@@ -50,10 +50,10 @@
 ### Prototypes
 
 **Here's what I'm listening too** (Profile Component)
-<img src="images/listening-to.png"\>
+<img src="images/listening-to.png"/>
 
 **Playist** (Profile Component)
-<img src="images/playlist-page.jpeg"\>
+<img src="images/playlist-page.jpeg"/>
 
 **Activity Feed**
-<img src="images/feed-sketch.png"\>
+<img src="images/feed-sketch.png"/>
