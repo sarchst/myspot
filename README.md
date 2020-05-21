@@ -1,7 +1,8 @@
 # MySpot
 
 ### Description:
-  MySpot is a social media platform for music lovers who want to socially connect with other music lovers. Users log in through their Spotify accounts so they can access their Spotify songs and playlists on MySpot. MySpot will allow users manage and share playlists with others, follow other users, see what other users are listening to, and add playlists from MySpot to their Spotify accounts. 
+
+  MySpot is a social media platform for music lovers who want to socially connect with other music lovers. Users log in through their Spotify accounts so they can access their Spotify songs and playlists on MySpot. MySpot will allow users manage, post, and share music (playlists, albums, songs) with others, follow and message other users, see what other users are listening to, and add playlists from MySpot to their Spotify accounts. 
 
 ### Project Task Requirements:
 
@@ -9,7 +10,7 @@
 1. Public profile page
 2. Follow people
 3. Log in to your profile to see the playlists of the people you follow
-  * See who’s currently online
+   * See who’s currently online
 4. Edit/View your own playlist
 5. Search for songs/albums
     
@@ -46,4 +47,13 @@
 4. Upon successful sign up,redirect to the user’s profile friends list with friend suggestions (potentially based of FaceBook)
 5. Upon successful login, redirect user to main Feed
 
+### Prototypes
 
+**Here's what I'm listening too** (Profile Component)
+<img src="images/listening-to.png"\>
+
+**Playist** (Profile Component)
+<img src="images/playlist-page.jpeg"\>
+
+**Activity Feed**
+<img src="images/feed-sketch.png"\>
