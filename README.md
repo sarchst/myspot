@@ -49,10 +49,10 @@
 
 ### Prototypes
 
-**Here's what I'm listening too** (Profile Component)
+**Here's what I'm listening to** (Profile Component)
 <img src="images/listening-to.png"/>
 
-**Playist** (Profile Component)
+**Playlist** (Profile Component)
 <img src="images/playlist-page.jpeg"/>
 
 **Activity Feed**
