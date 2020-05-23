@@ -57,3 +57,6 @@
 
 **Activity Feed**
 <img src="images/feed-sketch.png"/>
+
+**Profile Page**
+<img src="images/profile-page.jpg"/>
