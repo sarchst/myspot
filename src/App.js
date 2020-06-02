@@ -2,12 +2,13 @@ import React from 'react';
 import logo from './logo.svg';
 import { Counter } from './features/counter/Counter';
 import './App.css';
-import MiniDrawer from './Layouts/MiniDrawer';
+import Sidebar from './Layouts/Sidebar';
 
 function App() {
   return (
     <div className="App">
-      <MiniDrawer />
+      {/* <MiniDrawer /> */}
+      <Sidebar />
     </div>
   );
 }
