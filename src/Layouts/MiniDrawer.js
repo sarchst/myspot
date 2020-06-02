@@ -20,9 +20,11 @@ import Button from '@material-ui/core/Button';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import AudiotrackIcon from '@material-ui/icons/Audiotrack';
 import HeadsetIcon from '@material-ui/icons/Headset';
-import MicNoneIcon from '@material-ui/icons/MicNone';
+import MicIcon from '@material-ui/icons/Mic';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import PublicIcon from '@material-ui/icons/Public';
+import QueueMusicIcon from '@material-ui/icons/QueueMusic';
+import PlayCircleFilledIcon from '@material-ui/icons/PlayCircleFilled';
 
 
 const drawerWidth = 240;
@@ -86,9 +88,6 @@ const useStyles = makeStyles((theme) => ({
     content: {
         flexGrow: 1,
         padding: theme.spacing(3),
-    },
-    navButtons: {
-
     }
 }));
 
@@ -109,14 +108,16 @@ export default function MiniDrawer() {
         switch (text) {
             case 'Profile':
                 return <AccountCircleIcon />
+            case 'Here\'s What I\'m Listening To':
+                return <PlayCircleFilledIcon />
+            case 'Playlists':
+                return <QueueMusicIcon />
             case 'Posts':
                 return <AudiotrackIcon />
             case 'Followers':
-                return <MicNoneIcon />
+                return <MicIcon />
             case 'Following':
                 return <HeadsetIcon />
-            case 'Feed':
-                return <PublicIcon />
             default:
                 return <FavoriteIcon />
 
@@ -146,15 +147,15 @@ export default function MiniDrawer() {
                         <MenuIcon />
                     </IconButton>
                     <Typography variant="h6" noWrap>
-                        My Spot
+                        MySpot
           </Typography>
-                    <Button variant="h6" color="inherit" className={classes.navButtons}>
+                    <Button variant="h6" color="inherit">
                         Profile
           </Button>
-                    <Button variant="h6" color="inherit" className={classes.navButtons}>
+                    <Button variant="h6" color="inherit">
                         Feed
                     </Button>
-                    <Button variant="h6" color="inherit" className={classes.navButtons}>Login</Button>
+                    <Button variant="h6" color="inherit">Login</Button>
                 </Toolbar>
             </AppBar>
             <Drawer
@@ -178,7 +179,7 @@ export default function MiniDrawer() {
                 <Divider />
 
                 <List>
-                    {['Profile', 'Posts', 'Followers', 'Following', 'Feed'].map((text, index) => (
+                    {['Profile', 'Here\'s What I\'m Listening To', 'Posts', 'Playlists', 'Followers', 'Following'].map((text, index) => (
                         <ListItem button key={text}>
                             <ListItemIcon>{getSidebarIcon(text)}</ListItemIcon>
                             <ListItemText primary={text} />
