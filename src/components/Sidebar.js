@@ -1,6 +1,5 @@
 import React from 'react';
 import clsx from 'clsx';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
 
 import { withStyles } from '@material-ui/core/styles';
 
@@ -134,14 +133,6 @@ class Sidebar extends React.Component {
 
     render() {
 
-
-
-        // const theme = useTheme();
-        // const [open, setOpen] = React.useState(false);
-
-
-        // const classes = useStyles();
-
         const { classes, theme } = this.props;
 
         return (
@@ -199,7 +190,7 @@ class Sidebar extends React.Component {
                     <Divider />
 
                     <List>
-                        {['Profile', 'Here\'s What I\'m Listening To', 'Posts', 'Playlists', 'Followers', 'Following'].map((text, index) => (
+                        {['Profile', 'What I\'m Listening To', 'Posts', 'Playlists', 'Followers', 'Following'].map((text, index) => (
                             <ListItem button key={text}>
                                 <ListItemIcon>{this.getSidebarIcon(text)}</ListItemIcon>
                                 <ListItemText primary={text} />
