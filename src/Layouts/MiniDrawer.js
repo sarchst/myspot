@@ -15,9 +15,14 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
 import Button from '@material-ui/core/Button';
+
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import AudiotrackIcon from '@material-ui/icons/Audiotrack';
+import HeadsetIcon from '@material-ui/icons/Headset';
+import MicNoneIcon from '@material-ui/icons/MicNone';
+import FavoriteIcon from '@material-ui/icons/Favorite';
+import PublicIcon from '@material-ui/icons/Public';
 
 
 const drawerWidth = 240;
@@ -100,6 +105,25 @@ export default function MiniDrawer() {
         setOpen(false);
     };
 
+    const getSidebarIcon = text => {
+        switch (text) {
+            case 'Profile':
+                return <AccountCircleIcon />
+            case 'Posts':
+                return <AudiotrackIcon />
+            case 'Followers':
+                return <MicNoneIcon />
+            case 'Following':
+                return <HeadsetIcon />
+            case 'Feed':
+                return <PublicIcon />
+            default:
+                return <FavoriteIcon />
+
+        }
+
+    }
+
     return (
         <div className={classes.root}>
             <CssBaseline />
@@ -152,19 +176,20 @@ export default function MiniDrawer() {
                     </IconButton>
                 </div>
                 <Divider />
+
                 <List>
-                    {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
+                    {['Profile', 'Posts', 'Followers', 'Following', 'Feed'].map((text, index) => (
                         <ListItem button key={text}>
-                            <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
+                            <ListItemIcon>{getSidebarIcon(text)}</ListItemIcon>
                             <ListItemText primary={text} />
                         </ListItem>
                     ))}
                 </List>
                 <Divider />
                 <List>
-                    {['All mail', 'Trash', 'Spam'].map((text, index) => (
+                    {['Favourites'].map((text, index) => (
                         <ListItem button key={text}>
-                            <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
+                            <ListItemIcon>{getSidebarIcon(text)}</ListItemIcon>
                             <ListItemText primary={text} />
                         </ListItem>
                     ))}
