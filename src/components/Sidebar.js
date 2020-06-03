@@ -28,6 +28,8 @@ import PublicIcon from '@material-ui/icons/Public';
 import QueueMusicIcon from '@material-ui/icons/QueueMusic';
 import PlayCircleFilledIcon from '@material-ui/icons/PlayCircleFilled';
 
+import Appbar from './Appbar';
+
 const drawerWidth = 240;
 
 const styles = theme => ({
@@ -139,7 +141,7 @@ class Sidebar extends React.Component {
 
             <div className={classes.root}>
                 <CssBaseline />
-                <AppBar
+                {/* <AppBar
                     position="fixed"
                     className={clsx(classes.appBar, {
                         [classes.appBarShift]: this.state.open,
@@ -168,7 +170,8 @@ class Sidebar extends React.Component {
                     </Button>
                         <Button variant="h6" color="inherit">Login</Button>
                     </Toolbar>
-                </AppBar>
+                </AppBar> */}
+                {/* <Appbar /> */}
                 <Drawer
                     variant="permanent"
                     className={clsx(classes.drawer, {
