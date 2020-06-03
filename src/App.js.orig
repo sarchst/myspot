@@ -1,4 +1,8 @@
 import React from 'react';
+<<<<<<< HEAD
+import Post from './components/Post';
+=======
+>>>>>>> development
 import './App.css';
 import Sidebar from './components/Sidebar';
 import Appbar from './components/Appbar';
