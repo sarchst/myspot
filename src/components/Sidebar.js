@@ -143,8 +143,7 @@ class Sidebar extends React.Component {
                             [classes.drawerOpen]: this.props.open,
                             [classes.drawerClose]: !this.props.open,
                         }),
-                    }}
-                >
+                    }}>
                     <div className={classes.toolbar}>
                         <IconButton onClick={this.handleDrawerClose}>
                             {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
