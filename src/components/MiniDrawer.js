@@ -25,6 +25,9 @@ import FavoriteIcon from './node_modules/@material-ui/icons/Favorite';
 import QueueMusicIcon from './node_modules/@material-ui/icons/QueueMusic';
 import PlayCircleFilledIcon from './node_modules/@material-ui/icons/PlayCircleFilled';
 
+// THIS WAS EXAMPLE CODE DOWNLOADED FROM MATERIAL UI 
+// MIKAYLA CREATED THE APPBAR AND SIDE BAR COMPONENTS BASED ON THIS CODE
+
 
 const drawerWidth = 240;
 

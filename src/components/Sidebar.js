@@ -1,11 +1,8 @@
 import React from 'react';
 import clsx from 'clsx';
 
-import { withStyles } from '@material-ui/core/styles';
 
 import Drawer from '@material-ui/core/Drawer';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
 import List from '@material-ui/core/List';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
@@ -27,6 +24,10 @@ import FavoriteIcon from '@material-ui/icons/Favorite';
 import PublicIcon from '@material-ui/icons/Public';
 import QueueMusicIcon from '@material-ui/icons/QueueMusic';
 import PlayCircleFilledIcon from '@material-ui/icons/PlayCircleFilled';
+
+import { connect } from 'react-redux';
+import { withStyles } from '@material-ui/core/styles';
+import { toggleSidebar } from '../app/actions';
 
 import Appbar from './Appbar';
 
@@ -102,14 +103,8 @@ class Sidebar extends React.Component {
         this.state = { open: false }
     }
 
-    handleDrawerOpen = () => {
-        // setOpen(true);
-        this.setState({ open: true })
-    };
-
     handleDrawerClose = () => {
-        // setOpen(false);
-        this.setState({ open: false })
+        this.props.toggleSidebar();
     };
 
     getSidebarIcon = text => {
@@ -141,47 +136,16 @@ class Sidebar extends React.Component {
 
             <div className={classes.root}>
                 <CssBaseline />
-                {/* <AppBar
-                    position="fixed"
-                    className={clsx(classes.appBar, {
-                        [classes.appBarShift]: this.state.open,
-                    })}
-                >
-                    <Toolbar>
-                        <IconButton
-                            color="inherit"
-                            aria-label="open drawer"
-                            onClick={this.handleDrawerOpen}
-                            edge="start"
-                            className={clsx(classes.menuButton, {
-                                [classes.hide]: this.state.open,
-                            })}
-                        >
-                            <MenuIcon />
-                        </IconButton>
-                        <Typography variant="h6" noWrap>
-                            MySpot
-          </Typography>
-                        <Button variant="h6" color="inherit">
-                            Profile
-          </Button>
-                        <Button variant="h6" color="inherit">
-                            Feed
-                    </Button>
-                        <Button variant="h6" color="inherit">Login</Button>
-                    </Toolbar>
-                </AppBar> */}
-                {/* <Appbar /> */}
                 <Drawer
                     variant="permanent"
                     className={clsx(classes.drawer, {
-                        [classes.drawerOpen]: this.state.open,
-                        [classes.drawerClose]: !this.state.open,
+                        [classes.drawerOpen]: this.props.open,
+                        [classes.drawerClose]: !this.props.open,
                     })}
                     classes={{
                         paper: clsx({
-                            [classes.drawerOpen]: this.state.open,
-                            [classes.drawerClose]: !this.state.open,
+                            [classes.drawerOpen]: this.props.open,
+                            [classes.drawerClose]: !this.props.open,
                         }),
                     }}
                 >
@@ -244,4 +208,11 @@ class Sidebar extends React.Component {
     }
 }
 
-export default withStyles(styles, { withTheme: true })(Sidebar);
+const mapStateToProps = state => {
+    return {
+        open: state.isSidebarOpen
+    }
+}
+
+
+export default connect(mapStateToProps, { toggleSidebar })(withStyles(styles, { withTheme: true })(Sidebar));

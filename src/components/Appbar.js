@@ -84,17 +84,8 @@ class Appbar extends React.Component {
     }
 
     handleDrawerOpen = () => {
-        // setOpen(true);
-        // this.setState({ open: true })
         this.props.toggleSidebar();
     };
-
-    handleDrawerClose = () => {
-        // setOpen(false);
-        // this.setState({ open: false })
-        this.props.toggleSidebar();
-    };
-
 
 
     render() {
@@ -115,7 +106,7 @@ class Appbar extends React.Component {
                         onClick={this.handleDrawerOpen}
                         edge="start"
                         className={clsx(classes.menuButton, {
-                            [classes.hide]: this.state.open,
+                            [classes.hide]: this.props.open,
                         })}
                     >
                         <MenuIcon />
