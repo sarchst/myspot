@@ -8,20 +8,17 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import Button from '@material-ui/core/Button';
 
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import AudiotrackIcon from '@material-ui/icons/Audiotrack';
 import HeadsetIcon from '@material-ui/icons/Headset';
 import MicIcon from '@material-ui/icons/Mic';
 import FavoriteIcon from '@material-ui/icons/Favorite';
-import PublicIcon from '@material-ui/icons/Public';
 import QueueMusicIcon from '@material-ui/icons/QueueMusic';
 import PlayCircleFilledIcon from '@material-ui/icons/PlayCircleFilled';
 
@@ -29,7 +26,6 @@ import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
 import { toggleSidebar } from '../app/actions';
 
-import Appbar from './Appbar';
 
 const drawerWidth = 240;
 
