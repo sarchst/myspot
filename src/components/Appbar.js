@@ -90,7 +90,7 @@ class Appbar extends React.Component {
 
     render() {
 
-        const { classes, theme } = this.props;
+        const { classes } = this.props;
 
         return (
             <AppBar
@@ -111,16 +111,16 @@ class Appbar extends React.Component {
                     >
                         <MenuIcon />
                     </IconButton>
-                    <Typography variant="h6" noWrap>
+                    <Typography noWrap>
                         MySpot
           </Typography>
-                    <Button variant="h6" color="inherit">
+                    <Button color="inherit">
                         Profile
           </Button>
-                    <Button variant="h6" color="inherit">
+                    <Button color="inherit">
                         Feed
                     </Button>
-                    <Button variant="h6" color="inherit">Login</Button>
+                    <Button color="inherit">Login</Button>
                 </Toolbar>
             </AppBar>
 
