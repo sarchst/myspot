@@ -154,6 +154,7 @@ class Post extends Component {
                 {this.state.title}
               </Link>
             </Grid>
+            {/* TODO add media art component? */}
           </Grid>
           <Grid
             item
