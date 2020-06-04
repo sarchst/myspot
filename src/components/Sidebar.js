@@ -25,6 +25,7 @@ import PlayCircleFilledIcon from '@material-ui/icons/PlayCircleFilled';
 import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
 import { toggleSidebar } from '../app/actions';
+import Playlists from './Playlists'
 
 
 const drawerWidth = 240;
@@ -194,6 +195,7 @@ class Sidebar extends React.Component {
                         nibh sit. Ornare aenean euismod elementum nisi quis eleifend. Commodo viverra maecenas
                         accumsan lacus vel facilisis. Nulla posuere sollicitudin aliquam ultrices sagittis orci a.
         </Typography>
+        <Playlists/>
                 </main>
             </div>
         );

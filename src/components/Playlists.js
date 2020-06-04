@@ -73,14 +73,6 @@ class Playlists extends React.Component {
     return (
       <React.Fragment>
         <CssBaseline />
-        <AppBar position="relative">
-          <Toolbar>
-            <CameraIcon className={classes.icon} />
-            <Typography variant="h6" color="inherit" noWrap>
-              Album layout
-            </Typography>
-          </Toolbar>
-        </AppBar>
         <main>
           {/* Hero unit */}
           <div className={classes.heroContent}>
@@ -92,7 +84,7 @@ class Playlists extends React.Component {
                 color="textPrimary"
                 gutterBottom
               >
-                Album layout
+                Playlists
               </Typography>
               <Typography
                 variant="h5"
@@ -104,20 +96,6 @@ class Playlists extends React.Component {
                 contents, the creator, etc. Make it short and sweet, but not too
                 short so folks don&apos;t simply skip over it entirely.
               </Typography>
-              <div className={classes.heroButtons}>
-                <Grid container spacing={2} justify="center">
-                  <Grid item>
-                    <Button variant="contained" color="primary">
-                      Main call to action
-                    </Button>
-                  </Grid>
-                  <Grid item>
-                    <Button variant="outlined" color="primary">
-                      Secondary action
-                    </Button>
-                  </Grid>
-                </Grid>
-              </div>
             </Container>
           </div>
           <Container className={classes.cardGrid} maxWidth="md">
@@ -133,11 +111,10 @@ class Playlists extends React.Component {
                     />
                     <CardContent className={classes.cardContent}>
                       <Typography gutterBottom variant="h5" component="h2">
-                        Heading
+                        Playlist Name.
                       </Typography>
                       <Typography>
-                        This is a media card. You can use this section to
-                        describe the content.
+                        Playlist description.
                       </Typography>
                     </CardContent>
                     <CardActions>
@@ -154,22 +131,6 @@ class Playlists extends React.Component {
             </Grid>
           </Container>
         </main>
-        {/* Footer */}
-        <footer className={classes.footer}>
-          <Typography variant="h6" align="center" gutterBottom>
-            Footer
-          </Typography>
-          <Typography
-            variant="subtitle1"
-            align="center"
-            color="textSecondary"
-            component="p"
-          >
-            Something here to give the footer a purpose!
-          </Typography>
-          <Copyright />
-        </footer>
-        {/* End footer */}
       </React.Fragment>
     );
   }
