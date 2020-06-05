@@ -176,6 +176,9 @@ class Sidebar extends React.Component {
         <main className={classes.content}>
           <div className={classes.toolbar} />
           This is where side bar compenets go
+          <Post />
+          <Post />
+          <Post />
         </main>
       </div>
     );

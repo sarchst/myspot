@@ -157,7 +157,9 @@ export default function MiniDrawer() {
                     <Button variant="h6" color="inherit">
                         Feed
                     </Button>
-                    <Button variant="h6" color="inherit">Login</Button>
+                    <Button variant="h6" color="inherit">
+                        Logout
+                    </Button>
                 </Toolbar>
             </AppBar>
             <Drawer
