@@ -24,6 +24,7 @@ import PlayCircleFilledIcon from "@material-ui/icons/PlayCircleFilled";
 import { connect } from "react-redux";
 import { withStyles } from "@material-ui/core/styles";
 import { toggleSidebar } from "../app/actions";
+import contentType from "../data/ContentTypeEnum";
 
 const drawerWidth = 240;
 
@@ -101,17 +102,17 @@ class Sidebar extends React.Component {
 
   getSidebarIcon = (text) => {
     switch (text) {
-      case "What I'm Listening To":
+      case contentType.LISTENINGTO:
         return <PlayCircleFilledIcon />;
-      case "Playlists":
+      case contentType.PLAYLISTS:
         return <QueueMusicIcon />;
-      case "Posts":
+      case contentType.POSTS:
         return <AudiotrackIcon />;
-      case "Followers":
+      case contentType.FOLLOWERS:
         return <MicIcon />;
-      case "Following":
+      case contentType.FOLLOWING:
         return <HeadsetIcon />;
-      case "Favourites":
+      case contentType.FAVOURITES:
         return <FavoriteIcon />;
       default:
         return <AccountCircleIcon />;
@@ -148,14 +149,15 @@ class Sidebar extends React.Component {
           </div>
           <Divider />
 
+          {/*TODO: EITHER map username separately so it doesn't collide with other keywords OR block keywords from being used as username*/}
           <List>
             {[
               this.props.username,
-              "What I'm Listening To",
-              "Posts",
-              "Playlists",
-              "Followers",
-              "Following",
+              contentType.LISTENINGTO,
+              contentType.POSTS,
+              contentType.PLAYLISTS,
+              contentType.FOLLOWERS,
+              contentType.FOLLOWING
             ].map((text, index) => (
               <ListItem button key={text}>
                 <ListItemIcon>{this.getSidebarIcon(text)}</ListItemIcon>
@@ -165,7 +167,7 @@ class Sidebar extends React.Component {
           </List>
           <Divider />
           <List>
-            {["Favourites"].map((text, index) => (
+            {[contentType.FAVOURITES].map((text, index) => (
               <ListItem button key={text}>
                 <ListItemIcon>{this.getSidebarIcon(text)}</ListItemIcon>
                 <ListItemText primary={text} />
