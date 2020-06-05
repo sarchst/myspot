@@ -25,6 +25,10 @@ import PlayCircleFilledIcon from "@material-ui/icons/PlayCircleFilled";
 import { connect } from "react-redux";
 import { withStyles } from "@material-ui/core/styles";
 import { toggleSidebar } from "../app/actions";
+import contentType from "../data/ContentTypeEnum";
+import ProfilePage from "./content-page/ProfilePage";
+import FeedPage from "./content-page/FeedPage";
+import HomePage from "./content-page/HomePage";
 
 const drawerWidth = 240;
 
@@ -97,7 +101,7 @@ class Sidebar extends React.Component {
   }
 
   handleDrawerClose = () => {
-    this.props.toggleSidebar();
+    this.props.toggleSideBar();
   };
 
   // This is only temporary and will need to be switched over to redux global state
@@ -119,20 +123,32 @@ class Sidebar extends React.Component {
 
   getSidebarIcon = (text) => {
     switch (text) {
-      case "Profile":
-        return <AccountCircleIcon />;
-      case "Here's What I'm Listening To":
+      case contentType.LISTENINGTO:
         return <PlayCircleFilledIcon />;
-      case "Playlists":
+      case contentType.PLAYLISTS:
         return <QueueMusicIcon />;
-      case "Posts":
+      case contentType.POSTS:
         return <AudiotrackIcon />;
-      case "Followers":
+      case contentType.FOLLOWERS:
         return <MicIcon />;
-      case "Following":
+      case contentType.FOLLOWING:
         return <HeadsetIcon />;
-      default:
+      case contentType.FAVOURITES:
         return <FavoriteIcon />;
+      default:
+        return <AccountCircleIcon />;
+    }
+  };
+
+  displayContentPage = () => {
+    console.log(this.props.selectedContentPage);
+    switch (this.props.selectedContentPage) {
+      case contentType.PROFILE:
+        return <ProfilePage />;
+      case contentType.FEED:
+        return <FeedPage />;
+      default:
+        return <HomePage />;
     }
   };
 
@@ -166,14 +182,15 @@ class Sidebar extends React.Component {
           </div>
           <Divider />
 
+          {/*TODO: EITHER map username separately so it doesn't collide with other keywords OR block keywords from being used as username*/}
           <List>
             {[
-              "Profile",
-              "What I'm Listening To",
-              "Posts",
-              "Playlists",
-              "Followers",
-              "Following",
+              this.props.username,
+              contentType.LISTENINGTO,
+              contentType.POSTS,
+              contentType.PLAYLISTS,
+              contentType.FOLLOWERS,
+              contentType.FOLLOWING,
             ].map((text, index) => (
               <ListItem button key={text} onClick={() => this.selectView(text)}>
                 <ListItemIcon>{this.getSidebarIcon(text)}</ListItemIcon>
@@ -183,7 +200,7 @@ class Sidebar extends React.Component {
           </List>
           <Divider />
           <List>
-            {["Favourites"].map((text, index) => (
+            {[contentType.FAVOURITES].map((text, index) => (
               <ListItem button key={text}>
                 <ListItemIcon>{this.getSidebarIcon(text)}</ListItemIcon>
                 <ListItemText primary={text} />
@@ -194,6 +211,7 @@ class Sidebar extends React.Component {
         <main className={classes.content}>
           <div className={classes.toolbar} />
           {this.getViewComponent()}
+          {/* {this.displayContentPage()} */}
         </main>
       </div>
     );
@@ -203,9 +221,18 @@ class Sidebar extends React.Component {
 const mapStateToProps = (state) => {
   return {
     open: state.isSidebarOpen,
+    username: state.userName,
+    selectedContentPage: state.selectedContentPage,
   };
 };
 
-export default connect(mapStateToProps, { toggleSidebar })(
-  withStyles(styles, { withTheme: true })(Sidebar)
-);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    toggleSideBar: () => dispatch(toggleSidebar()),
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withStyles(styles, { withTheme: true })(Sidebar));

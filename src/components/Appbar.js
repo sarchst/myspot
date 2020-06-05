@@ -9,8 +9,9 @@ import MenuIcon from "@material-ui/icons/Menu";
 import Button from "@material-ui/core/Button";
 import SettingsIcon from "@material-ui/icons/Settings";
 import { withStyles } from "@material-ui/core";
+import { logOut, selectContentPage, toggleSidebar } from "../app/actions";
+import contentType from "../data/ContentTypeEnum";
 import { connect } from "react-redux";
-import { toggleSidebar } from "../app/actions";
 
 const drawerWidth = 240;
 
@@ -94,6 +95,10 @@ class Appbar extends React.Component {
     this.props.toggleSidebar();
   };
 
+  logOut = () => {
+    this.props.logOut();
+  };
+
   render() {
     const { classes } = this.props;
 
@@ -119,15 +124,28 @@ class Appbar extends React.Component {
           <Typography noWrap className={classes.appTitle}>
             MySpot
           </Typography>
-          <Button color="inherit" className={classes.appbarButton}>
-            Profile
+          <Button
+            className={classes.appbarButton}
+            color="inherit"
+            onClick={() => this.props.selectContentPage(contentType.PROFILE)}
+          >
+            {contentType.PROFILE}
           </Button>
-          <Button color="inherit" className={classes.appbarButton}>
-            Feed
+          <Button
+            className={classes.appbarButton}
+            color="inherit"
+            onClick={() => this.props.selectContentPage(contentType.FEED)}
+          >
+            {contentType.FEED}
           </Button>
-          <Button color="inherit" className={classes.appbarButton}>
-            Logout{" "}
+          <Button
+            className={classes.appbarButton}
+            color="inherit"
+            onClick={this.logOut}
+          >
+            Logout
           </Button>
+
           <Button color="inherit" className={classes.appbarButton}>
             <SettingsIcon />
           </Button>
@@ -143,6 +161,16 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, { toggleSidebar })(
-  withStyles(styles, { withTheme: true })(Appbar)
-);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    toggleSidebar: () => dispatch(toggleSidebar()),
+    logOut: () => dispatch(logOut()),
+    selectContentPage: (contentType) =>
+      dispatch(selectContentPage(contentType)),
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withStyles(styles, { withTheme: true })(Appbar));
