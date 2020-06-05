@@ -1,6 +1,7 @@
 import React from "react";
 import clsx from "clsx";
 import Post from "./Post";
+import Playlists from "./Playlists";
 
 import Drawer from "@material-ui/core/Drawer";
 import List from "@material-ui/core/List";

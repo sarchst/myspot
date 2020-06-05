@@ -34,7 +34,6 @@ const styles = (theme) => ({
     marginRight: theme.spacing(2),
   },
   heroContent: {
-    backgroundColor: theme.palette.background.paper,
     padding: theme.spacing(0, 0, 0),
   },
   heroButtons: {
