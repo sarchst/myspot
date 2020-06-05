@@ -101,9 +101,7 @@ class Sidebar extends React.Component {
 
   getSidebarIcon = (text) => {
     switch (text) {
-      case "Profile":
-        return <AccountCircleIcon />;
-      case "Here's What I'm Listening To":
+      case "What I'm Listening To":
         return <PlayCircleFilledIcon />;
       case "Playlists":
         return <QueueMusicIcon />;
@@ -113,8 +111,10 @@ class Sidebar extends React.Component {
         return <MicIcon />;
       case "Following":
         return <HeadsetIcon />;
-      default:
+      case "Favourites":
         return <FavoriteIcon />;
+      default:
+        return <AccountCircleIcon />;
     }
   };
 
@@ -150,7 +150,7 @@ class Sidebar extends React.Component {
 
           <List>
             {[
-              "Profile",
+              this.props.username,
               "What I'm Listening To",
               "Posts",
               "Playlists",
@@ -188,6 +188,7 @@ class Sidebar extends React.Component {
 const mapStateToProps = (state) => {
   return {
     open: state.isSidebarOpen,
+    username: state.userName
   };
 };
 

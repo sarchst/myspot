@@ -7,7 +7,7 @@ import username from "./username";
 const allReducers = combineReducers({
     isSidebarOpen: toggleSidebar,
     isLoggedIn: isLoggedIn,
-    username: username
+    userName: username
 })
 
 export default allReducers;
