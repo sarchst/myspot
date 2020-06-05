@@ -17,7 +17,7 @@ import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import MusicNoteRoundedIcon from '@material-ui/icons/MusicNoteRounded';
-import {logIn} from "../app/actions";
+import {logIn, usernameSubmit} from "../app/actions";
 import red from "@material-ui/core/colors/red";
 
 function Copyright() {
@@ -102,6 +102,8 @@ class Login extends React.Component {
         this.setState(state => ({
             isInvalidLogin: false
         }));
+        console.log(this.state.usernameInput);
+        this.props.usernameSubmit(this.state.usernameInput);
         this.props.logIn();
     }
 
@@ -219,7 +221,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        logIn: () => dispatch(logIn())
+        logIn: () => dispatch(logIn()),
+        usernameSubmit: username => dispatch(usernameSubmit(username))
         // examples
         // selectMessage: selectedMessage => dispatch(selectMessage(selectedMessage)),
         //     deleteMessage: idx => dispatch(deleteMessage(idx))

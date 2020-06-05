@@ -139,6 +139,7 @@ class Appbar extends React.Component {
 const mapStateToProps = state => {
     return {
         open: state.isSidebarOpen
+        // username: state.username
     }
 }
 

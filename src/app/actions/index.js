@@ -1,5 +1,6 @@
 export const LOG_IN = "LOG_IN";
-export const LOG_OUT = "LOG_OUT"
+export const LOG_OUT = "LOG_OUT";
+export const USERNAME = "USERNAME";
 
 export const toggleSidebar = () => ({
     type: 'TOGGLE_SIDEBAR'
@@ -11,4 +12,9 @@ export const logIn = () => ({
 
 export const logOut = () => ({
     type: LOG_OUT
+})
+
+export const usernameSubmit = payload => ({
+    type: USERNAME,
+    username: payload
 })

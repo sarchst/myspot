@@ -12,9 +12,9 @@ const loginPage = () => {
     );
 }
 
-const contentPage = () => {
+let contentPage = () => {
     return (<div className="App">
-            <Appbar />
+            <Appbar/>
             <Sidebar />
         </div>
     );
@@ -37,7 +37,8 @@ class App extends React.Component {
 
 const mapStateToProps = state => {
     return {
-        isLoggedIn: state.isLoggedIn
+        isLoggedIn: state.isLoggedIn,
+        username: state.username
     }
 }
 
