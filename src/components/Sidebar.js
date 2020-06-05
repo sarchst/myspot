@@ -194,6 +194,12 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, { toggleSidebar })(
+const mapDispatchToProps = dispatch => {
+  return {
+    toggleSideBar: dispatch(toggleSidebar())
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(
   withStyles(styles, { withTheme: true })(Sidebar)
 );
