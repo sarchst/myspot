@@ -18,6 +18,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import MusicNoteRoundedIcon from '@material-ui/icons/MusicNoteRounded';
 import {logIn} from "../app/actions";
+import red from "@material-ui/core/colors/red";
 
 function Copyright() {
     return (
@@ -66,14 +67,58 @@ const styles = theme => ({
 class Login extends React.Component {
     constructor(props) {
         super(props);
+        this.state = {
+            isInvalidLogin: false,
+            usernameInput: "",
+            passwordInput: ""
+        };
     }
 
+    usernameInput = (event) => {
+        this.setState({
+            usernameInput: event.target.value
+        })
+    }
+
+    passwordInput = (event) => {
+        this.setState({
+            passwordInput: event.target.value
+        })
+    }
+
+
+
     attemptLogin = () => {
-        console.log("attempting to log in");
-        this.props.LogIn();
-        // check if user and pass is not empty
-            // if yes, dispatch isLoggedInYes "LoggedIn"
-            // clear user and pass fields
+        if (this.checkUsernameAndPassword()) {
+            this.logIn();
+        } else {
+            this.setState(state => ({
+                isInvalidLogin: true
+            }));
+        }
+    }
+
+    logIn = () => {
+        this.setState(state => ({
+            isInvalidLogin: false
+        }));
+        this.props.logIn();
+    }
+
+    checkUsernameAndPassword = () => {
+        return (this.state.usernameInput !== "" && this.state.passwordInput !== "");
+    }
+
+    displayLoginError = () => {
+        if (this.state.isInvalidLogin) {
+            return (
+                <Typography style={{ color: red[500] }} align="center">
+                    Please enter a username and password.
+                </Typography>
+            )
+        } else {
+            return null;
+        }
     }
 
     render() {
@@ -110,6 +155,8 @@ class Login extends React.Component {
                                 name="email"
                                 autoComplete="email"
                                 autoFocus
+                                value={this.state.usernameInput}
+                                onChange={this.usernameInput}
                             />
                             <TextField
                                 variant="outlined"
@@ -121,11 +168,14 @@ class Login extends React.Component {
                                 type="password"
                                 id="password"
                                 autoComplete="current-password"
+                                value={this.state.passwordInput}
+                                onChange={this.passwordInput}
                             />
                             <FormControlLabel
                                 control={<Checkbox value="remember" color="primary" />}
                                 label="Remember me"
                             />
+                            {this.displayLoginError()}
                             <Button
                                 // type="submit"
                                 fullWidth
@@ -169,7 +219,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        LogIn: () => dispatch(logIn())
+        logIn: () => dispatch(logIn())
         // examples
         // selectMessage: selectedMessage => dispatch(selectMessage(selectedMessage)),
         //     deleteMessage: idx => dispatch(deleteMessage(idx))
