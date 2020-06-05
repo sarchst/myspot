@@ -100,6 +100,23 @@ class Sidebar extends React.Component {
     this.props.toggleSidebar();
   };
 
+  // This is only temporary and will need to be switched over to redux global state
+  selectView = (text) => {
+    this.setState({ viewPage: text });
+  };
+
+  // This is only temporary and will need to be switched over to redux actions and reducers
+  getViewComponent = () => {
+    switch (this.state.viewPage) {
+      case "Playlists":
+        return <Playlists />;
+      case "Posts":
+        return <Post />;
+      default:
+        return <Playlists />;
+    }
+  };
+
   getSidebarIcon = (text) => {
     switch (text) {
       case "Profile":
@@ -158,7 +175,7 @@ class Sidebar extends React.Component {
               "Followers",
               "Following",
             ].map((text, index) => (
-              <ListItem button key={text}>
+              <ListItem button key={text} onClick={() => this.selectView(text)}>
                 <ListItemIcon>{this.getSidebarIcon(text)}</ListItemIcon>
                 <ListItemText primary={text} />
               </ListItem>
@@ -176,7 +193,7 @@ class Sidebar extends React.Component {
         </Drawer>
         <main className={classes.content}>
           <div className={classes.toolbar} />
-          This is where side bar compenets go
+          {this.getViewComponent()}
         </main>
       </div>
     );
