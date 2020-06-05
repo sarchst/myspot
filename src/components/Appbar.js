@@ -9,7 +9,8 @@ import MenuIcon from '@material-ui/icons/Menu';
 import Button from '@material-ui/core/Button';
 import { withStyles } from '@material-ui/core';
 import { connect } from 'react-redux';
-import {logOut, toggleSidebar} from '../app/actions';
+import {logOut, selectContentPage, toggleSidebar} from '../app/actions';
+import contentType from "../data/ContentTypeEnum";
 
 const drawerWidth = 240;
 
@@ -118,11 +119,13 @@ class Appbar extends React.Component {
                     <Typography noWrap>
                         MySpot
           </Typography>
-                    <Button color="inherit">
-                        Profile
+                    <Button color="inherit" onClick={() => this.props.selectContentPage(contentType.PROFILE)}>
+                        {/*onClick={this.props.selectContentPage(contentType.PROFILE)}*/}
+                        {contentType.PROFILE}
           </Button>
-                    <Button color="inherit">
-                        Feed
+                    <Button color="inherit" onClick={() => this.props.selectContentPage(contentType.FEED)}>
+                        {/*onClick={this.props.selectContentPage(contentType.FEED)}*/}
+                        {contentType.FEED}
                     </Button>
                     <Button color="inherit" onClick={this.logOut}>
                         Logout
@@ -145,7 +148,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         toggleSidebar: () => dispatch(toggleSidebar()),
-        logOut: () => dispatch(logOut())
+        logOut: () => dispatch(logOut()),
+        selectContentPage: (contentType) => dispatch(selectContentPage(contentType))
     }
 }
 

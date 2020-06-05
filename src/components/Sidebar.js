@@ -1,6 +1,5 @@
 import React from "react";
 import clsx from "clsx";
-import Post from "./Post";
 
 import Drawer from "@material-ui/core/Drawer";
 import List from "@material-ui/core/List";
@@ -25,6 +24,9 @@ import { connect } from "react-redux";
 import { withStyles } from "@material-ui/core/styles";
 import { toggleSidebar } from "../app/actions";
 import contentType from "../data/ContentTypeEnum";
+import ProfilePage from "./content-page/ProfilePage";
+import FeedPage from "./content-page/FeedPage";
+import HomePage from "./content-page/HomePage";
 
 const drawerWidth = 240;
 
@@ -97,7 +99,7 @@ class Sidebar extends React.Component {
   }
 
   handleDrawerClose = () => {
-    this.props.toggleSidebar();
+    this.props.toggleSideBar();
   };
 
   getSidebarIcon = (text) => {
@@ -118,6 +120,18 @@ class Sidebar extends React.Component {
         return <AccountCircleIcon />;
     }
   };
+
+  displayContentPage = () => {
+    console.log(this.props.selectedContentPage);
+    switch (this.props.selectedContentPage) {
+      case contentType.PROFILE:
+        return <ProfilePage />;
+      case contentType.FEED:
+        return <FeedPage />;
+      default:
+        return <HomePage />;
+    }
+  }
 
   render() {
     const { classes, theme } = this.props;
@@ -177,10 +191,8 @@ class Sidebar extends React.Component {
         </Drawer>
         <main className={classes.content}>
           <div className={classes.toolbar} />
-          This is where side bar compenets go
-          <Post />
-          <Post />
-          <Post />
+          {/*content pages are displayed here*/}
+          {this.displayContentPage()}
         </main>
       </div>
     );
@@ -190,13 +202,14 @@ class Sidebar extends React.Component {
 const mapStateToProps = (state) => {
   return {
     open: state.isSidebarOpen,
-    username: state.userName
+    username: state.userName,
+    selectedContentPage: state.selectedContentPage
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    toggleSideBar: dispatch(toggleSidebar())
+    toggleSideBar: () => dispatch(toggleSidebar())
   }
 }
 
