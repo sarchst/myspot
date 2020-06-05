@@ -1,5 +1,6 @@
 import React from "react";
 import clsx from "clsx";
+import Post from "./Post";
 import Playlists from "./Playlists";
 
 import Drawer from "@material-ui/core/Drawer";
@@ -149,7 +150,7 @@ class Sidebar extends React.Component {
       default:
         return <HomePage />;
     }
-  }
+  };
 
   render() {
     const { classes, theme } = this.props;
@@ -189,7 +190,7 @@ class Sidebar extends React.Component {
               contentType.POSTS,
               contentType.PLAYLISTS,
               contentType.FOLLOWERS,
-              contentType.FOLLOWING
+              contentType.FOLLOWING,
             ].map((text, index) => (
               <ListItem button key={text} onClick={() => this.selectView(text)}>
                 <ListItemIcon>{this.getSidebarIcon(text)}</ListItemIcon>
@@ -210,7 +211,7 @@ class Sidebar extends React.Component {
         <main className={classes.content}>
           <div className={classes.toolbar} />
           {this.getViewComponent()}
-          {this.displayContentPage()}
+          {/* {this.displayContentPage()} */}
         </main>
       </div>
     );
@@ -221,16 +222,17 @@ const mapStateToProps = (state) => {
   return {
     open: state.isSidebarOpen,
     username: state.userName,
-    selectedContentPage: state.selectedContentPage
+    selectedContentPage: state.selectedContentPage,
   };
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
   return {
-    toggleSideBar: () => dispatch(toggleSidebar())
-  }
-}
+    toggleSideBar: () => dispatch(toggleSidebar()),
+  };
+};
 
-export default connect(mapStateToProps, mapDispatchToProps)(
-  withStyles(styles, { withTheme: true })(Sidebar)
-);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withStyles(styles, { withTheme: true })(Sidebar));
