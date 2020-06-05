@@ -5,10 +5,10 @@ export const toggleSidebar = () => ({
     type: 'TOGGLE_SIDEBAR'
 })
 
-export const LogIn = () => ({
+export const logIn = () => ({
     type: LOG_IN
 })
 
-export const LogOut = () => ({
+export const logOut = () => ({
     type: LOG_OUT
 })

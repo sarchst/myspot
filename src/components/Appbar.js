@@ -9,7 +9,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import Button from '@material-ui/core/Button';
 import { withStyles } from '@material-ui/core';
 import { connect } from 'react-redux';
-import { toggleSidebar } from '../app/actions';
+import {logOut, toggleSidebar} from '../app/actions';
 
 const drawerWidth = 240;
 
@@ -87,6 +87,10 @@ class Appbar extends React.Component {
         this.props.toggleSidebar();
     };
 
+    logOut = () => {
+        this.props.logOut();
+    }
+
 
     render() {
 
@@ -120,7 +124,7 @@ class Appbar extends React.Component {
                     <Button color="inherit">
                         Feed
                     </Button>
-                    <Button color="inherit">
+                    <Button color="inherit" onClick={this.logOut}>
                         Logout
                     </Button>
                 </Toolbar>
@@ -138,4 +142,11 @@ const mapStateToProps = state => {
     }
 }
 
-export default connect(mapStateToProps, { toggleSidebar })(withStyles(styles, { withTheme: true })(Appbar));
+const mapDispatchToProps = dispatch => {
+    return {
+        toggleSidebar: () => dispatch(toggleSidebar()),
+        logOut: () => dispatch(logOut())
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles, { withTheme: true })(Appbar));

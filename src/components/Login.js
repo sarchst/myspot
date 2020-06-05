@@ -17,7 +17,7 @@ import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import MusicNoteRoundedIcon from '@material-ui/icons/MusicNoteRounded';
-import {LogIn} from "../app/actions";
+import {logIn} from "../app/actions";
 
 function Copyright() {
     return (
@@ -169,7 +169,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        LogIn: () => dispatch(LogIn())
+        LogIn: () => dispatch(logIn())
         // examples
         // selectMessage: selectedMessage => dispatch(selectMessage(selectedMessage)),
         //     deleteMessage: idx => dispatch(deleteMessage(idx))
