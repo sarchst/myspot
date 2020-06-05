@@ -1,5 +1,6 @@
 import React from "react";
 import clsx from "clsx";
+import Playlists from "./Playlists";
 
 import Drawer from "@material-ui/core/Drawer";
 import List from "@material-ui/core/List";
@@ -102,6 +103,23 @@ class Sidebar extends React.Component {
     this.props.toggleSideBar();
   };
 
+  // This is only temporary and will need to be switched over to redux global state
+  selectView = (text) => {
+    this.setState({ viewPage: text });
+  };
+
+  // This is only temporary and will need to be switched over to redux actions and reducers
+  getViewComponent = () => {
+    switch (this.state.viewPage) {
+      case "Playlists":
+        return <Playlists />;
+      case "Posts":
+        return <Post />;
+      default:
+        return <Playlists />;
+    }
+  };
+
   getSidebarIcon = (text) => {
     switch (text) {
       case contentType.LISTENINGTO:
@@ -173,7 +191,7 @@ class Sidebar extends React.Component {
               contentType.FOLLOWERS,
               contentType.FOLLOWING
             ].map((text, index) => (
-              <ListItem button key={text}>
+              <ListItem button key={text} onClick={() => this.selectView(text)}>
                 <ListItemIcon>{this.getSidebarIcon(text)}</ListItemIcon>
                 <ListItemText primary={text} />
               </ListItem>
@@ -191,7 +209,7 @@ class Sidebar extends React.Component {
         </Drawer>
         <main className={classes.content}>
           <div className={classes.toolbar} />
-          {/*content pages are displayed here*/}
+          {this.getViewComponent()}
           {this.displayContentPage()}
         </main>
       </div>
