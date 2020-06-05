@@ -120,7 +120,9 @@ class Appbar extends React.Component {
                     <Button color="inherit">
                         Feed
                     </Button>
-                    <Button color="inherit">Login</Button>
+                    <Button color="inherit">
+                        Logout
+                    </Button>
                 </Toolbar>
             </AppBar>
 
