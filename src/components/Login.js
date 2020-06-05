@@ -16,7 +16,8 @@ import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
+import MusicNoteRoundedIcon from '@material-ui/icons/MusicNoteRounded';
+import {LogIn} from "../app/actions";
 
 function Copyright() {
     return (
@@ -36,7 +37,7 @@ const styles = theme => ({
         height: '100vh',
     },
     image: {
-        backgroundImage: 'url(https://source.unsplash.com/random)',
+        backgroundImage: 'url(https://source.unsplash.com/featured/?{music})',
         backgroundRepeat: 'no-repeat',
         backgroundColor:
             theme.palette.type === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],
@@ -68,6 +69,8 @@ class Login extends React.Component {
     }
 
     attemptLogin = () => {
+        console.log("attempting to log in");
+        this.props.LogIn();
         // check if user and pass is not empty
             // if yes, dispatch isLoggedInYes "LoggedIn"
             // clear user and pass fields
@@ -83,12 +86,19 @@ class Login extends React.Component {
                 <Grid item xs={false} sm={4} md={7} className={classes.image} />
                 <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
                     <div className={classes.paper}>
-                        <Avatar className={classes.avatar}>
-                            <LockOutlinedIcon />
-                        </Avatar>
+                        <Typography component="h1" variant="h2">
+                            <MusicNoteRoundedIcon color="secondary" style={{ fontSize: 40 }}/>
+                            MySpot
+                            <br/>
+                            <br/>
+                        </Typography>
+
                         <Typography component="h1" variant="h5">
                             Sign in
                         </Typography>
+                        <Avatar className={classes.avatar}>
+                            <LockOutlinedIcon />
+                        </Avatar>
                         <form className={classes.form} noValidate>
                             <TextField
                                 variant="outlined"
@@ -117,10 +127,11 @@ class Login extends React.Component {
                                 label="Remember me"
                             />
                             <Button
-                                type="submit"
+                                // type="submit"
                                 fullWidth
                                 variant="contained"
                                 color="primary"
+                                onClick={this.attemptLogin}
                                 className={classes.submit}
                             >
                                 Sign In
@@ -157,9 +168,13 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = dispatch => {
-    // examples
-    // selectMessage: selectedMessage => dispatch(selectMessage(selectedMessage)),
-    //     deleteMessage: idx => dispatch(deleteMessage(idx))
+    return {
+        LogIn: () => dispatch(LogIn())
+        // examples
+        // selectMessage: selectedMessage => dispatch(selectMessage(selectedMessage)),
+        //     deleteMessage: idx => dispatch(deleteMessage(idx))
+    }
+
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles, { withTheme: true })(Login));
