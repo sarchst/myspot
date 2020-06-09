@@ -30,6 +30,11 @@ import ProfilePage from "./content-page/ProfilePage";
 import FeedPage from "./content-page/FeedPage";
 import HomePage from "./content-page/HomePage";
 
+import { Link, Route, Switch } from "react-router-dom";
+import Followers from "./Followers";
+import Following from "./Following";
+import NowPlaying from "./NowPlaying";
+
 const drawerWidth = 240;
 
 const styles = (theme) => ({
@@ -109,17 +114,17 @@ class Sidebar extends React.Component {
     this.setState({ viewPage: text });
   };
 
-  // This is only temporary and will need to be switched over to redux actions and reducers
-  getViewComponent = () => {
-    switch (this.state.viewPage) {
-      case "Playlists":
-        return <Playlists />;
-      case "Posts":
-        return <Post />;
-      default:
-        return <Playlists />;
-    }
-  };
+  // // This is only temporary and will need to be switched over to redux actions and reducers
+  // getViewComponent = () => {
+  //   switch (this.state.viewPage) {
+  //     case "Playlists":
+  //       return <Playlists />;
+  //     case "Posts":
+  //       return <Post />;
+  //     default:
+  //       return <Playlists />;
+  //   }
+  // };
 
   getSidebarIcon = (text) => {
     switch (text) {
@@ -140,17 +145,17 @@ class Sidebar extends React.Component {
     }
   };
 
-  displayContentPage = () => {
-    console.log(this.props.selectedContentPage);
-    switch (this.props.selectedContentPage) {
-      case contentType.PROFILE:
-        return <ProfilePage />;
-      case contentType.FEED:
-        return <FeedPage />;
-      default:
-        return <HomePage />;
-    }
-  };
+  // displayContentPage = () => {
+  //   console.log(this.props.selectedContentPage);
+  //   switch (this.props.selectedContentPage) {
+  //     case contentType.PROFILE:
+  //       return <ProfilePage />;
+  //     case contentType.FEED:
+  //       return <FeedPage />;
+  //     default:
+  //       return <HomePage />;
+  //   }
+  // };
 
   render() {
     const { classes, theme } = this.props;
@@ -194,7 +199,9 @@ class Sidebar extends React.Component {
             ].map((text, index) => (
               <ListItem button key={text} onClick={() => this.selectView(text)}>
                 <ListItemIcon>{this.getSidebarIcon(text)}</ListItemIcon>
-                <ListItemText primary={text} />
+                <Link to={text}>
+                  <ListItemText primary={text} />
+                </Link>
               </ListItem>
             ))}
           </List>
@@ -208,10 +215,28 @@ class Sidebar extends React.Component {
             ))}
           </List>
         </Drawer>
+
         <main className={classes.content}>
           <div className={classes.toolbar} />
-          {this.getViewComponent()}
+          {/* {this.getViewComponent()} */}
           {/* {this.displayContentPage()} */}
+          <Switch>
+            <Route path="/g/Posts">
+              <Post />
+            </Route>
+            <Route path="/g/PlayLists">
+              <Playlists />
+            </Route>
+            <Route path="/g/Followers">
+              <Followers />
+            </Route>
+            <Route path="/g/Follwoing">
+              <Following />
+            </Route>
+            <Route path="/g/What I'm Listening To">
+              <NowPlaying />
+            </Route>
+          </Switch>
         </main>
       </div>
     );

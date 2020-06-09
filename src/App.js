@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import Sidebar from "./components/Sidebar";
 import Appbar from "./components/Appbar";
 import Login from "./components/Login";
+import { BrowserRouter as Router } from "react-router-dom";
 
 const loginPage = () => {
   return (
@@ -23,12 +24,23 @@ let contentPage = () => {
 };
 
 class App extends React.Component {
+  // render() {
+  //   if (this.props.isLoggedIn) {
+  //     return contentPage();
+  //   } else {
+  //     return loginPage();
+  //   }
+  // }
+
   render() {
-    if (this.props.isLoggedIn) {
-      return contentPage();
-    } else {
-      return loginPage();
-    }
+    return (
+      <Router>
+        <div className="App">
+          <Appbar />
+          <Sidebar />
+        </div>
+      </Router>
+    );
   }
 }
 
