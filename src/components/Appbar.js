@@ -12,7 +12,6 @@ import { withStyles } from "@material-ui/core";
 import { logOut, selectContentPage, toggleSidebar } from "../app/actions";
 import contentType from "../data/ContentTypeEnum";
 import { connect } from "react-redux";
-
 const drawerWidth = 240;
 
 const styles = (theme) => ({

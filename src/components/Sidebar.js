@@ -26,14 +26,15 @@ import { connect } from "react-redux";
 import { withStyles } from "@material-ui/core/styles";
 import { toggleSidebar } from "../app/actions";
 import contentType from "../data/ContentTypeEnum";
-import ProfilePage from "./content-page/ProfilePage";
-import FeedPage from "./content-page/FeedPage";
-import HomePage from "./content-page/HomePage";
+// import ProfilePage from "./content-page/ProfilePage";
+// import FeedPage from "./content-page/FeedPage";
+// import HomePage from "./content-page/HomePage";
 
 import { Link, Route, Switch } from "react-router-dom";
 import Followers from "./Followers";
 import Following from "./Following";
 import NowPlaying from "./NowPlaying";
+import ProfilePage from "./content-page/ProfilePage";
 
 const drawerWidth = 240;
 
@@ -114,18 +115,6 @@ class Sidebar extends React.Component {
     this.setState({ viewPage: text });
   };
 
-  // // This is only temporary and will need to be switched over to redux actions and reducers
-  // getViewComponent = () => {
-  //   switch (this.state.viewPage) {
-  //     case "Playlists":
-  //       return <Playlists />;
-  //     case "Posts":
-  //       return <Post />;
-  //     default:
-  //       return <Playlists />;
-  //   }
-  // };
-
   getSidebarIcon = (text) => {
     switch (text) {
       case contentType.LISTENINGTO:
@@ -144,18 +133,6 @@ class Sidebar extends React.Component {
         return <AccountCircleIcon />;
     }
   };
-
-  // displayContentPage = () => {
-  //   console.log(this.props.selectedContentPage);
-  //   switch (this.props.selectedContentPage) {
-  //     case contentType.PROFILE:
-  //       return <ProfilePage />;
-  //     case contentType.FEED:
-  //       return <FeedPage />;
-  //     default:
-  //       return <HomePage />;
-  //   }
-  // };
 
   render() {
     const { classes, theme } = this.props;
@@ -218,23 +195,24 @@ class Sidebar extends React.Component {
 
         <main className={classes.content}>
           <div className={classes.toolbar} />
-          {/* {this.getViewComponent()} */}
-          {/* {this.displayContentPage()} */}
           <Switch>
-            <Route path="/g/Posts">
+            <Route path="/Posts">
               <Post />
             </Route>
-            <Route path="/g/PlayLists">
+            <Route path="/PlayLists">
               <Playlists />
             </Route>
-            <Route path="/g/Followers">
+            <Route path="/Followers">
               <Followers />
             </Route>
-            <Route path="/g/Follwoing">
+            <Route path="/Following">
               <Following />
             </Route>
-            <Route path="/g/What I'm Listening To">
+            <Route path="/What I'm Listening To">
               <NowPlaying />
+            </Route>
+            <Route path="/">
+              <ProfilePage />
             </Route>
           </Switch>
         </main>
