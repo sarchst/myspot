@@ -166,6 +166,11 @@ class Sidebar extends React.Component {
 
           {/*TODO: EITHER map username separately so it doesn't collide with other keywords OR block keywords from being used as username*/}
           <List>
+            {/* <ListItem>
+              <ListItemIcon>{<AccountCircleIcon />}</ListItemIcon>
+              {/* <AccountCircleIcon/> */}
+            {/* <ListItemText primary={this.props.username} /> */}
+            {/* </ListItem> */}
             {[
               this.props.username,
               contentType.LISTENINGTO,
@@ -176,7 +181,7 @@ class Sidebar extends React.Component {
             ].map((text, index) => (
               <ListItem button key={text} onClick={() => this.selectView(text)}>
                 <ListItemIcon>{this.getSidebarIcon(text)}</ListItemIcon>
-                <Link to={text.toLowerCase()}>
+                <Link to={"/" + this.props.username + "/" + text.toLowerCase()}>
                   <ListItemText primary={text} />
                 </Link>
               </ListItem>
@@ -196,22 +201,22 @@ class Sidebar extends React.Component {
         <main className={classes.content}>
           <div className={classes.toolbar} />
           <Switch>
-            <Route path="/posts">
+            <Route path="/:user/posts/">
               <Post />
             </Route>
-            <Route path="/playlists">
+            <Route path="/:user/playlists">
               <Playlists />
             </Route>
-            <Route path="/followers">
+            <Route path="/:user/followers">
               <Followers />
             </Route>
-            <Route path="/following">
+            <Route path="/:user/following">
               <Following />
             </Route>
-            <Route path="/what i'm listening to">
+            <Route path="/:user/what i'm listening to">
               <NowPlaying />
             </Route>
-            <Route path={"/" + this.props.userName}>
+            <Route path={"/:user"}>
               <ProfilePage />
             </Route>
           </Switch>
