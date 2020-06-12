@@ -176,7 +176,7 @@ class Sidebar extends React.Component {
             ].map((text, index) => (
               <ListItem button key={text} onClick={() => this.selectView(text)}>
                 <ListItemIcon>{this.getSidebarIcon(text)}</ListItemIcon>
-                <Link to={text}>
+                <Link to={text.toLowerCase()}>
                   <ListItemText primary={text} />
                 </Link>
               </ListItem>
@@ -196,22 +196,22 @@ class Sidebar extends React.Component {
         <main className={classes.content}>
           <div className={classes.toolbar} />
           <Switch>
-            <Route path="/Posts">
+            <Route path="/posts">
               <Post />
             </Route>
-            <Route path="/PlayLists">
+            <Route path="/playlists">
               <Playlists />
             </Route>
-            <Route path="/Followers">
+            <Route path="/followers">
               <Followers />
             </Route>
-            <Route path="/Following">
+            <Route path="/following">
               <Following />
             </Route>
-            <Route path="/What I'm Listening To">
+            <Route path="/what i'm listening to">
               <NowPlaying />
             </Route>
-            <Route path="/">
+            <Route path={"/" + this.props.userName}>
               <ProfilePage />
             </Route>
           </Switch>
