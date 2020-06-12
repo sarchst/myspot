@@ -91,6 +91,7 @@ const styles = (theme) => ({
     alignItems: "center",
     justifyContent: "flex-end",
     padding: theme.spacing(0, 1),
+    textDecoration: "none",
     // necessary for content to be below app bar
     ...theme.mixins.toolbar,
   },
@@ -166,13 +167,18 @@ class Sidebar extends React.Component {
 
           {/*TODO: EITHER map username separately so it doesn't collide with other keywords OR block keywords from being used as username*/}
           <List>
-            {/* <ListItem>
+            <ListItem
+              button
+              key={this.props.username}
+              onClick={() => this.selectView(this.props.username)}
+            >
               <ListItemIcon>{<AccountCircleIcon />}</ListItemIcon>
-              {/* <AccountCircleIcon/> */}
-            {/* <ListItemText primary={this.props.username} /> */}
-            {/* </ListItem> */}
+              <Link to={"/" + this.props.username}>
+                <ListItemText primary={this.props.username} />
+              </Link>
+            </ListItem>
             {[
-              this.props.username,
+              // this.props.username,
               contentType.LISTENINGTO,
               contentType.POSTS,
               contentType.PLAYLISTS,
@@ -201,6 +207,9 @@ class Sidebar extends React.Component {
         <main className={classes.content}>
           <div className={classes.toolbar} />
           <Switch>
+            <Route path={"/:user"} exact>
+              <ProfilePage />
+            </Route>
             <Route path="/:user/posts/">
               <Post />
             </Route>
@@ -215,9 +224,6 @@ class Sidebar extends React.Component {
             </Route>
             <Route path="/:user/what i'm listening to">
               <NowPlaying />
-            </Route>
-            <Route path={"/:user"}>
-              <ProfilePage />
             </Route>
           </Switch>
         </main>
