@@ -9,9 +9,11 @@ import MenuIcon from "@material-ui/icons/Menu";
 import Button from "@material-ui/core/Button";
 import SettingsIcon from "@material-ui/icons/Settings";
 import { withStyles } from "@material-ui/core";
-import { logOut, selectContentPage, toggleSidebar } from "../app/actions";
+import { logOut, toggleSidebar } from "../app/actions";
 import contentType from "../data/ContentTypeEnum";
+// import ProfilePage from "../components/content-page/ProfilePage";
 import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 const drawerWidth = 240;
 
 const styles = (theme) => ({
@@ -40,35 +42,15 @@ const styles = (theme) => ({
   appbarButton: {
     marginLeft: 50,
     fontSize: 15,
+    textDecoration: "none",
+    color: "white",
   },
   appTitle: {
+    display: "flex",
     fontSize: 25,
   },
   hide: {
     display: "none",
-  },
-  drawer: {
-    width: drawerWidth,
-    flexShrink: 0,
-    whiteSpace: "nowrap",
-  },
-  drawerOpen: {
-    width: drawerWidth,
-    transition: theme.transitions.create("width", {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  },
-  drawerClose: {
-    transition: theme.transitions.create("width", {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-    overflowX: "hidden",
-    width: theme.spacing(7) + 1,
-    [theme.breakpoints.up("sm")]: {
-      width: theme.spacing(9) + 1,
-    },
   },
   toolbar: {
     display: "flex",
@@ -85,11 +67,6 @@ const styles = (theme) => ({
 });
 
 class Appbar extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { open: false };
-  }
-
   handleDrawerOpen = () => {
     this.props.toggleSidebar();
   };
@@ -123,20 +100,27 @@ class Appbar extends React.Component {
           <Typography noWrap className={classes.appTitle}>
             MySpot
           </Typography>
-          <Button
+          <Link to={"/" + this.props.username} className={classes.appbarButton}>
+            <Button
+              // onClick={() => this.props.selectContentPage(contentType.PROFILE)}
+              color="inherit"
+            >
+              {contentType.PROFILE}
+            </Button>
+          </Link>
+          <Link
+            to={"/" + this.props.username + "/feed"}
             className={classes.appbarButton}
-            color="inherit"
-            onClick={() => this.props.selectContentPage(contentType.PROFILE)}
           >
-            {contentType.PROFILE}
-          </Button>
-          <Button
-            className={classes.appbarButton}
-            color="inherit"
-            onClick={() => this.props.selectContentPage(contentType.FEED)}
-          >
-            {contentType.FEED}
-          </Button>
+            <Button
+              // className={classes.appbarButton}
+              color="inherit"
+              // onClick={() => this.props.selectContentPage(contentType.FEED)}
+            >
+              {contentType.FEED}
+            </Button>
+          </Link>
+
           <Button
             className={classes.appbarButton}
             color="inherit"
@@ -144,10 +128,14 @@ class Appbar extends React.Component {
           >
             Logout
           </Button>
-
-          <Button color="inherit" className={classes.appbarButton}>
-            <SettingsIcon />
-          </Button>
+          <Link
+            to={"/" + this.props.username + "/settings"}
+            className={classes.appbarButton}
+          >
+            <Button color="inherit">
+              <SettingsIcon />
+            </Button>
+          </Link>
         </Toolbar>
       </AppBar>
     );
@@ -157,6 +145,7 @@ class Appbar extends React.Component {
 const mapStateToProps = (state) => {
   return {
     open: state.isSidebarOpen,
+    username: state.username,
   };
 };
 
@@ -164,8 +153,8 @@ const mapDispatchToProps = (dispatch) => {
   return {
     toggleSidebar: () => dispatch(toggleSidebar()),
     logOut: () => dispatch(logOut()),
-    selectContentPage: (contentType) =>
-      dispatch(selectContentPage(contentType)),
+    // selectContentPage: (contentType) =>
+    //   dispatch(selectContentPage(contentType)),
   };
 };
 

@@ -31,31 +31,19 @@ import contentType from "../data/ContentTypeEnum";
 // import HomePage from "./content-page/HomePage";
 
 import { Link, Route, Switch } from "react-router-dom";
+
 import Followers from "./Followers";
 import Following from "./Following";
 import NowPlaying from "./NowPlaying";
-import ProfilePage from "./content-page/ProfilePage";
+import Profile from "./Profile";
+import Feed from "./Feed";
+import Settings from "./Settings";
 
 const drawerWidth = 240;
 
 const styles = (theme) => ({
   root: {
     display: "flex",
-  },
-  appBar: {
-    zIndex: theme.zIndex.drawer + 1,
-    transition: theme.transitions.create(["width", "margin"], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-  },
-  appBarShift: {
-    marginLeft: drawerWidth,
-    width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(["width", "margin"], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
   },
   menuButton: {
     marginRight: 36,
@@ -99,22 +87,23 @@ const styles = (theme) => ({
     flexGrow: 1,
     padding: theme.spacing(3),
   },
+  sidebarItem: {
+    display: "flex",
+    alignItems: "center",
+    textDecoration: "none",
+    color: "black",
+  },
 });
 
 class Sidebar extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { open: false };
-  }
-
   handleDrawerClose = () => {
     this.props.toggleSideBar();
   };
 
   // This is only temporary and will need to be switched over to redux global state
-  selectView = (text) => {
-    this.setState({ viewPage: text });
-  };
+  // selectView = (text) => {
+  //   this.setState({ viewPage: text });
+  // };
 
   getSidebarIcon = (text) => {
     switch (text) {
@@ -133,6 +122,13 @@ class Sidebar extends React.Component {
       default:
         return <AccountCircleIcon />;
     }
+  };
+
+  processTextForURL = (text) => {
+    if (text === contentType.LISTENINGTO) {
+      return "whatimlisteningto";
+    }
+    return text.toLowerCase();
   };
 
   render() {
@@ -170,24 +166,38 @@ class Sidebar extends React.Component {
             <ListItem
               button
               key={this.props.username}
-              onClick={() => this.selectView(this.props.username)}
+              // onClick={() => this.selectView(this.props.username)}
             >
-              <ListItemIcon>{<AccountCircleIcon />}</ListItemIcon>
-              <Link to={"/" + this.props.username}>
-                <ListItemText primary={this.props.username} />
+              <Link
+                className={classes.sidebarItem}
+                to={"/" + this.props.username}
+              >
+                <ListItemIcon>{<AccountCircleIcon />}</ListItemIcon>
+                <ListItemText primary={this.props.username} color="inhereit" />
               </Link>
             </ListItem>
             {[
-              // this.props.username,
               contentType.LISTENINGTO,
               contentType.POSTS,
               contentType.PLAYLISTS,
               contentType.FOLLOWERS,
               contentType.FOLLOWING,
             ].map((text, index) => (
-              <ListItem button key={text} onClick={() => this.selectView(text)}>
-                <ListItemIcon>{this.getSidebarIcon(text)}</ListItemIcon>
-                <Link to={"/" + this.props.username + "/" + text.toLowerCase()}>
+              <ListItem
+                button
+                key={text}
+                // onClick={() => this.selectView(text)}
+              >
+                <Link
+                  className={classes.sidebarItem}
+                  to={
+                    "/" +
+                    this.props.username +
+                    "/" +
+                    this.processTextForURL(text)
+                  }
+                >
+                  <ListItemIcon>{this.getSidebarIcon(text)}</ListItemIcon>
                   <ListItemText primary={text} />
                 </Link>
               </ListItem>
@@ -206,9 +216,10 @@ class Sidebar extends React.Component {
 
         <main className={classes.content}>
           <div className={classes.toolbar} />
+          {/* TODO: distinguish between active user/ logged in user once we have more than one profile */}
           <Switch>
             <Route path={"/:user"} exact>
-              <ProfilePage />
+              <Profile />
             </Route>
             <Route path="/:user/posts/">
               <Post />
@@ -222,8 +233,14 @@ class Sidebar extends React.Component {
             <Route path="/:user/following">
               <Following />
             </Route>
-            <Route path="/:user/what i'm listening to">
+            <Route path="/:user/whatimlisteningto">
               <NowPlaying />
+            </Route>
+            <Route path="/:user/feed">
+              <Feed />
+            </Route>
+            <Route path="/:user/settings">
+              <Settings />
             </Route>
           </Switch>
         </main>
@@ -235,8 +252,8 @@ class Sidebar extends React.Component {
 const mapStateToProps = (state) => {
   return {
     open: state.isSidebarOpen,
-    username: state.userName,
-    selectedContentPage: state.selectedContentPage,
+    username: state.username,
+    // selectedContentPage: state.selectedContentPage,
   };
 };
 
