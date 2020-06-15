@@ -70,7 +70,7 @@ class Settings extends React.Component {
     this.setState({ ...this.state, [event.target.name]: event.target.checked });
   };
   handleLangSelect = (event) => {
-    this.setState({ ...this.state, [event.target.name]: event.target.value });
+    this.setState({ ...this.state, language: event.target.value });
   };
 
   render() {
@@ -83,6 +83,7 @@ class Settings extends React.Component {
           <Grid item xs={12}>
             <Paper className={classes.paper}>
               <Grid className={classes.userdata} container>
+                {/* TODO: will we allow user to upload a new pic which is different from their spotify account pic? */}
                 <AccountCircleIcon className={classes.profilePic} />
                 <Grid className={classes.content} item>
                   <Grid item>
@@ -96,7 +97,7 @@ class Settings extends React.Component {
             </Paper>
             {/* <Divider className={classes.divider} /> */}
             <Grid item xs={12}>
-              <Paper className={classes.paper} container>
+              <Paper className={classes.paper}>
                 <Grid className={classes.setting} container>
                   <Grid item>
                     <Typography>Notifications</Typography>
@@ -132,11 +133,14 @@ class Settings extends React.Component {
                       labelId="combo-box-lang-label"
                       id="combo-box-lang"
                       style={{ width: 200 }}
-                      color="inherit"
-                      onchange={this.handleLangSelect}
+                      color="primary"
+                      onChange={this.handleLangSelect}
+                      value={this.state.language}
                     >
                       {languages.map((text, index) => (
-                        <MenuItem value={text}>{text}</MenuItem>
+                        <MenuItem value={text} key={index}>
+                          {text}
+                        </MenuItem>
                       ))}
                     </Select>
                   </FormControl>
