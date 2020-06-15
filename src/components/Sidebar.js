@@ -89,6 +89,8 @@ const styles = (theme) => ({
   },
   sidebarItem: {
     display: "flex",
+    flexGrow: 1,
+    flexShrink: 1,
     alignItems: "center",
     textDecoration: "none",
     color: "black",
@@ -176,6 +178,7 @@ class Sidebar extends React.Component {
                 <ListItemText primary={this.props.username} color="inhereit" />
               </Link>
             </ListItem>
+
             {[
               contentType.LISTENINGTO,
               contentType.POSTS,

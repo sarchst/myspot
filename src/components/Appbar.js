@@ -48,6 +48,7 @@ const styles = (theme) => ({
   appTitle: {
     display: "flex",
     fontSize: 25,
+    flexShrink: 1,
   },
   hide: {
     display: "none",
@@ -97,7 +98,7 @@ class Appbar extends React.Component {
           >
             <MenuIcon />
           </IconButton>
-          <Typography noWrap className={classes.appTitle}>
+          <Typography noWrap={false} className={classes.appTitle}>
             MySpot
           </Typography>
           <Link to={"/" + this.props.username} className={classes.appbarButton}>
