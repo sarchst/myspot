@@ -19,6 +19,6 @@ export const usernameSubmit = (payload) => ({
   username: payload,
 });
 
-export const selectContentPage = (payload) => ({
-  type: payload,
-});
+// export const selectContentPage = (payload) => ({
+//   type: payload,
+// });

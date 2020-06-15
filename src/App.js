@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import Sidebar from "./components/Sidebar";
 import Appbar from "./components/Appbar";
 import Login from "./components/Login";
+import { BrowserRouter as Router } from "react-router-dom";
 
 const loginPage = () => {
   return (
@@ -13,20 +14,28 @@ const loginPage = () => {
   );
 };
 
-let contentPage = () => {
-  return (
-    <div className="App">
-      <Appbar />
-      <Sidebar />
-    </div>
-  );
-};
+// let contentPage = () => {
+//   return (
+//     <div className="App">
+//       <Appbar />
+//       <Sidebar />
+//     </div>
+//   );
+// };
 
 class App extends React.Component {
   render() {
     if (this.props.isLoggedIn) {
-      return contentPage();
+      return (
+        <Router>
+          <div className="App">
+            <Appbar />
+            <Sidebar />
+          </div>
+        </Router>
+      );
     } else {
+      // TODO: use React Router/redirect to from login page to main page after authentication is implemented
       return loginPage();
     }
   }
