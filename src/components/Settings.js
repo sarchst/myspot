@@ -11,6 +11,11 @@ import { connect } from "react-redux";
 import { withStyles } from "@material-ui/core/styles";
 import { Typography } from "@material-ui/core";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
+import {
+  toggleNotifications,
+  toggleDarkmode,
+  changeLang,
+} from "../app/actions";
 
 const styles = (theme) => ({
   root: {
@@ -50,27 +55,18 @@ const styles = (theme) => ({
   },
 });
 
-const languages = ["English", "French"];
+const languages = ["English", "French", "Spanish"];
 
 class Settings extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      notifications: true,
-      darkmode: false,
-      language: "English",
-    };
-  }
-
-  toggleNotifications = (event) => {
-    this.setState({ ...this.state, [event.target.name]: event.target.checked });
+  handleNotifToggle = () => {
+    this.props.toggleNotifications(this.props.accountSettings.notifications);
   };
 
-  toggleDarkmode = (event) => {
-    this.setState({ ...this.state, [event.target.name]: event.target.checked });
+  handleDarkmodeToggle = () => {
+    this.props.toggleDarkmode(this.props.accountSettings.darkmode);
   };
   handleLangSelect = (event) => {
-    this.setState({ ...this.state, language: event.target.value });
+    this.props.changeLang(event.target.value);
   };
 
   render() {
@@ -104,8 +100,8 @@ class Settings extends React.Component {
                   </Grid>
                   <Grid item>
                     <Switch
-                      checked={this.state.notifications}
-                      onChange={this.toggleNotifications}
+                      checked={this.props.accountSettings.notifications}
+                      onChange={this.handleNotifToggle}
                       name="notifications"
                       inputProps={{ "aria-label": "secondary checkbox" }}
                     />
@@ -118,8 +114,8 @@ class Settings extends React.Component {
                   </Grid>
                   <Grid item>
                     <Switch
-                      checked={this.state.darkmode}
-                      onChange={this.toggleDarkmode}
+                      checked={this.props.accountSettings.darkmode}
+                      onChange={this.handleDarkmodeToggle}
                       name="darkmode"
                       inputProps={{ "aria-label": "secondary checkbox" }}
                     />
@@ -135,7 +131,7 @@ class Settings extends React.Component {
                       style={{ width: 200 }}
                       color="primary"
                       onChange={this.handleLangSelect}
-                      value={this.state.language}
+                      value={this.props.accountSettings.language}
                     >
                       {languages.map((text, index) => (
                         <MenuItem value={text} key={index}>
@@ -166,8 +162,11 @@ class Settings extends React.Component {
 
 const mapStateToProps = (state) => ({
   username: state.username,
+  accountSettings: state.accountSettings,
 });
 
-export default connect(mapStateToProps)(
-  withStyles(styles, { withTheme: true })(Settings)
-);
+export default connect(mapStateToProps, {
+  toggleNotifications,
+  toggleDarkmode,
+  changeLang,
+})(withStyles(styles, { withTheme: true })(Settings));
