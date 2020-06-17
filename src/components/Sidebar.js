@@ -1,6 +1,6 @@
 import React from "react";
 import clsx from "clsx";
-import Post from "./Post";
+// import Post from "./Post";
 import Playlists from "./Playlists";
 
 import Drawer from "@material-ui/core/Drawer";
@@ -36,7 +36,7 @@ import Followers from "./Followers";
 import Following from "./Following";
 import NowPlaying from "./NowPlaying";
 import Profile from "./Profile";
-import Feed from "./Feed";
+import Feed from "./feed/Feed";
 import Settings from "./Settings";
 
 const drawerWidth = 240;
@@ -222,7 +222,7 @@ class Sidebar extends React.Component {
               <Profile />
             </Route>
             <Route path="/:user/posts/">
-              <Post />
+              <Feed />
             </Route>
             <Route path="/:user/playlists">
               <Playlists />

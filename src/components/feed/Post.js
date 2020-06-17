@@ -65,15 +65,9 @@ class Post extends Component {
   state = {
     moreOptions: false,
     anchorEl: null,
-    userID: 1,
-    username: "BOB_STAR_123",
-    content: "Check out this new playlist by ChilledCow!",
-    title: "Study Beats",
-    type: "playlist",
-    usersLiked: [2, 3, 4, 5, 6],
   };
 
-  gotToMedia = () => {
+  goToMedia = () => {
     // TODO GOTO media
   };
 
@@ -117,7 +111,7 @@ class Post extends Component {
   };
 
   render() {
-    const { classes } = this.props;
+    const { classes, postdata } = this.props;
     return (
       <Paper className={classes.paper}>
         <Grid
@@ -132,7 +126,7 @@ class Post extends Component {
           <Grid item>
             <Avatar className={classes.display}>DP</Avatar>
           </Grid>
-          <Grid item>{this.state.username}</Grid>
+          <Grid item>{postdata.username}</Grid>
         </Grid>
         <Grid container spacing={1}>
           <Grid
@@ -144,14 +138,14 @@ class Post extends Component {
             justify="center"
             alignItems="flex-start"
           >
-            <Grid item>{this.state.content}</Grid>
+            <Grid item>{postdata.content}</Grid>
             <Grid item>
               <Link
                 component="button"
                 variant="body2"
-                onClick={() => this.gotToMedia()}
+                onClick={() => this.goToMedia()}
               >
-                {this.state.title}
+                {postdata.title}
               </Link>
             </Grid>
             {/* TODO add media art component? */}
@@ -219,12 +213,10 @@ class Post extends Component {
                 aria-controls="like-post"
                 onClick={() => this.like(user.id)}
                 color={
-                  this.state.usersLiked.includes(user.id)
-                    ? "primary"
-                    : "default"
+                  postdata.usersLiked.includes(user.id) ? "primary" : "default"
                 }
               >
-                {this.state.usersLiked.length}
+                {postdata.usersLiked.length}
                 <EmojiEmotionsIcon />
               </IconButton>
             </Grid>
@@ -234,7 +226,7 @@ class Post extends Component {
                 size="small"
                 aria-label="repost"
                 aria-controls="repost-post"
-                onClick={() => this.repost(this.state)}
+                onClick={() => this.repost(postdata)}
               >
                 <ReplyIcon />
               </IconButton>
@@ -245,7 +237,7 @@ class Post extends Component {
                 size="small"
                 aria-label="share"
                 aria-controls="share-post"
-                onClick={() => this.share(this.state.type)}
+                onClick={() => this.share(postdata.type)}
               >
                 <ShareIcon />
               </IconButton>
@@ -256,7 +248,7 @@ class Post extends Component {
                 size="small"
                 aria-label="add"
                 aria-controls="add-media"
-                onClick={() => this.addPostMedia(this.state.type)}
+                onClick={() => this.addPostMedia(postdata.type)}
               >
                 <LibraryAddIcon />
               </IconButton>
@@ -270,6 +262,7 @@ class Post extends Component {
 
 Post.propTypes = {
   classes: PropTypes.object.isRequired,
+  postdata: PropTypes.object.isRequired,
 };
 
 export default compose(withStyles(styles))(Post);
