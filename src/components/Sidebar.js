@@ -15,12 +15,13 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
-import AudiotrackIcon from "@material-ui/icons/Audiotrack";
+// import AudiotrackIcon from "@material-ui/icons/Audiotrack";
 import HeadsetIcon from "@material-ui/icons/Headset";
 import MicIcon from "@material-ui/icons/Mic";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import QueueMusicIcon from "@material-ui/icons/QueueMusic";
 import PlayCircleFilledIcon from "@material-ui/icons/PlayCircleFilled";
+import AlbumIcon from "@material-ui/icons/Album";
 
 import { connect } from "react-redux";
 import { withStyles } from "@material-ui/core/styles";
@@ -93,7 +94,7 @@ const styles = (theme) => ({
     flexShrink: 1,
     alignItems: "center",
     textDecoration: "none",
-    color: "black",
+    color: "inherit",
   },
 });
 
@@ -113,8 +114,8 @@ class Sidebar extends React.Component {
         return <PlayCircleFilledIcon />;
       case contentType.PLAYLISTS:
         return <QueueMusicIcon />;
-      case contentType.POSTS:
-        return <AudiotrackIcon />;
+      case contentType.ALBUMS:
+        return <AlbumIcon />;
       case contentType.FOLLOWERS:
         return <MicIcon />;
       case contentType.FOLLOWING:
@@ -181,7 +182,7 @@ class Sidebar extends React.Component {
 
             {[
               contentType.LISTENINGTO,
-              contentType.POSTS,
+              contentType.ALBUMS,
               contentType.PLAYLISTS,
               contentType.FOLLOWERS,
               contentType.FOLLOWING,
@@ -224,7 +225,7 @@ class Sidebar extends React.Component {
             <Route path={"/:user"} exact>
               <Profile />
             </Route>
-            <Route path="/:user/posts/">
+            <Route path="/:user/albums">
               <Post />
             </Route>
             <Route path="/:user/playlists">

@@ -11,7 +11,6 @@ import SettingsIcon from "@material-ui/icons/Settings";
 import { withStyles } from "@material-ui/core";
 import { logOut, toggleSidebar } from "../app/actions";
 import contentType from "../data/ContentTypeEnum";
-// import ProfilePage from "../components/content-page/ProfilePage";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 const drawerWidth = 240;
@@ -103,7 +102,6 @@ class Appbar extends React.Component {
           </Typography>
           <Link to={"/" + this.props.username} className={classes.appbarButton}>
             <Button
-              // onClick={() => this.props.selectContentPage(contentType.PROFILE)}
               color="inherit"
             >
               {contentType.PROFILE}
@@ -114,9 +112,7 @@ class Appbar extends React.Component {
             className={classes.appbarButton}
           >
             <Button
-              // className={classes.appbarButton}
               color="inherit"
-              // onClick={() => this.props.selectContentPage(contentType.FEED)}
             >
               {contentType.FEED}
             </Button>
@@ -154,8 +150,6 @@ const mapDispatchToProps = (dispatch) => {
   return {
     toggleSidebar: () => dispatch(toggleSidebar()),
     logOut: () => dispatch(logOut()),
-    // selectContentPage: (contentType) =>
-    //   dispatch(selectContentPage(contentType)),
   };
 };
 
