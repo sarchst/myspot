@@ -1,6 +1,6 @@
  const contentType = {
     LISTENINGTO: "What I'm Listening To",
-    POSTS: "Posts",
+    ALBUMS: "Albums",
     PLAYLISTS: "PlayLists",
     FOLLOWERS: "Followers",
     FOLLOWING: "Following",

@@ -22,3 +22,18 @@ export const usernameSubmit = (payload) => ({
 // export const selectContentPage = (payload) => ({
 //   type: payload,
 // });
+
+export const toggleNotifications = (payload) => ({
+  type: "TOGGLE_NOTIFICATIONS",
+  payload,
+});
+
+export const toggleDarkmode = (payload) => ({
+  type: "TOGGLE_DARKMODE",
+  payload,
+});
+
+export const changeLang = (payload) => ({
+  type: "CHANGE_LANG",
+  payload,
+});
