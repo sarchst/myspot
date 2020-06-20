@@ -150,59 +150,70 @@ class Login extends React.Component {
               <LockOutlinedIcon />
             </Avatar>
             <form className={classes.form} noValidate>
-              <TextField
-                variant="outlined"
-                margin="normal"
-                required
-                fullWidth
-                id="email"
-                label="Username"
-                name="email"
-                autoComplete="email"
-                autoFocus
-                value={this.state.usernameInput}
-                onChange={this.usernameInput}
-              />
-              <TextField
-                variant="outlined"
-                margin="normal"
-                required
-                fullWidth
-                name="password"
-                label="Password"
-                type="password"
-                id="password"
-                autoComplete="current-password"
-                value={this.state.passwordInput}
-                onChange={this.passwordInput}
-              />
-              <FormControlLabel
-                control={<Checkbox value="remember" color="primary" />}
-                label="Remember me"
-              />
-              {this.displayLoginError()}
+              {/*<TextField*/}
+              {/*  variant="outlined"*/}
+              {/*  margin="normal"*/}
+              {/*  required*/}
+              {/*  fullWidth*/}
+              {/*  id="email"*/}
+              {/*  label="Username"*/}
+              {/*  name="email"*/}
+              {/*  autoComplete="email"*/}
+              {/*  autoFocus*/}
+              {/*  value={this.state.usernameInput}*/}
+              {/*  onChange={this.usernameInput}*/}
+              {/*/>*/}
+              {/*<TextField*/}
+              {/*  variant="outlined"*/}
+              {/*  margin="normal"*/}
+              {/*  required*/}
+              {/*  fullWidth*/}
+              {/*  name="password"*/}
+              {/*  label="Password"*/}
+              {/*  type="password"*/}
+              {/*  id="password"*/}
+              {/*  autoComplete="current-password"*/}
+              {/*  value={this.state.passwordInput}*/}
+              {/*  onChange={this.passwordInput}*/}
+              {/*/>*/}
+              {/*<FormControlLabel*/}
+              {/*  control={<Checkbox value="remember" color="primary" />}*/}
+              {/*  label="Remember me"*/}
+              {/*/>*/}
+              {/*{this.displayLoginError()}*/}
+              {/*<Button*/}
+              {/*  // type="submit"*/}
+              {/*  fullWidth*/}
+              {/*  variant="contained"*/}
+              {/*  color="primary"*/}
+              {/*  onClick={this.attemptLogin}*/}
+              {/*  className={classes.submit}*/}
+              {/*>*/}
+              {/*  Sign In*/}
+              {/*</Button>*/}
+              {/*<Grid container>*/}
+              {/*  <Grid item xs>*/}
+              {/*    <Link href="#" variant="body2">*/}
+              {/*      Forgot password?*/}
+              {/*    </Link>*/}
+              {/*  </Grid>*/}
+              {/*  <Grid item>*/}
+              {/*    <Link href="#" variant="body2">*/}
+              {/*      {"Don't have an account? Sign Up"}*/}
+              {/*    </Link>*/}
+              {/*  </Grid>*/}
+              {/*</Grid>*/}
               <Button
-                // type="submit"
-                fullWidth
-                variant="contained"
-                color="primary"
-                onClick={this.attemptLogin}
-                className={classes.submit}
+                  // type="submit"
+                  href={"http://localhost:8888"}
+                  fullWidth
+                  variant="contained"
+                  color="primary"
+                  // onClick={this.attemptLogin}
+                  className={classes.submit}
               >
-                Sign In
+                Sign In With Spotify
               </Button>
-              <Grid container>
-                <Grid item xs>
-                  <Link href="#" variant="body2">
-                    Forgot password?
-                  </Link>
-                </Grid>
-                <Grid item>
-                  <Link href="#" variant="body2">
-                    {"Don't have an account? Sign Up"}
-                  </Link>
-                </Grid>
-              </Grid>
               <Box mt={5}>
                 <Copyright />
               </Box>

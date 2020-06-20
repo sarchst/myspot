@@ -6,6 +6,10 @@ import Appbar from "./components/Appbar";
 import Login from "./components/Login";
 import { BrowserRouter as Router } from "react-router-dom";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
+import Spotify from 'spotify-web-api-js';
+import Button from "@material-ui/core/Button";
+
+const spotifyWebApi = new Spotify();
 
 const loginPage = () => {
   return (
@@ -42,6 +46,49 @@ const darkTheme = createMuiTheme({
   },
 });
 class App extends React.Component {
+  constructor(props) {
+    super(props);
+    const params = this.getHashParams();
+    console.log("params is: ");
+    console.log(params);
+    console.log("access token is " + params.access_token);
+    this.state = {
+      isLoggedIn: (params.access_token) ? true : false,
+      nowPlaying: {
+        name: "Not checked",
+        image: ""
+      }
+    }
+
+    if (params.access_token) {
+      spotifyWebApi.setAccessToken(params.access_token);
+    }
+  }
+
+  getNowPlaying() {
+    spotifyWebApi.getMyCurrentPlaybackState()
+    .then((response) => {
+      console.log("response is: ");
+      console.log(response);
+      this.setState({
+        nowPlaying: {
+          name: response.item.name,
+          image: response.item.album.images[0].url
+        }
+      })
+    })
+  }
+
+  getHashParams() {
+    var hashParams = {};
+    var e, r = /([^&;=]+)=?([^&;]*)/g,
+        q = window.location.hash.substring(1);
+    while ( e = r.exec(q)) {
+      hashParams[e[1]] = decodeURIComponent(e[2]);
+    }
+    return hashParams;
+  }
+
   selectTheme = () =>
     this.props.accountSettings.darkmode ? darkTheme : lightTheme;
 
@@ -59,7 +106,24 @@ class App extends React.Component {
       );
     } else {
       // TODO: use React Router/redirect to from login page to main page after authentication is implemented
-      return loginPage();
+      // return loginPage();
+      return (
+          <div>
+            <Button
+                // type="submit"
+                href={"http://localhost:8888"}
+                fullWidth
+                variant="contained"
+                color="primary"
+                // onClick={this.attemptLogin}
+            >
+              Sign In With Spotify
+            </Button>
+            <div>Now Playing: {this.state.nowPlaying.name}</div>
+            <img src={this.state.nowPlaying.image} style={{width: 100}}/>
+            <button onClick= {() => this.getNowPlaying()}>Check Now Playing</button>
+          </div>
+      )
     }
   }
 }
