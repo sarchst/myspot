@@ -47,12 +47,11 @@ const initialState = {
 export const feed = (state = initialState, action) => {
   switch (action.type) {
     case TOGGLE_LIKE:
-      let newSet;
+      const newSet = new Set(action.payload.post.usersLiked);
       if (action.payload.post.usersLiked.has(action.payload.userId)) {
-        action.payload.post.usersLiked.delete(action.payload.userId);
-        newSet = action.payload.post.usersLiked;
+        newSet.delete(action.payload.userId);
       } else {
-        newSet = action.payload.post.usersLiked.add(action.payload.userId);
+        newSet.add(action.payload.userId);
       }
       return {
         ...state,

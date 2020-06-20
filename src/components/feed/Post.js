@@ -33,7 +33,7 @@ const styles = {
     borderRadius: 12,
     margin: 5,
   },
-  content: {
+  userGrid: {
     margin: 5,
   },
   button: {
@@ -109,11 +109,12 @@ class Post extends Component {
         <Grid
           item
           container
-          xs
+          xs={2}
           spacing={1}
           direction="column"
           justify="center"
           alignItems="center"
+          className={classes.userGrid}
         >
           <Grid item>
             <Avatar className={classes.display}>DP</Avatar>
@@ -124,7 +125,7 @@ class Post extends Component {
           <Grid
             item
             container
-            xs={10}
+            xs={9}
             spacing={2}
             direction="column"
             justify="center"
