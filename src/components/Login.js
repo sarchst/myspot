@@ -203,6 +203,17 @@ class Login extends React.Component {
                   </Link>
                 </Grid>
               </Grid>
+              <Button
+                  // type="submit"
+                  href={"http://localhost:8888"}
+                  fullWidth
+                  variant="contained"
+                  color="secondary"
+                  // onClick={this.attemptLogin}
+                  className={classes.submit}
+              >
+                Sign In With Spotify
+              </Button>
               <Box mt={5}>
                 <Copyright />
               </Box>
@@ -221,15 +232,14 @@ const mapStateToProps = (state) => {
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    logIn: () => dispatch(logIn()),
-    usernameSubmit: (username) => dispatch(usernameSubmit(username)),
-    // selectContentPage: contentType => dispatch(selectContentPage(contentType))
-  };
-};
+// const mapDispatchToProps = (dispatch) => {
+//   return {
+//     logIn: () => dispatch(logIn()),
+//     usernameSubmit: (username) => dispatch(usernameSubmit(username)),
+//     // selectContentPage: contentType => dispatch(selectContentPage(contentType))
+//   };
+// };
 
 export default connect(
-  mapStateToProps,
-  mapDispatchToProps
+  mapStateToProps
 )(withStyles(styles, { withTheme: true })(Login));

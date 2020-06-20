@@ -6,14 +6,18 @@ import Appbar from "./components/Appbar";
 import Login from "./components/Login";
 import { BrowserRouter as Router } from "react-router-dom";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
+import Spotify from 'spotify-web-api-js';
+import {logIn, registerSpotifyWebApi, usernameSubmit} from "./app/actions";
 
-const loginPage = () => {
-  return (
-    <div className="App">
-      <Login />
-    </div>
-  );
-};
+const spotifyWebApi = new Spotify();
+
+// const loginPage = () => {
+//   return (
+//     <div className="App">
+//       <Login />
+//     </div>
+//   );
+// };
 
 const lightTheme = createMuiTheme({
   palette: {
@@ -42,6 +46,38 @@ const darkTheme = createMuiTheme({
   },
 });
 class App extends React.Component {
+  constructor(props) {
+    super(props);
+    const params = this.getHashParams();
+    console.log("params is: ");
+    console.log(params);
+    console.log("access token is " + params.access_token);
+
+    if (params.access_token) {
+      spotifyWebApi.setAccessToken(params.access_token);
+      console.log("LOGGING IN: SENDING SPOTIFYWEBAPI TO REDUX STORE");
+      console.log(spotifyWebApi);
+      this.props.registerSpotifyWebApi(params.access_token);
+      spotifyWebApi.getMe()
+          .then((response) => {
+            console.log("user profile response object ");
+            console.log(response);
+            this.props.usernameSubmit(response.display_name);
+            this.props.logIn();
+          })
+    }
+  }
+
+  getHashParams() {
+    var hashParams = {};
+    var e, r = /([^&;=]+)=?([^&;]*)/g,
+        q = window.location.hash.substring(1);
+    while ( e = r.exec(q)) {
+      hashParams[e[1]] = decodeURIComponent(e[2]);
+    }
+    return hashParams;
+  }
+
   selectTheme = () =>
     this.props.accountSettings.darkmode ? darkTheme : lightTheme;
 
@@ -59,7 +95,21 @@ class App extends React.Component {
       );
     } else {
       // TODO: use React Router/redirect to from login page to main page after authentication is implemented
-      return loginPage();
+      // return loginPage();
+      return (
+          // <div>
+          //   <Button
+          //       // type="submit"
+          //       href={"http://localhost:8888"}
+          //       fullWidth
+          //       variant="contained"
+          //       color="primary"
+          //       // onClick={this.attemptLogin}
+          //   >
+          //     Sign In With Spotify
+          //   </Button>
+          <Login/>
+      )
     }
   }
 }
@@ -72,4 +122,13 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps)(App);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    logIn: () => dispatch(logIn()),
+    usernameSubmit: (username) => dispatch(usernameSubmit(username)),
+    registerSpotifyWebApi: (spotifyWebApi) => dispatch(registerSpotifyWebApi(spotifyWebApi)),
+    // selectContentPage: contentType => dispatch(selectContentPage(contentType))
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

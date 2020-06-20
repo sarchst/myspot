@@ -1,6 +1,12 @@
 export const LOG_IN = "LOG_IN";
 export const LOG_OUT = "LOG_OUT";
 export const USERNAME = "USERNAME";
+export const SPOTIFY_WEB_API = "SPOTIFY_WEB_API";
+
+export const registerSpotifyWebApi = (spotifyWebApi) => ({
+  type: SPOTIFY_WEB_API,
+  payload: spotifyWebApi
+});
 
 export const toggleSidebar = () => ({
   type: "TOGGLE_SIDEBAR",
