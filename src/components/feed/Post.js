@@ -25,6 +25,7 @@ const styles = {
     display: "flex",
     padding: 10,
     borderRadius: 16,
+    margin: 5,
   },
   display: {
     display: "flex",
@@ -32,7 +33,9 @@ const styles = {
     borderRadius: 12,
     margin: 5,
   },
-  content: {},
+  content: {
+    margin: 5,
+  },
   button: {
     padding: 0,
     width: 30,
@@ -56,11 +59,6 @@ const styles = {
 
 const menuOptions = ["edit", "delete", "report"];
 
-const user = {
-  id: 7,
-  username: "FreeBird_86",
-};
-
 class Post extends Component {
   state = {
     moreOptions: false,
@@ -72,13 +70,7 @@ class Post extends Component {
   };
 
   like = (id) => {
-    if (!this.state.usersLiked.includes(id)) {
-      this.setState({ usersLiked: [...this.state.usersLiked, id] });
-    } else {
-      this.setState({
-        usersLiked: this.state.usersLiked.filter((u) => u !== id),
-      });
-    }
+    this.props.toggleLike();
   };
 
   repost = (post) => {
@@ -211,9 +203,11 @@ class Post extends Component {
                 size="small"
                 aria-label="like"
                 aria-controls="like-post"
-                onClick={() => this.like(user.id)}
+                onClick={() => this.like(this.props.key)}
                 color={
-                  postdata.usersLiked.includes(user.id) ? "primary" : "default"
+                  postdata.usersLiked.has(this.props.userId)
+                    ? "primary"
+                    : "default"
                 }
               >
                 {postdata.usersLiked.length}
