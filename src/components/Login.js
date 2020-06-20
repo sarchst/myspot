@@ -17,7 +17,7 @@ import Grid from "@material-ui/core/Grid";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import MusicNoteRoundedIcon from "@material-ui/icons/MusicNoteRounded";
-import { logIn, usernameSubmit } from "../app/actions";
+// import { logIn, usernameSubmit } from "../app/actions";
 import red from "@material-ui/core/colors/red";
 // import contentType from "../data/ContentTypeEnum";
 
@@ -204,13 +204,13 @@ class Login extends React.Component {
                 </Grid>
               </Grid>
               <Button
-                  // type="submit"
-                  href={"http://localhost:8888"}
-                  fullWidth
-                  variant="contained"
-                  color="secondary"
-                  // onClick={this.attemptLogin}
-                  className={classes.submit}
+                // type="submit"
+                href={"http://localhost:8888"}
+                fullWidth
+                variant="contained"
+                color="secondary"
+                // onClick={this.attemptLogin}
+                className={classes.submit}
               >
                 Sign In With Spotify
               </Button>
@@ -240,6 +240,6 @@ const mapStateToProps = (state) => {
 //   };
 // };
 
-export default connect(
-  mapStateToProps
-)(withStyles(styles, { withTheme: true })(Login));
+export default connect(mapStateToProps)(
+  withStyles(styles, { withTheme: true })(Login)
+);

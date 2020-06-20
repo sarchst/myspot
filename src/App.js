@@ -6,8 +6,8 @@ import Appbar from "./components/Appbar";
 import Login from "./components/Login";
 import { BrowserRouter as Router } from "react-router-dom";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
-import Spotify from 'spotify-web-api-js';
-import {logIn, registerSpotifyWebApi, usernameSubmit} from "./app/actions";
+import Spotify from "spotify-web-api-js";
+import { logIn, registerSpotifyWebApi, usernameSubmit } from "./app/actions";
 
 const spotifyWebApi = new Spotify();
 
@@ -49,30 +49,31 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     const params = this.getHashParams();
-    console.log("params is: ");
-    console.log(params);
-    console.log("access token is " + params.access_token);
+    // console.log("params is: ");
+    // console.log(params);
+    // console.log("access token is " + params.access_token);
 
     if (params.access_token) {
       spotifyWebApi.setAccessToken(params.access_token);
       console.log("LOGGING IN: SENDING SPOTIFYWEBAPI TO REDUX STORE");
       console.log(spotifyWebApi);
       this.props.registerSpotifyWebApi(params.access_token);
-      spotifyWebApi.getMe()
-          .then((response) => {
-            console.log("user profile response object ");
-            console.log(response);
-            this.props.usernameSubmit(response.display_name);
-            this.props.logIn();
-          })
+      spotifyWebApi.getMe().then((response) => {
+        console.log("user profile response object ");
+        console.log(response);
+        this.props.usernameSubmit(response.display_name);
+        this.props.logIn();
+      });
     }
   }
 
+  // got this code from a Spotify API tutorial https://www.youtube.com/watch?v=prayNyuN3w0
   getHashParams() {
     var hashParams = {};
-    var e, r = /([^&;=]+)=?([^&;]*)/g,
-        q = window.location.hash.substring(1);
-    while ( e = r.exec(q)) {
+    var e,
+      r = /([^&;=]+)=?([^&;]*)/g,
+      q = window.location.hash.substring(1);
+    while ((e = r.exec(q))) {
       hashParams[e[1]] = decodeURIComponent(e[2]);
     }
     return hashParams;
@@ -97,19 +98,19 @@ class App extends React.Component {
       // TODO: use React Router/redirect to from login page to main page after authentication is implemented
       // return loginPage();
       return (
-          // <div>
-          //   <Button
-          //       // type="submit"
-          //       href={"http://localhost:8888"}
-          //       fullWidth
-          //       variant="contained"
-          //       color="primary"
-          //       // onClick={this.attemptLogin}
-          //   >
-          //     Sign In With Spotify
-          //   </Button>
-          <Login/>
-      )
+        // <div>
+        //   <Button
+        //       // type="submit"
+        //       href={"http://localhost:8888"}
+        //       fullWidth
+        //       variant="contained"
+        //       color="primary"
+        //       // onClick={this.attemptLogin}
+        //   >
+        //     Sign In With Spotify
+        //   </Button>
+        <Login />
+      );
     }
   }
 }
@@ -126,7 +127,8 @@ const mapDispatchToProps = (dispatch) => {
   return {
     logIn: () => dispatch(logIn()),
     usernameSubmit: (username) => dispatch(usernameSubmit(username)),
-    registerSpotifyWebApi: (spotifyWebApi) => dispatch(registerSpotifyWebApi(spotifyWebApi)),
+    registerSpotifyWebApi: (spotifyWebApi) =>
+      dispatch(registerSpotifyWebApi(spotifyWebApi)),
     // selectContentPage: contentType => dispatch(selectContentPage(contentType))
   };
 };
