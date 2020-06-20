@@ -37,3 +37,17 @@ export const changeLang = (payload) => ({
   type: "CHANGE_LANG",
   payload,
 });
+
+let postId = 1;
+export const makePost = (payload) => ({
+  type: "NEW_POST",
+  payload: {
+    id: ++postId,
+    userID: ++postId,
+    username: payload.username,
+    content: payload.content,
+    title: payload.title,
+    type: payload.type,
+    usersLiked: new Set([]),
+  },
+});
