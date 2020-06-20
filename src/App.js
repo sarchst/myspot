@@ -7,17 +7,17 @@ import Login from "./components/Login";
 import { BrowserRouter as Router } from "react-router-dom";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import Spotify from 'spotify-web-api-js';
-import Button from "@material-ui/core/Button";
+import {logIn, registerSpotifyWebApi, usernameSubmit} from "./app/actions";
 
 const spotifyWebApi = new Spotify();
 
-const loginPage = () => {
-  return (
-    <div className="App">
-      <Login />
-    </div>
-  );
-};
+// const loginPage = () => {
+//   return (
+//     <div className="App">
+//       <Login />
+//     </div>
+//   );
+// };
 
 const lightTheme = createMuiTheme({
   palette: {
@@ -52,31 +52,20 @@ class App extends React.Component {
     console.log("params is: ");
     console.log(params);
     console.log("access token is " + params.access_token);
-    this.state = {
-      isLoggedIn: (params.access_token) ? true : false,
-      nowPlaying: {
-        name: "Not checked",
-        image: ""
-      }
-    }
 
     if (params.access_token) {
       spotifyWebApi.setAccessToken(params.access_token);
+      console.log("LOGGING IN: SENDING SPOTIFYWEBAPI TO REDUX STORE");
+      console.log(spotifyWebApi);
+      this.props.registerSpotifyWebApi(params.access_token);
+      spotifyWebApi.getMe()
+          .then((response) => {
+            console.log("user profile response object ");
+            console.log(response);
+            this.props.usernameSubmit(response.display_name);
+            this.props.logIn();
+          })
     }
-  }
-
-  getNowPlaying() {
-    spotifyWebApi.getMyCurrentPlaybackState()
-    .then((response) => {
-      console.log("response is: ");
-      console.log(response);
-      this.setState({
-        nowPlaying: {
-          name: response.item.name,
-          image: response.item.album.images[0].url
-        }
-      })
-    })
   }
 
   getHashParams() {
@@ -108,21 +97,18 @@ class App extends React.Component {
       // TODO: use React Router/redirect to from login page to main page after authentication is implemented
       // return loginPage();
       return (
-          <div>
-            <Button
-                // type="submit"
-                href={"http://localhost:8888"}
-                fullWidth
-                variant="contained"
-                color="primary"
-                // onClick={this.attemptLogin}
-            >
-              Sign In With Spotify
-            </Button>
-            <div>Now Playing: {this.state.nowPlaying.name}</div>
-            <img src={this.state.nowPlaying.image} style={{width: 100}}/>
-            <button onClick= {() => this.getNowPlaying()}>Check Now Playing</button>
-          </div>
+          // <div>
+          //   <Button
+          //       // type="submit"
+          //       href={"http://localhost:8888"}
+          //       fullWidth
+          //       variant="contained"
+          //       color="primary"
+          //       // onClick={this.attemptLogin}
+          //   >
+          //     Sign In With Spotify
+          //   </Button>
+          <Login/>
       )
     }
   }
@@ -136,4 +122,13 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps)(App);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    logIn: () => dispatch(logIn()),
+    usernameSubmit: (username) => dispatch(usernameSubmit(username)),
+    registerSpotifyWebApi: (spotifyWebApi) => dispatch(registerSpotifyWebApi(spotifyWebApi)),
+    // selectContentPage: contentType => dispatch(selectContentPage(contentType))
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
