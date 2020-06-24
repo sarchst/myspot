@@ -5,7 +5,7 @@ export const SPOTIFY_WEB_API = "SPOTIFY_WEB_API";
 
 export const registerSpotifyWebApi = (spotifyWebApi) => ({
   type: SPOTIFY_WEB_API,
-  payload: spotifyWebApi
+  payload: spotifyWebApi,
 });
 
 export const toggleSidebar = () => ({
@@ -24,10 +24,6 @@ export const usernameSubmit = (payload) => ({
   type: USERNAME,
   username: payload,
 });
-
-// export const selectContentPage = (payload) => ({
-//   type: payload,
-// });
 
 export const toggleNotifications = (payload) => ({
   type: "TOGGLE_NOTIFICATIONS",
