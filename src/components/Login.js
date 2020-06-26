@@ -17,7 +17,7 @@ import Grid from "@material-ui/core/Grid";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import MusicNoteRoundedIcon from "@material-ui/icons/MusicNoteRounded";
-import { logIn, usernameSubmit } from "../app/actions";
+// import { logIn, usernameSubmit } from "../app/actions";
 import red from "@material-ui/core/colors/red";
 // import contentType from "../data/ContentTypeEnum";
 
@@ -203,6 +203,17 @@ class Login extends React.Component {
                   </Link>
                 </Grid>
               </Grid>
+              <Button
+                // type="submit"
+                href={"http://localhost:8888"}
+                fullWidth
+                variant="contained"
+                color="secondary"
+                // onClick={this.attemptLogin}
+                className={classes.submit}
+              >
+                Sign In With Spotify
+              </Button>
               <Box mt={5}>
                 <Copyright />
               </Box>
@@ -221,15 +232,14 @@ const mapStateToProps = (state) => {
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    logIn: () => dispatch(logIn()),
-    usernameSubmit: (username) => dispatch(usernameSubmit(username)),
-    // selectContentPage: contentType => dispatch(selectContentPage(contentType))
-  };
-};
+// const mapDispatchToProps = (dispatch) => {
+//   return {
+//     logIn: () => dispatch(logIn()),
+//     usernameSubmit: (username) => dispatch(usernameSubmit(username)),
+//     // selectContentPage: contentType => dispatch(selectContentPage(contentType))
+//   };
+// };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(withStyles(styles, { withTheme: true })(Login));
+export default connect(mapStateToProps)(
+  withStyles(styles, { withTheme: true })(Login)
+);

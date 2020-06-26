@@ -5,6 +5,8 @@ import isLoggedIn from "./isLoggedIn";
 import username from "./username";
 import feed from "./feed";
 import settings from "./settings";
+import posts from "./profile";
+import spotifyWebApi from "./spotifyWebApi";
 // import selectedContentPage from "./selectedContentPage";
 
 const allReducers = combineReducers({
@@ -13,6 +15,8 @@ const allReducers = combineReducers({
   username: username,
   feed: feed,
   accountSettings: settings,
+  posts: posts,
+  spotifyWebApi: spotifyWebApi,
   // selectedContentPage: selectedContentPage,
 });
 

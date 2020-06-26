@@ -210,8 +210,9 @@ class Post extends Component {
                     ? "primary"
                     : "default"
                 }
+                // color="primary"
               >
-                {postdata.usersLiked.length}
+                {postdata.usersLiked.size}
                 <EmojiEmotionsIcon />
               </IconButton>
             </Grid>
