@@ -1,0 +1,16 @@
+{
+  "name": "myspot",
+  "version": "1.0.0",
+  "description": "A place for music and friends.",
+  "main": "index.js",
+  "repository": "https://github.com/sarchst/myspot",
+  "author": "Quinn Hanson, Mikayla Louie, Sarchen Starke, Austin Lee",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "mongoose": "^5.9.20",
+    "nodemon": "^2.0.4"
+  }
+}
