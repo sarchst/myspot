@@ -3,6 +3,11 @@ var router = express.Router();
 
 const UserContrl = require("../controllers/user-controller");
 
+router.post("/user", UserContrl.createUser);
+router.put("/user/:id", UserContrl.updateUser);
+router.get("/user/:id", UserContrl.getUserById);
+router.get("/users", UserContrl.getUsers);
+
 // example from assignment\
 
 // router.post("/message", MovieCtrl.createMessage);

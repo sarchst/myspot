@@ -1,6 +1,10 @@
 const mongoose = require("mongoose");
 
-const uri = ""; // this will need to be the uri for our database
+// allows you to import environmental variables
+require("dotenv").config();
+
+var dbname = "myspot";
+var uri = `mongodb+srv://${process.env.MONGOUSER}:${process.env.MONGOPW}@myspot.gu485.mongodb.net/${dbname}?retryWrites=true&w=majority`;
 
 mongoose.connect(uri, { useNewUrlParser: true }).catch((e) => {
   console.error("Connection error", e.message);
