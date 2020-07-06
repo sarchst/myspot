@@ -4,3 +4,4 @@ export const toggleLike = (payload) => ({
   type: TOGGLE_LIKE,
   payload,
 });
+
