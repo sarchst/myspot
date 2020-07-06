@@ -21,14 +21,16 @@ const Setting = new Schema({
   disableAcc: { type: Boolean, required: true },
 });
 
-const Post = new Schema({
-  _id: { type: String, required: true }, // TODO: check correct type for objectid
-  type: { type: String, required: true },
-  time: { type: String, required: true },
-  content: { type: String, required: true },
-  media: { type: String, required: true }, // TODO: may need to be object for spotify
-  usersLiked: { type: Array, required: true }, // TODO: using Array instead of Set because Set is not a valid schema type..
-});
+const Post = new Schema(
+  {
+    _id: { type: String, required: true }, // TODO: confirm that id type is string
+    type: { type: String, required: true },
+    content: { type: String, required: true },
+    media: { type: String, required: true }, // TODO: may need to be object for spotify?
+    usersLiked: { type: Array, required: true },
+  },
+  { timestamps: true } // TODO: using Array instead of Set because Set is not a valid schema type..shouldn't make a difference though?
+);
 
 const User = new Schema(
   {

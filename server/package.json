@@ -10,7 +10,6 @@
     "start": "node ./bin/www",
     "devstart": "nodemon ./bin/www"
   },
-
   "dependencies": {
     "body-parser": "^1.19.0",
     "cookie-parser": "~1.4.4",
@@ -21,6 +20,7 @@
     "jade": "~1.11.0",
     "mongoose": "^5.9.21",
     "morgan": "~1.9.1",
-    "nodemon": "^2.0.4"
+    "nodemon": "^2.0.4",
+    "request": "^2.88.2"
   }
 }

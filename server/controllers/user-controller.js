@@ -48,7 +48,7 @@ updateUser = async (req, res) => {
         message: "User not found!",
       });
     }
-    // attributes we want the user to be able to update
+    // confirm that these attributes we want the user to be able to update
     User.profilePic = body.profilePic;
     User.email = body.email;
     User.settings = body.settings;
@@ -72,10 +72,11 @@ updateUser = async (req, res) => {
   });
 };
 
-// no deleteUser because we don't want user to be able to remove themselves from db entirely
+// No deleteUser because we don't want user to be able to remove themselves from our db entirely
 
+// don't think we need to await keyword because we're using callbacks
 getUserById = async (req, res) => {
-  await User.findOne({ _id: req.params.id }, (err, User) => {
+  User.findOne({ _id: req.params.id }, (err, User) => {
     if (err) {
       return res.status(400).json({ success: false, error: err });
     }
@@ -85,7 +86,7 @@ getUserById = async (req, res) => {
 };
 
 getUsers = async (req, res) => {
-  await User.find({}, (err, Users) => {
+  User.find({}, (err, Users) => {
     if (err) {
       return res.status(400).json({ success: false, error: err });
     }
