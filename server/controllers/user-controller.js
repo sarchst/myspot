@@ -75,6 +75,7 @@ updateUser = async (req, res) => {
 // No deleteUser because we don't want user to be able to remove themselves from our db entirely
 
 // don't think we need to await keyword because we're using callbacks
+// Returns a single user from the database
 getUserById = async (req, res) => {
   User.findOne({ _id: req.params.id }, (err, User) => {
     if (err) {
@@ -85,6 +86,7 @@ getUserById = async (req, res) => {
   }).catch((err) => console.log(err));
 };
 
+// Returns a list of all users in the database
 getUsers = async (req, res) => {
   User.find({}, (err, Users) => {
     if (err) {
@@ -97,6 +99,7 @@ getUsers = async (req, res) => {
   }).catch((err) => console.log(err));
 };
 
+// Returns a list of posts created by users the active user follows
 getUserFeed = async (req, res) => {
   User.findOne({ _id: req.params.id })
     .populate({
@@ -109,7 +112,6 @@ getUserFeed = async (req, res) => {
       // },
     })
     .exec(function (err, user) {
-      if (err) console.log(err);
       followingSize = user.following.length;
       console.log("following list size is: " + followingSize);
       let feedPosts = [];
@@ -122,10 +124,20 @@ getUserFeed = async (req, res) => {
     .catch((err) => console.log(err));
 };
 
+// Returns a list of posts created by the user
+getUserPosts = async (req, res) => {
+  User.findOne({ _id: req.params.id })
+    .exec(function (err, user) {
+      console.log(user.posts);
+      return res.status(200).json({ success: true, data: user.posts });
+    })
+    .catch((err) => console.log(err));
+};
 module.exports = {
   createUser,
   updateUser,
   getUsers,
   getUserById,
   getUserFeed,
+  getUserPosts,
 };
