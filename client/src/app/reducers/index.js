@@ -7,6 +7,7 @@ import feed from "./feed";
 import settings from "./settings";
 import posts from "./profile";
 import spotifyWebApi from "./spotifyWebApi";
+import fetchFeed from "./fetchFeed";
 // import selectedContentPage from "./selectedContentPage";
 
 const allReducers = combineReducers({
@@ -17,6 +18,7 @@ const allReducers = combineReducers({
   accountSettings: settings,
   posts: posts,
   spotifyWebApi: spotifyWebApi,
+  fetchFeed: fetchFeed,
   // selectedContentPage: selectedContentPage,
 });
 

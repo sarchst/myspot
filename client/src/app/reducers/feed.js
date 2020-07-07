@@ -1,4 +1,4 @@
-import { TOGGLE_LIKE } from "../actions/feedActions";
+import { TOGGLE_LIKE, ADD_POSTS_TO_FEED } from "../actions/feedActions";
 
 const fakePosts = [
   {
@@ -61,6 +61,9 @@ export const feed = (state = initialState, action) => {
             : post
         ),
       };
+    case ADD_POSTS_TO_FEED:
+      return action.payload;
+
     default:
       return state;
   }
