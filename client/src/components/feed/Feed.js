@@ -2,6 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 
 import Post from "./Post";
+import MakePost from "./MakePost";
 import { toggleLike } from "../../app/actions/feedActions";
 
 class Feed extends React.Component {
@@ -9,7 +10,7 @@ class Feed extends React.Component {
     const { toggleLike } = this.props;
     return (
       <div>
-        {/* <MakePost /> TODO */}
+        <MakePost />
         {this.props.feed.posts.map((p) => (
           <Post
             key={p._id}

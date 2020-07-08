@@ -1,16 +1,17 @@
 import React from "react";
-import Button from "@material-ui/core/Button";
 import { connect } from "react-redux";
-import Radio from "@material-ui/core/Radio";
-import RadioGroup from "@material-ui/core/RadioGroup";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import FormControl from "@material-ui/core/FormControl";
-import FormLabel from "@material-ui/core/FormLabel";
-import Typography from "@material-ui/core/Typography";
-import Paper from "@material-ui/core/Paper";
+// import Button from "@material-ui/core/Button";
+// import Radio from "@material-ui/core/Radio";
+// import RadioGroup from "@material-ui/core/RadioGroup";
+// import FormControlLabel from "@material-ui/core/FormControlLabel";
+// import FormControl from "@material-ui/core/FormControl";
+// import FormLabel from "@material-ui/core/FormLabel";
+// import Typography from "@material-ui/core/Typography";
+// import Paper from "@material-ui/core/Paper";
 import { withStyles } from "@material-ui/core/styles";
-import { makePost } from "../app/actions";
+// import { makePost } from "../app/actions";
 import Post from "./feed/Post";
+import MakePost from "./feed/MakePost";
 
 const styles = (theme) => ({
   root: {
@@ -70,7 +71,8 @@ class Profile extends React.Component {
     const { classes } = this.props;
     return (
       <div className={classes.root}>
-        <Paper className={classes.paper}>
+        <MakePost />
+        {/* <Paper className={classes.paper}>
           <Typography className={classes.header}>Create a new post</Typography>
           <FormControl component="fieldset">
             <FormLabel component="legend">Type</FormLabel>
@@ -107,7 +109,7 @@ class Profile extends React.Component {
 
         <Button onClick={this.handleSubmitPost} color="primary">
           Create a new post
-        </Button>
+        </Button> */}
 
         <div>
           {this.props.posts && this.props.posts.length ? (
@@ -133,6 +135,4 @@ const mapStateToProps = (state) => ({
   posts: state.posts,
 });
 
-export default connect(mapStateToProps, { makePost })(
-  withStyles(styles)(Profile)
-);
+export default connect(mapStateToProps, {})(withStyles(styles)(Profile));
