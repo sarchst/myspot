@@ -8,7 +8,7 @@ router.put("/user/:id", UserContrl.updateUser);
 router.get("/user/:id", UserContrl.getUserById);
 router.get("/users", UserContrl.getUsers);
 
-router.get("/user/feed/:id", UserContrl.getUserFeed);
+router.get("/user/feed/:id", UserContrl.getUserFollowingFeed);
 router.get("/user/posts/:id", UserContrl.getUserPosts);
 
 

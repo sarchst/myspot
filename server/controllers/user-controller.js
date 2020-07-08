@@ -100,7 +100,7 @@ getUsers = async (req, res) => {
 };
 
 // Returns a list of posts created by users the active user follows
-getUserFeed = async (req, res) => {
+getUserFollowingFeed = async (req, res) => {
   User.findById({ _id: req.params.id }, function (err, result) {
     if (err) {
       return res.status(400).json({ success: false, error: err });
@@ -118,8 +118,9 @@ getUserFeed = async (req, res) => {
       //   },
       // },
     })
-    .sort({ timestamp: -1 })
+    // .sort({ timestamp: -1 })
     .exec(function (err, user) {
+      console.log(user);
       followingSize = user.following.length;
       let feedPosts = [];
       for (i = 0; i < followingSize; i++) {
@@ -152,6 +153,6 @@ module.exports = {
   updateUser,
   getUsers,
   getUserById,
-  getUserFeed,
+  getUserFollowingFeed,
   getUserPosts,
 };
