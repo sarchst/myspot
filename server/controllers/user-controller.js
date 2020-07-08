@@ -106,7 +106,7 @@ getUserFeed = async (req, res) => {
       return res.status(400).json({ success: false, error: err });
     }
     if (!result) {
-      return res.status(400).json({ sucess: false, error: "User not found" });
+      return res.status(404).json({ sucess: false, error: "User not found" });
     }
   })
     .populate({
@@ -138,7 +138,7 @@ getUserPosts = async (req, res) => {
       return res.status(400).json({ success: false, error: err });
     }
     if (!result) {
-      return res.status(400).json({ success: false, error: "User not found" });
+      return res.status(404).json({ success: false, error: "User not found" });
     }
   })
     .exec(function (err, user) {
