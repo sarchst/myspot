@@ -47,17 +47,20 @@ const initialState = {
 export const feed = (state = initialState, action) => {
   switch (action.type) {
     case TOGGLE_LIKE:
-      const newSet = new Set(action.payload.post.usersLiked);
-      if (action.payload.post.usersLiked.has(action.payload.userId)) {
-        newSet.delete(action.payload.userId);
+      let newUsersLiked = [...action.payload.usersLiked];
+      if (action.payload.usersLiked.includes(action.payload.userId)) {
+        newUsersLiked = newUsersLiked.filter(
+          (u) => u !== action.payload.userId
+        );
       } else {
-        newSet.add(action.payload.userId);
+        newUsersLiked.push(action.payload.userId);
       }
       return {
         ...state,
+        // I don't like this, could take a long time if we have a lot of posts
         posts: state.posts.map((post) =>
           post.id === action.payload.post.id
-            ? { ...post, usersLiked: newSet }
+            ? { ...post, usersLiked: newUsersLiked }
             : post
         ),
       };
