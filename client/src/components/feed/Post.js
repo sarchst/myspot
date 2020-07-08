@@ -69,7 +69,7 @@ class Post extends Component {
     // TODO GOTO media
   };
 
-  like = (id) => {
+  like = () => {
     this.props.toggleLike();
   };
 
