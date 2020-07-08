@@ -17,10 +17,13 @@ class Feed extends React.Component {
         {/* <MakePost /> TODO */}
         {this.props.feed.posts.map((p) => (
           <Post
-            key={p.id}
+            key={p._id}
             postdata={p}
-            toggleLike={() => toggleLike({ post: p, userId: 7 })}
-            userId={7}
+            // TODO: the userId's below will need to be set as the active user's id (username) eventually, just set it as me for now
+            toggleLike={() =>
+              toggleLike({ usersLiked: p.usersLiked, userId: "quinn" })
+            }
+            userId={"quinn"}
           />
         ))}
       </div>
