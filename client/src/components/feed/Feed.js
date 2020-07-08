@@ -2,12 +2,17 @@ import React from "react";
 import { connect } from "react-redux";
 
 import Post from "./Post";
-import { toggleLike, fetchFeed } from "../../app/actions/feedActions";
+import {
+  toggleLike,
+  fetchFeed,
+  addPersonalPostsToFeed,
+} from "../../app/actions/feedActions";
 
 class Feed extends React.Component {
   componentDidMount = (id) => {
     // TODO: change "mikayla" with id once active user is set up
     this.props.fetchFeed("mikayla");
+    this.props.addPersonalPostsToFeed("mikayla");
   };
   render() {
     const { toggleLike } = this.props;
@@ -41,6 +46,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = {
   toggleLike,
   fetchFeed,
+  addPersonalPostsToFeed,
   // toggleActivity,
 };
 

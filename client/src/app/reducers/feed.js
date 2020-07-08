@@ -1,4 +1,8 @@
-import { TOGGLE_LIKE, ADD_POSTS_TO_FEED } from "../actions/feedActions";
+import {
+  TOGGLE_LIKE,
+  ADD_POSTS_TO_FEED,
+  COMBINE_P_POSTS_WITH_FEED,
+} from "../actions/feedActions";
 
 // const fakePosts = [
 //   {
@@ -67,7 +71,12 @@ export const feed = (state = initialState, action) => {
     case ADD_POSTS_TO_FEED:
       return {
         ...state,
-        posts: action.payload,
+        posts: [...state.posts, ...action.payload],
+      };
+    case COMBINE_P_POSTS_WITH_FEED:
+      return {
+        ...state,
+        posts: [...state.posts, ...action.payload],
       };
     default:
       return state;
