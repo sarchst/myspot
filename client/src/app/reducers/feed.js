@@ -41,7 +41,7 @@ const fakePosts = [
 
 const initialState = {
   activity: true,
-  posts: fakePosts,
+  posts: [],
 };
 
 export const feed = (state = initialState, action) => {
@@ -65,8 +65,10 @@ export const feed = (state = initialState, action) => {
         ),
       };
     case ADD_POSTS_TO_FEED:
-      return action.payload;
-
+      return {
+        ...state,
+        posts: action.payload,
+      };
     default:
       return state;
   }

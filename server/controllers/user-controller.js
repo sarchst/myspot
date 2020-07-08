@@ -118,6 +118,7 @@ getUserFeed = async (req, res) => {
       //   },
       // },
     })
+    .sort({ timestamp: -1 })
     .exec(function (err, user) {
       followingSize = user.following.length;
       let feedPosts = [];

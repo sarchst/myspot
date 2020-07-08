@@ -11,23 +11,26 @@ class Feed extends React.Component {
   };
   render() {
     const { toggleLike } = this.props;
-    console.log(this.props.feed.posts);
-    return (
-      <div>
-        {/* <MakePost /> TODO */}
-        {this.props.feed.posts.map((p) => (
-          <Post
-            key={p._id}
-            postdata={p}
-            // TODO: the userId's below will need to be set as the active user's id (username) eventually, just set it as me for now
-            toggleLike={() =>
-              toggleLike({ usersLiked: p.usersLiked, userId: "quinn" })
-            }
-            userId={"quinn"}
-          />
-        ))}
-      </div>
-    );
+    if (this.props.feed.posts) {
+      return (
+        <div>
+          {/* <MakePost /> TODO */}
+          {this.props.feed.posts.map((p) => (
+            <Post
+              key={p._id}
+              postdata={p}
+              // TODO: the userId's below will need to be set as the active user's id (username) eventually, just set it as me for now
+              toggleLike={() =>
+                toggleLike({ usersLiked: p.usersLiked, userId: "mikayla" })
+              }
+              userId={"mikayla"}
+            />
+          ))}
+        </div>
+      );
+    } else {
+      return <h1>Nothing to see here</h1>;
+    }
   }
 }
 
