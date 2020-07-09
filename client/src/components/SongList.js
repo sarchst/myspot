@@ -35,7 +35,9 @@ class SongList extends React.Component {
         <Link to={"/" + this.props.username + "/playlists"}>Go Back</Link>
         <ul>
           {this.state.tracks.map((track, index) => (
-            <li>{track.track.name + " - " + track.track.artists[0].name}</li>
+            <li key={index}>
+              {track.track.name + " - " + track.track.artists[0].name}
+            </li>
           ))}
         </ul>
       </div>
