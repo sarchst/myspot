@@ -72,7 +72,7 @@ class Playlists extends React.Component {
   componentDidMount() {
     spotifyWebApi.getUserPlaylists().then(
       (data) => {
-        console.log("User playlists", data.items);
+        console.log("User playlists", data);
         this.setState({
           usersPlaylists: data.items,
         });
@@ -101,7 +101,7 @@ class Playlists extends React.Component {
               >
                 Playlists
               </Typography>
-              <Typography
+              {/* <Typography
                 variant="h5"
                 align="center"
                 color="textSecondary"
@@ -110,7 +110,7 @@ class Playlists extends React.Component {
                 Something short and leading about the collection below—its
                 contents, the creator, etc. Make it short and sweet, but not too
                 short so folks don&apos;t simply skip over it entirely.
-              </Typography>
+              </Typography> */}
             </Container>
           </div>
           <Container className={classes.cardGrid} maxWidth="md">
