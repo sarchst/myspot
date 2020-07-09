@@ -19,7 +19,9 @@ class Feed extends React.Component {
   render() {
     const { toggleLike } = this.props;
     // if (this.props.feed.posts) {
+    
     // For now, we are rendering the active user's posts and the other user's posts separately
+    // Eventually I will do a combined query and render only from feed store to Feed component
     return (
       <div>
         <div>
