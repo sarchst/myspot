@@ -39,6 +39,7 @@ import NowPlaying from "./NowPlaying";
 import Profile from "./Profile";
 import Feed from "./feed/Feed";
 import Settings from "./Settings";
+import SongList from "./SongList";
 
 const drawerWidth = 240;
 
@@ -228,7 +229,7 @@ class Sidebar extends React.Component {
             <Route path="/:user/posts/">
               <Feed />
             </Route>
-            <Route path="/:user/playlists">
+            <Route path="/:user/playlists" exact>
               <Playlists />
             </Route>
             <Route path="/:user/followers">
@@ -246,6 +247,10 @@ class Sidebar extends React.Component {
             <Route path="/:user/settings">
               <Settings />
             </Route>
+            <Route
+              path="/:user/playlists/:playlistid"
+              render={(props) => <SongList {...props} />}
+            />
           </Switch>
         </main>
       </div>

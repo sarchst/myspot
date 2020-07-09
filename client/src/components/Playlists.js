@@ -12,6 +12,7 @@ import Container from "@material-ui/core/Container";
 // import Link from "@material-ui/core/Link";
 import { connect } from "react-redux";
 import Spotify from "spotify-web-api-js";
+import { Link } from "react-router-dom";
 
 const spotifyWebApi = new Spotify();
 
@@ -131,9 +132,18 @@ class Playlists extends React.Component {
                       <Typography>{playlist.description}</Typography>
                     </CardContent>
                     <CardActions>
-                      <Button size="small" color="primary">
-                        View
-                      </Button>
+                      <Link
+                        to={
+                          "/" +
+                          this.props.username +
+                          "/playlists/" +
+                          playlist.id
+                        }
+                      >
+                        <Button size="small" color="primary">
+                          View Songs
+                        </Button>
+                      </Link>
                     </CardActions>
                   </Card>
                 </Grid>
@@ -149,6 +159,7 @@ class Playlists extends React.Component {
 const mapStateToProps = (state) => {
   return {
     spotifyWebApi: state.spotifyWebApi,
+    username: state.username,
   };
 };
 
