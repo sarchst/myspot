@@ -69,7 +69,7 @@ class Post extends Component {
     // TODO GOTO media
   };
 
-  like = (id) => {
+  like = () => {
     this.props.toggleLike();
   };
 
@@ -103,7 +103,7 @@ class Post extends Component {
   };
 
   render() {
-    const { classes, postdata } = this.props;
+    const { classes, postdata, userId } = this.props;
     return (
       <Paper className={classes.paper}>
         <Grid
@@ -119,7 +119,7 @@ class Post extends Component {
           <Grid item>
             <Avatar className={classes.display}>DP</Avatar>
           </Grid>
-          <Grid item>{postdata.username}</Grid>
+          <Grid item>{postdata.author}</Grid>
         </Grid>
         <Grid container spacing={1}>
           <Grid
@@ -138,7 +138,7 @@ class Post extends Component {
                 variant="body2"
                 onClick={() => this.goToMedia()}
               >
-                {postdata.title}
+                {postdata.media}
               </Link>
             </Grid>
             {/* TODO add media art component? */}
@@ -204,15 +204,12 @@ class Post extends Component {
                 size="small"
                 aria-label="like"
                 aria-controls="like-post"
-                onClick={() => this.like(this.props.key)}
+                onClick={() => this.like()}
                 color={
-                  postdata.usersLiked.has(this.props.userId)
-                    ? "primary"
-                    : "default"
+                  postdata.usersLiked.includes(userId) ? "primary" : "default"
                 }
-                // color="primary"
               >
-                {postdata.usersLiked.size}
+                {postdata.usersLiked.length}
                 <EmojiEmotionsIcon />
               </IconButton>
             </Grid>
@@ -233,7 +230,7 @@ class Post extends Component {
                 size="small"
                 aria-label="share"
                 aria-controls="share-post"
-                onClick={() => this.share(postdata.type)}
+                onClick={() => this.share(postdata)}
               >
                 <ShareIcon />
               </IconButton>
@@ -244,7 +241,7 @@ class Post extends Component {
                 size="small"
                 aria-label="add"
                 aria-controls="add-media"
-                onClick={() => this.addPostMedia(postdata.type)}
+                onClick={() => this.addPostMedia(postdata)}
               >
                 <LibraryAddIcon />
               </IconButton>
