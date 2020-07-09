@@ -12,6 +12,7 @@ import {
   Grid,
   Input,
   InputLabel,
+  Select,
   TextField,
 } from "@material-ui/core";
 import { ToggleButton, ToggleButtonGroup } from "@material-ui/lab";
@@ -38,6 +39,9 @@ const styles = (theme) => ({
     textAlign: "left",
     color: theme.palette.text.secondary,
   },
+  submit: {
+    float: "right",
+  },
 });
 
 const marks = [
@@ -60,7 +64,10 @@ class MakePost extends React.Component {
     content: "",
     title: "",
     type: "playlist",
+    mediaOptions: [],
   };
+
+  // TODO componentDidMount get playlists adn set state
 
   handleChange = (e, value) => {
     this.setState({ type: value });
@@ -69,6 +76,12 @@ class MakePost extends React.Component {
   handleTypeSelect = (event, type) => {
     if (type !== null) {
       this.setState({ type: type });
+    }
+  };
+
+  handleMediaSelect = (event, media) => {
+    if (media !== null) {
+      this.setState({ media: media });
     }
   };
 
@@ -96,16 +109,12 @@ class MakePost extends React.Component {
     return (
       <div className={classes.root}>
         <Paper className={classes.paper}>
-          <Grid
-            container
-            spacing={2}
-            // direction="column"
-            // justify="center"
-            // alignItems="center"
-          >
+          <Grid container spacing={2} alignItems="center" justify="flex-end">
             <Grid item xs={12}>
               <FormControl fullWidth>
-                <InputLabel htmlFor="standard-basic">Post your Jams</InputLabel>
+                <InputLabel htmlFor="standard-basic">
+                  Tell us about your Jams
+                </InputLabel>
                 <Input
                   id="standard-basic"
                   value={this.state.content}
@@ -113,48 +122,47 @@ class MakePost extends React.Component {
                 />
               </FormControl>
             </Grid>
-            <Grid item>
-              {/* <FormControl component="fieldset">
-            <FormLabel component="legend">Type</FormLabel>
-            <RadioGroup
-              aria-label="PostType"
-              name="postType"
-              value={this.value}
-              onChange={this.handleChange}
-            >
-              <FormControlLabel
-                value="playlist"
-                control={<Radio />}
-                label="Playlist"
-              />
-              <FormControlLabel
-                value="album"
-                control={<Radio />}
-                label="Album"
-              />
-              <FormControlLabel value="song" control={<Radio />} label="Song" />
-            </RadioGroup>
-          </FormControl> */}
-              <ToggleButtonGroup
-                value={this.state.type}
-                exclusive
-                onChange={this.handleTypeSelect}
-                size="small"
-              >
-                <ToggleButton value="playlist" aria-label="playlist">
-                  <PlaylistAddIcon />
-                </ToggleButton>
-                <ToggleButton value="album" aria-label="album">
-                  <AlbumIcon />
-                </ToggleButton>
-                <ToggleButton value="song" aria-label="song">
-                  <MusicNoteIcon />
-                </ToggleButton>
-              </ToggleButtonGroup>
+            <Grid item xs={2}>
+              <FormControl>
+                <ToggleButtonGroup
+                  value={this.state.type}
+                  exclusive
+                  onChange={this.handleTypeSelect}
+                  size="small"
+                >
+                  <ToggleButton value="playlist" aria-label="playlist">
+                    <PlaylistAddIcon />
+                  </ToggleButton>
+                  <ToggleButton value="album" aria-label="album">
+                    <AlbumIcon />
+                  </ToggleButton>
+                  <ToggleButton value="song" aria-label="song">
+                    <MusicNoteIcon />
+                  </ToggleButton>
+                </ToggleButtonGroup>
+              </FormControl>
             </Grid>
-            <Grid item></Grid>
-            <Grid item>
-              <Button onClick={this.handleSubmitPost} color="primary">
+            <Grid item xs={8}>
+              <FormControl style={{ minWidth: 200 }}>
+                <InputLabel id="media">Media</InputLabel>
+                <Select
+                  native
+                  value={this.state.media}
+                  onChange={this.handleMediaSelect}
+                >
+                  {this.state.mediaOptions.map((mc) => {
+                    return <option value={mc}>{mc}</option>;
+                  })}
+                </Select>
+              </FormControl>
+            </Grid>
+            <Grid item xs={2}>
+              <Button
+                className={classes.submit}
+                variant="contained"
+                onClick={this.handleSubmitPost}
+                color="primary"
+              >
                 Post
               </Button>
             </Grid>
