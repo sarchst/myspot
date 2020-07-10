@@ -99,7 +99,7 @@ class Login extends React.Component {
               <br />
               <br />
             </Typography>
-            <Grid xs={16} className={classes.loginBox}>
+            <Grid className={classes.loginBox}>
               <Typography component="h1" variant="h5">
                 Sign in
               </Typography>
