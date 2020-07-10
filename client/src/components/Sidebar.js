@@ -226,7 +226,7 @@ class Sidebar extends React.Component {
             <Route path={"/:user"} exact>
               <Profile />
             </Route>
-            <Route path="/:user/posts/">
+            <Route path="/:user/posts">
               <Feed />
             </Route>
             <Route path="/:user/playlists" exact>

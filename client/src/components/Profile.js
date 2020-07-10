@@ -10,6 +10,8 @@ import Typography from "@material-ui/core/Typography";
 import Paper from "@material-ui/core/Paper";
 import { withStyles } from "@material-ui/core/styles";
 import { makePost } from "../app/actions";
+import { toggleLike } from "../app/actions/feedActions";
+import { fetchPosts } from "../app/actions/postActions";
 import Post from "./feed/Post";
 
 const styles = (theme) => ({
@@ -43,6 +45,13 @@ class Profile extends React.Component {
     };
   }
 
+  componentDidMount = (id) => {
+    // TODO: change "mikayla" with id once active user is set up
+    console.log("component profile mount");
+    this.setState({ username: this.props.username });
+    this.props.fetchPosts("mikayla");
+  };
+
   handleChange = (event) => {
     this.setState({ type: event.target.value });
   };
@@ -55,9 +64,10 @@ class Profile extends React.Component {
     this.setState({ content });
   };
 
-  componentDidMount = () => {
-    this.setState({ username: this.props.username });
-  };
+  // componentDidMount = () => {
+  //   this.setState({ username: this.props.username });
+  // };
+
   handleSubmitPost = () => {
     // dispatches actions to add msg
     this.props.makePost(this.state);
@@ -67,7 +77,7 @@ class Profile extends React.Component {
   };
 
   render() {
-    const { classes } = this.props;
+    const { classes, toggleLike } = this.props;
     return (
       <div className={classes.root}>
         <Paper className={classes.paper}>
@@ -113,10 +123,10 @@ class Profile extends React.Component {
           {this.props.posts && this.props.posts.length ? (
             this.props.posts.map((p) => (
               <Post
-                key={p.id}
+                key={p._id}
                 postdata={p}
-                // toggleLike={() => toggleLike({ post: p, userId: 7 })}
-                // userId={7}
+                toggleLike={() => toggleLike({ post: p, userId: 7 })}
+                userId={7}
               />
             ))
           ) : (
@@ -133,6 +143,6 @@ const mapStateToProps = (state) => ({
   posts: state.posts,
 });
 
-export default connect(mapStateToProps, { makePost })(
+export default connect(mapStateToProps, { makePost, fetchPosts, toggleLike })(
   withStyles(styles)(Profile)
 );
