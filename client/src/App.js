@@ -8,6 +8,7 @@ import { BrowserRouter as Router } from "react-router-dom";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import Spotify from "spotify-web-api-js";
 import { registerSpotifyWebApi, usernameSubmit } from "./app/actions";
+import { submitSpotifyApiUserMe } from "./app/actions/spotifyApiActions";
 
 const spotifyWebApi = new Spotify();
 
@@ -61,6 +62,7 @@ class App extends React.Component {
       spotifyWebApi.getMe().then((response) => {
         console.log("user profile response object ");
         console.log(response);
+        this.props.submitSpotifyApiUserMe(response);
         this.props.usernameSubmit(response.display_name);
       });
     }
@@ -112,7 +114,8 @@ const mapDispatchToProps = (dispatch) => {
     usernameSubmit: (username) => dispatch(usernameSubmit(username)),
     registerSpotifyWebApi: (spotifyWebApi) =>
       dispatch(registerSpotifyWebApi(spotifyWebApi)),
-    // selectContentPage: contentType => dispatch(selectContentPage(contentType))
+    submitSpotifyApiUserMe: (spotifyUserMe) =>
+      dispatch(submitSpotifyApiUserMe(spotifyUserMe)),
   };
 };
 

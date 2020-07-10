@@ -13,6 +13,7 @@ import { makePost } from "../app/actions";
 import { toggleLike } from "../app/actions/feedActions";
 import { fetchPosts } from "../app/actions/postActions";
 import Post from "./feed/Post";
+import ProfileCard from "./profile/ProfileCard";
 
 const styles = (theme) => ({
   root: {
@@ -80,6 +81,7 @@ class Profile extends React.Component {
     const { classes, toggleLike } = this.props;
     return (
       <div className={classes.root}>
+        <ProfileCard />
         <Paper className={classes.paper}>
           <Typography className={classes.header}>Create a new post</Typography>
           <FormControl component="fieldset">

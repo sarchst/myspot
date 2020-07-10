@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="VcsDirectoryMappings">
+    <mapping directory="$PROJECT_DIR$" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/auth-server" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/authserver" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/web-api-auth-examples" vcs="Git" />
+  </component>
+</project>

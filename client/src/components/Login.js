@@ -72,15 +72,6 @@ const styles = (theme) => ({
 });
 
 class Login extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      isInvalidLogin: false,
-      usernameInput: "",
-      passwordInput: "",
-    };
-  }
-
   render() {
     const { classes } = this.props;
 
