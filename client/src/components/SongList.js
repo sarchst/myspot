@@ -10,6 +10,8 @@ class SongList extends React.Component {
     super(props);
     this.state = {
       tracks: [],
+      name: "",
+      description: "",
     };
     spotifyWebApi.setAccessToken(this.props.spotifyWebApi);
   }
@@ -17,7 +19,7 @@ class SongList extends React.Component {
   componentDidMount() {
     spotifyWebApi.getPlaylistTracks(this.props.match.params.playlistid).then(
       (data) => {
-        console.log(data);
+        console.log("Songs in playlist", data);
         this.setState({
           tracks: data.items,
         });
@@ -26,16 +28,34 @@ class SongList extends React.Component {
         console.error(err);
       }
     );
-  }
 
+    spotifyWebApi.getPlaylist(this.props.match.params.playlistid).then(
+      (data) => {
+        console.log("Playlist data", data);
+        this.setState({
+          name: data.name,
+          description: data.description,
+        });
+      },
+      function (err) {
+        console.error(err);
+      }
+    );
+  }
+  // this component is just a stand in to display info, will replace with prettier version
   render() {
     return (
       <div>
-        <h3>Songs</h3>
         <Link to={"/" + this.props.username + "/playlists"}>Go Back</Link>
-        <ul>
+        <h1>{this.state.name}</h1>
+        <h4>{this.state.description}</h4>
+        <ul style={{ listStyleType: "none" }}>
           {this.state.tracks.map((track, index) => (
             <li key={index}>
+              <img
+                src={track.track.album.images[0].url}
+                style={{ width: 50, height: 50 }}
+              />
               {track.track.name + " - " + track.track.artists[0].name}
             </li>
           ))}
