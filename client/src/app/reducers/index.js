@@ -5,7 +5,7 @@ import isLoggedIn from "./isLoggedIn";
 import username from "./username";
 import feed from "./feed";
 import settings from "./settings";
-import posts from "./posts";
+import posts from "./makePost";
 import spotifyWebApi from "./spotifyWebApi";
 import fetchFeed from "./fetchFeed";
 import fetchPosts from "./fetchPosts";

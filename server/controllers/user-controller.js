@@ -148,6 +148,37 @@ getUserPosts = async (req, res) => {
     })
     .catch((err) => console.log(err));
 };
+
+addPost = async (req, res) => {
+  const body = req.body;
+  if (!body) {
+    return res.status(400).json({
+      success: false,
+      error: "This is an invalid post.",
+    });
+  }
+
+  User.findOneAndUpdate(
+    { _id: req.params.id },
+    { $addToSet: { posts: body } },
+    { new: true },
+    (err, user) => {
+      if (err) {
+        return res.status(404).json({
+          err,
+          message: "This is an invalid update request.",
+        });
+      }
+      return res.status(200).json({ success: true, posts: user.posts });
+    }
+  ).catch((err) => {
+    return res.status(404).json({
+      error,
+      message: "User not found.",
+    });
+  });
+};
+
 module.exports = {
   createUser,
   updateUser,
@@ -155,4 +186,5 @@ module.exports = {
   getUserById,
   getUserFollowingFeed,
   getUserPosts,
+  addPost,
 };

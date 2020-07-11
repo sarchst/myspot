@@ -2,13 +2,14 @@ import React from "react";
 import { connect } from "react-redux";
 
 import Post from "./Post";
+import MakePost from "./MakePost";
 import {
   toggleLike,
   fetchFeed,
   addPersonalPostsToFeed,
 } from "../../app/actions/feedActions";
-
 import { fetchPosts } from "../../app/actions/postActions";
+
 class Feed extends React.Component {
   componentDidMount = (id) => {
     // TODO: change "mikayla" with id once active user is set up
@@ -16,38 +17,34 @@ class Feed extends React.Component {
     // this.props.addPersonalPostsToFeed("mikayla");
     this.props.fetchPosts("mikayla");
   };
+
   render() {
     const { toggleLike } = this.props;
     // if (this.props.feed.posts) {
-    
+
     // For now, we are rendering the active user's posts and the other user's posts separately
     // Eventually I will do a combined query and render only from feed store to Feed component
     return (
       <div>
+        <MakePost />
         <div>
-          {/* <MakePost /> TODO */}
           {this.props.feed.posts.map((p) => (
             <Post
               key={p._id}
               postdata={p}
               // TODO: the userId's below will need to be set as the active user's id (username) eventually, just set it as me for now
-              toggleLike={() =>
-                toggleLike({ usersLiked: p.usersLiked, userId: "mikayla" })
-              }
+              toggleLike={() => toggleLike({ post: p, userId: "mikayla" })}
               userId={"mikayla"}
             />
           ))}
         </div>
         <div>
-          {/* <MakePost /> TODO */}
           {this.props.posts.map((p) => (
             <Post
               key={p._id}
               postdata={p}
               // TODO: the userId's below will need to be set as the active user's id (username) eventually, just set it as me for now
-              toggleLike={() =>
-                toggleLike({ usersLiked: p.usersLiked, userId: "mikayla" })
-              }
+              toggleLike={() => toggleLike({ post: p, userId: "mikayla" })}
               userId={"mikayla"}
             />
           ))}

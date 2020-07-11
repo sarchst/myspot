@@ -15,6 +15,7 @@ export const toggleLike = (payload) => ({
   type: TOGGLE_LIKE,
   payload,
 });
+// let postId = 1;
 
 export function fetchFeedStarted() {
   return {
@@ -58,18 +59,18 @@ export function fetchFeed(id) {
         if (res.error) {
           throw res.error;
         }
-        console.log("fetchFeed method:");
+        // console.log("fetchFeed method:");
         dispatch(fetchFeedSuccess());
         return res.data;
       })
       .then((res) => {
-        console.log("Feed to be loaded:");
-        console.log(res);
+        // console.log("Feed to be loaded:");
+        // console.log(res);
         dispatch(addPostsToFeed(res));
         return res;
       })
       .catch((error) => {
-        console.log("Fetch Feed Error");
+        // console.log("Fetch Feed Error");
         dispatch(fetchFeedError(error));
       });
   };
@@ -85,18 +86,18 @@ export function addPersonalPostsToFeed(id) {
         if (res.error) {
           throw res.error;
         }
-        console.log("fetchPosts method:");
+        // console.log("fetchPosts method:");
         dispatch(fetchPostsSuccess());
         return res.data;
       })
       .then((res) => {
-        console.log("POSTS to be loaded:");
-        console.log(res);
+        // console.log("POSTS to be loaded:");
+        // console.log(res);
         dispatch(combinePPostWithFeed(res));
         return res;
       })
       .catch((error) => {
-        console.log("Fetch Posts Error");
+        // console.log("Fetch Posts Error");
         dispatch(fetchPostsError(error));
       });
   };
