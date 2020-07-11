@@ -12,9 +12,9 @@ export const toggleSidebar = () => ({
   type: "TOGGLE_SIDEBAR",
 });
 
-export const logIn = () => ({
-  type: LOG_IN,
-});
+// export const logIn = () => ({
+//   type: LOG_IN,
+// });
 
 export const logOut = () => ({
   type: LOG_OUT,

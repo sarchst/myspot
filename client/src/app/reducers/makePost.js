@@ -6,6 +6,8 @@ export const posts = (state = initialState, action) => {
   switch (action.type) {
     case ADD_POSTS_TO_POSTS:
       return action.payload;
+    case MAKE_POST_SUCCESS:
+      return;
     default:
       return state;
   }
