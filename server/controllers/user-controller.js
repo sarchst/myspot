@@ -75,6 +75,7 @@ updateUser = async (req, res) => {
 // No deleteUser because we don't want user to be able to remove themselves from our db entirely
 
 // don't think we need to await keyword because we're using callbacks
+// Returns a single user from the database
 getUserById = async (req, res) => {
   User.findOne({ _id: req.params.id }, (err, User) => {
     if (err) {
@@ -85,6 +86,7 @@ getUserById = async (req, res) => {
   }).catch((err) => console.log(err));
 };
 
+// Returns a list of all users in the database
 getUsers = async (req, res) => {
   User.find({}, (err, Users) => {
     if (err) {
@@ -97,138 +99,92 @@ getUsers = async (req, res) => {
   }).catch((err) => console.log(err));
 };
 
+// Returns a list of posts created by users the active user follows
+getUserFollowingFeed = async (req, res) => {
+  User.findById({ _id: req.params.id }, function (err, result) {
+    if (err) {
+      return res.status(400).json({ success: false, error: err });
+    }
+    if (!result) {
+      return res.status(404).json({ sucess: false, error: "User not found" });
+    }
+  })
+    .populate({
+      path: "following",
+      // populate: {
+      //   path: "posts",
+      //   populate: {
+      //     path: "usersLiked",
+      //   },
+      // },
+    })
+    // .sort({ timestamp: -1 })
+    .exec(function (err, user) {
+      console.log(user);
+      followingSize = user.following.length;
+      let feedPosts = [];
+      for (i = 0; i < followingSize; i++) {
+        feedPosts = [...feedPosts, ...user.following[i].posts];
+      }
+      console.log(feedPosts);
+      return res.status(200).json({ success: true, data: feedPosts });
+    })
+    .catch((err) => console.log(err));
+};
+
+// Returns a list of posts created by the user
+getUserPosts = async (req, res) => {
+  User.findOne({ _id: req.params.id }, function (err, result) {
+    if (err) {
+      return res.status(400).json({ success: false, error: err });
+    }
+    if (!result) {
+      return res.status(404).json({ success: false, error: "User not found" });
+    }
+  })
+    .exec(function (err, user) {
+      console.log(user.posts);
+      return res.status(200).json({ success: true, data: user.posts });
+    })
+    .catch((err) => console.log(err));
+};
+
+addPost = async (req, res) => {
+  const body = req.body;
+  if (!body) {
+    return res.status(400).json({
+      success: false,
+      error: "This is an invalid post.",
+    });
+  }
+
+  User.findOneAndUpdate(
+    { _id: req.params.id },
+    body,
+    { new: true },
+    (err, user) => {
+      if (err) {
+        return res.status(404).json({
+          err,
+          message: "This is an invalid update request.",
+        });
+      }
+      return res.status(200).json({ success: true, posts: user.posts });
+    }
+  ).catch((err) => {
+    return res.status(404).json({
+      error,
+      message: "User not found.",
+    });
+  });
+};
+
 module.exports = {
   createUser,
   updateUser,
   getUsers,
   getUserById,
+  getUserFollowingFeed,
+  getUserPosts,
+  addPost,
 };
-
-// Example from the assignment
-
-// createMessage = (req, res) => {
-//   const body = req.body;
-
-//   if (!body) {
-//     return res.status(400).json({
-//       success: false,
-//       error: "You must provide a message for The Abyss",
-//     });
-//   }
-
-//   const message = new Message(body);
-
-//   if (!message) {
-//     return res.status(400).json({ success: false, error: err });
-//   }
-
-//   message
-//     .save()
-//     .then(() => {
-//       return res.status(201).json({
-//         success: true,
-//         id: message._id,
-//         message: "Message thrown into the Abyss!",
-//       });
-//     })
-//     .catch((error) => {
-//       return res.status(400).json({
-//         error,
-//         message: "The Abyss rejects your message!",
-//       });
-//     });
-// };
-
-// updateMessage = async (req, res) => {
-//   const body = req.body;
-
-//   if (!body) {
-//     return res.status(400).json({
-//       success: false,
-//       error: "You must provide a body to update the Abyss",
-//     });
-//   }
-
-//   Message.findOne({ _id: req.params.id }, (err, message) => {
-//     if (err) {
-//       return res.status(404).json({
-//         err,
-//         message: "The Abyss cannot find your message!",
-//       });
-//     }
-//     message.name = body.message;
-//     // message.time = body.time
-//     message.rating = body.wordcount;
-//     message
-//       .save()
-//       .then(() => {
-//         return res.status(200).json({
-//           success: true,
-//           id: message._id,
-//           message: "The Abyss changed your message!",
-//         });
-//       })
-//       .catch((error) => {
-//         return res.status(404).json({
-//           error,
-//           message: "The Abyss rejects your message update!",
-//         });
-//       });
-//   });
-// };
-
-// deleteMessage = async (req, res) => {
-//   await Message.findOneAndDelete({ _id: req.params.id }, (err, message) => {
-//     if (err) {
-//       return res.status(400).json({ success: false, error: err });
-//     }
-
-//     if (!message) {
-//       return res
-//         .status(404)
-//         .json({ success: false, error: `The Abyss cannot find your message!` });
-//     }
-
-//     return res.status(200).json({ success: true, data: message });
-//   }).catch((err) => console.log(err));
-// };
-
-// getMessageById = async (req, res) => {
-//   await Message.findOne({ _id: req.params.id }, (err, message) => {
-//     if (err) {
-//       return res.status(400).json({ success: false, error: err });
-//     }
-
-//     if (!message) {
-//       return res
-//         .status(404)
-//         .json({ success: false, error: `The Abyss cannot find your message!` });
-//     }
-//     return res.status(200).json({ success: true, data: message });
-//   }).catch((err) => console.log(err));
-// };
-
-// getMessages = async (req, res) => {
-//   await Message.find({}, (err, messages) => {
-//     if (err) {
-//       return res.status(400).json({ success: false, error: err });
-//     }
-//     if (!messages.length) {
-//       return res
-//         .status(404)
-//         .json({
-//           success: false,
-//           error: `The Abyss cannot find your messages!`,
-//         });
-//     }
-//     return res.status(200).json({ success: true, data: messages });
-//   }).catch((err) => console.log(err));
-// };
-
-// module.exports = {
-//   createMessage,
-//   updateMessage,
-//   deleteMessage,
-//   getMessages,
-//   getMessageById,
-// };

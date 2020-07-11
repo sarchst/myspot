@@ -3,26 +3,21 @@ import Button from "@material-ui/core/Button";
 import { connect } from "react-redux";
 
 import {
-  Radio,
-  RadioGroup,
-  FormLabel,
   FormControl,
-  FormControlLabel,
+  // FormControlLabel,
   Paper,
   Grid,
   Input,
   InputLabel,
+  MenuItem,
   Select,
-  TextField,
 } from "@material-ui/core";
 import { ToggleButton, ToggleButtonGroup } from "@material-ui/lab";
 import AlbumIcon from "@material-ui/icons/Album";
 import MusicNoteIcon from "@material-ui/icons/MusicNote";
 import PlaylistAddIcon from "@material-ui/icons/PlaylistAdd";
-import Typography from "@material-ui/core/Typography";
 import { withStyles } from "@material-ui/core/styles";
-import { makePost } from "../../app/actions/feedActions";
-import Post from "./Post";
+import { makePost } from "../../app/actions/postActions";
 
 const styles = (theme) => ({
   root: {
@@ -38,39 +33,26 @@ const styles = (theme) => ({
     margin: theme.spacing(2),
     textAlign: "left",
     color: theme.palette.text.secondary,
+    display: "flex",
+    borderRadius: 16,
   },
   submit: {
     float: "right",
   },
 });
 
-const marks = [
-  {
-    value: "playlist",
-    label: "Playlist",
-  },
-  {
-    value: "album",
-    label: "Album",
-  },
-  {
-    value: "song",
-    label: "Song",
-  },
-];
-
 class MakePost extends React.Component {
   state = {
     content: "",
-    title: "",
+    media: "",
     type: "playlist",
     mediaOptions: [],
   };
 
-  // TODO componentDidMount get playlists adn set state
+  // TODO componentDidMount get playlists and set state mediaOptions
 
-  handleChange = (e, value) => {
-    this.setState({ type: value });
+  handleChange = (e) => {
+    this.setState({ content: e.target.value });
   };
 
   handleTypeSelect = (event, type) => {
@@ -79,10 +61,11 @@ class MakePost extends React.Component {
     }
   };
 
-  handleMediaSelect = (event, media) => {
-    if (media !== null) {
-      this.setState({ media: media });
-    }
+  handleMediaSelect = (e) => {
+    // if (media !== null) {
+    //   this.setState({ media: media });
+    // }
+    this.setState({ media: e.target.value });
   };
 
   updateTitle = (title) => {
@@ -96,11 +79,11 @@ class MakePost extends React.Component {
   componentDidMount = () => {
     this.setState({ username: this.props.username });
   };
+
   handleSubmitPost = () => {
-    // dispatches actions to add msg
     this.props.makePost(this.state);
-    // // resets state back to empty string
-    // this.setState({ input: "" });
+    // TODO media will have to change after spotify integration
+    this.setState({ content: "", media: "", type: "playlist" });
     console.log(this.state);
   };
 
@@ -146,13 +129,23 @@ class MakePost extends React.Component {
               <FormControl style={{ minWidth: 200 }}>
                 <InputLabel id="media">Media</InputLabel>
                 <Select
-                  native
+                  // native
                   value={this.state.media}
                   onChange={this.handleMediaSelect}
                 >
+                  {/* TODO REPLACE temporary option with this mapping once api has connect with spotify
                   {this.state.mediaOptions.map((mc) => {
                     return <option value={mc}>{mc}</option>;
-                  })}
+                  })} */}
+                  <MenuItem value="my awesome playlist">
+                    my awesome playlist
+                  </MenuItem>
+                  <MenuItem value="my firday night playlist">
+                    my friday night playlist
+                  </MenuItem>
+                  <MenuItem value="my workout playlist">
+                    my workout playlist
+                  </MenuItem>
                 </Select>
               </FormControl>
             </Grid>

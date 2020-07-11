@@ -23,6 +23,7 @@ const Post = new Schema(
     media: { type: String, required: true }, // TODO: may need to be object for spotify?
     usersLiked: [{ type: String, ref: "User", required: true }],
     repost: { type: Boolean, required: true },
+    author: { type: String, ref: "User", required: true },
   },
   { timestamps: true }
 );
@@ -41,4 +42,4 @@ const User = new Schema(
   { timestamps: true }
 );
 
-module.exports = mongoose.model("users", User);
+module.exports = mongoose.model("User", User);

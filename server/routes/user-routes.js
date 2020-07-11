@@ -8,13 +8,9 @@ router.put("/user/:id", UserContrl.updateUser);
 router.get("/user/:id", UserContrl.getUserById);
 router.get("/users", UserContrl.getUsers);
 
-// example from assignment\
-
-// router.post("/message", MovieCtrl.createMessage);
-// router.put("/message/:id", MovieCtrl.updateMessage);
-// router.delete("/message/:id", MovieCtrl.deleteMessage);
-// router.get("/message/:id", MovieCtrl.getMessageById);
-// router.get("/messages", MovieCtrl.getMessages);
+router.get("/user/feed/:id", UserContrl.getUserFollowingFeed);
+router.get("/user/posts/:id", UserContrl.getUserPosts);
+router.put("/user/posts/:id", UserContrl.addPost);
 
 /* GET users listing. */
 router.get("/", function (req, res, next) {

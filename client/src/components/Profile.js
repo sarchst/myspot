@@ -9,7 +9,8 @@ import { connect } from "react-redux";
 // import Typography from "@material-ui/core/Typography";
 // import Paper from "@material-ui/core/Paper";
 import { withStyles } from "@material-ui/core/styles";
-// import { makePost } from "../app/actions";
+import { toggleLike } from "../app/actions/feedActions";
+import { fetchPosts } from "../app/actions/postActions";
 import Post from "./feed/Post";
 import MakePost from "./feed/MakePost";
 
@@ -44,6 +45,13 @@ class Profile extends React.Component {
     };
   }
 
+  componentDidMount = (id) => {
+    // TODO: change "mikayla" with id once active user is set up
+    console.log("component profile mount");
+    this.setState({ username: this.props.username });
+    this.props.fetchPosts("mikayla");
+  };
+
   handleChange = (event) => {
     this.setState({ type: event.target.value });
   };
@@ -56,69 +64,31 @@ class Profile extends React.Component {
     this.setState({ content });
   };
 
-  componentDidMount = () => {
-    this.setState({ username: this.props.username });
-  };
-  handleSubmitPost = () => {
-    // dispatches actions to add msg
-    this.props.makePost(this.state);
-    // // resets state back to empty string
-    // this.setState({ input: "" });
-    console.log(this.state);
-  };
+  // componentDidMount = () => {
+  //   this.setState({ username: this.props.username });
+  // };
+
+  // handleSubmitPost = () => {
+  //   // dispatches actions to add msg
+  //   this.props.makePost(this.state);
+  //   // // resets state back to empty string
+  //   // this.setState({ input: "" });
+  //   console.log(this.state);
+  // };
 
   render() {
-    const { classes } = this.props;
+    const { classes, toggleLike } = this.props;
     return (
       <div className={classes.root}>
         <MakePost />
-        {/* <Paper className={classes.paper}>
-          <Typography className={classes.header}>Create a new post</Typography>
-          <FormControl component="fieldset">
-            <FormLabel component="legend">Type</FormLabel>
-            <RadioGroup
-              aria-label="PostType"
-              name="postType"
-              value={this.value}
-              onChange={this.handleChange}
-            >
-              <FormControlLabel
-                value="playlist"
-                control={<Radio />}
-                label="Playlist"
-              />
-              <FormControlLabel
-                value="album"
-                control={<Radio />}
-                label="Album"
-              />
-              <FormControlLabel value="song" control={<Radio />} label="Song" />
-            </RadioGroup>
-          </FormControl>
-          <Typography>Title</Typography>
-          <input
-            onChange={(event) => this.updateTitle(event.target.value)}
-            value={this.state.input}
-          />
-          <Typography>Content:</Typography>
-          <input
-            onChange={(event) => this.updateContent(event.target.value)}
-            value={this.state.content}
-          />
-        </Paper>
-
-        <Button onClick={this.handleSubmitPost} color="primary">
-          Create a new post
-        </Button> */}
-
         <div>
           {this.props.posts && this.props.posts.length ? (
             this.props.posts.map((p) => (
               <Post
-                key={p.id}
+                key={p._id}
                 postdata={p}
-                // toggleLike={() => toggleLike({ post: p, userId: 7 })}
-                // userId={7}
+                toggleLike={() => toggleLike({ post: p, userId: 7 })}
+                userId={7}
               />
             ))
           ) : (
@@ -135,4 +105,12 @@ const mapStateToProps = (state) => ({
   posts: state.posts,
 });
 
-export default connect(mapStateToProps, {})(withStyles(styles)(Profile));
+const mapDispatchToProps = {
+  toggleLike,
+  fetchPosts,
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withStyles(styles)(Profile));
