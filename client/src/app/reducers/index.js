@@ -9,6 +9,7 @@ import posts from "./posts";
 import spotifyWebApi from "./spotifyWebApi";
 import fetchFeed from "./fetchFeed";
 import fetchPosts from "./fetchPosts";
+import spotifyApiUserMe from "./spotifyApiUserMe";
 // import selectedContentPage from "./selectedContentPage";
 
 const allReducers = combineReducers({
@@ -21,6 +22,7 @@ const allReducers = combineReducers({
   fetchFeed: fetchFeed,
   fetchPosts: fetchPosts,
   posts: posts,
+  spotifyApiUserMe: spotifyApiUserMe,
   // selectedContentPage: selectedContentPage,
 });
 

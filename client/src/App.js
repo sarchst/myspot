@@ -7,7 +7,8 @@ import Login from "./components/Login";
 import { BrowserRouter as Router } from "react-router-dom";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import Spotify from "spotify-web-api-js";
-import { logIn, registerSpotifyWebApi, usernameSubmit } from "./app/actions";
+import { registerSpotifyWebApi, usernameSubmit } from "./app/actions";
+import { submitSpotifyApiUserMe } from "./app/actions/spotifyApiActions";
 
 const spotifyWebApi = new Spotify();
 
@@ -61,8 +62,8 @@ class App extends React.Component {
       spotifyWebApi.getMe().then((response) => {
         console.log("user profile response object ");
         console.log(response);
+        this.props.submitSpotifyApiUserMe(response);
         this.props.usernameSubmit(response.display_name);
-        this.props.logIn();
       });
     }
   }
@@ -83,7 +84,7 @@ class App extends React.Component {
     this.props.accountSettings.darkmode ? darkTheme : lightTheme;
 
   render() {
-    if (this.props.isLoggedIn) {
+    if (this.props.spotifyWebApi) {
       return (
         <ThemeProvider theme={this.selectTheme()}>
           <Router>
@@ -95,41 +96,26 @@ class App extends React.Component {
         </ThemeProvider>
       );
     } else {
-      // TODO: use React Router/redirect to from login page to main page after authentication is implemented
-      // return loginPage();
-      return (
-        // <div>
-        //   <Button
-        //       // type="submit"
-        //       href={"http://localhost:8888"}
-        //       fullWidth
-        //       variant="contained"
-        //       color="primary"
-        //       // onClick={this.attemptLogin}
-        //   >
-        //     Sign In With Spotify
-        //   </Button>
-        <Login />
-      );
+      return <Login />;
     }
   }
 }
 
 const mapStateToProps = (state) => {
   return {
-    isLoggedIn: state.isLoggedIn,
     username: state.username,
     accountSettings: state.accountSettings,
+    spotifyWebApi: state.spotifyWebApi,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    logIn: () => dispatch(logIn()),
     usernameSubmit: (username) => dispatch(usernameSubmit(username)),
     registerSpotifyWebApi: (spotifyWebApi) =>
       dispatch(registerSpotifyWebApi(spotifyWebApi)),
-    // selectContentPage: contentType => dispatch(selectContentPage(contentType))
+    submitSpotifyApiUserMe: (spotifyUserMe) =>
+      dispatch(submitSpotifyApiUserMe(spotifyUserMe)),
   };
 };
 
