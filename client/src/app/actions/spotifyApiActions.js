@@ -7,9 +7,10 @@ export const submitSpotifyApiUserMe = (SpotifyApiUserInfoMe) => {
       _id: SpotifyApiUserInfoMe.id,
       username: SpotifyApiUserInfoMe.display_name,
       email: SpotifyApiUserInfoMe.email,
-      followers: [],
-      following: [],
-      posts: [],
+      profilePic:
+        SpotifyApiUserInfoMe.images.length !== 0
+          ? SpotifyApiUserInfoMe.images[0].url
+          : "",
     };
     fetch(`http://localhost:9000/user`, {
       method: "POST", // or 'PUT'

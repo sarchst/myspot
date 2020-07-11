@@ -35,7 +35,7 @@ const User = new Schema(
     profilePic: { type: String }, // TODO this will be coming from Spotify but they may not have one
     email: { type: String, required: true },
 
-    settings: { type: Setting },
+    settings: { type: Setting, default: {}, required: true },
     // , required: true
     followers: [{ type: String, ref: "User", required: true }],
 
