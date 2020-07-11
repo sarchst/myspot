@@ -55,6 +55,7 @@ class SongList extends React.Component {
               <img
                 src={track.track.album.images[0].url}
                 style={{ width: 50, height: 50 }}
+                alt="this is album art"
               />
               {track.track.name + " - " + track.track.artists[0].name}
             </li>

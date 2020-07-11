@@ -57,7 +57,6 @@ class App extends React.Component {
     if (params.access_token) {
       spotifyWebApi.setAccessToken(params.access_token);
       console.log("LOGGING IN: SENDING SPOTIFYWEBAPI TO REDUX STORE");
-      console.log(spotifyWebApi);
       this.props.registerSpotifyWebApi(params.access_token);
       spotifyWebApi.getMe().then((response) => {
         console.log("user profile response object ");
