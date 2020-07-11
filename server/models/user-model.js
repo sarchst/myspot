@@ -22,7 +22,7 @@ const Post = new Schema(
     content: { type: String },
     media: { type: String, required: true }, // TODO: may need to be object for spotify?
     usersLiked: [{ type: String, ref: "User", required: true }],
-    repost: { type: Boolean, required: true },
+    repost: { type: Boolean, default: false, required: true },
     author: { type: String, ref: "User", required: true },
   },
   { timestamps: true }

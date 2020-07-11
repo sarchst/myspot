@@ -160,7 +160,7 @@ addPost = async (req, res) => {
 
   User.findOneAndUpdate(
     { _id: req.params.id },
-    { $push: { posts: body } },
+    { $addToSet: { posts: body } },
     { new: true },
     (err, user) => {
       if (err) {

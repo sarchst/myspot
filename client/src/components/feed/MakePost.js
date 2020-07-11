@@ -43,13 +43,18 @@ const styles = (theme) => ({
 
 class MakePost extends React.Component {
   state = {
+    author: "mikayla", // TODO: this will have to change to state.username once we have actual spotify users
     content: "",
     media: "",
     type: "playlist",
+    usersLiked: ["mikayla"], // TODO same todo as above, maybe not even have this?
     mediaOptions: [],
   };
 
   // TODO componentDidMount get playlists and set state mediaOptions
+  componentDidMount = () => {
+    this.setState({ username: this.props.username });
+  };
 
   handleChange = (e) => {
     this.setState({ content: e.target.value });
@@ -74,10 +79,6 @@ class MakePost extends React.Component {
 
   updateContent = (content) => {
     this.setState({ content });
-  };
-
-  componentDidMount = () => {
-    this.setState({ username: this.props.username });
   };
 
   handleSubmitPost = () => {

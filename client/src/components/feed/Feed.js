@@ -33,9 +33,7 @@ class Feed extends React.Component {
               key={p._id}
               postdata={p}
               // TODO: the userId's below will need to be set as the active user's id (username) eventually, just set it as me for now
-              toggleLike={() =>
-                toggleLike({ usersLiked: p.usersLiked, userId: "mikayla" })
-              }
+              toggleLike={() => toggleLike({ post: p, userId: "mikayla" })}
               userId={"mikayla"}
             />
           ))}
@@ -46,9 +44,7 @@ class Feed extends React.Component {
               key={p._id}
               postdata={p}
               // TODO: the userId's below will need to be set as the active user's id (username) eventually, just set it as me for now
-              toggleLike={() =>
-                toggleLike({ usersLiked: p.usersLiked, userId: "mikayla" })
-              }
+              toggleLike={() => toggleLike({ post: p, userId: "mikayla" })}
               userId={"mikayla"}
             />
           ))}
