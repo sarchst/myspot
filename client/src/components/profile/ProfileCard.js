@@ -71,20 +71,32 @@ class ProfileCard extends React.Component {
     super(props);
     this.state = {
       topTracks: [],
+      recentTracks: [],
     };
     spotifyWebApi.setAccessToken(this.props.spotifyWebApi);
   }
   componentDidMount = () => {
-    console.log(this.props.spotifyWebApi);
     spotifyWebApi
       .getMyTopTracks()
       .then((result) => {
-        console.log(result);
+        // console.log(result);
         this.setState({
-          topTracks: result.items.slice(0, 3),
+          topTracks: result.items.slice(0, Math.min(result.items.length, 3)),
         });
       })
       .catch((err) => {
+        console.log("error getting top tracks");
+        console.log(err);
+      });
+    spotifyWebApi
+      .getMyRecentlyPlayedTracks()
+      .then((result) => {
+        this.setState({
+          recentTracks: result.items.slice(0, Math.min(result.items.length, 3)),
+        });
+      })
+      .catch((err) => {
+        console.log("error getting recent tracks");
         console.log(err);
       });
   };
@@ -138,24 +150,75 @@ class ProfileCard extends React.Component {
           </Box>
         </Box>
         <Divider light />
-        <List
-          className={classes.listRoot}
-          dense={true}
-          subheader={
-            <ListSubheader component="div" id="nested-list-subheader">
-              My Top Tracks
-            </ListSubheader>
-          }
-        >
-          {this.state.topTracks.map((track) => (
-            <ListItem>
-              <ListItemAvatar>
-                <Avatar src={track.album.images[0].url}></Avatar>
-              </ListItemAvatar>
-              <ListItemText primary={track.name} secondary={track.album.name} />
-            </ListItem>
-          ))}
-        </List>
+        <Box display={"flex"}>
+          <Box
+            className={classes.profileCardBox}
+            p={2}
+            flex={"auto"}
+            // className={borderedGridStyles.item}
+          >
+            <List
+              className={classes.listRoot}
+              dense={true}
+              subheader={
+                <ListSubheader component="div" id="nested-list-subheader">
+                  My Top Tracks
+                </ListSubheader>
+              }
+            >
+              {this.state.topTracks.map((track, idx) => (
+                <ListItem key={idx}>
+                  <ListItemAvatar>
+                    <Avatar src={track.album.images[0].url}></Avatar>
+                  </ListItemAvatar>
+                  <ListItemText
+                    primary={track.name}
+                    secondary={track.album.artists.map(
+                      (artist, idx) =>
+                        artist.name +
+                        (idx < track.album.artists.length - 1 ? " | " : "")
+                    )}
+                  />
+                </ListItem>
+              ))}
+            </List>
+          </Box>
+          <Box
+            className={classes.profileCardBox}
+            p={2}
+            flex={"auto"}
+            // className={borderedGridStyles.item}
+          >
+            <List
+              className={classes.listRoot}
+              dense={true}
+              subheader={
+                <ListSubheader component="div" id="nested-list-subheader">
+                  Recently Played Songs
+                </ListSubheader>
+              }
+            >
+              {this.state.recentTracks.map((item) => (
+                <ListItem
+                  alignItems={"center"}
+                  button={true}
+                  onClick={() => window.open(item.track.preview_url)}
+                >
+                  {/*{console.log(item)}*/}
+                  <ListItemAvatar>
+                    <Avatar src={item.track.album.images[0].url}></Avatar>
+                  </ListItemAvatar>
+                  <ListItemText
+                    primary={item.track.name}
+                    secondary={
+                      "Played: " + new Date(item.played_at).toLocaleString()
+                    }
+                  />
+                </ListItem>
+              ))}
+            </List>
+          </Box>
+        </Box>
       </Card>
     );
   }
