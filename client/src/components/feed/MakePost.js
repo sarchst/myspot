@@ -4,7 +4,6 @@ import { connect } from "react-redux";
 
 import {
   FormControl,
-  // FormControlLabel,
   Paper,
   Grid,
   Input,
@@ -25,7 +24,6 @@ const styles = (theme) => ({
   },
   header: {
     fontSize: 20,
-    // margin: theme.spacing(2, 0),
     color: theme.palette.primary,
   },
   paper: {
@@ -67,9 +65,6 @@ class MakePost extends React.Component {
   };
 
   handleMediaSelect = (e) => {
-    // if (media !== null) {
-    //   this.setState({ media: media });
-    // }
     this.setState({ media: e.target.value });
   };
 

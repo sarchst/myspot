@@ -15,6 +15,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import ListItem from "@material-ui/core/ListItem";
 import ListSubheader from "@material-ui/core/ListSubheader";
+import PlayCircleOutlineIcon from "@material-ui/icons/PlayCircleOutline";
 
 const styles = (theme) => ({
   card: {
@@ -62,6 +63,9 @@ const styles = (theme) => ({
     width: "100%",
     backgroundColor: theme.palette.background.paper,
   },
+  audioPlayer: {
+    width: "50%",
+  },
 });
 
 const spotifyWebApi = new Spotify();
@@ -71,22 +75,41 @@ class ProfileCard extends React.Component {
     super(props);
     this.state = {
       topTracks: [],
+      recentTracks: [],
+      songUri: "",
     };
     spotifyWebApi.setAccessToken(this.props.spotifyWebApi);
   }
   componentDidMount = () => {
-    console.log(this.props.spotifyWebApi);
     spotifyWebApi
       .getMyTopTracks()
       .then((result) => {
-        console.log(result);
+        // console.log(result);
         this.setState({
-          topTracks: result.items.slice(0, 3),
+          topTracks: result.items.slice(0, Math.min(result.items.length, 3)),
         });
       })
       .catch((err) => {
+        console.log("error getting top tracks");
         console.log(err);
       });
+    spotifyWebApi
+      .getMyRecentlyPlayedTracks()
+      .then((result) => {
+        this.setState({
+          recentTracks: result.items.slice(0, Math.min(result.items.length, 3)),
+        });
+      })
+      .catch((err) => {
+        console.log("error getting recent tracks");
+        console.log(err);
+      });
+  };
+
+  setPlayerSong = (songUri) => {
+    this.setState({
+      songUri: songUri,
+    });
   };
 
   render() {
@@ -138,24 +161,106 @@ class ProfileCard extends React.Component {
           </Box>
         </Box>
         <Divider light />
-        <List
-          className={classes.listRoot}
-          dense={true}
-          subheader={
-            <ListSubheader component="div" id="nested-list-subheader">
-              My Top Tracks
-            </ListSubheader>
-          }
-        >
-          {this.state.topTracks.map((track) => (
-            <ListItem>
-              <ListItemAvatar>
-                <Avatar src={track.album.images[0].url}></Avatar>
-              </ListItemAvatar>
-              <ListItemText primary={track.name} secondary={track.album.name} />
-            </ListItem>
-          ))}
-        </List>
+        <Box display={"flex"}>
+          <Box
+            className={classes.profileCardBox}
+            p={2}
+            flex={"auto"}
+            // className={borderedGridStyles.item}
+          >
+            <List
+              className={classes.listRoot}
+              dense={true}
+              subheader={
+                <ListSubheader component="div" id="nested-list-subheader">
+                  My Top Tracks
+                </ListSubheader>
+              }
+            >
+              {this.state.topTracks.map((track, idx) => (
+                <ListItem
+                  key={idx}
+                  button={true}
+                  onClick={() => this.setPlayerSong(track.preview_url)}
+                >
+                  <Box pr={1} pt={1}>
+                    <PlayCircleOutlineIcon />
+                  </Box>
+                  <ListItemAvatar>
+                    <Avatar
+                      src={
+                        track.album.images.length
+                          ? track.album.images[0].url
+                          : null
+                      }
+                    ></Avatar>
+                  </ListItemAvatar>
+                  <ListItemText
+                    primary={track.name}
+                    secondary={track.album.artists.map(
+                      (artist, idx) =>
+                        artist.name +
+                        (idx < track.album.artists.length - 1 ? " | " : "")
+                    )}
+                  />
+                  {/*<ListItemSecondaryAction>*/}
+                  {/*  <IconButton edge="start" aria-label="delete">*/}
+
+                  {/*  </IconButton>*/}
+                  {/*</ListItemSecondaryAction>*/}
+                </ListItem>
+              ))}
+            </List>
+          </Box>
+          <Box
+            className={classes.profileCardBox}
+            p={2}
+            flex={"auto"}
+            // className={borderedGridStyles.item}
+          >
+            <List
+              className={classes.listRoot}
+              dense={true}
+              subheader={
+                <ListSubheader component="div" id="nested-list-subheader">
+                  Recently Played Songs
+                </ListSubheader>
+              }
+            >
+              {this.state.recentTracks.map((item, idx) => (
+                <ListItem
+                  key={idx}
+                  alignItems={"center"}
+                  button={true}
+                  onClick={() => this.setPlayerSong(item.track.preview_url)}
+                >
+                  <Box pr={1} pt={1}>
+                    <PlayCircleOutlineIcon />
+                  </Box>
+                  <ListItemAvatar>
+                    <Avatar src={item.track.album.images[0].url}></Avatar>
+                  </ListItemAvatar>
+                  <ListItemText
+                    primary={item.track.name}
+                    secondary={
+                      "Played: " + new Date(item.played_at).toLocaleString()
+                    }
+                  />
+                </ListItem>
+              ))}
+            </List>
+          </Box>
+        </Box>
+        {this.state.songUri ? (
+          <Box className={classes.profileCardBox} pb={1}>
+            <audio
+              className={classes.audioPlayer}
+              autoPlay
+              controls="controls"
+              src={this.state.songUri}
+            ></audio>
+          </Box>
+        ) : null}
       </Card>
     );
   }
