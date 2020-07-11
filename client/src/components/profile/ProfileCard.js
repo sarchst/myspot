@@ -15,6 +15,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import ListItem from "@material-ui/core/ListItem";
 import ListSubheader from "@material-ui/core/ListSubheader";
+import PlayCircleOutlineIcon from "@material-ui/icons/PlayCircleOutline";
 
 const styles = (theme) => ({
   card: {
@@ -62,6 +63,9 @@ const styles = (theme) => ({
     width: "100%",
     backgroundColor: theme.palette.background.paper,
   },
+  audioPlayer: {
+    width: "50%",
+  },
 });
 
 const spotifyWebApi = new Spotify();
@@ -72,6 +76,7 @@ class ProfileCard extends React.Component {
     this.state = {
       topTracks: [],
       recentTracks: [],
+      songUri: "",
     };
     spotifyWebApi.setAccessToken(this.props.spotifyWebApi);
   }
@@ -99,6 +104,12 @@ class ProfileCard extends React.Component {
         console.log("error getting recent tracks");
         console.log(err);
       });
+  };
+
+  setPlayerSong = (songUri) => {
+    this.setState({
+      songUri: songUri,
+    });
   };
 
   render() {
@@ -167,9 +178,22 @@ class ProfileCard extends React.Component {
               }
             >
               {this.state.topTracks.map((track, idx) => (
-                <ListItem key={idx}>
+                <ListItem
+                  key={idx}
+                  button={true}
+                  onClick={() => this.setPlayerSong(track.preview_url)}
+                >
+                  <Box pr={1} pt={1}>
+                    <PlayCircleOutlineIcon />
+                  </Box>
                   <ListItemAvatar>
-                    <Avatar src={track.album.images[0].url}></Avatar>
+                    <Avatar
+                      src={
+                        track.album.images.length
+                          ? track.album.images[0].url
+                          : null
+                      }
+                    ></Avatar>
                   </ListItemAvatar>
                   <ListItemText
                     primary={track.name}
@@ -179,6 +203,11 @@ class ProfileCard extends React.Component {
                         (idx < track.album.artists.length - 1 ? " | " : "")
                     )}
                   />
+                  {/*<ListItemSecondaryAction>*/}
+                  {/*  <IconButton edge="start" aria-label="delete">*/}
+
+                  {/*  </IconButton>*/}
+                  {/*</ListItemSecondaryAction>*/}
                 </ListItem>
               ))}
             </List>
@@ -198,13 +227,16 @@ class ProfileCard extends React.Component {
                 </ListSubheader>
               }
             >
-              {this.state.recentTracks.map((item) => (
+              {this.state.recentTracks.map((item, idx) => (
                 <ListItem
+                  key={idx}
                   alignItems={"center"}
                   button={true}
-                  onClick={() => window.open(item.track.preview_url)}
+                  onClick={() => this.setPlayerSong(item.track.preview_url)}
                 >
-                  {/*{console.log(item)}*/}
+                  <Box pr={1} pt={1}>
+                    <PlayCircleOutlineIcon />
+                  </Box>
                   <ListItemAvatar>
                     <Avatar src={item.track.album.images[0].url}></Avatar>
                   </ListItemAvatar>
@@ -219,6 +251,16 @@ class ProfileCard extends React.Component {
             </List>
           </Box>
         </Box>
+        {this.state.songUri ? (
+          <Box className={classes.profileCardBox} pb={1}>
+            <audio
+              className={classes.audioPlayer}
+              autoPlay
+              controls="controls"
+              src={this.state.songUri}
+            ></audio>
+          </Box>
+        ) : null}
       </Card>
     );
   }
