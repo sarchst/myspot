@@ -165,19 +165,23 @@ class Sidebar extends React.Component {
           </div>
           <Divider />
 
-          {/*TODO: EITHER map username separately so it doesn't collide with other keywords OR block keywords from being used as username*/}
+          {/*TODO: EITHER map username separately so it doesn't collide with other keywords OR block keywords from being used as username
+          LEFT THIS cause Im not sure if its better now?*/}
           <List>
             <ListItem
               button
-              key={this.props.username}
+              key={this.props.user.active.username}
               // onClick={() => this.selectView(this.props.username)}
             >
               <Link
                 className={classes.sidebarItem}
-                to={"/" + this.props.username}
+                to={"/" + this.props.user.active.username}
               >
                 <ListItemIcon>{<AccountCircleIcon />}</ListItemIcon>
-                <ListItemText primary={this.props.username} color="inhereit" />
+                <ListItemText
+                  primary={this.props.user.active.username}
+                  color="inhereit"
+                />
               </Link>
             </ListItem>
 
@@ -197,7 +201,7 @@ class Sidebar extends React.Component {
                   className={classes.sidebarItem}
                   to={
                     "/" +
-                    this.props.username +
+                    this.props.user.active.username +
                     "/" +
                     this.processTextForURL(text)
                   }
@@ -221,7 +225,6 @@ class Sidebar extends React.Component {
 
         <main className={classes.content}>
           <div className={classes.toolbar} />
-          {/* TODO: distinguish between active user/ logged in user once we have more than one profile */}
           <Switch>
             <Route path={"/:user"} exact>
               <Profile />
@@ -261,7 +264,7 @@ class Sidebar extends React.Component {
 const mapStateToProps = (state) => {
   return {
     open: state.isSidebarOpen,
-    username: state.username,
+    user: state.user,
     // selectedContentPage: state.selectedContentPage,
   };
 };

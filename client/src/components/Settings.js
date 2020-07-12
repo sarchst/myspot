@@ -71,7 +71,7 @@ class Settings extends React.Component {
   };
 
   render() {
-    const { classes } = this.props;
+    const { classes, user } = this.props;
     return (
       <div className={classes.root}>
         <Typography className={classes.header}>Account Settings</Typography>
@@ -84,7 +84,7 @@ class Settings extends React.Component {
                 <AccountCircleIcon className={classes.profilePic} />
                 <Grid className={classes.content} item>
                   <Grid item>
-                    <Typography>Username: {this.props.username}</Typography>
+                    <Typography>Username: {user.current.username}</Typography>
                   </Grid>
                   <Grid item>
                     <Typography>Email: associatedEmail@gmail.com</Typography>
@@ -164,7 +164,7 @@ class Settings extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-  username: state.username,
+  user: state.user,
   accountSettings: state.accountSettings,
 });
 

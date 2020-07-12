@@ -41,17 +41,17 @@ const styles = (theme) => ({
 
 class MakePost extends React.Component {
   state = {
-    author: "mikayla", // TODO: this will have to change to state.username once we have actual spotify users
+    authorId: this.props.user.current.id, // user id, ref to user schema
     content: "",
     media: "",
     type: "playlist",
-    usersLiked: ["mikayla"], // TODO same todo as above, maybe not even have this?
-    mediaOptions: [],
+    usersLiked: [this.props.user.current.id], // automatically liking your own post
+    // mediaOptions: [],
+    username: this.props.user.current.username,
   };
 
-  // TODO componentDidMount get playlists and set state mediaOptions
   componentDidMount = () => {
-    this.setState({ username: this.props.username });
+    // // TODO STILL NEED componentDidMount to get playlists and set state mediaOptions
   };
 
   handleChange = (e) => {
@@ -78,7 +78,7 @@ class MakePost extends React.Component {
 
   handleSubmitPost = () => {
     this.props.makePost(this.state);
-    // TODO media will have to change after spotify integration
+    // TODO media options will have to change after spotify integration
     this.setState({ content: "", media: "", type: "playlist" });
     console.log(this.state);
   };
@@ -163,7 +163,7 @@ class MakePost extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-  username: state.username,
+  user: state.user,
   posts: state.posts,
 });
 

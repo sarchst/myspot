@@ -7,11 +7,10 @@ export const ADD_POSTS_TO_POSTS = "ADD_POSTS_TO_POSTS";
 export const MAKE_POST_SUCCESS = "MAKE_POST_SUCCESS";
 
 export const makePost = (post) => {
-  // TODO make the id component post.username once we have a spotify user in database, setting it to mikayla for now to match other temp username values
   console.log("Post from actions: ", post);
   return (dispatch) => {
     return axios
-      .put(`http://localhost:9000/user/posts/mikayla`, post)
+      .put(`http://localhost:9000/user/posts/${post.authorId}`, post)
       .then((res) => {
         console.log("Res: ", res);
         dispatch(makePostSuccess(res.data.posts));

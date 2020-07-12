@@ -9,7 +9,8 @@ import MenuIcon from "@material-ui/icons/Menu";
 import Button from "@material-ui/core/Button";
 import SettingsIcon from "@material-ui/icons/Settings";
 import { withStyles } from "@material-ui/core";
-import { logOut, toggleSidebar } from "../app/actions";
+import { toggleSidebar } from "../app/actions";
+import { logOut } from "../app/actions/userActions";
 import contentType from "../data/ContentTypeEnum";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
@@ -100,22 +101,17 @@ class Appbar extends React.Component {
           <Typography noWrap={false} className={classes.appTitle}>
             MySpot
           </Typography>
-          <Link to={"/" + this.props.username} className={classes.appbarButton}>
-            <Button
-              color="inherit"
-            >
-              {contentType.PROFILE}
-            </Button>
-          </Link>
           <Link
-            to={"/" + this.props.username + "/feed"}
+            to={"/" + this.props.user.current.username}
             className={classes.appbarButton}
           >
-            <Button
-              color="inherit"
-            >
-              {contentType.FEED}
-            </Button>
+            <Button color="inherit">{contentType.PROFILE}</Button>
+          </Link>
+          <Link
+            to={"/" + this.props.user.current.username + "/feed"}
+            className={classes.appbarButton}
+          >
+            <Button color="inherit">{contentType.FEED}</Button>
           </Link>
 
           <Button
@@ -126,7 +122,7 @@ class Appbar extends React.Component {
             Logout
           </Button>
           <Link
-            to={"/" + this.props.username + "/settings"}
+            to={"/" + this.props.user.current.username + "/settings"}
             className={classes.appbarButton}
           >
             <Button color="inherit">
@@ -142,7 +138,7 @@ class Appbar extends React.Component {
 const mapStateToProps = (state) => {
   return {
     open: state.isSidebarOpen,
-    username: state.username,
+    user: state.user,
   };
 };
 
