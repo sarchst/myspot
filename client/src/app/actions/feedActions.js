@@ -64,9 +64,10 @@ export function fetchFeed(id) {
         return res.data;
       })
       .then((res) => {
-        // console.log("Feed to be loaded:");
-        // console.log(res);
-        dispatch(addPostsToFeed(res));
+        const feed = [].concat(res[0].posts, res[0].following[0].posts);
+        console.log("feed is: ");
+        console.log(feed);
+        dispatch(addPostsToFeed(feed));
         return res;
       })
       .catch((error) => {
@@ -76,29 +77,29 @@ export function fetchFeed(id) {
   };
 }
 
-// will probably not need this, instead we'll change the feed query to get posts from active user and other users
-export function addPersonalPostsToFeed(id) {
-  return (dispatch) => {
-    dispatch(fetchPostsStarted());
-    fetch(`http://localhost:9000/user/posts/${id}`)
-      .then((res) => res.json())
-      .then((res) => {
-        if (res.error) {
-          throw res.error;
-        }
-        // console.log("fetchPosts method:");
-        dispatch(fetchPostsSuccess());
-        return res.data;
-      })
-      .then((res) => {
-        // console.log("POSTS to be loaded:");
-        // console.log(res);
-        dispatch(combinePPostWithFeed(res));
-        return res;
-      })
-      .catch((error) => {
-        // console.log("Fetch Posts Error");
-        dispatch(fetchPostsError(error));
-      });
-  };
-}
+// // will probably not need this, instead we'll change the feed query to get posts from active user and other users
+// export function addPersonalPostsToFeed(id) {
+//   return (dispatch) => {
+//     dispatch(fetchPostsStarted());
+//     fetch(`http://localhost:9000/user/posts/${id}`)
+//       .then((res) => res.json())
+//       .then((res) => {
+//         if (res.error) {
+//           throw res.error;
+//         }
+//         // console.log("fetchPosts method:");
+//         dispatch(fetchPostsSuccess());
+//         return res.data;
+//       })
+//       .then((res) => {
+//         // console.log("POSTS to be loaded:");
+//         // console.log(res);
+//         dispatch(combinePPostWithFeed(res));
+//         return res;
+//       })
+//       .catch((error) => {
+//         // console.log("Fetch Posts Error");
+//         dispatch(fetchPostsError(error));
+//       });
+//   };
+// }

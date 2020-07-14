@@ -14,7 +14,7 @@ class Feed extends React.Component {
   componentDidMount = (id) => {
     this.props.fetchFeed(this.props.user.current.id);
     // TODO this will have to change most likely
-    this.props.fetchPosts(this.props.user.active.id);
+    // this.props.fetchPosts(this.props.user.active.id);
   };
 
   render() {
@@ -38,7 +38,7 @@ class Feed extends React.Component {
             />
           ))}
         </div>
-        <div>
+        {/* <div>
           {this.props.posts.map((p) => (
             <Post
               key={p._id}
@@ -49,7 +49,7 @@ class Feed extends React.Component {
               userId={user.current.id}
             />
           ))}
-        </div>
+        </div> */}
       </div>
     );
     // } else {
@@ -67,7 +67,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = {
   toggleLike,
   fetchFeed,
-  addPersonalPostsToFeed,
+  // addPersonalPostsToFeed,
   fetchPosts,
   // toggleActivity,
 };
