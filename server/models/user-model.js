@@ -16,7 +16,7 @@ const Setting = new Schema(
   { timestamps: true }
 );
 
-const Post = new Schema(
+const PostSchema = new Schema(
   {
     type: { type: String, required: true }, // TODO: May have to reference this back to media?
     content: { type: String },
@@ -29,7 +29,7 @@ const Post = new Schema(
   { timestamps: true }
 );
 
-const User = new Schema(
+const UserSchema = new Schema(
   {
     _id: { type: String, required: true },
     username: { type: String, required: true },
@@ -38,11 +38,17 @@ const User = new Schema(
     settings: { type: Setting, default: {}, required: true },
     followers: [{ type: String, ref: "User", required: true }],
     following: [{ type: String, ref: "User", required: true }],
-    posts: { type: [Post], required: true },
+    posts: [{ type: PostSchema, required: true }],
     topTracks: [],
     recentTracks: [],
   },
   { timestamps: true }
 );
 
-module.exports = mongoose.model("User", User);
+const User = mongoose.model("User", UserSchema);
+const Post = mongoose.model("Post", PostSchema);
+
+module.exports = {
+  Post: Post,
+  User: User,
+};
