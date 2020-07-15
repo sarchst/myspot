@@ -76,7 +76,6 @@ export function fetchFeed(id) {
   };
 }
 
-// will probably not need this, instead we'll change the feed query to get posts from active user and other users
 export function addPersonalPostsToFeed(id) {
   return (dispatch) => {
     dispatch(fetchPostsStarted());

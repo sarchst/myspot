@@ -1,20 +1,8 @@
-import {
-  SET_CURRENT_USER,
-  SET_ACTIVE_USER,
-  LOG_OUT,
-} from "../actions/userActions";
+import { SET_CURRENT_USER, LOG_OUT } from "../actions/userActions";
 
-// Current is for the person using MySpot and navigating the Appbar
-// Active is for navigating and rendering the Sidebar
 const initialState = {
-  current: {
-    id: "",
-    username: "",
-  },
-  active: {
-    id: "",
-    username: "",
-  },
+  id: "",
+  username: "",
 };
 
 export const user = (state = initialState, action) => {
@@ -22,34 +10,14 @@ export const user = (state = initialState, action) => {
     case SET_CURRENT_USER:
       return {
         ...state,
-        current: {
-          ...state.current,
-          id: action.id,
-          username: action.username,
-        },
-      };
-    case SET_ACTIVE_USER:
-      return {
-        ...state,
-        active: {
-          ...state.active,
-          id: action.id,
-          username: action.username,
-        },
+        id: action.id,
+        username: action.username,
       };
     case LOG_OUT:
       return {
         ...state,
-        current: {
-          ...state.current,
-          id: "",
-          username: "",
-        },
-        active: {
-          ...state.active,
-          id: "",
-          username: "",
-        },
+        id: "",
+        username: "",
       };
     default:
       return state;

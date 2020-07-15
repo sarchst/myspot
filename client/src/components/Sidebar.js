@@ -170,16 +170,16 @@ class Sidebar extends React.Component {
           <List>
             <ListItem
               button
-              key={this.props.user.active.username}
+              key={this.props.user.username}
               // onClick={() => this.selectView(this.props.username)}
             >
               <Link
                 className={classes.sidebarItem}
-                to={"/" + this.props.user.active.username}
+                to={"/" + this.props.user.username}
               >
                 <ListItemIcon>{<AccountCircleIcon />}</ListItemIcon>
                 <ListItemText
-                  primary={this.props.user.active.username}
+                  primary={this.props.user.username}
                   color="inhereit"
                 />
               </Link>
@@ -201,7 +201,7 @@ class Sidebar extends React.Component {
                   className={classes.sidebarItem}
                   to={
                     "/" +
-                    this.props.user.active.username +
+                    this.props.user.username +
                     "/" +
                     this.processTextForURL(text)
                   }

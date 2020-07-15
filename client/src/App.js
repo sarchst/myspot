@@ -8,7 +8,7 @@ import { BrowserRouter as Router } from "react-router-dom";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import Spotify from "spotify-web-api-js";
 import { registerSpotifyWebApi } from "./app/actions";
-import { setCurrentUser, setActiveUser } from "./app/actions/userActions";
+import { setCurrentUser } from "./app/actions/userActions";
 import { submitSpotifyApiUserMe } from "./app/actions/spotifyApiActions";
 
 const spotifyWebApi = new Spotify();
@@ -55,7 +55,6 @@ class App extends React.Component {
         console.log("spotify profile response object: ", response);
         this.props.submitSpotifyApiUserMe(response);
         this.props.setCurrentUser(response.id, response.display_name);
-        this.props.setActiveUser(response.id, response.display_name);
       });
     }
   }
@@ -73,10 +72,11 @@ class App extends React.Component {
   }
 
   selectTheme = () =>
+    // TODO swith this too user from database?
     this.props.accountSettings.darkmode ? darkTheme : lightTheme;
 
   render() {
-    if (this.props.spotifyWebApi && this.props.user.current.id) {
+    if (this.props.spotifyWebApi && this.props.user.id) {
       return (
         <ThemeProvider theme={this.selectTheme()}>
           <Router>
@@ -104,7 +104,6 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     setCurrentUser: (id, username) => dispatch(setCurrentUser(id, username)),
-    setActiveUser: (id, username) => dispatch(setActiveUser(id, username)),
     registerSpotifyWebApi: (spotifyWebApi) =>
       dispatch(registerSpotifyWebApi(spotifyWebApi)),
     submitSpotifyApiUserMe: (spotifyUserMe) =>

@@ -12,9 +12,9 @@ import { fetchPosts } from "../../app/actions/postActions";
 
 class Feed extends React.Component {
   componentDidMount = (id) => {
-    this.props.fetchFeed(this.props.user.current.id);
+    this.props.fetchFeed(this.props.user.id);
     // TODO this will have to change most likely
-    this.props.fetchPosts(this.props.user.active.id);
+    this.props.fetchPosts(this.props.user.id);
   };
 
   render() {
@@ -31,10 +31,8 @@ class Feed extends React.Component {
             <Post
               key={p._id}
               postdata={p}
-              toggleLike={() =>
-                toggleLike({ post: p, userId: user.current.id })
-              }
-              userId={user.current.id}
+              toggleLike={() => toggleLike({ post: p, userId: user.id })}
+              userId={user.id}
             />
           ))}
         </div>
@@ -43,10 +41,8 @@ class Feed extends React.Component {
             <Post
               key={p._id}
               postdata={p}
-              toggleLike={() =>
-                toggleLike({ post: p, userId: user.current.id })
-              }
-              userId={user.current.id}
+              toggleLike={() => toggleLike({ post: p, userId: user.id })}
+              userId={user.id}
             />
           ))}
         </div>

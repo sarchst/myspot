@@ -34,11 +34,13 @@ const User = new Schema(
     _id: { type: String, required: true },
     username: { type: String, required: true },
     profilePic: { type: String },
-    email: { type: String, required: true },
+    country: { type: String, required: true },
     settings: { type: Setting, default: {}, required: true },
     followers: [{ type: String, ref: "User", required: true }],
     following: [{ type: String, ref: "User", required: true }],
     posts: { type: [Post], required: true },
+    topTracks: [],
+    recentTracks: [],
   },
   { timestamps: true }
 );
