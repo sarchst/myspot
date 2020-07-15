@@ -86,9 +86,9 @@ class Settings extends React.Component {
                   <Grid item>
                     <Typography>Username: {user.username}</Typography>
                   </Grid>
-                  <Grid item>
+                  {/* <Grid item>
                     <Typography>Email: associatedEmail@gmail.com</Typography>
-                  </Grid>
+                  </Grid> */}
                 </Grid>
               </Grid>
             </Paper>
@@ -96,7 +96,8 @@ class Settings extends React.Component {
             <Grid item xs={12}>
               <Paper className={classes.paper}>
                 <Grid className={classes.setting} container>
-                  <Grid item>
+                  {/* Notifications toggle commented out for now, until we implement it */}
+                  {/* <Grid item>
                     <Typography>Notifications</Typography>
                   </Grid>
                   <Grid item>
@@ -106,9 +107,9 @@ class Settings extends React.Component {
                       name="notifications"
                       inputProps={{ "aria-label": "secondary checkbox" }}
                     />
-                  </Grid>
+                  </Grid> */}
                 </Grid>
-                <Divider className={classes.divider} />
+                {/* <Divider className={classes.divider} /> */}
                 <Grid className={classes.setting} container>
                   <Grid item>
                     <Typography>Dark Mode</Typography>
@@ -122,9 +123,10 @@ class Settings extends React.Component {
                     />
                   </Grid>
                 </Grid>
-                <Divider className={classes.divider} />
+                {/* <Divider className={classes.divider} /> */}
                 <Grid item>
-                  <FormControl className={classes.formControl}>
+                  {/* Language drop down commented out for now, until we implement it */}
+                  {/* <FormControl className={classes.formControl}>
                     <InputLabel id="combo-box-lang-label">Language</InputLabel>
                     <Select
                       labelId="combo-box-lang-label"
@@ -140,12 +142,8 @@ class Settings extends React.Component {
                         </MenuItem>
                       ))}
                     </Select>
-                  </FormControl>
+                  </FormControl> */}
                 </Grid>
-                <Divider className={classes.divider} />
-                <Typography>Additional Settings Here</Typography>
-                <Divider className={classes.divider} />
-                <Typography>Additional Settings Here</Typography>
               </Paper>
             </Grid>
             {/* <Divider className={classes.divider} /> */}
