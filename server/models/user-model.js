@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const Setting = new Schema(
+const SettingSchema = new Schema(
   {
     notification: { type: Boolean, default: true, required: true },
     darkMode: { type: Boolean, default: false, required: true },
@@ -35,7 +35,7 @@ const UserSchema = new Schema(
     username: { type: String, required: true },
     profilePic: { type: String },
     country: { type: String, required: true },
-    settings: { type: Setting, default: {}, required: true },
+    settings: { type: SettingSchema, default: {}, required: true },
     followers: [{ type: String, ref: "User", required: true }],
     following: [{ type: String, ref: "User", required: true }],
     posts: [{ type: PostSchema, required: true }],
@@ -47,8 +47,10 @@ const UserSchema = new Schema(
 
 const User = mongoose.model("User", UserSchema);
 const Post = mongoose.model("Post", PostSchema);
+const Setting = mongoose.model("Setting", SettingSchema);
 
 module.exports = {
   Post: Post,
   User: User,
+  Setting: Setting,
 };

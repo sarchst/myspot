@@ -1,4 +1,4 @@
-const { User, Post } = require("../models/user-model");
+const { User, Post, Setting } = require("../models/user-model");
 
 createUser = (req, res) => {
   const body = req.body;
@@ -181,6 +181,40 @@ addPost = (req, res) => {
   });
 };
 
+updateSettings = (req, res) => {
+  const body = req.body;
+  if (!body) {
+    return res.status(400).json({
+      success: false,
+      error: "You must provide a body to update",
+    });
+  }
+
+  console.log("Req body is " + body);
+  const setting = new Setting(body);
+  console.log("settings is " + setting);
+  console.log(req.params.id);
+  User.findOneAndUpdate(
+    { _id: req.params.id },
+    { darkMode: setting.isDarkmode },
+    { new: true },
+    (err, result) => {
+      if (err) {
+        return res.status(404).json({
+          err,
+          message: "This is an invalid settings update request.",
+        });
+      }
+      return res.status(200).json({ success: true, settings: result });
+    }
+  ).catch((err) => {
+    return res.status(404).json({
+      error: err,
+      message: "User setting not found.",
+    });
+  });
+};
+
 module.exports = {
   createUser,
   updateUser,
@@ -189,4 +223,5 @@ module.exports = {
   getUserFollowingFeed,
   getUserPosts,
   addPost,
+  updateSettings,
 };

@@ -12,6 +12,8 @@ router.get("/user/feed/:id", UserContrl.getUserFollowingFeed);
 router.get("/user/posts/:id", UserContrl.getUserPosts);
 router.put("/user/posts/:id", UserContrl.addPost);
 
+
+router.put("/user/settings/:id", UserContrl.updateSettings)
 /* GET users listing. */
 router.get("/", function (req, res, next) {
   res.send("respond with a resource");

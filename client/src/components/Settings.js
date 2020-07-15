@@ -4,20 +4,20 @@ import Paper from "@material-ui/core/Paper";
 import Divider from "@material-ui/core/Divider";
 import Switch from "@material-ui/core/Switch";
 import Button from "@material-ui/core/Button";
-import InputLabel from "@material-ui/core/InputLabel";
-import MenuItem from "@material-ui/core/MenuItem";
-import FormControl from "@material-ui/core/FormControl";
-import Select from "@material-ui/core/Select";
+// import InputLabel from "@material-ui/core/InputLabel";
+// import MenuItem from "@material-ui/core/MenuItem";
+// import FormControl from "@material-ui/core/FormControl";
+// import Select from "@material-ui/core/Select";
 import { connect } from "react-redux";
 import { withStyles } from "@material-ui/core/styles";
 import { Typography } from "@material-ui/core";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import {
   toggleNotifications,
-  toggleDarkmode,
+  // toggleDarkmode,
   changeLang,
 } from "../app/actions";
-
+import { toggleDarkmode } from "../app/actions/settingsActions";
 const styles = (theme) => ({
   root: {
     flexGrow: 1,
@@ -56,15 +56,25 @@ const styles = (theme) => ({
   },
 });
 
-const languages = ["English", "French", "Spanish"];
+// const languages = ["English", "French", "Spanish"];
 
 class Settings extends React.Component {
+  state = {
+    activeUser: this.props.user.id,
+    notifications: true, // user id, ref to user schema
+    darkMode: this.props.accountSettings.darkmode,
+    language: "English",
+    disableAcc: false,
+  };
+
   handleNotifToggle = () => {
     this.props.toggleNotifications(this.props.accountSettings.notifications);
   };
 
   handleDarkmodeToggle = () => {
-    this.props.toggleDarkmode(this.props.accountSettings.darkmode);
+    // this.props.toggleDarkmode(this.props.accountSettings.darkmode);
+    console.log(this.state);
+    this.props.toggleDarkmode(this.state);
   };
   handleLangSelect = (event) => {
     this.props.changeLang(event.target.value);
