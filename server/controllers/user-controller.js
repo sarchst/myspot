@@ -99,7 +99,7 @@ getUsers = async (req, res) => {
   }).catch((err) => console.log(err));
 };
 
-// Returns a list of posts created by users the active user follows
+// Returns a list of posts created by users the current user follows
 getUserFollowingFeed = async (req, res) => {
   User.findById({ _id: req.params.id }, function (err, result) {
     if (err) {
