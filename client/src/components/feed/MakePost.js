@@ -41,13 +41,13 @@ const styles = (theme) => ({
 
 class MakePost extends React.Component {
   state = {
-    authorId: this.props.user.current.id, // user id, ref to user schema
+    authorId: this.props.user.id, // user id, ref to user schema
     content: "",
     media: "",
     type: "playlist",
-    usersLiked: [this.props.user.current.id], // automatically liking your own post
+    usersLiked: [this.props.user.id], // automatically liking your own post
     // mediaOptions: [],
-    username: this.props.user.current.username,
+    username: this.props.user.username,
   };
 
   componentDidMount = () => {

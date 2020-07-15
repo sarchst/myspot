@@ -102,13 +102,13 @@ class Appbar extends React.Component {
             MySpot
           </Typography>
           <Link
-            to={"/" + this.props.user.current.username}
+            to={"/" + this.props.user.username}
             className={classes.appbarButton}
           >
             <Button color="inherit">{contentType.PROFILE}</Button>
           </Link>
           <Link
-            to={"/" + this.props.user.current.username + "/feed"}
+            to={"/" + this.props.user.username + "/feed"}
             className={classes.appbarButton}
           >
             <Button color="inherit">{contentType.FEED}</Button>
@@ -122,7 +122,7 @@ class Appbar extends React.Component {
             Logout
           </Button>
           <Link
-            to={"/" + this.props.user.current.username + "/settings"}
+            to={"/" + this.props.user.username + "/settings"}
             className={classes.appbarButton}
           >
             <Button color="inherit">

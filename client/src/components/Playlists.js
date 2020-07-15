@@ -134,12 +134,7 @@ class Playlists extends React.Component {
                     </CardContent>
                     <CardActions>
                       <Link
-                        to={
-                          "/" +
-                          user.active.username +
-                          "/playlists/" +
-                          playlist.id
-                        }
+                        to={"/" + user.username + "/playlists/" + playlist.id}
                       >
                         <Button size="small" color="primary">
                           View Songs

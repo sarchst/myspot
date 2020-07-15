@@ -84,7 +84,7 @@ class Settings extends React.Component {
                 <AccountCircleIcon className={classes.profilePic} />
                 <Grid className={classes.content} item>
                   <Grid item>
-                    <Typography>Username: {user.current.username}</Typography>
+                    <Typography>Username: {user.username}</Typography>
                   </Grid>
                   <Grid item>
                     <Typography>Email: associatedEmail@gmail.com</Typography>
