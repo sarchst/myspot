@@ -1,4 +1,4 @@
-const User = require("../models/user-model");
+const { User, Post } = require("../models/user-model");
 
 createUser = (req, res) => {
   const body = req.body;
@@ -149,7 +149,7 @@ getUserPosts = async (req, res) => {
     .catch((err) => console.log(err));
 };
 
-addPost = async (req, res) => {
+addPost = (req, res) => {
   const body = req.body;
   if (!body) {
     return res.status(400).json({
@@ -158,10 +158,12 @@ addPost = async (req, res) => {
     });
   }
 
+  const post = new Post(body);
+
   User.findOneAndUpdate(
     { _id: req.params.id },
-    { $addToSet: { posts: body } },
-    { new: true },
+    { $push: { posts: post } },
+    { new: true, upsert: true },
     (err, user) => {
       if (err) {
         return res.status(404).json({
