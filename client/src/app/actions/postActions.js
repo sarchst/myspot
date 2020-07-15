@@ -6,21 +6,6 @@ export const FETCH_POSTS_STARTED = "FETCH_POSTS_STARTED";
 export const ADD_POSTS_TO_POSTS = "ADD_POSTS_TO_POSTS";
 export const MAKE_POST_SUCCESS = "MAKE_POST_SUCCESS";
 
-export const makePost = (post) => {
-  console.log("Post from actions: ", post);
-  return (dispatch) => {
-    return axios
-      .put(`http://localhost:9000/user/posts/${post.authorId}`, post)
-      .then((res) => {
-        console.log("Res: ", res);
-        dispatch(makePostSuccess(res.data.posts));
-      })
-      .catch((error) => {
-        throw error;
-      });
-  };
-};
-
 export const makePostSuccess = (posts) => ({
   type: MAKE_POST_SUCCESS,
   payload: posts,
@@ -51,6 +36,21 @@ export function addPostsToPosts(data) {
     payload: data,
   };
 }
+
+export const makePost = (post) => {
+  console.log("Post from actions: ", post);
+  return (dispatch) => {
+    return axios
+      .put(`http://localhost:9000/user/posts/${post.authorId}`, post)
+      .then((res) => {
+        console.log("Res: ", res);
+        dispatch(makePostSuccess(res.data.posts));
+      })
+      .catch((error) => {
+        throw error;
+      });
+  };
+};
 
 export function fetchPosts(id) {
   return (dispatch) => {

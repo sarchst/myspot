@@ -6,23 +6,18 @@ import MakePost from "./MakePost";
 import {
   toggleLike,
   fetchFeed,
-  addPersonalPostsToFeed,
 } from "../../app/actions/feedActions";
 import { fetchPosts } from "../../app/actions/postActions";
 
 class Feed extends React.Component {
   componentDidMount = (id) => {
     this.props.fetchFeed(this.props.user.id);
-    // TODO this will have to change most likely /
-    this.props.fetchPosts(this.props.user.id);
   };
 
   render() {
     const { toggleLike, user } = this.props;
-    // if (this.props.feed.posts) {
 
-    // For now, we are rendering the active user's posts and the other user's posts separately
-    // Eventually I will do a combined query and render only from feed store to Feed component
+    if (this.props.feed.posts) {
     return (
       <div>
         <MakePost />
@@ -36,21 +31,11 @@ class Feed extends React.Component {
             />
           ))}
         </div>
-        {/* <div>
-          {this.props.posts.map((p) => (
-            <Post
-              key={p._id}
-              postdata={p}
-              toggleLike={() => toggleLike({ post: p, userId: user.id })}
-              userId={user.id}
-            />
-          ))}
-        </div> */}
       </div>
     );
-    // } else {
-    //   return <h1>Nothing to see here</h1>;
-    // }
+    } else {
+      return <h1>Hmm, there's nothing on your feed yet! Add some friends to see their posts.</h1>;
+    }
   }
 }
 
@@ -63,7 +48,6 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = {
   toggleLike,
   fetchFeed,
-  // addPersonalPostsToFeed,
   fetchPosts,
   // toggleActivity,
 };

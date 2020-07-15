@@ -99,39 +99,6 @@ getUsers = async (req, res) => {
   }).catch((err) => console.log(err));
 };
 
-// // Returns a list of posts created by users the active user follows
-// getUserFollowingFeed = async (req, res) => {
-//   User.findById({ _id: req.params.id }, function (err, result) {
-//     if (err) {
-//       return res.status(400).json({ success: false, error: err });
-//     }
-//     if (!result) {
-//       return res.status(404).json({ sucess: false, error: "User not found" });
-//     }
-//   })
-//     .populate({
-//       path: "following",
-//       // populate: {
-//       //   path: "posts",
-//       //   populate: {
-//       //     path: "usersLiked",
-//       //   },
-//       // },
-//     })
-//     // .sort({ timestamp: -1 })
-//     .exec(function (err, user) {
-//       console.log(user);
-//       followingSize = user.following.length;
-//       let feedPosts = [];
-//       for (i = 0; i < followingSize; i++) {
-//         feedPosts = [...feedPosts, ...user.following[i].posts];
-//       }
-//       console.log(feedPosts);
-//       return res.status(200).json({ success: true, data: feedPosts });
-//     })
-//     .catch((err) => console.log(err));
-// };
-
 // Returns a list of posts created by users the active user follows
 getUserFollowingFeed = async (req, res) => {
   User.find({ _id: req.params.id }, "posts following", function (err, result) {
@@ -151,26 +118,6 @@ getUserFollowingFeed = async (req, res) => {
       // console.log(result.following.posts);
       return res.status(200).json({ success: true, data: result });
     })
-    // .populate({
-    //   path: "following",
-    //   // populate: {
-    //   //   path: "posts",
-    //   //   populate: {
-    //   //     path: "usersLiked",
-    //   //   },
-    //   // },
-    // })
-    // // .sort({ timestamp: -1 })
-    // .exec(function (err, user) {
-    //   console.log(user);
-    //   followingSize = user.following.length;
-    //   let feedPosts = [];
-    //   for (i = 0; i < followingSize; i++) {
-    //     feedPosts = [...feedPosts, ...user.following[i].posts];
-    //   }
-    //   console.log(feedPosts);
-    //   return res.status(200).json({ success: true, data: feedPosts });
-    // })
     .catch((err) => console.log(err));
 };
 

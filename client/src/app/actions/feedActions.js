@@ -1,9 +1,3 @@
-import {
-  fetchPostsStarted,
-  fetchPostsSuccess,
-  fetchPostsError,
-} from "./postActions";
-
 export const TOGGLE_LIKE = "TOGGLE_LIKE";
 export const FETCH_FEED_SUCCESS = "FETCH_FEED_SUCCESS";
 export const FETCH_FEED_ERROR = "FETCH_FEED_ERROR";
@@ -15,7 +9,6 @@ export const toggleLike = (payload) => ({
   type: TOGGLE_LIKE,
   payload,
 });
-// let postId = 1;
 
 export function fetchFeedStarted() {
   return {
@@ -43,12 +36,6 @@ export function addPostsToFeed(data) {
   };
 }
 
-export function combinePPostWithFeed(data) {
-  return {
-    type: COMBINE_P_POSTS_WITH_FEED,
-    payload: data,
-  };
-}
 
 export function fetchFeed(id) {
   return (dispatch) => {
@@ -67,6 +54,8 @@ export function fetchFeed(id) {
         const feed = [].concat(res[0].posts, res[0].following[0].posts);
         console.log("feed is: ");
         console.log(feed);
+
+        // TODO: add sorting logic here once timestamp is added to Posts
         dispatch(addPostsToFeed(feed));
         return res;
       })
@@ -76,30 +65,3 @@ export function fetchFeed(id) {
       });
   };
 }
-
-// // will probably not need this, instead we'll change the feed query to get posts from active user and other users
-// export function addPersonalPostsToFeed(id) {
-//   return (dispatch) => {
-//     dispatch(fetchPostsStarted());
-//     fetch(`http://localhost:9000/user/posts/${id}`)
-//       .then((res) => res.json())
-//       .then((res) => {
-//         if (res.error) {
-//           throw res.error;
-//         }
-//         // console.log("fetchPosts method:");
-//         dispatch(fetchPostsSuccess());
-//         return res.data;
-//       })
-//       .then((res) => {
-//         // console.log("POSTS to be loaded:");
-//         // console.log(res);
-//         dispatch(combinePPostWithFeed(res));
-//         return res;
-//       })
-//       .catch((error) => {
-//         // console.log("Fetch Posts Error");
-//         dispatch(fetchPostsError(error));
-//       });
-//   };
-// }
