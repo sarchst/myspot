@@ -117,9 +117,10 @@ class Post extends Component {
           className={classes.userGrid}
         >
           <Grid item>
-            <Avatar className={classes.display}>DP</Avatar>
+            <Avatar className={classes.display}>DP</Avatar>{" "}
+            {/* TODO add user profile picture */}
           </Grid>
-          <Grid item>{postdata.author}</Grid>
+          <Grid item>{postdata.username}</Grid>
         </Grid>
         <Grid container spacing={1}>
           <Grid
@@ -142,6 +143,7 @@ class Post extends Component {
               </Link>
             </Grid>
             {/* TODO add media art component? */}
+            {/* TODO add media icon component? */}
           </Grid>
           <Grid
             item

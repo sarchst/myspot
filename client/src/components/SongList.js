@@ -46,7 +46,7 @@ class SongList extends React.Component {
   render() {
     return (
       <div>
-        <Link to={"/" + this.props.username + "/playlists"}>Go Back</Link>
+        <Link to={"/" + this.props.user.username + "/playlists"}>Go Back</Link>
         <h1>{this.state.name}</h1>
         <h4>{this.state.description}</h4>
         <ul style={{ listStyleType: "none" }}>
@@ -69,7 +69,7 @@ class SongList extends React.Component {
 const mapStateToProps = (state) => {
   return {
     spotifyWebApi: state.spotifyWebApi,
-    username: state.username,
+    user: state.user,
   };
 };
 

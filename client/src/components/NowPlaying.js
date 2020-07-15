@@ -17,14 +17,15 @@ class NowPlaying extends React.Component {
   }
 
   getNowPlaying() {
-    // console.log("spotifywebApi inside getnowplaying");
-    // console.log(this.props.spotifyWebApi);
+    console.log(
+      "spotifywebApi inside getnowplaying:",
+      this.props.spotifyWebApi
+    );
     // spotifyWebApi.setAccessToken(this.props.spotifyWebApi);
     spotifyWebApi
       .getMyCurrentPlaybackState()
       .then((response) => {
-        console.log("response is: ");
-        console.log(response);
+        console.log("response is: ", response);
         this.setState({
           nowPlaying: {
             name: response.item.name,

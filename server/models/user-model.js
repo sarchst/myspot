@@ -23,7 +23,8 @@ const Post = new Schema(
     media: { type: String, required: true }, // TODO: may need to be object for spotify?
     usersLiked: [{ type: String, ref: "User", required: true }],
     repost: { type: Boolean, default: false, required: true },
-    author: { type: String, ref: "User", required: true },
+    authorId: { type: String, ref: "User", required: true },
+    username: { type: String, required: true },
   },
   { timestamps: true }
 );
@@ -31,13 +32,15 @@ const Post = new Schema(
 const User = new Schema(
   {
     _id: { type: String, required: true },
-    username: { type: String, default: this._id },
+    username: { type: String, required: true },
     profilePic: { type: String },
-    email: { type: String, required: true },
+    country: { type: String, required: true },
     settings: { type: Setting, default: {}, required: true },
     followers: [{ type: String, ref: "User", required: true }],
     following: [{ type: String, ref: "User", required: true }],
     posts: { type: [Post], required: true },
+    topTracks: [],
+    recentTracks: [],
   },
   { timestamps: true }
 );

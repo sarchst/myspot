@@ -85,7 +85,8 @@ class Playlists extends React.Component {
   }
 
   render() {
-    const { classes } = this.props;
+    console.log(this.props.user);
+    const { classes, user } = this.props;
     return (
       <React.Fragment>
         <CssBaseline />
@@ -133,12 +134,7 @@ class Playlists extends React.Component {
                     </CardContent>
                     <CardActions>
                       <Link
-                        to={
-                          "/" +
-                          this.props.username +
-                          "/playlists/" +
-                          playlist.id
-                        }
+                        to={"/" + user.username + "/playlists/" + playlist.id}
                       >
                         <Button size="small" color="primary">
                           View Songs
@@ -159,7 +155,7 @@ class Playlists extends React.Component {
 const mapStateToProps = (state) => {
   return {
     spotifyWebApi: state.spotifyWebApi,
-    username: state.username,
+    user: state.user,
   };
 };
 

@@ -1,8 +1,7 @@
 import { combineReducers } from "redux";
 
 import toggleSidebar from "./toggleSidebar";
-import isLoggedIn from "./isLoggedIn";
-import username from "./username";
+import user from "./user";
 import feed from "./feed";
 import settings from "./settings";
 import posts from "./makePost";
@@ -14,8 +13,7 @@ import spotifyApiUserMe from "./spotifyApiUserMe";
 
 const allReducers = combineReducers({
   isSidebarOpen: toggleSidebar,
-  isLoggedIn: isLoggedIn,
-  username: username,
+  user: user,
   feed: feed,
   accountSettings: settings,
   spotifyWebApi: spotifyWebApi,

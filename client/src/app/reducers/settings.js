@@ -1,3 +1,5 @@
+import { TOGGLE_DARKMODE, TOGGLE_NOTIFICATIONS, CHANGE_LANG } from "../actions";
+
 const initialState = {
   notifications: true,
   darkmode: false,
@@ -6,21 +8,21 @@ const initialState = {
 
 export const settingsReducer = (state = initialState, action) => {
   switch (action.type) {
-    case "TOGGLE_NOTIFICATIONS":
+    case TOGGLE_NOTIFICATIONS:
       const newNotification = !action.payload;
       return {
         notifications: newNotification,
         darkmode: state.darkmode,
         language: state.language,
       };
-    case "TOGGLE_DARKMODE":
+    case TOGGLE_DARKMODE:
       const newDarkmode = !action.payload;
       return {
         notifications: state.notifications,
         darkmode: newDarkmode,
         language: state.language,
       };
-    case "CHANGE_LANG":
+    case CHANGE_LANG:
       return {
         ...state,
         language: action.payload,

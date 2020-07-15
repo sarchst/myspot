@@ -7,18 +7,11 @@ import Login from "./components/Login";
 import { BrowserRouter as Router } from "react-router-dom";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import Spotify from "spotify-web-api-js";
-import { registerSpotifyWebApi, usernameSubmit } from "./app/actions";
+import { registerSpotifyWebApi } from "./app/actions";
+import { setCurrentUser } from "./app/actions/userActions";
 import { submitSpotifyApiUserMe } from "./app/actions/spotifyApiActions";
 
 const spotifyWebApi = new Spotify();
-
-// const loginPage = () => {
-//   return (
-//     <div className="App">
-//       <Login />
-//     </div>
-//   );
-// };
 
 const lightTheme = createMuiTheme({
   palette: {
@@ -59,10 +52,9 @@ class App extends React.Component {
       console.log("LOGGING IN: SENDING SPOTIFYWEBAPI TO REDUX STORE");
       this.props.registerSpotifyWebApi(params.access_token);
       spotifyWebApi.getMe().then((response) => {
-        console.log("user profile response object ");
-        console.log(response);
+        console.log("spotify profile response object: ", response);
         this.props.submitSpotifyApiUserMe(response);
-        this.props.usernameSubmit(response.display_name);
+        this.props.setCurrentUser(response.id, response.display_name);
       });
     }
   }
@@ -80,10 +72,11 @@ class App extends React.Component {
   }
 
   selectTheme = () =>
+    // TODO swith this too user from database?
     this.props.accountSettings.darkmode ? darkTheme : lightTheme;
 
   render() {
-    if (this.props.spotifyWebApi) {
+    if (this.props.spotifyWebApi && this.props.user.id) {
       return (
         <ThemeProvider theme={this.selectTheme()}>
           <Router>
@@ -102,7 +95,7 @@ class App extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    username: state.username,
+    user: state.user,
     accountSettings: state.accountSettings,
     spotifyWebApi: state.spotifyWebApi,
   };
@@ -110,7 +103,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    usernameSubmit: (username) => dispatch(usernameSubmit(username)),
+    setCurrentUser: (id, username) => dispatch(setCurrentUser(id, username)),
     registerSpotifyWebApi: (spotifyWebApi) =>
       dispatch(registerSpotifyWebApi(spotifyWebApi)),
     submitSpotifyApiUserMe: (spotifyUserMe) =>
