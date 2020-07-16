@@ -165,6 +165,16 @@ addPost = (req, res) => {
   );
 };
 
+getUserSettings = async (req, res) => {
+  User.findOne({ _id: req.params.id }, "settings", (err, User) => {
+    if (err) {
+      return res.status(400).json({ success: false, error: err });
+    }
+    console.log("user contrl method:" + User);
+    return res.status(200).json({ success: true, data: User });
+  }).catch((err) => console.log(err));
+};
+
 updateSettings = async (req, res) => {
   const body = req.body;
   if (!body) {
@@ -208,4 +218,5 @@ module.exports = {
   getUserPosts,
   addPost,
   updateSettings,
+  getUserSettings,
 };

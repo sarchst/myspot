@@ -10,6 +10,7 @@ import Spotify from "spotify-web-api-js";
 import { registerSpotifyWebApi } from "./app/actions";
 import { setCurrentUser } from "./app/actions/userActions";
 import { submitSpotifyApiUserMe } from "./app/actions/spotifyApiActions";
+import { fetchUserSettings } from "./app/actions/settingsActions";
 
 const spotifyWebApi = new Spotify();
 
@@ -71,8 +72,6 @@ class App extends React.Component {
     return hashParams;
   }
 
-
-
   selectTheme = () =>
     // TODO swith this too user from database?
     this.props.accountSettings.darkMode ? darkTheme : lightTheme;
@@ -110,6 +109,7 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(registerSpotifyWebApi(spotifyWebApi)),
     submitSpotifyApiUserMe: (spotifyUserMe) =>
       dispatch(submitSpotifyApiUserMe(spotifyUserMe)),
+    fetchUserSettings: fetchUserSettings,
   };
 };
 

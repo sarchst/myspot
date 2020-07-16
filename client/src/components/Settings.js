@@ -85,11 +85,9 @@ class Settings extends React.Component {
 
   updateSettings = () => {
     console.log("Settings (darkmode) being updated!");
-
-    const newDarkmode = !this.props.accountSettings.darkMode;
     const newSettings = {
       notification: true,
-      darkMode: newDarkmode,
+      darkMode: !this.props.accountSettings.newDarkmode,
       language: "English",
       disableAcc: false,
     };
