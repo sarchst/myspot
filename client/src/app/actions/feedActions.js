@@ -36,7 +36,6 @@ export function addPostsToFeed(data) {
   };
 }
 
-
 export function fetchFeed(id) {
   return (dispatch) => {
     dispatch(fetchFeedStarted());
@@ -52,9 +51,12 @@ export function fetchFeed(id) {
       })
       .then((res) => {
         const feed = [].concat(res[0].posts, res[0].following[0].posts);
-        console.log("feed is: ");
-        console.log(feed);
-
+        // console.log("feed is: ");
+        // console.log(feed);
+        // const sortedFeed = feed.sort(
+        //   (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+        // );
+        // console.log(sortedFeed);
         // TODO: add sorting logic here once timestamp is added to Posts
         dispatch(addPostsToFeed(feed));
         return res;
