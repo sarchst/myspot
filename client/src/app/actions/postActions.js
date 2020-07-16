@@ -1,4 +1,5 @@
 import axios from "axios";
+import { fetchFeed } from "./feedActions";
 
 export const FETCH_POSTS_SUCCESS = "FETCH_POSTS_SUCCESS";
 export const FETCH_POSTS_ERROR = "FETCH_POSTS_ERROR";
@@ -39,12 +40,16 @@ export function addPostsToPosts(data) {
 
 export const makePost = (post) => {
   console.log("Post from actions: ", post);
+  const id = post.authorId;
   return (dispatch) => {
     return axios
-      .put(`http://localhost:9000/user/posts/${post.authorId}`, post)
+      .put(`http://localhost:9000/user/posts/${id}`, post)
       .then((res) => {
         console.log("Res: ", res);
         dispatch(makePostSuccess(res.data.posts));
+      })
+      .then(() => {
+        dispatch(fetchFeed(id));
       })
       .catch((error) => {
         throw error;

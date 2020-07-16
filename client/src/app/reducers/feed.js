@@ -1,7 +1,4 @@
-import {
-  TOGGLE_LIKE,
-  ADD_POSTS_TO_FEED,
-} from "../actions/feedActions";
+import { TOGGLE_LIKE, ADD_POSTS_TO_FEED } from "../actions/feedActions";
 
 const initialState = {
   activity: true,
