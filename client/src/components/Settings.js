@@ -87,7 +87,7 @@ class Settings extends React.Component {
     console.log("Settings (darkmode) being updated!");
     const newSettings = {
       notification: true,
-      darkMode: !this.props.accountSettings.newDarkmode,
+      darkMode: !this.props.accountSettings.darkMode,
       language: "English",
       disableAcc: false,
     };
@@ -140,7 +140,7 @@ class Settings extends React.Component {
                   </Grid>
                   <Grid item>
                     <Switch
-                      checked={this.props.accountSettings.darkmode}
+                      checked={this.props.accountSettings.darkMode}
                       onChange={this.updateSettings}
                       name="darkmode"
                       inputProps={{ "aria-label": "secondary checkbox" }}
