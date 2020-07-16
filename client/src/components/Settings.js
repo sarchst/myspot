@@ -60,6 +60,7 @@ const styles = (theme) => ({
 
 class Settings extends React.Component {
   state = {
+    user: this.props.user.id,
     notifications: true, // user id, ref to user schema
     darkMode: this.props.accountSettings.darkmode,
     language: "English",

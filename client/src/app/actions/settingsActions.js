@@ -27,9 +27,9 @@ export const toggleDarkmode = (settings, id) => {
   return (dispatch) => {
     dispatch(toggleDarkmodeStarted());
     console.log(settings);
-    console.log("active user is " + id);
+    console.log("current user is " + settings.user);
     axios
-      .put(`http://localhost:9000/user/settings/${id}`, settings)
+      .put(`http://localhost:9000/user/settings/${settings.user}`, settings)
       .then((res) => {
         console.log("Update settings res: " + res);
         dispatch(toggleDarkmodeSuccess());
