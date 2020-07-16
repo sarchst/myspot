@@ -21,17 +21,15 @@ export function toggleDarkmodeError(error) {
     error: error,
   };
 }
-export const toggleDarkmode = (settings) => {
+export const toggleDarkmode = (settings, id) => {
   console.log("Settings from action " + settings);
+  console.log("ID " + id);
   return (dispatch) => {
     dispatch(toggleDarkmodeStarted());
     console.log(settings);
-    console.log("active user is " + settings.activeUser);
+    console.log("active user is " + id);
     axios
-      .put(
-        `http://localhost:9000/user/settings/${settings.activeUser}`,
-        settings
-      )
+      .put(`http://localhost:9000/user/settings/${id}`, settings)
       .then((res) => {
         console.log("Update settings res: " + res);
         dispatch(toggleDarkmodeSuccess());

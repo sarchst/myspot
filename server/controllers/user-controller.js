@@ -181,7 +181,7 @@ addPost = (req, res) => {
   });
 };
 
-updateSettings = (req, res) => {
+updateSettings = async (req, res) => {
   const body = req.body;
   if (!body) {
     return res.status(400).json({
@@ -196,7 +196,7 @@ updateSettings = (req, res) => {
   console.log(req.params.id);
   User.findOneAndUpdate(
     { _id: req.params.id },
-    { darkMode: setting.isDarkmode },
+    { settings: setting },
     { new: true },
     (err, result) => {
       if (err) {
