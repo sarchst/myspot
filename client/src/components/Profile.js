@@ -39,20 +39,16 @@ class Profile extends React.Component {
         <MakePost />
         <div>
           {this.props.posts && this.props.posts.length ? (
-            // TODO TEMPORARY this is just reversing the order for presentational purposes, will be fixed once we query our posts in right order
             // ALSO this could be a Feed component potentially with a is profile feed prop or something, not front burner issue though
             // this.props.posts.map((p) => (
-            this.props.posts
-              .slice()
-              .reverse()
-              .map((p) => (
-                <Post
-                  key={p._id}
-                  postdata={p}
-                  toggleLike={() => toggleLike({ post: p, userId: user.id })}
-                  userId={user.id}
-                />
-              ))
+            this.props.posts.map((p) => (
+              <Post
+                key={p._id}
+                postdata={p}
+                toggleLike={() => toggleLike({ post: p, userId: user.id })}
+                userId={user.id}
+              />
+            ))
           ) : (
             <h3 color="primary">Hmm..no posts yet. You should make one!</h3>
           )}
