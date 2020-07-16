@@ -162,12 +162,7 @@ addPost = (req, res) => {
       }
       return res.status(200).json({ success: true, posts: user.posts });
     }
-  ).catch((err) => {
-    return res.status(404).json({
-      error,
-      message: "User not found.",
-    });
-  });
+  );
 };
 
 module.exports = {
