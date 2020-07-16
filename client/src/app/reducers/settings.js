@@ -1,9 +1,11 @@
 import { TOGGLE_DARKMODE, TOGGLE_NOTIFICATIONS, CHANGE_LANG } from "../actions";
+import { UPDATE_SETTINGS_SUCCESS } from "../actions/settingsActions";
 
 const initialState = {
-  notifications: true,
-  darkmode: false,
+  notification: true,
+  darkMode: false,
   language: "English",
+  disableAcc: false,
 };
 
 export const settingsReducer = (state = initialState, action) => {
@@ -11,15 +13,15 @@ export const settingsReducer = (state = initialState, action) => {
     case TOGGLE_NOTIFICATIONS:
       const newNotification = !action.payload;
       return {
-        notifications: newNotification,
-        darkmode: state.darkmode,
+        notification: newNotification,
+        darkMode: state.darkmode,
         language: state.language,
       };
     case TOGGLE_DARKMODE:
       const newDarkmode = !action.payload;
       return {
-        notifications: state.notifications,
-        darkmode: newDarkmode,
+        notification: state.notification,
+        darkMode: newDarkmode,
         language: state.language,
       };
     case CHANGE_LANG:
@@ -27,6 +29,9 @@ export const settingsReducer = (state = initialState, action) => {
         ...state,
         language: action.payload,
       };
+    case UPDATE_SETTINGS_SUCCESS:
+      console.log("UPDATE SETTINGS SUCCCESS PAYLOAD: " + action.payload);
+      return action.payload;
     default:
       return state;
   }

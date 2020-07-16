@@ -1,7 +1,7 @@
 import {
-  TOGGLE_DARKMODE_STARTED,
-  TOGGLE_DARKMODE_SUCCESS,
-  TOGGLE_DARKMODE_ERROR,
+  UPDATE_SETTINGS_STARTED,
+  UPDATE_SETTINGS_SUCCESS,
+  UPDATE_SETTINGS_ERROR,
 } from "../actions/settingsActions";
 
 const initialState = {
@@ -11,17 +11,17 @@ const initialState = {
 
 export const updateSettings = (state = initialState, action) => {
   switch (action.type) {
-    case TOGGLE_DARKMODE_STARTED:
+    case UPDATE_SETTINGS_STARTED:
       return {
         ...state,
         pending: true,
       };
-    case TOGGLE_DARKMODE_SUCCESS:
+    case UPDATE_SETTINGS_SUCCESS:
       return {
         ...state,
         pending: false,
       };
-    case TOGGLE_DARKMODE_ERROR:
+    case UPDATE_SETTINGS_ERROR:
       return {
         ...state,
         pending: false,

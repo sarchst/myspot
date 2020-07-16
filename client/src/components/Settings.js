@@ -17,7 +17,10 @@ import {
   // toggleDarkmode,
   changeLang,
 } from "../app/actions";
-import { toggleDarkmode } from "../app/actions/settingsActions";
+import {
+  // toggleDarkmode,
+  updateSettings,
+} from "../app/actions/settingsActions";
 const styles = (theme) => ({
   root: {
     flexGrow: 1,
@@ -59,25 +62,38 @@ const styles = (theme) => ({
 // const languages = ["English", "French", "Spanish"];
 
 class Settings extends React.Component {
-  state = {
-    user: this.props.user.id,
-    notifications: true, // user id, ref to user schema
-    darkMode: this.props.accountSettings.darkmode,
-    language: "English",
-    disableAcc: false,
-  };
+  // state = {
+  //   // user: this.props.user.id,
+  //   notification: true, // user id, ref to user schema
+  //   darkMode: this.props.accountSettings.darkmode,
+  //   language: "English",
+  //   disableAcc: false,
+  // };
 
-  handleNotifToggle = () => {
-    this.props.toggleNotifications(this.props.accountSettings.notifications);
-  };
+  // handleNotifToggle = () => {
+  //   this.props.toggleNotifications(this.props.accountSettings.notifications);
+  // };
 
-  handleDarkmodeToggle = () => {
-    // this.props.toggleDarkmode(this.props.accountSettings.darkmode);
-    console.log(this.state);
-    this.props.toggleDarkmode(this.state, this.props.user);
-  };
-  handleLangSelect = (event) => {
-    this.props.changeLang(event.target.value);
+  // handleDarkmodeToggle = () => {
+  //   // this.props.toggleDarkmode(this.props.accountSettings.darkmode);
+  //   console.log(this.state);
+  //   this.props.toggleDarkmode(this.state, this.props.user);
+  // };
+  // handleLangSelect = (event) => {
+  //   this.props.changeLang(event.target.value);
+  // };
+
+  updateSettings = () => {
+    console.log("Settings (darkmode) being updated!");
+
+    const newDarkmode = !this.props.accountSettings.darkMode;
+    const newSettings = {
+      notification: true,
+      darkMode: newDarkmode,
+      language: "English",
+      disableAcc: false,
+    };
+    this.props.updateSettings(newSettings, this.props.user.id);
   };
 
   render() {
@@ -127,7 +143,7 @@ class Settings extends React.Component {
                   <Grid item>
                     <Switch
                       checked={this.props.accountSettings.darkmode}
-                      onChange={this.handleDarkmodeToggle}
+                      onChange={this.updateSettings}
                       name="darkmode"
                       inputProps={{ "aria-label": "secondary checkbox" }}
                     />
@@ -178,6 +194,7 @@ const mapStateToProps = (state) => ({
 
 export default connect(mapStateToProps, {
   toggleNotifications,
-  toggleDarkmode,
+  // toggleDarkmode,
   changeLang,
+  updateSettings,
 })(withStyles(styles, { withTheme: true })(Settings));

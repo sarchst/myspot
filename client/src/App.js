@@ -71,9 +71,11 @@ class App extends React.Component {
     return hashParams;
   }
 
+
+
   selectTheme = () =>
     // TODO swith this too user from database?
-    this.props.accountSettings.darkmode ? darkTheme : lightTheme;
+    this.props.accountSettings.darkMode ? darkTheme : lightTheme;
 
   render() {
     if (this.props.spotifyWebApi && this.props.user.id) {

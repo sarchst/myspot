@@ -1,41 +1,43 @@
 import axios from "axios";
-export const TOGGLE_DARKMODE_SUCCESS = "TOGGLE_DARKMODE_SUCCESS";
-export const TOGGLE_DARKMODE_ERROR = "TOGGLE_DARKMODE_ERROR";
-export const TOGGLE_DARKMODE_STARTED = "TOGGLE_DARKMODE_STARTED";
+export const UPDATE_SETTINGS_SUCCESS = "UPDATE_SETTINGS_SUCCESS";
+export const UPDATE_SETTINGS_ERROR = "UPDATE_SETTINGS_ERROR";
+export const UPDATE_SETTINGS_STARTED = "UPDATE_SETTINGS_STARTED";
 
-export function toggleDarkmodeStarted() {
+export function updateSettingsStarted() {
   return {
-    type: TOGGLE_DARKMODE_STARTED,
+    type: UPDATE_SETTINGS_STARTED,
   };
 }
 
-export function toggleDarkmodeSuccess() {
+export function updateSettingsSuccess(settings) {
   return {
-    type: TOGGLE_DARKMODE_SUCCESS,
+    type: UPDATE_SETTINGS_SUCCESS,
+    payload: settings,
   };
 }
 
-export function toggleDarkmodeError(error) {
+export function updateSettingsError(error) {
   return {
-    type: TOGGLE_DARKMODE_ERROR,
+    type: UPDATE_SETTINGS_ERROR,
     error: error,
   };
 }
-export const toggleDarkmode = (settings, id) => {
+export const updateSettings = (settings, id) => {
   console.log("Settings from action " + settings);
   console.log("ID " + id);
   return (dispatch) => {
-    dispatch(toggleDarkmodeStarted());
-    console.log(settings);
-    console.log("current user is " + settings.user);
+    dispatch(updateSettingsStarted());
+    console.log("current user is " + id);
+    console.log("settings are :" + JSON.stringify(settings));
     axios
-      .put(`http://localhost:9000/user/settings/${settings.user}`, settings)
+      .put(`http://localhost:9000/user/settings/${id}`, settings)
       .then((res) => {
-        console.log("Update settings res: " + res);
-        dispatch(toggleDarkmodeSuccess());
+        console.log("Update settings response: " + JSON.stringify(res));
+        console.log("settings only: " + JSON.stringify(res.data.settings));
+        dispatch(updateSettingsSuccess(res.data.settings));
       })
       .catch((err) => {
-        dispatch(toggleDarkmodeError(err));
+        dispatch(updateSettingsError(err));
       });
   };
 };

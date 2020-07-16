@@ -175,12 +175,12 @@ updateSettings = async (req, res) => {
   }
 
   console.log("Req body is " + body);
-  const setting = new Setting(body);
-  console.log("settings is " + setting);
+  const settings = new Setting(body);
+  console.log("settings is " + settings);
   console.log(req.params.id);
   User.findOneAndUpdate(
     { _id: req.params.id },
-    { settings: setting },
+    { settings: settings },
     { new: true },
     (err, result) => {
       if (err) {
@@ -189,7 +189,7 @@ updateSettings = async (req, res) => {
           message: "This is an invalid settings update request.",
         });
       }
-      return res.status(200).json({ success: true, settings: result });
+      return res.status(200).json({ success: true, settings: result.settings });
     }
   ).catch((err) => {
     return res.status(404).json({
