@@ -101,7 +101,7 @@ getUsers = async (req, res) => {
 
 // Returns a list of posts created by users the active user follows
 getUserFollowingFeed = async (req, res) => {
-  User.findById({ _id: req.params.id }, function (err, result) {
+  User.find({ _id: req.params.id }, "posts following", function (err, result) {
     if (err) {
       return res.status(400).json({ success: false, error: err });
     }
@@ -111,23 +111,12 @@ getUserFollowingFeed = async (req, res) => {
   })
     .populate({
       path: "following",
-      // populate: {
-      //   path: "posts",
-      //   populate: {
-      //     path: "usersLiked",
-      //   },
-      // },
+      select: "posts",
     })
-    // .sort({ timestamp: -1 })
-    .exec(function (err, user) {
-      console.log(user);
-      followingSize = user.following.length;
-      let feedPosts = [];
-      for (i = 0; i < followingSize; i++) {
-        feedPosts = [...feedPosts, ...user.following[i].posts];
-      }
-      console.log(feedPosts);
-      return res.status(200).json({ success: true, data: feedPosts });
+    .exec(function (err, result) {
+      // console.log(result.data.following.posts);
+      // console.log(result.following.posts);
+      return res.status(200).json({ success: true, data: result });
     })
     .catch((err) => console.log(err));
 };
