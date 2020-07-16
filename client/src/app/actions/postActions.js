@@ -73,7 +73,10 @@ export function fetchPosts(id) {
       .then((res) => {
         // console.log("POSTS to be loaded:");
         // console.log(res);
-        dispatch(addPostsToPosts(res));
+        const sortedPosts = res.sort(
+          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+        );
+        dispatch(addPostsToPosts(sortedPosts));
         return res;
       })
       .catch((error) => {

@@ -1,4 +1,4 @@
-const { User, Post } = require("../models/user-model");
+const { User, Post, Setting } = require("../models/user-model");
 
 createUser = (req, res) => {
   const body = req.body;
@@ -99,7 +99,7 @@ getUsers = async (req, res) => {
   }).catch((err) => console.log(err));
 };
 
-// Returns a list of posts created by users the active user follows
+// Returns a list of posts created by users the current user follows
 getUserFollowingFeed = async (req, res) => {
   User.find({ _id: req.params.id }, "posts following", function (err, result) {
     if (err) {
@@ -165,6 +165,50 @@ addPost = (req, res) => {
   );
 };
 
+getUserSettings = async (req, res) => {
+  User.findOne({ _id: req.params.id }, "settings", (err, User) => {
+    if (err) {
+      return res.status(400).json({ success: false, error: err });
+    }
+    console.log("user contrl method:" + User);
+    return res.status(200).json({ success: true, data: User });
+  }).catch((err) => console.log(err));
+};
+
+updateSettings = async (req, res) => {
+  const body = req.body;
+  if (!body) {
+    return res.status(400).json({
+      success: false,
+      error: "You must provide a body to update",
+    });
+  }
+
+  console.log("Req body is " + body);
+  const settings = new Setting(body);
+  console.log("settings is " + settings);
+  console.log(req.params.id);
+  User.findOneAndUpdate(
+    { _id: req.params.id },
+    { settings: settings },
+    { new: true },
+    (err, result) => {
+      if (err) {
+        return res.status(404).json({
+          err,
+          message: "This is an invalid settings update request.",
+        });
+      }
+      return res.status(200).json({ success: true, settings: result.settings });
+    }
+  ).catch((err) => {
+    return res.status(404).json({
+      error: err,
+      message: "User setting not found.",
+    });
+  });
+};
+
 module.exports = {
   createUser,
   updateUser,
@@ -173,4 +217,6 @@ module.exports = {
   getUserFollowingFeed,
   getUserPosts,
   addPost,
+  updateSettings,
+  getUserSettings,
 };
