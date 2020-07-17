@@ -35,12 +35,12 @@ const UserSchema = new Schema(
     username: { type: String, required: true },
     profilePic: { type: String },
     country: { type: String, required: true },
-    settings: { type: SettingSchema, default: {}, required: true },
-    followers: [{ type: String, ref: "User", required: true }],
-    following: [{ type: String, ref: "User", required: true }],
-    posts: [{ type: PostSchema, required: true }],
-    topTracks: [],
-    recentTracks: [],
+    settings: { type: SettingSchema, default: {} },
+    followers: [{ type: String, ref: "User", default: [] }],
+    following: [{ type: String, ref: "User", default: [] }],
+    posts: [{ type: PostSchema, default: [] }],
+    topTracks: [{ type: Object, default: [] }],
+    recentTracks: [{ type: Object, default: [] }],
   },
   { timestamps: true }
 );

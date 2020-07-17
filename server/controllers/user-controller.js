@@ -31,45 +31,75 @@ createUser = (req, res) => {
     });
 };
 
+// updateUser updates user if they exist in the db
+// else create new user with req.body
 updateUser = async (req, res) => {
-  const body = req.body;
+  console.log("calling updateUser in user-controller");
 
+  console.log(req.body.recentTracks.length);
+  console.log(req.body.topTracks.length);
+  const body = req.body;
   if (!body) {
     return res.status(400).json({
       success: false,
       error: "You must provide a body to update",
     });
   }
-
-  User.findOne({ _id: req.params.id }, (err, User) => {
-    if (err) {
-      return res.status(404).json({
-        err,
-        message: "User not found!",
+  console.log("inside user-controller");
+  User.findByIdAndUpdate(
+    req.body._id,
+    req.body,
+    {
+      upsert: true,
+      setDefaultsOnInsert: true,
+      useFindAndModify: false,
+      new: true,
+      omitUndefined: true,
+    },
+    (err, User) => {
+      if (err) {
+        return res.status(400).json({
+          err,
+          message: "user PUT error",
+        });
+      }
+      console.log(User);
+      return res.status(200).json({
+        User,
+        message: "user PUT success",
       });
     }
-    // confirm that these attributes we want the user to be able to update
-    User.profilePic = body.profilePic;
-    User.email = body.email;
-    User.settings = body.settings;
-    User.followers = body.followers;
-    User.following = body.following;
-    User.posts = body.posts;
-    User.save()
-      .then(() => {
-        return res.status(200).json({
-          success: true,
-          id: User._id,
-          message: "User updated!",
-        });
-      })
-      .catch((error) => {
-        return res.status(404).json({
-          error,
-          message: "User not updated!",
-        });
-      });
-  });
+  );
+
+  // User.findOne({ _id: req.params.id }, (err, User) => {
+  //   if (err) {
+  //     return res.status(404).json({
+  //       err,
+  //       message: "User not found!",
+  //     });
+  //   }
+  //   // confirm that these attributes we want the user to be able to update
+  //   User.profilePic = body.profilePic;
+  //   User.email = body.email;
+  //   User.settings = body.settings;
+  //   User.followers = body.followers;
+  //   User.following = body.following;
+  //   User.posts = body.posts;
+  //   User.save()
+  //     .then(() => {
+  //       return res.status(200).json({
+  //         success: true,
+  //         id: User._id,
+  //         message: "User updated!",
+  //       });
+  //     })
+  //     .catch((error) => {
+  //       return res.status(404).json({
+  //         error,
+  //         message: "User not updated!",
+  //       });
+  //     });
+  // });
 };
 
 // No deleteUser because we don't want user to be able to remove themselves from our db entirely
@@ -117,8 +147,8 @@ getUserFollowingFeed = async (req, res) => {
       // console.log(result.data.following.posts);
       // console.log(result.following.posts);
       return res.status(200).json({ success: true, data: result });
-    })
-    .catch((err) => console.log(err));
+    });
+  // .catch((err) => console.log(err));
 };
 
 // Returns a list of posts created by the user
@@ -130,12 +160,12 @@ getUserPosts = async (req, res) => {
     if (!result) {
       return res.status(404).json({ success: false, error: "User not found" });
     }
-  })
-    .exec(function (err, user) {
-      console.log(user.posts);
-      return res.status(200).json({ success: true, data: user.posts });
-    })
-    .catch((err) => console.log(err));
+  }).exec(function (err, user) {
+    console.log("user posts");
+    console.log(user.posts);
+    return res.status(200).json({ success: true, data: user.posts });
+  });
+  // .catch((err) => console.log(err));
 };
 
 addPost = (req, res) => {

@@ -51,12 +51,35 @@ class App extends React.Component {
     if (params.access_token) {
       spotifyWebApi.setAccessToken(params.access_token);
       console.log("LOGGING IN: SENDING SPOTIFYWEBAPI TO REDUX STORE");
+      let userObject = {};
       this.props.registerSpotifyWebApi(params.access_token);
-      spotifyWebApi.getMe().then((response) => {
-        console.log("spotify profile response object: ", response);
-        this.props.submitSpotifyApiUserMe(response);
-        this.props.setCurrentUser(response.id, response.display_name);
-      });
+      spotifyWebApi
+        .getMe()
+        .then((response) => {
+          Object.assign(userObject, response);
+          return spotifyWebApi.getMyTopTracks();
+        })
+        .then((topTracksResponse) => {
+          if (topTracksResponse) {
+            userObject.topTracks = topTracksResponse.items.slice(
+              0,
+              Math.min(topTracksResponse.items.length, 3)
+            );
+          }
+          return spotifyWebApi.getMyRecentlyPlayedTracks();
+        })
+        .then((recentTracksResponse) => {
+          if (recentTracksResponse) {
+            userObject.recentTracks = recentTracksResponse.items.slice(
+              0,
+              Math.min(recentTracksResponse.items.length, 3)
+            );
+          }
+          console.log("submitSpotifyApiUserMe from App.js");
+          // console.log(userObject);
+          this.props.submitSpotifyApiUserMe(userObject);
+          this.props.setCurrentUser(userObject.id, userObject.display_name);
+        });
     }
   }
 
