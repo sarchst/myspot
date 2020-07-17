@@ -35,7 +35,7 @@ const UserSchema = new Schema(
     username: { type: String, required: true },
     profilePic: { type: String },
     country: { type: String, required: true },
-    settings: { type: Setting, default: {} },
+    settings: { type: SettingSchema, default: {} },
     followers: [{ type: String, ref: "User", default: [] }],
     following: [{ type: String, ref: "User", default: [] }],
     posts: [{ type: PostSchema, default: [] }],
