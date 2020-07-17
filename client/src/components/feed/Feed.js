@@ -10,7 +10,7 @@ import {
 import { fetchPosts } from "../../app/actions/postActions";
 
 class Feed extends React.Component {
-  componentDidMount = (id) => {
+  componentDidMount = () => {
     this.props.fetchFeed(this.props.user.id);
   };
 
