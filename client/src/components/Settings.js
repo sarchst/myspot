@@ -4,6 +4,7 @@ import Paper from "@material-ui/core/Paper";
 import Divider from "@material-ui/core/Divider";
 import Switch from "@material-ui/core/Switch";
 import Button from "@material-ui/core/Button";
+import ImageUpload from "./ImageUpload";
 // import InputLabel from "@material-ui/core/InputLabel";
 // import MenuItem from "@material-ui/core/MenuItem";
 // import FormControl from "@material-ui/core/FormControl";
@@ -116,6 +117,7 @@ class Settings extends React.Component {
                 </Grid>
               </Grid>
             </Paper>
+            <ImageUpload />
             {/* <Divider className={classes.divider} /> */}
             <Grid item xs={12}>
               <Paper className={classes.paper}>
