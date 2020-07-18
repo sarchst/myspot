@@ -2,7 +2,8 @@ import React from "react";
 import clsx from "clsx";
 // import Post from "./Post";
 import Playlists from "./Playlists";
-
+import Albums from "./Albums";
+import Favourites from "./Favourites";
 import Drawer from "@material-ui/core/Drawer";
 import List from "@material-ui/core/List";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -191,6 +192,7 @@ class Sidebar extends React.Component {
               contentType.PLAYLISTS,
               contentType.FOLLOWERS,
               contentType.FOLLOWING,
+              contentType.FAVOURITES,
             ].map((text, index) => (
               <ListItem
                 button
@@ -231,6 +233,12 @@ class Sidebar extends React.Component {
             </Route>
             <Route path="/:user/posts">
               <Feed />
+            </Route>
+            <Route path="/:user/albums" exact>
+              <Albums />
+            </Route>
+            <Route path="/:user/favourites" exact>
+              <Favourites />
             </Route>
             <Route path="/:user/playlists" exact>
               <Playlists />

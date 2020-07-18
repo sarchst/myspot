@@ -61,21 +61,23 @@ const styles = (theme) => ({
   },
 });
 
-class Playlists extends React.Component {
+// todo: (Sarchen) reuse Playlist component
+
+class Albums extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      usersPlaylists: [],
+      usersAlbums: [],
     };
     spotifyWebApi.setAccessToken(this.props.spotifyWebApi);
   }
 
   componentDidMount() {
-    spotifyWebApi.getUserPlaylists().then(
+    spotifyWebApi.getMySavedAlbums().then(
       (data) => {
-        console.log("User playlists", data);
+        console.log("User albums", data);
         this.setState({
-          usersPlaylists: data.items,
+          usersAlbums: data.items,
         });
       },
       function (err) {
@@ -101,7 +103,7 @@ class Playlists extends React.Component {
                 color="textPrimary"
                 gutterBottom
               >
-                Playlists
+                Albums
               </Typography>
               {/* <Typography
                 variant="h5"
@@ -118,29 +120,34 @@ class Playlists extends React.Component {
           <Container className={classes.cardGrid} maxWidth="md">
             {/* End hero unit */}
             <Grid container spacing={4}>
-              {this.state.usersPlaylists.map((playlist, index) => (
+              {this.state.usersAlbums.map((playlist, index) => (
                 <Grid item key={index} xs={12} sm={6} md={4}>
                   <Card className={classes.card}>
                     <CardMedia
                       className={classes.cardMedia}
-                      image={playlist.images[0].url}
+                      image={playlist.album.images[0].url}
                       title="Image title"
                     />
                     <CardContent className={classes.cardContent}>
                       <Typography gutterBottom variant="h5" component="h2">
-                        {playlist.name}
+                        {playlist.album.name}
                       </Typography>
-                      {/* todo: (Sarchen) fix element tags in description */}
-                      <Typography>{playlist.description}</Typography>
+                      <Typography>{playlist.album.artists[0].name}</Typography>
                     </CardContent>
                     <CardActions>
-                      <Link
-                        to={"/" + user.username + "/playlists/" + playlist.id}
-                      >
-                        <Button size="small" color="primary">
-                          View Songs
-                        </Button>
-                      </Link>
+                      {/* todo: (Sarchen) setup link to songlist for album*/}
+                      {/* <Link
+                        to={
+                          "/" +
+                          user.username +
+                          "/playlists/" +
+                          playlist.album.id
+                        }
+                      > */}
+                      {/* <Button size="small" color="primary">
+                        View Songs
+                      </Button> */}
+                      {/* </Link> */}
                     </CardActions>
                   </Card>
                 </Grid>
@@ -161,5 +168,5 @@ const mapStateToProps = (state) => {
 };
 
 export default connect(mapStateToProps)(
-  withStyles(styles, { withTheme: true })(Playlists)
+  withStyles(styles, { withTheme: true })(Albums)
 );
