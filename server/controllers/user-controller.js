@@ -239,6 +239,39 @@ updateSettings = async (req, res) => {
   });
 };
 
+
+updateProfilePic = async (req, res) => {
+  const body = req.body;
+  if (!body) {
+    return res.status(400).json({
+      success: false,
+      error: "You must provide a body to update",
+    });
+  }
+
+  console.log("Req body is " + body);
+  console.log(req.params.id);
+  User.findOneAndUpdate(
+    { _id: req.params.id },
+    { profilePic: body.profilePic },
+    { new: true },
+    (err, result) => {
+      if (err) {
+        return res.status(404).json({
+          err,
+          message: "This is an invalid profile pic update request.",
+        });
+      }
+      return res.status(200).json({ success: true, profilePic: result.profilePic});
+    }
+  ).catch((err) => {
+    return res.status(404).json({
+      error: err,
+      message: "User not found.",
+    });
+  });
+};
+
 module.exports = {
   createUser,
   updateUser,
@@ -249,4 +282,5 @@ module.exports = {
   addPost,
   updateSettings,
   getUserSettings,
+  updateProfilePic
 };
