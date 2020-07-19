@@ -103,20 +103,19 @@ class Settings extends React.Component {
         <Divider className={classes.divider} />
         <Grid container spacing={3}>
           <Grid item xs={12}>
-            <Paper className={classes.paper}>
+            {/* <Paper className={classes.paper}>
               <Grid className={classes.userdata} container>
-                {/* TODO: will we allow user to upload a new pic which is different from their spotify account pic? */}
                 <AccountCircleIcon className={classes.profilePic} />
                 <Grid className={classes.content} item>
                   <Grid item>
                     <Typography>Username: {user.username}</Typography>
                   </Grid>
-                  {/* <Grid item>
+                  <Grid item>
                     <Typography>Email: associatedEmail@gmail.com</Typography>
-                  </Grid> */}
+                  </Grid>
                 </Grid>
               </Grid>
-            </Paper>
+            </Paper> */}
             <ImageUpload />
             {/* <Divider className={classes.divider} /> */}
             <Grid item xs={12}>
@@ -173,13 +172,13 @@ class Settings extends React.Component {
               </Paper>
             </Grid>
             {/* <Divider className={classes.divider} /> */}
-            <Grid item xs={12}>
+            {/* <Grid item xs={12}>
               <Paper className={classes.paper}>
                 <Button variant="outlined" color="primary">
                   Disable My MySpot Account
                 </Button>
               </Paper>
-            </Grid>
+            </Grid> */}
           </Grid>
         </Grid>
       </div>

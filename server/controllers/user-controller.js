@@ -239,6 +239,15 @@ updateSettings = async (req, res) => {
   });
 };
 
+getProfilePic = async (req, res) => {
+  User.findOne({ _id: req.params.id }, "profilePic", (err, Img) => {
+    if (err) {
+      return res.status(400).json({ success: false, error: err });
+    }
+    console.log("user contrl method img link:" + Img);
+    return res.status(200).json({ success: true, data: Img });
+  }).catch((err) => console.log(err));
+};
 
 updateProfilePic = async (req, res) => {
   const body = req.body;
@@ -282,5 +291,6 @@ module.exports = {
   addPost,
   updateSettings,
   getUserSettings,
-  updateProfilePic
+  updateProfilePic, 
+  getProfilePic
 };

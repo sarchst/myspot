@@ -1,8 +1,11 @@
 import { SET_CURRENT_USER, LOG_OUT } from "../actions/userActions";
+import { FETCH_PROFILEPIC_SUCCESS } from "../actions/imageUploadActions";
 
 const initialState = {
   id: "",
   username: "",
+  profilePic:
+    "https://res.cloudinary.com/dafyfaoby/image/upload/v1595033510/samples/people/jazz.jpg",
 };
 
 export const user = (state = initialState, action) => {
@@ -18,6 +21,11 @@ export const user = (state = initialState, action) => {
         ...state,
         id: "",
         username: "",
+      };
+    case FETCH_PROFILEPIC_SUCCESS:
+      return {
+        ...state,
+        profilePic: action.payload,
       };
     default:
       return state;

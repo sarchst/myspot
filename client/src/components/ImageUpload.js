@@ -1,18 +1,73 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { DropzoneDialogBase } from "material-ui-dropzone";
 import Button from "@material-ui/core/Button";
-import { saveProfilePic } from "../app/actions/imageUploadActions";
+import {
+  saveProfilePic,
+  fetchProfilePic,
+} from "../app/actions/imageUploadActions";
+
+import { makeStyles } from "@material-ui/core/styles";
+import Card from "@material-ui/core/Card";
+import CardActionArea from "@material-ui/core/CardActionArea";
+import CardActions from "@material-ui/core/CardActions";
+import CardContent from "@material-ui/core/CardContent";
+import CardMedia from "@material-ui/core/CardMedia";
+import Typography from "@material-ui/core/Typography";
 require("dotenv").config();
 
-const ImageUpload = ({ saveProfilePic, user }) => {
+const useStyles = makeStyles({
+  root: {
+    maxWidth: 300,
+  },
+  media: {
+    height: 300,
+  },
+});
+
+const ImageUpload = ({ saveProfilePic, user, fetchProfilePic }) => {
+  const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   const [fileObjects, setFileObjects] = React.useState([]);
+
+  useEffect(() => {
+    console.log("component did mount");
+    fetchProfilePic(user.id);
+  }, [user.profilePic]);
   return (
     <div>
-      <Button variant="contained" color="primary" onClick={() => setOpen(true)}>
-        Add Image
-      </Button>
+      <Card className={classes.root}>
+        <CardActionArea>
+          <CardMedia
+            className={classes.media}
+            image={user.profilePic}
+            title="Contemplative Reptile"
+          />
+          <CardContent>
+            <Typography gutterBottom variant="h5" component="h2">
+              {user.id}
+            </Typography>
+            {/* <Typography variant="body2" color="textSecondary" component="p">
+              Cool description of me
+            </Typography> */}
+          </CardContent>
+        </CardActionArea>
+        <CardActions>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => setOpen(true)}
+          >
+            Edit Profile Picture
+          </Button>
+          {/* <Button size="small" color="primary">
+            Share
+          </Button>
+          <Button size="small" color="primary">
+            Learn More
+          </Button> */}
+        </CardActions>
+      </Card>
 
       <DropzoneDialogBase
         acceptedFiles={["image/*"]}
@@ -34,7 +89,7 @@ const ImageUpload = ({ saveProfilePic, user }) => {
         onSave={() => {
           console.log("onSave", fileObjects);
           // handleDrop(fileObjects);
-          saveProfilePic(fileObjects, user);
+          saveProfilePic(fileObjects, user.id);
           setOpen(false);
           // trigger axios call to put image in cloudinary
         }}
@@ -46,47 +101,8 @@ const ImageUpload = ({ saveProfilePic, user }) => {
 };
 
 function mapStateToProps(state) {
-  return { user: state.user.id };
+  return { user: state.user };
 }
-export default connect(mapStateToProps, { saveProfilePic })(ImageUpload);
-
-// reroute this through REACT ACTION.
-
-// export const handleDrop = (files) => {
-//   // Push all the axios request promise into a single array
-//   const uploaders = files.map((file) => {
-//     // Initial FormData
-//     console.log(process.env.IMG_CLOUD_UPLOAD_PRESET);
-//     console.log(file);
-//     const formData = new FormData();
-//     formData.append("file", file.data);
-//     formData.append("tags", `codeinfuse, medium, gist`);
-//     formData.append("upload_preset", process.env.IMG_CLOUD_UPLOAD_PRESET); // Replace the preset name with your own
-//     formData.append("api_key", process.env.IMG_CLOUD_API_KEY); // Replace API key with your own Cloudinary key
-//     formData.append("timestamp", (Date.now() / 1000) | 0);
-//     console.log("got here");
-//     console.log(formData);
-
-//     // Make an AJAX upload request using Axios (replace Cloudinary URL below with your own)
-//     return axios
-//       .post(
-//         process.env.IMG_CLOUD_UPLOAD_URL,
-//         formData,
-//         {
-//           headers: { "X-Requested-With": "XMLHttpRequest" },
-//         }
-//       )
-//       .then((response) => {
-//         const data = response.data;
-//         const fileURL = data.secure_url; // You should store this URL for future references in your app
-//         console.log(data);
-//         console.log(fileURL);
-//       });
-//   });
-
-//   // Once all the files are uploaded
-//   axios.all(uploaders).then(() => {
-//     // ... perform after upload is successful operation
-//     console.log("axios success");
-//   });
-// };
+export default connect(mapStateToProps, { saveProfilePic, fetchProfilePic })(
+  ImageUpload
+);
