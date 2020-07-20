@@ -1,7 +1,7 @@
 import axios from "axios";
 export const FETCH_PROFILEPIC_SUCCESS = "FETCH_PROFILE_PIC_SUCESS";
 
-export const saveAndUpdateProfilePic  = (files, id) => {
+export const saveAndUpdateProfilePic = (files, id) => {
   return (dispatch) => {
     // Push all the axios request promise into a single array
     const uploaders = files.map((file) => {
@@ -23,12 +23,12 @@ export const saveAndUpdateProfilePic  = (files, id) => {
       return axios
         .post(
           "https://api.cloudinary.com/v1_1/dafyfaoby/image/upload",
-          formData,
-          {
-            headers: {
-              "X-Requested-With": "XMLHttpRequest",
-            },
-          }
+          formData
+          // {
+          //   headers: {
+          //     "X-Requested-With": "XMLHttpRequest",
+          //   },
+          // }
         )
         .then((response) => {
           const data = response.data;
@@ -39,7 +39,7 @@ export const saveAndUpdateProfilePic  = (files, id) => {
         })
         .then((url) => {
           console.log("url is " + url);
-          
+
           return axios
             .put(`http://localhost:9000/user/profilepic/${id}`, {
               profilePic: url,

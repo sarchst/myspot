@@ -33,7 +33,8 @@ const ImageUpload = ({ saveAndUpdateProfilePic, user, fetchProfilePic }) => {
   useEffect(() => {
     console.log("component did mount");
     fetchProfilePic(user.id);
-  }, fetchProfilePic(user.id),[]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   return (
     <div>
       <Card className={classes.root}>
@@ -78,7 +79,6 @@ const ImageUpload = ({ saveAndUpdateProfilePic, user, fetchProfilePic }) => {
         open={open}
         onAdd={(newFileObjs) => {
           console.log("onAdd", newFileObjs);
-          // TODO: limit upload to 1 image at a time
           setFileObjects([].concat(fileObjects, newFileObjs));
         }}
         onDelete={(deleteFileObj) => {
@@ -87,9 +87,14 @@ const ImageUpload = ({ saveAndUpdateProfilePic, user, fetchProfilePic }) => {
         }}
         onClose={() => setOpen(false)}
         onSave={() => {
-          console.log("onSave", fileObjects);
-          saveAndUpdateProfilePic(fileObjects, user.id);
-          setOpen(false);
+          if (fileObjects.length > 1) {
+            console.log("only 1 pic allowed");
+            // TODO: add error snack bar here
+          } else {
+            console.log("onSave", fileObjects);
+            saveAndUpdateProfilePic(fileObjects, user.id);
+            setOpen(false);
+          }
         }}
         showPreviews={true}
         showFileNamesInPreview={true}
@@ -101,6 +106,7 @@ const ImageUpload = ({ saveAndUpdateProfilePic, user, fetchProfilePic }) => {
 function mapStateToProps(state) {
   return { user: state.user };
 }
-export default connect(mapStateToProps, { saveAndUpdateProfilePic, fetchProfilePic })(
-  ImageUpload
-);
+export default connect(mapStateToProps, {
+  saveAndUpdateProfilePic,
+  fetchProfilePic,
+})(ImageUpload);

@@ -263,10 +263,9 @@ updateProfilePic = async (req, res) => {
   User.findOneAndUpdate(
     { _id: req.params.id },
     {
-        profilePic:
-          "https://res.cloudinary.com/dafyfaoby/image/upload/v1595047687/xc2zlvookb9qg29xvehb.jpg",
-      },
-    
+      profilePic: body.profilePic,
+    },
+
     { new: true },
     (err, result) => {
       if (err) {
@@ -297,6 +296,6 @@ module.exports = {
   addPost,
   updateSettings,
   getUserSettings,
-  updateProfilePic, 
-  getProfilePic
+  updateProfilePic,
+  getProfilePic,
 };
