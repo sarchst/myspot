@@ -5,7 +5,7 @@ const initialState = {
   id: "",
   username: "",
   profilePic:
-    "https://res.cloudinary.com/dafyfaoby/image/upload/v1595033510/samples/people/jazz.jpg",
+    "https://res.cloudinary.com/dafyfaoby/image/upload/v1595033507/samples/sheep.jpg",
 };
 
 export const user = (state = initialState, action) => {

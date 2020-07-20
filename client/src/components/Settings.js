@@ -3,7 +3,7 @@ import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 import Divider from "@material-ui/core/Divider";
 import Switch from "@material-ui/core/Switch";
-import Button from "@material-ui/core/Button";
+// import Button from "@material-ui/core/Button";
 import ImageUpload from "./ImageUpload";
 // import InputLabel from "@material-ui/core/InputLabel";
 // import MenuItem from "@material-ui/core/MenuItem";
@@ -12,7 +12,7 @@ import ImageUpload from "./ImageUpload";
 import { connect } from "react-redux";
 import { withStyles } from "@material-ui/core/styles";
 import { Typography } from "@material-ui/core";
-import AccountCircleIcon from "@material-ui/icons/AccountCircle";
+// import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import {
   toggleNotifications,
   // toggleDarkmode,
@@ -96,7 +96,7 @@ class Settings extends React.Component {
   };
 
   render() {
-    const { classes, user } = this.props;
+    const { classes } = this.props;
     return (
       <div className={classes.root}>
         <Typography className={classes.header}>Account Settings</Typography>

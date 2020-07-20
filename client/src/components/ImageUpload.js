@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { DropzoneDialogBase } from "material-ui-dropzone";
 import Button from "@material-ui/core/Button";
 import {
-  saveProfilePic,
+  saveAndUpdateProfilePic,
   fetchProfilePic,
 } from "../app/actions/imageUploadActions";
 
@@ -25,7 +25,7 @@ const useStyles = makeStyles({
   },
 });
 
-const ImageUpload = ({ saveProfilePic, user, fetchProfilePic }) => {
+const ImageUpload = ({ saveAndUpdateProfilePic, user, fetchProfilePic }) => {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   const [fileObjects, setFileObjects] = React.useState([]);
@@ -33,7 +33,7 @@ const ImageUpload = ({ saveProfilePic, user, fetchProfilePic }) => {
   useEffect(() => {
     console.log("component did mount");
     fetchProfilePic(user.id);
-  }, [user.profilePic]);
+  }, fetchProfilePic(user.id),[]);
   return (
     <div>
       <Card className={classes.root}>
@@ -41,7 +41,7 @@ const ImageUpload = ({ saveProfilePic, user, fetchProfilePic }) => {
           <CardMedia
             className={classes.media}
             image={user.profilePic}
-            title="Contemplative Reptile"
+            title="User's profile pic"
           />
           <CardContent>
             <Typography gutterBottom variant="h5" component="h2">
@@ -88,10 +88,8 @@ const ImageUpload = ({ saveProfilePic, user, fetchProfilePic }) => {
         onClose={() => setOpen(false)}
         onSave={() => {
           console.log("onSave", fileObjects);
-          // handleDrop(fileObjects);
-          saveProfilePic(fileObjects, user.id);
+          saveAndUpdateProfilePic(fileObjects, user.id);
           setOpen(false);
-          // trigger axios call to put image in cloudinary
         }}
         showPreviews={true}
         showFileNamesInPreview={true}
@@ -103,6 +101,6 @@ const ImageUpload = ({ saveProfilePic, user, fetchProfilePic }) => {
 function mapStateToProps(state) {
   return { user: state.user };
 }
-export default connect(mapStateToProps, { saveProfilePic, fetchProfilePic })(
+export default connect(mapStateToProps, { saveAndUpdateProfilePic, fetchProfilePic })(
   ImageUpload
 );

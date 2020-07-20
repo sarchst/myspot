@@ -1,7 +1,7 @@
 import axios from "axios";
 export const FETCH_PROFILEPIC_SUCCESS = "FETCH_PROFILE_PIC_SUCESS";
 
-export const saveProfilePic = (files, id) => {
+export const saveAndUpdateProfilePic  = (files, id) => {
   return (dispatch) => {
     // Push all the axios request promise into a single array
     const uploaders = files.map((file) => {
