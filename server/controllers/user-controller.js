@@ -262,7 +262,11 @@ updateProfilePic = async (req, res) => {
   console.log(req.params.id);
   User.findOneAndUpdate(
     { _id: req.params.id },
-    { profilePic: body.profilePic },
+    {
+        profilePic:
+          "https://res.cloudinary.com/dafyfaoby/image/upload/v1595047687/xc2zlvookb9qg29xvehb.jpg",
+      },
+    
     { new: true },
     (err, result) => {
       if (err) {
@@ -271,7 +275,9 @@ updateProfilePic = async (req, res) => {
           message: "This is an invalid profile pic update request.",
         });
       }
-      return res.status(200).json({ success: true, profilePic: result.profilePic});
+      return res
+        .status(200)
+        .json({ success: true, profilePic: result.profilePic });
     }
   ).catch((err) => {
     return res.status(404).json({

@@ -39,6 +39,7 @@ export const saveAndUpdateProfilePic  = (files, id) => {
         })
         .then((url) => {
           console.log("url is " + url);
+          
           return axios
             .put(`http://localhost:9000/user/profilepic/${id}`, {
               profilePic: url,
