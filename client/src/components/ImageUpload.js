@@ -9,7 +9,6 @@ import {
 
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
-import CardActionArea from "@material-ui/core/CardActionArea";
 import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
@@ -57,21 +56,19 @@ const ImageUpload = ({ saveAndUpdateProfilePic, user, fetchProfilePic }) => {
   return (
     <div>
       <Card className={classes.root}>
-        <CardActionArea>
-          <CardMedia
-            className={classes.media}
-            image={getProfilePic()}
-            title="User's profile pic"
-          />
-          <CardContent>
-            <Typography gutterBottom variant="h5" component="h2">
-              {user.id}
-            </Typography>
-            {/* <Typography variant="body2" color="textSecondary" component="p">
+        <CardMedia
+          className={classes.media}
+          image={getProfilePic()}
+          title="User's profile pic"
+        />
+        <CardContent>
+          <Typography gutterBottom variant="h5" component="h2">
+            {user.id}
+          </Typography>
+          {/* <Typography variant="body2" color="textSecondary" component="p">
               Cool description of me
             </Typography> */}
-          </CardContent>
-        </CardActionArea>
+        </CardContent>
         <CardActions>
           <Button
             variant="contained"

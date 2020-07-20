@@ -58,6 +58,12 @@ const styles = (theme) => ({
     justify: "space-between",
     alignItems: "center",
   },
+  profilecard: {
+    padding: theme.spacing(2),
+    // margin: theme.spacing(2),
+    textAlign: "left",
+    color: theme.palette.text.secondary,
+  },
 });
 
 // const languages = ["English", "French", "Spanish"];
@@ -116,7 +122,13 @@ class Settings extends React.Component {
                 </Grid>
               </Grid>
             </Paper> */}
-            <ImageUpload />
+            {/* <Paper className={classes.paper}> */}
+            <Grid item xs={12} className={classes.profilecard}>
+              <ImageUpload />
+            </Grid>
+
+            {/* </Paper> */}
+
             {/* <Divider className={classes.divider} /> */}
             <Grid item xs={12}>
               <Paper className={classes.paper}>
