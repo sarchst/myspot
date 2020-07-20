@@ -14,6 +14,8 @@ import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
 import Typography from "@material-ui/core/Typography";
+import Snackbar from "@material-ui/core/Snackbar";
+import MuiAlert from "@material-ui/lab/Alert";
 require("dotenv").config();
 
 const useStyles = makeStyles({
@@ -25,9 +27,14 @@ const useStyles = makeStyles({
   },
 });
 
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
+
 const ImageUpload = ({ saveAndUpdateProfilePic, user, fetchProfilePic }) => {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
+  const [snackOpen, setSnackOpen] = React.useState(false);
   const [fileObjects, setFileObjects] = React.useState([]);
 
   useEffect(() => {
@@ -35,13 +42,25 @@ const ImageUpload = ({ saveAndUpdateProfilePic, user, fetchProfilePic }) => {
     fetchProfilePic(user.id);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const handleSnackClose = () => setSnackOpen(false);
+
+  const getProfilePic = () => {
+    if (user.profilePic === "") {
+      // can set default pic link here
+      return "https://res.cloudinary.com/dafyfaoby/image/upload/v1595033507/samples/sheep.jpg";
+    } else {
+      return user.profilePic;
+    }
+  };
+
   return (
     <div>
       <Card className={classes.root}>
         <CardActionArea>
           <CardMedia
             className={classes.media}
-            image={user.profilePic}
+            image={getProfilePic()}
             title="User's profile pic"
           />
           <CardContent>
@@ -83,13 +102,13 @@ const ImageUpload = ({ saveAndUpdateProfilePic, user, fetchProfilePic }) => {
         }}
         onDelete={(deleteFileObj) => {
           console.log("onDelete", deleteFileObj);
-          setFileObjects([]);
+          setFileObjects(fileObjects.filter((x) => x !== deleteFileObj));
         }}
         onClose={() => setOpen(false)}
         onSave={() => {
           if (fileObjects.length > 1) {
             console.log("only 1 pic allowed");
-            // TODO: add error snack bar here
+            setSnackOpen(true);
           } else {
             console.log("onSave", fileObjects);
             saveAndUpdateProfilePic(fileObjects, user.id);
@@ -99,6 +118,15 @@ const ImageUpload = ({ saveAndUpdateProfilePic, user, fetchProfilePic }) => {
         showPreviews={true}
         showFileNamesInPreview={true}
       />
+      <Snackbar
+        open={snackOpen}
+        autoHideDuration={6000}
+        onClose={handleSnackClose}
+      >
+        <Alert onClose={handleSnackClose} severity="error">
+          Error: Please select a single image.
+        </Alert>
+      </Snackbar>
     </div>
   );
 };

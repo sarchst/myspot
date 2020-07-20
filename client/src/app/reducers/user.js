@@ -4,8 +4,7 @@ import { FETCH_PROFILEPIC_SUCCESS } from "../actions/imageUploadActions";
 const initialState = {
   id: "",
   username: "",
-  profilePic:
-    "https://res.cloudinary.com/dafyfaoby/image/upload/v1595033507/samples/sheep.jpg",
+  profilePic: "",
 };
 
 export const user = (state = initialState, action) => {
