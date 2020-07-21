@@ -8,6 +8,7 @@ import MakePost from "./feed/MakePost";
 import ProfileCard from "./profile/ProfileCard";
 import { fetchUserSettings } from "../app/actions/settingsActions";
 
+
 const styles = (theme) => ({
   root: {
     flexGrow: 1,
@@ -26,11 +27,14 @@ const styles = (theme) => ({
 });
 
 class Profile extends React.Component {
-  componentDidMount = (id) => {
+  componentDidMount = () => {
+    // console.log("in CDM " + this.props.match.params.user);
     this.props.fetchPosts(this.props.user.id);
     this.props.fetchUserSettings(this.props.user.id);
   };
 
+  // Should be able to pass this.props.match.params.user here as an argument to Profile to render
+  // the correct Profile Page, whether that is yourself or another user
   render() {
     const { classes, user, toggleLike } = this.props;
     return (
@@ -58,10 +62,13 @@ class Profile extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => ({
-  user: state.user,
-  posts: state.posts,
-});
+const mapStateToProps = (state, ownProps) => {
+  // console.log(ownProps);
+  return {
+    user: state.user,
+    posts: state.posts,
+  };
+};
 
 const mapDispatchToProps = {
   toggleLike,

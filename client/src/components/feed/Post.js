@@ -16,7 +16,7 @@ import LibraryAddIcon from "@material-ui/icons/LibraryAdd";
 import ReplyIcon from "@material-ui/icons/Reply";
 import ShareIcon from "@material-ui/icons/Share";
 import { withStyles } from "@material-ui/core/styles";
-
+import { Link as RouterLink } from "react-router-dom";
 const styles = {
   root: {
     flexGrow: 1,
@@ -54,6 +54,13 @@ const styles = {
   },
   media: {
     // media style
+  },
+  routerLink: {
+    textDecoration: "none",
+    color: "inherit",
+    "&:hover": {
+      textDecoration: "underline",
+    },
   },
 };
 
@@ -120,7 +127,12 @@ class Post extends Component {
             <Avatar className={classes.display}>DP</Avatar>{" "}
             {/* TODO add user profile picture */}
           </Grid>
-          <Grid item>{postdata.username}</Grid>
+          <RouterLink
+            className={classes.routerLink}
+            to={`/people/${postdata.username}`}
+          >
+            <Grid item>{postdata.username}</Grid>
+          </RouterLink>
         </Grid>
         <Grid container spacing={1}>
           <Grid

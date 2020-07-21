@@ -49,8 +49,13 @@ export function fetchFeed(id) {
         return res.data;
       })
       .then((res) => {
-        const feed = [].concat(res[0].posts, res[0].following[0].posts);
-
+        // const feed = [].concat(res[0].posts, res[0].following[0].posts);
+        let numFollowing = res[0].following.length;
+        // console.log(numFollowing);
+        let feed = res[0].posts;
+        for (let i = 0; i < numFollowing; i++) {
+          feed = feed.concat(res[0].following[i].posts);
+        }
         const sortedFeed = feed.sort(
           (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
         );
