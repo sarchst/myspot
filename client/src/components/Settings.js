@@ -4,20 +4,23 @@ import Paper from "@material-ui/core/Paper";
 import Divider from "@material-ui/core/Divider";
 import Switch from "@material-ui/core/Switch";
 import Button from "@material-ui/core/Button";
-import InputLabel from "@material-ui/core/InputLabel";
-import MenuItem from "@material-ui/core/MenuItem";
-import FormControl from "@material-ui/core/FormControl";
-import Select from "@material-ui/core/Select";
+// import InputLabel from "@material-ui/core/InputLabel";
+// import MenuItem from "@material-ui/core/MenuItem";
+// import FormControl from "@material-ui/core/FormControl";
+// import Select from "@material-ui/core/Select";
 import { connect } from "react-redux";
 import { withStyles } from "@material-ui/core/styles";
 import { Typography } from "@material-ui/core";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import {
   toggleNotifications,
-  toggleDarkmode,
+  // toggleDarkmode,
   changeLang,
 } from "../app/actions";
-
+import {
+  // toggleDarkmode,
+  updateSettings,
+} from "../app/actions/settingsActions";
 const styles = (theme) => ({
   root: {
     flexGrow: 1,
@@ -56,18 +59,39 @@ const styles = (theme) => ({
   },
 });
 
-const languages = ["English", "French", "Spanish"];
+// const languages = ["English", "French", "Spanish"];
 
 class Settings extends React.Component {
-  handleNotifToggle = () => {
-    this.props.toggleNotifications(this.props.accountSettings.notifications);
-  };
+  // state = {
+  //   // user: this.props.user.id,
+  //   notification: true, // user id, ref to user schema
+  //   darkMode: this.props.accountSettings.darkmode,
+  //   language: "English",
+  //   disableAcc: false,
+  // };
 
-  handleDarkmodeToggle = () => {
-    this.props.toggleDarkmode(this.props.accountSettings.darkmode);
-  };
-  handleLangSelect = (event) => {
-    this.props.changeLang(event.target.value);
+  // handleNotifToggle = () => {
+  //   this.props.toggleNotifications(this.props.accountSettings.notifications);
+  // };
+
+  // handleDarkmodeToggle = () => {
+  //   // this.props.toggleDarkmode(this.props.accountSettings.darkmode);
+  //   console.log(this.state);
+  //   this.props.toggleDarkmode(this.state, this.props.user);
+  // };
+  // handleLangSelect = (event) => {
+  //   this.props.changeLang(event.target.value);
+  // };
+
+  updateSettings = () => {
+    console.log("Settings (darkmode) being updated!");
+    const newSettings = {
+      notification: true,
+      darkMode: !this.props.accountSettings.darkMode,
+      language: "English",
+      disableAcc: false,
+    };
+    this.props.updateSettings(newSettings, this.props.user.id);
   };
 
   render() {
@@ -86,9 +110,9 @@ class Settings extends React.Component {
                   <Grid item>
                     <Typography>Username: {user.username}</Typography>
                   </Grid>
-                  <Grid item>
+                  {/* <Grid item>
                     <Typography>Email: associatedEmail@gmail.com</Typography>
-                  </Grid>
+                  </Grid> */}
                 </Grid>
               </Grid>
             </Paper>
@@ -96,7 +120,8 @@ class Settings extends React.Component {
             <Grid item xs={12}>
               <Paper className={classes.paper}>
                 <Grid className={classes.setting} container>
-                  <Grid item>
+                  {/* Notifications toggle commented out for now, until we implement it */}
+                  {/* <Grid item>
                     <Typography>Notifications</Typography>
                   </Grid>
                   <Grid item>
@@ -106,25 +131,26 @@ class Settings extends React.Component {
                       name="notifications"
                       inputProps={{ "aria-label": "secondary checkbox" }}
                     />
-                  </Grid>
+                  </Grid> */}
                 </Grid>
-                <Divider className={classes.divider} />
+                {/* <Divider className={classes.divider} /> */}
                 <Grid className={classes.setting} container>
                   <Grid item>
                     <Typography>Dark Mode</Typography>
                   </Grid>
                   <Grid item>
                     <Switch
-                      checked={this.props.accountSettings.darkmode}
-                      onChange={this.handleDarkmodeToggle}
+                      checked={this.props.accountSettings.darkMode}
+                      onChange={this.updateSettings}
                       name="darkmode"
                       inputProps={{ "aria-label": "secondary checkbox" }}
                     />
                   </Grid>
                 </Grid>
-                <Divider className={classes.divider} />
+                {/* <Divider className={classes.divider} /> */}
                 <Grid item>
-                  <FormControl className={classes.formControl}>
+                  {/* Language drop down commented out for now, until we implement it */}
+                  {/* <FormControl className={classes.formControl}>
                     <InputLabel id="combo-box-lang-label">Language</InputLabel>
                     <Select
                       labelId="combo-box-lang-label"
@@ -140,12 +166,8 @@ class Settings extends React.Component {
                         </MenuItem>
                       ))}
                     </Select>
-                  </FormControl>
+                  </FormControl> */}
                 </Grid>
-                <Divider className={classes.divider} />
-                <Typography>Additional Settings Here</Typography>
-                <Divider className={classes.divider} />
-                <Typography>Additional Settings Here</Typography>
               </Paper>
             </Grid>
             {/* <Divider className={classes.divider} /> */}
@@ -170,6 +192,7 @@ const mapStateToProps = (state) => ({
 
 export default connect(mapStateToProps, {
   toggleNotifications,
-  toggleDarkmode,
+  // toggleDarkmode,
   changeLang,
+  updateSettings,
 })(withStyles(styles, { withTheme: true })(Settings));

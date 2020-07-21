@@ -1,8 +1,4 @@
-import {
-  TOGGLE_LIKE,
-  ADD_POSTS_TO_FEED,
-  COMBINE_P_POSTS_WITH_FEED,
-} from "../actions/feedActions";
+import { TOGGLE_LIKE, ADD_POSTS_TO_FEED } from "../actions/feedActions";
 
 const initialState = {
   activity: true,
@@ -33,14 +29,7 @@ export const feed = (state = initialState, action) => {
     case ADD_POSTS_TO_FEED:
       return {
         ...state,
-        // posts: [...state.posts, ...action.payload],
         posts: action.payload,
-      };
-    // TODO: need to find the best way to combine personal and other users posts and then rendering
-    case COMBINE_P_POSTS_WITH_FEED:
-      return {
-        ...state,
-        posts: [...state.posts, ...action.payload],
       };
     default:
       return state;
