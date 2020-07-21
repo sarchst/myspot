@@ -49,12 +49,39 @@ export function fetchFeed(id) {
         return res.data;
       })
       .then((res) => {
-        const feed = [].concat(res[0].posts, res[0].following[0].posts);
+        // create follower set object with _id : profilePic
+
+        let followerSet = {};
+        let numFollowing = res[0].following.length;
+        followerSet[res[0]._id] = res[0].profilePic;
+        for (let i = 0; i < numFollowing; i++) {
+          followerSet[res[0].following[i]._id] = res[0].following[i].profilePic;
+        }
+
+        // console.log(followerSet);
+        
+
+        // // console.log(numFollowing);
+        let feed = res[0].posts; 
+        for (let i = 0; i < numFollowing; i++) {
+          feed = feed.concat(res[0].following[i].posts);
+        }
+        // console.log(feed);
+
+        // add profilePic info to each feed 
+        for (let i = 0; i < feed.length; i++) {
+          feed[i].profilePic = followerSet[feed[i].authorId];
+        }
+
+        // console.log(feed);
 
         const sortedFeed = feed.sort(
           (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
         );
+
+        // console.log(sortedFeed);
         dispatch(addPostsToFeed(sortedFeed));
+        // console.log("fetch feed finished");
         return res;
       })
       .catch((error) => {

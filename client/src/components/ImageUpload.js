@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { connect } from "react-redux";
 import { DropzoneDialogBase } from "material-ui-dropzone";
 import Button from "@material-ui/core/Button";
@@ -36,11 +36,6 @@ const ImageUpload = ({ saveAndUpdateProfilePic, user, fetchProfilePic }) => {
   const [snackOpen, setSnackOpen] = React.useState(false);
   const [fileObjects, setFileObjects] = React.useState([]);
 
-  useEffect(() => {
-    console.log("component did mount");
-    fetchProfilePic(user.id);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   const handleSnackClose = () => setSnackOpen(false);
 

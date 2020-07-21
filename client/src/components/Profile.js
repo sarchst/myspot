@@ -7,6 +7,7 @@ import Post from "./feed/Post";
 import MakePost from "./feed/MakePost";
 import ProfileCard from "./profile/ProfileCard";
 import { fetchUserSettings } from "../app/actions/settingsActions";
+import { fetchProfilePic } from "../app/actions/imageUploadActions";
 
 const styles = (theme) => ({
   root: {
@@ -26,9 +27,10 @@ const styles = (theme) => ({
 });
 
 class Profile extends React.Component {
-  componentDidMount = (id) => {
+  componentDidMount = () => {
     this.props.fetchPosts(this.props.user.id);
     this.props.fetchUserSettings(this.props.user.id);
+    this.props.fetchProfilePic(this.props.user.id);
   };
 
   render() {
@@ -67,6 +69,7 @@ const mapDispatchToProps = {
   toggleLike,
   fetchPosts,
   fetchUserSettings,
+  fetchProfilePic,
 };
 
 export default connect(

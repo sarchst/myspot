@@ -6,7 +6,7 @@ export const saveAndUpdateProfilePic = (files, id) => {
     // Push all the axios request promise into a single array
     const uploaders = files.map((file) => {
       // Initial FormData
-      console.log(file);
+      // console.log(file);
       // https://cloudinary.com/documentation/how_to_integrate_cloudinary
       // according to the docs, api_key, cloud name can be public
 
@@ -16,8 +16,8 @@ export const saveAndUpdateProfilePic = (files, id) => {
       formData.append("upload_preset", "i0r4rfo8"); // Replace the preset name with your own
       formData.append("api_key", "548279656671333"); // Replace API key with your own Cloudinary key
       formData.append("timestamp", (Date.now() / 1000) | 0);
-      console.log("got here");
-      console.log(formData);
+      // console.log("got here");
+      // console.log(formData);
 
       // Make an AJAX upload request using Axios (replace Cloudinary URL below with your own)
       return axios
@@ -34,19 +34,19 @@ export const saveAndUpdateProfilePic = (files, id) => {
           const data = response.data;
           const fileURL = data.secure_url; // You should store this URL for future references in your app
           // console.log(data);
-          console.log("file url is " + fileURL);
+          // console.log("file url is " + fileURL);
           return fileURL;
         })
         .then((url) => {
-          console.log("url is " + url);
+          // console.log("url is " + url);
 
           return axios
             .put(`http://localhost:9000/user/profilepic/${id}`, {
               profilePic: url,
             })
             .then((res) => {
-              console.log("Res: ", res);
-              console.log("put success");
+              // console.log("Res: ", res);
+              // console.log("put success");
               // dispatch(makePostSuccess(res.data.posts));
             })
             .catch((error) => {
@@ -79,7 +79,7 @@ export const fetchProfilePic = (id) => {
         if (res.error) {
           throw res.error;
         }
-        console.log("Res " + JSON.stringify(res));
+        // console.log("Res " + JSON.stringify(res));
         dispatch(fetchProfilePicSuccess(res.data.profilePic));
       })
       .catch((err) => {
@@ -88,3 +88,22 @@ export const fetchProfilePic = (id) => {
       });
   };
 };
+
+export async function fetchProfilePicById(id) {
+  // return (dispatch) => {
+  fetch(`http://localhost:9000/user/profilepic/${id}`)
+    .then((res) => res.json())
+    .then((res) => {
+      if (res.error) {
+        throw res.error;
+      }
+      // console.log("Res in fetchProfilePicById " + JSON.stringify(res));
+      // console.log(res.data.profilePic);
+      // dispatch(fetchProfilePicSuccess(res.data.profilePic));
+      return res.data.profilePic;
+    })
+    .catch((err) => {
+      console.log("fetch profile pic err: " + err);
+      throw err;
+    });
+}
