@@ -2,7 +2,9 @@ import React from "react";
 import clsx from "clsx";
 // import Post from "./Post";
 import Playlists from "./Playlists";
-
+import Albums from "./Albums";
+import Tinderify from "./Tinderify";
+import Favourites from "./Favourites";
 import Drawer from "@material-ui/core/Drawer";
 import List from "@material-ui/core/List";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -22,6 +24,7 @@ import FavoriteIcon from "@material-ui/icons/Favorite";
 import QueueMusicIcon from "@material-ui/icons/QueueMusic";
 import PlayCircleFilledIcon from "@material-ui/icons/PlayCircleFilled";
 import AlbumIcon from "@material-ui/icons/Album";
+import WhatshotIcon from "@material-ui/icons/Whatshot";
 
 import { connect } from "react-redux";
 import { withStyles } from "@material-ui/core/styles";
@@ -124,6 +127,8 @@ class Sidebar extends React.Component {
         return <HeadsetIcon />;
       case contentType.FAVOURITES:
         return <FavoriteIcon />;
+      case contentType.TINDERIFY:
+        return <WhatshotIcon />;
       default:
         return <AccountCircleIcon />;
     }
@@ -192,6 +197,8 @@ class Sidebar extends React.Component {
               contentType.PLAYLISTS,
               contentType.FOLLOWERS,
               contentType.FOLLOWING,
+              contentType.FAVOURITES,
+              contentType.TINDERIFY,
             ].map((text, index) => (
               <ListItem
                 button
@@ -213,15 +220,6 @@ class Sidebar extends React.Component {
               </ListItem>
             ))}
           </List>
-          <Divider />
-          <List>
-            {[contentType.FAVOURITES].map((text, index) => (
-              <ListItem button key={text}>
-                <ListItemIcon>{this.getSidebarIcon(text)}</ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItem>
-            ))}
-          </List>
         </Drawer>
 
         <main className={classes.content}>
@@ -232,6 +230,15 @@ class Sidebar extends React.Component {
             </Route> */}
             <Route path="/:user/posts">
               <Feed />
+            </Route>
+            <Route path="/:user/albums" exact>
+              <Albums />
+            </Route>
+            <Route path="/:user/tinderify" exact>
+              <Tinderify />
+            </Route>
+            <Route path="/:user/favourites" exact>
+              <Favourites />
             </Route>
             <Route path="/:user/playlists" exact>
               <Playlists />

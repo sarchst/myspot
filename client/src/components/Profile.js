@@ -7,6 +7,7 @@ import Post from "./feed/Post";
 import MakePost from "./feed/MakePost";
 import ProfileCard from "./profile/ProfileCard";
 import { fetchUserSettings } from "../app/actions/settingsActions";
+import { fetchProfilePic } from "../app/actions/imageUploadActions";
 
 
 const styles = (theme) => ({
@@ -28,9 +29,9 @@ const styles = (theme) => ({
 
 class Profile extends React.Component {
   componentDidMount = () => {
-    // console.log("in CDM " + this.props.match.params.user);
     this.props.fetchPosts(this.props.user.id);
     this.props.fetchUserSettings(this.props.user.id);
+    this.props.fetchProfilePic(this.props.user.id);
   };
 
   // Should be able to pass this.props.match.params.user here as an argument to Profile to render
@@ -74,6 +75,7 @@ const mapDispatchToProps = {
   toggleLike,
   fetchPosts,
   fetchUserSettings,
+  fetchProfilePic,
 };
 
 export default connect(

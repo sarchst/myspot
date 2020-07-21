@@ -41,7 +41,7 @@ export const fetchUserSettings = (id) => {
         if (res.error) {
           throw res.error;
         }
-        console.log("Res " + JSON.stringify(res));
+        // console.log("Res " + JSON.stringify(res));
         dispatch(fetchUserSettingsSuccess(res.data.settings));
       })
       .catch((err) => {

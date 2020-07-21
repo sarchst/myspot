@@ -17,7 +17,9 @@ import ReplyIcon from "@material-ui/icons/Reply";
 import ShareIcon from "@material-ui/icons/Share";
 import { withStyles } from "@material-ui/core/styles";
 import { Link as RouterLink } from "react-router-dom";
-const styles = {
+
+
+const styles = (theme) => ({
   root: {
     flexGrow: 1,
   },
@@ -32,6 +34,8 @@ const styles = {
     padding: 0,
     borderRadius: 12,
     margin: 5,
+    width: theme.spacing(9),
+    height: theme.spacing(9),
   },
   userGrid: {
     margin: 5,
@@ -62,7 +66,7 @@ const styles = {
       textDecoration: "underline",
     },
   },
-};
+});
 
 const menuOptions = ["edit", "delete", "report"];
 
@@ -71,6 +75,7 @@ class Post extends Component {
     moreOptions: false,
     anchorEl: null,
   };
+
 
   goToMedia = () => {
     // TODO GOTO media
@@ -124,7 +129,11 @@ class Post extends Component {
           className={classes.userGrid}
         >
           <Grid item>
-            <Avatar className={classes.display}>DP</Avatar>{" "}
+            <Avatar
+              className={classes.display}
+              src={postdata.profilePic}
+              alt="profile-pic"
+            />
             {/* TODO add user profile picture */}
           </Grid>
           <RouterLink
