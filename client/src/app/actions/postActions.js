@@ -42,18 +42,23 @@ export const makePost = (post) => {
   console.log("Post from actions: ", post);
   const id = post.authorId;
   return (dispatch) => {
-    return axios
-      .put(`http://localhost:9000/user/posts/${id}`, post)
-      .then((res) => {
-        console.log("Res: ", res);
-        dispatch(makePostSuccess(res.data.posts));
-      })
-      .then(() => {
-        dispatch(fetchFeed(id));
-      })
-      .catch((error) => {
-        throw error;
-      });
+    return (
+      axios
+        .put(`http://localhost:9000/user/posts/${id}`, post)
+        // .then((res) => {
+        //   console.log("Res: ", res);
+        // dispatch(makePostSuccess(res.data.posts));
+        // })
+        .then(() => {
+          dispatch(fetchPosts(id));
+        })
+        .then(() => {
+          dispatch(fetchFeed(id));
+        })
+        .catch((error) => {
+          throw error;
+        })
+    );
   };
 };
 
@@ -73,14 +78,21 @@ export function fetchPosts(id) {
       .then((res) => {
         // console.log("POSTS to be loaded:");
         // console.log(res);
-        const sortedPosts = res.sort(
+
+        // add profilePic key to every post yin posts
+        for (let i = 0; i < res.posts.length; i++) {
+          res.posts[i].profilePic = res.profilePic;
+        }
+
+        const sortedPosts = res.posts.sort(
           (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
         );
+
         dispatch(addPostsToPosts(sortedPosts));
         return res;
       })
       .catch((error) => {
-        // console.log("Fetch Posts Error");
+        console.log("Fetch Posts Error");
         dispatch(fetchPostsError(error));
       });
   };

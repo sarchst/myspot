@@ -131,7 +131,10 @@ getUsers = async (req, res) => {
 
 // Returns a list of posts created by users the current user follows
 getUserFollowingFeed = async (req, res) => {
-  User.find({ _id: req.params.id }, "posts following", function (err, result) {
+  User.find({ _id: req.params.id }, "posts following profilePic", function (
+    err,
+    result
+  ) {
     if (err) {
       return res.status(400).json({ success: false, error: err });
     }
@@ -141,7 +144,7 @@ getUserFollowingFeed = async (req, res) => {
   })
     .populate({
       path: "following",
-      select: "posts",
+      select: "posts profilePic",
     })
     .exec(function (err, result) {
       // console.log(result.data.following.posts);
@@ -153,7 +156,10 @@ getUserFollowingFeed = async (req, res) => {
 
 // Returns a list of posts created by the user
 getUserPosts = async (req, res) => {
-  User.findOne({ _id: req.params.id }, function (err, result) {
+  User.findOne({ _id: req.params.id }, "posts profilePic", function (
+    err,
+    result
+  ) {
     if (err) {
       return res.status(400).json({ success: false, error: err });
     }
@@ -162,8 +168,8 @@ getUserPosts = async (req, res) => {
     }
   }).exec(function (err, user) {
     console.log("user posts");
-    console.log(user.posts);
-    return res.status(200).json({ success: true, data: user.posts });
+    console.log(user);
+    return res.status(200).json({ success: true, data: user });
   });
   // .catch((err) => console.log(err));
 };

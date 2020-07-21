@@ -123,8 +123,8 @@ class ProfileCard extends React.Component {
           <Avatar
             className={classes.avatar}
             src={
-              this.props.spotifyApiUserMe.images.length
-                ? this.props.spotifyApiUserMe.images[0].url
+              this.props.user.profilePic
+                ? this.props.user.profilePic
                 : "./generic-user-headphone-icon.png"
             }
             // src={"https://i.pravatar.cc/300"}
@@ -270,6 +270,7 @@ const mapStateToProps = (state) => ({
   spotifyWebApi: state.spotifyWebApi,
   spotifyApiUserMe: state.spotifyApiUserMe,
   posts: state.posts,
+  user: state.user,
 });
 
 export default connect(mapStateToProps)(withStyles(styles)(ProfileCard));
