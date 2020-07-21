@@ -1,25 +1,11 @@
 import axios from "axios";
+import { fetchFeed } from "./feedActions";
 
 export const FETCH_POSTS_SUCCESS = "FETCH_POSTS_SUCCESS";
 export const FETCH_POSTS_ERROR = "FETCH_POSTS_ERROR";
 export const FETCH_POSTS_STARTED = "FETCH_POSTS_STARTED";
 export const ADD_POSTS_TO_POSTS = "ADD_POSTS_TO_POSTS";
 export const MAKE_POST_SUCCESS = "MAKE_POST_SUCCESS";
-
-export const makePost = (post) => {
-  console.log("Post from actions: ", post);
-  return (dispatch) => {
-    return axios
-      .put(`http://localhost:9000/user/posts/${post.authorId}`, post)
-      .then((res) => {
-        console.log("Res: ", res);
-        dispatch(makePostSuccess(res.data.posts));
-      })
-      .catch((error) => {
-        throw error;
-      });
-  };
-};
 
 export const makePostSuccess = (posts) => ({
   type: MAKE_POST_SUCCESS,
@@ -52,6 +38,25 @@ export function addPostsToPosts(data) {
   };
 }
 
+export const makePost = (post) => {
+  console.log("Post from actions: ", post);
+  const id = post.authorId;
+  return (dispatch) => {
+    return axios
+      .put(`http://localhost:9000/user/posts/${id}`, post)
+      .then((res) => {
+        console.log("Res: ", res);
+        dispatch(makePostSuccess(res.data.posts));
+      })
+      .then(() => {
+        dispatch(fetchFeed(id));
+      })
+      .catch((error) => {
+        throw error;
+      });
+  };
+};
+
 export function fetchPosts(id) {
   return (dispatch) => {
     dispatch(fetchPostsStarted());
@@ -68,7 +73,10 @@ export function fetchPosts(id) {
       .then((res) => {
         // console.log("POSTS to be loaded:");
         // console.log(res);
-        dispatch(addPostsToPosts(res));
+        const sortedPosts = res.sort(
+          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+        );
+        dispatch(addPostsToPosts(sortedPosts));
         return res;
       })
       .catch((error) => {

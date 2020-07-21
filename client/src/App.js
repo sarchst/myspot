@@ -10,6 +10,7 @@ import Spotify from "spotify-web-api-js";
 import { registerSpotifyWebApi } from "./app/actions";
 import { setCurrentUser } from "./app/actions/userActions";
 import { submitSpotifyApiUserMe } from "./app/actions/spotifyApiActions";
+import { fetchUserSettings } from "./app/actions/settingsActions";
 
 const spotifyWebApi = new Spotify();
 
@@ -50,12 +51,35 @@ class App extends React.Component {
     if (params.access_token) {
       spotifyWebApi.setAccessToken(params.access_token);
       console.log("LOGGING IN: SENDING SPOTIFYWEBAPI TO REDUX STORE");
+      let userObject = {};
       this.props.registerSpotifyWebApi(params.access_token);
-      spotifyWebApi.getMe().then((response) => {
-        console.log("spotify profile response object: ", response);
-        this.props.submitSpotifyApiUserMe(response);
-        this.props.setCurrentUser(response.id, response.display_name);
-      });
+      spotifyWebApi
+        .getMe()
+        .then((response) => {
+          Object.assign(userObject, response);
+          return spotifyWebApi.getMyTopTracks();
+        })
+        .then((topTracksResponse) => {
+          if (topTracksResponse) {
+            userObject.topTracks = topTracksResponse.items.slice(
+              0,
+              Math.min(topTracksResponse.items.length, 3)
+            );
+          }
+          return spotifyWebApi.getMyRecentlyPlayedTracks();
+        })
+        .then((recentTracksResponse) => {
+          if (recentTracksResponse) {
+            userObject.recentTracks = recentTracksResponse.items.slice(
+              0,
+              Math.min(recentTracksResponse.items.length, 3)
+            );
+          }
+          console.log("submitSpotifyApiUserMe from App.js");
+          // console.log(userObject);
+          this.props.submitSpotifyApiUserMe(userObject);
+          this.props.setCurrentUser(userObject.id, userObject.display_name);
+        });
     }
   }
 
@@ -73,7 +97,7 @@ class App extends React.Component {
 
   selectTheme = () =>
     // TODO swith this too user from database?
-    this.props.accountSettings.darkmode ? darkTheme : lightTheme;
+    this.props.accountSettings.darkMode ? darkTheme : lightTheme;
 
   render() {
     if (this.props.spotifyWebApi && this.props.user.id) {
@@ -108,6 +132,7 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(registerSpotifyWebApi(spotifyWebApi)),
     submitSpotifyApiUserMe: (spotifyUserMe) =>
       dispatch(submitSpotifyApiUserMe(spotifyUserMe)),
+    fetchUserSettings: fetchUserSettings,
   };
 };
 

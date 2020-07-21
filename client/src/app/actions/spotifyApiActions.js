@@ -6,24 +6,31 @@ export const submitSpotifyApiUserMe = (SpotifyApiUserInfoMe) => {
     let mongoUserObject = {
       _id: SpotifyApiUserInfoMe.id,
       username: SpotifyApiUserInfoMe.display_name,
-      email: SpotifyApiUserInfoMe.email,
       profilePic:
         SpotifyApiUserInfoMe.images.length !== 0
           ? SpotifyApiUserInfoMe.images[0].url
-          : "",
+          : undefined,
+      country: SpotifyApiUserInfoMe.country,
+      topTracks: SpotifyApiUserInfoMe.topTracks || null,
+      recentTracks: SpotifyApiUserInfoMe.recentTracks || null,
     };
-    fetch(`http://localhost:9000/user`, {
-      method: "POST", // or 'PUT'
+    console.log("mongoUserOjvect in spotifyApiAction");
+    console.log(mongoUserObject.topTracks.length);
+    fetch(`http://localhost:9000/user/${SpotifyApiUserInfoMe.display_name}`, {
+      method: "PUT", // changed from POST
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(mongoUserObject),
     })
       .then((response) => {
-        console.log(response);
+        console.log("user update success from spotifyAPIActions");
         dispatch(submitSpotifyApiUserMeThunk(SpotifyApiUserInfoMe));
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log("user update error from spotifyAPIActions");
+        console.log(err);
+      });
   };
 };
 
