@@ -1,5 +1,4 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import Spotify from "spotify-web-api-js";
 import { CssBaseline } from "@material-ui/core";
@@ -74,11 +73,10 @@ class Tinderify extends React.Component {
           });
         }
         console.log("Discover weekly ", playlist);
-        console.log(this.state.discoverWeeklyId);
         // get the songs
         spotifyWebApi.getPlaylist(this.state.discoverWeeklyId).then(
           (data) => {
-            console.log("SONG data", data);
+            console.log("Songs in Discover Weekly", data);
             this.setState({
               tracks: data.tracks.items,
               discoverWeeklyImageUrl: data.images[0].url,
@@ -178,12 +176,13 @@ class Tinderify extends React.Component {
                       src={track.track.album.images[0].url}
                       height="150"
                       width="150"
-                      alt="this is album art"
+                      alt="Album Art"
                     ></img>
                     <img
                       src={this.state.discoverWeeklyImageUrl}
                       height="150"
                       width="150"
+                      alt="Discover Weekly Art"
                     ></img>
                   </div>
                   <h1>{track.track.name}</h1>

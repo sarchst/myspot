@@ -1,5 +1,4 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import Spotify from "spotify-web-api-js";
 import { CssBaseline } from "@material-ui/core";
@@ -51,7 +50,7 @@ class Favourites extends React.Component {
   componentDidMount() {
     spotifyWebApi.getMySavedTracks().then(
       (data) => {
-        console.log("MY SAVED TRACKS", data);
+        console.log("Saved Tracks (aka favourites)", data);
         this.setState({
           tracks: data.items,
         });
@@ -98,7 +97,7 @@ class Favourites extends React.Component {
               <img
                 src={track.track.album.images[0].url}
                 style={{ width: 50, height: 50 }}
-                alt="this is album art"
+                alt="Album Art"
               />
               {track.track.name + " - " + track.track.artists[0].name}
             </li>

@@ -1,5 +1,4 @@
 import React from "react";
-import Button from "@material-ui/core/Button";
 import Card from "@material-ui/core/Card";
 import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
@@ -12,7 +11,6 @@ import Container from "@material-ui/core/Container";
 // import Link from "@material-ui/core/Link";
 import { connect } from "react-redux";
 import Spotify from "spotify-web-api-js";
-import { Link } from "react-router-dom";
 
 const spotifyWebApi = new Spotify();
 
@@ -87,8 +85,7 @@ class Albums extends React.Component {
   }
 
   render() {
-    console.log(this.props.user);
-    const { classes, user } = this.props;
+    const { classes } = this.props;
     return (
       <React.Fragment>
         <CssBaseline />

@@ -85,7 +85,6 @@ class Playlists extends React.Component {
   }
 
   render() {
-    console.log(this.props.user);
     const { classes, user } = this.props;
     return (
       <React.Fragment>
