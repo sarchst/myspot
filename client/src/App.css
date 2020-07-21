@@ -1,14 +1,21 @@
+/* Tinderify Song Card  */
+/* Source:  https://www.bypeople.com/profile-card-hover-effect/  */
+
+@import url("https://fonts.googleapis.com/css2?family=Comfortaa:wght@700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Pacifico&display=swap");
+
 .container {
   width: 400px;
   margin: 120px auto 120px;
-  background-color: #fff;
+  /* background-image: linear-gradient(to bottom right, #df4685, #ff5864, #ff8146); */
+  background-image: linear-gradient(to bottom right, #e56b9e, #ff7982, #ff9a6b);
   padding: 0 20px 20px;
   border-radius: 6px;
   -webkit-border-radius: 6px;
   -moz-border-radius: 6px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.075);
-  -webkit-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.075);
-  -moz-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.075);
+  box-shadow: 0 20px 50px #e56b9e;
+  -webkit-box-shadow: 0 20px 50px #e56b9e;
+  -moz-box-shadow: 0 20px 50px #e56b9e;
   text-align: center;
 }
 .container:hover .avatar-flip {
@@ -32,9 +39,9 @@
   transition: all 0.3s ease-in-out;
   -webkit-transition: all 0.3s ease-in-out;
   -moz-transition: all 0.3s ease-in-out;
-  box-shadow: 0 0 0 13px #f0f0f0;
-  -webkit-box-shadow: 0 0 0 13px #f0f0f0;
-  -moz-box-shadow: 0 0 0 13px #f0f0f0;
+  /* box-shadow: 0 0 0 5px #ff655b;
+  -webkit-box-shadow: 0 0 0 5px #ff655b;
+  -moz-box-shadow: 0 0 0 5px #ff655b; */
 }
 .avatar-flip img {
   position: absolute;
@@ -53,4 +60,23 @@
   transform: rotateY(180deg);
   -webkit-transform: rotateY(180deg);
   opacity: 0;
+}
+
+h2 {
+  font-size: 32px;
+  font-weight: 600;
+  margin-bottom: 15px;
+  font-family: "Comfortaa", cursive;
+}
+h4 {
+  font-size: 17px;
+  letter-spacing: 1px;
+  margin-bottom: 25px;
+  font-family: "Comfortaa", cursive;
+}
+
+.tinderify-title {
+  font-family: "Pacifico", cursive;
+  font-size: 100px;
+  align-self: center;
 }

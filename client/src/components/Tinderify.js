@@ -15,6 +15,7 @@ import {
 import "pure-react-carousel/dist/react-carousel.es.css";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import NotInterestedIcon from "@material-ui/icons/NotInterested";
+import WhatshotIcon from "@material-ui/icons/Whatshot";
 
 const spotifyWebApi = new Spotify();
 
@@ -140,7 +141,7 @@ class Tinderify extends React.Component {
                   color="textPrimary"
                   gutterBottom
                 >
-                  Tinderify
+                  <h1 className="tinderify-title">Tinderify</h1>
                 </Typography>
                 <Typography
                   variant="h5"
@@ -170,6 +171,7 @@ class Tinderify extends React.Component {
           <Slider>
             {this.state.tracks.map((track, index) => (
               <Slide key={index}>
+                {/* song html card from: https://www.bypeople.com/profile-card-hover-effect/ */}
                 <div className="container">
                   <div className="avatar-flip">
                     <img
@@ -185,9 +187,9 @@ class Tinderify extends React.Component {
                       alt="Discover Weekly Art"
                     ></img>
                   </div>
-                  <h1>{track.track.name}</h1>
-                  <h2>by</h2>
-                  <h2>{track.track.artists[0].name}</h2>
+                  <h2>{track.track.name}</h2>
+                  <h4>by</h4>
+                  <h4>{track.track.artists[0].name}</h4>
                   <NotInterestedIcon
                     onClick={() => this.notInterested()}
                   ></NotInterestedIcon>
