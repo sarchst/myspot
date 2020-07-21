@@ -219,15 +219,6 @@ class Sidebar extends React.Component {
               </ListItem>
             ))}
           </List>
-          <Divider />
-          <List>
-            {[contentType.FAVOURITES].map((text, index) => (
-              <ListItem button key={text}>
-                <ListItemIcon>{this.getSidebarIcon(text)}</ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItem>
-            ))}
-          </List>
         </Drawer>
 
         <main className={classes.content}>
