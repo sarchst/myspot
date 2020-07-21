@@ -1,8 +1,10 @@
 import { SET_CURRENT_USER, LOG_OUT } from "../actions/userActions";
+import { FETCH_PROFILEPIC_SUCCESS } from "../actions/imageUploadActions";
 
 const initialState = {
   id: "",
   username: "",
+  profilePic: "",
 };
 
 export const user = (state = initialState, action) => {
@@ -18,6 +20,11 @@ export const user = (state = initialState, action) => {
         ...state,
         id: "",
         username: "",
+      };
+    case FETCH_PROFILEPIC_SUCCESS:
+      return {
+        ...state,
+        profilePic: action.payload,
       };
     default:
       return state;

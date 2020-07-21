@@ -3,7 +3,8 @@ import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 import Divider from "@material-ui/core/Divider";
 import Switch from "@material-ui/core/Switch";
-import Button from "@material-ui/core/Button";
+// import Button from "@material-ui/core/Button";
+import ImageUpload from "./ImageUpload";
 // import InputLabel from "@material-ui/core/InputLabel";
 // import MenuItem from "@material-ui/core/MenuItem";
 // import FormControl from "@material-ui/core/FormControl";
@@ -11,7 +12,7 @@ import Button from "@material-ui/core/Button";
 import { connect } from "react-redux";
 import { withStyles } from "@material-ui/core/styles";
 import { Typography } from "@material-ui/core";
-import AccountCircleIcon from "@material-ui/icons/AccountCircle";
+// import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import {
   toggleNotifications,
   // toggleDarkmode,
@@ -57,6 +58,12 @@ const styles = (theme) => ({
     justify: "space-between",
     alignItems: "center",
   },
+  profilecard: {
+    padding: theme.spacing(2),
+    // margin: theme.spacing(2),
+    textAlign: "left",
+    color: theme.palette.text.secondary,
+  },
 });
 
 // const languages = ["English", "French", "Spanish"];
@@ -95,27 +102,33 @@ class Settings extends React.Component {
   };
 
   render() {
-    const { classes, user } = this.props;
+    const { classes } = this.props;
     return (
       <div className={classes.root}>
         <Typography className={classes.header}>Account Settings</Typography>
         <Divider className={classes.divider} />
         <Grid container spacing={3}>
           <Grid item xs={12}>
-            <Paper className={classes.paper}>
+            {/* <Paper className={classes.paper}>
               <Grid className={classes.userdata} container>
-                {/* TODO: will we allow user to upload a new pic which is different from their spotify account pic? */}
                 <AccountCircleIcon className={classes.profilePic} />
                 <Grid className={classes.content} item>
                   <Grid item>
                     <Typography>Username: {user.username}</Typography>
                   </Grid>
-                  {/* <Grid item>
+                  <Grid item>
                     <Typography>Email: associatedEmail@gmail.com</Typography>
-                  </Grid> */}
+                  </Grid>
                 </Grid>
               </Grid>
-            </Paper>
+            </Paper> */}
+            {/* <Paper className={classes.paper}> */}
+            <Grid item xs={12} className={classes.profilecard}>
+              <ImageUpload />
+            </Grid>
+
+            {/* </Paper> */}
+
             {/* <Divider className={classes.divider} /> */}
             <Grid item xs={12}>
               <Paper className={classes.paper}>
@@ -171,13 +184,13 @@ class Settings extends React.Component {
               </Paper>
             </Grid>
             {/* <Divider className={classes.divider} /> */}
-            <Grid item xs={12}>
+            {/* <Grid item xs={12}>
               <Paper className={classes.paper}>
                 <Button variant="outlined" color="primary">
                   Disable My MySpot Account
                 </Button>
               </Paper>
-            </Grid>
+            </Grid> */}
           </Grid>
         </Grid>
       </div>

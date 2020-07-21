@@ -14,6 +14,9 @@ router.put("/user/posts/:id", UserContrl.addPost);
 
 router.put("/user/settings/:id", UserContrl.updateSettings);
 router.get("/user/settings/:id", UserContrl.getUserSettings);
+
+router.put("/user/profilepic/:id", UserContrl.updateProfilePic);
+router.get("/user/profilepic/:id", UserContrl.getProfilePic);
 /* GET users listing. */
 router.get("/", function (req, res, next) {
   res.send("respond with a resource");
