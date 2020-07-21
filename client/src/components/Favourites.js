@@ -38,7 +38,7 @@ const styles = (theme) => ({
     padding: theme.spacing(0),
   },
 });
-// todo: (Sarchen) reuse songlist component
+
 class Favourites extends React.Component {
   constructor(props) {
     super(props);
