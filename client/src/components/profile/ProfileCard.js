@@ -19,7 +19,7 @@ import PlayCircleOutlineIcon from "@material-ui/icons/PlayCircleOutline";
 
 const styles = (theme) => ({
   card: {
-    borderRadius: 12,
+    borderRadius: 16,
     minWidth: 256,
     textAlign: "center",
   },
@@ -117,7 +117,8 @@ class ProfileCard extends React.Component {
 
     return (
       <Card
-      // className={cx(styles.card, shadowStyles.root)}
+        // className={cx(styles.card, shadowStyles.root)}
+        className={classes.card}
       >
         <CardContent className={classes.profileCardBox}>
           <Avatar

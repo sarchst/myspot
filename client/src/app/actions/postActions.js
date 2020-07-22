@@ -42,23 +42,18 @@ export const makePost = (post) => {
   console.log("Post from actions: ", post);
   const id = post.authorId;
   return (dispatch) => {
-    return (
-      axios
-        .put(`http://localhost:9000/user/posts/${id}`, post)
-        // .then((res) => {
-        //   console.log("Res: ", res);
-        // dispatch(makePostSuccess(res.data.posts));
-        // })
-        .then(() => {
-          dispatch(fetchPosts(id));
-        })
-        .then(() => {
-          dispatch(fetchFeed(id));
-        })
-        .catch((error) => {
-          throw error;
-        })
-    );
+    return axios
+      .put(`http://localhost:9000/user/posts/${id}`, post)
+
+      .then(() => {
+        dispatch(fetchPosts(id));
+      })
+      .then(() => {
+        dispatch(fetchFeed(id));
+      })
+      .catch((error) => {
+        throw error;
+      });
   };
 };
 
