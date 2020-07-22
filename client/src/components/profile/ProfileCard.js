@@ -16,6 +16,7 @@ import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import ListItem from "@material-ui/core/ListItem";
 import ListSubheader from "@material-ui/core/ListSubheader";
 import PlayCircleOutlineIcon from "@material-ui/icons/PlayCircleOutline";
+import MusicOffOutlinedIcon from "@material-ui/icons/MusicOffOutlined";
 
 const styles = (theme) => ({
   card: {
@@ -81,6 +82,8 @@ class ProfileCard extends React.Component {
     spotifyWebApi.setAccessToken(this.props.spotifyWebApi);
   }
   componentDidMount = () => {
+    // get top tracks for arbitrary user
+
     spotifyWebApi
       .getMyTopTracks()
       .then((result) => {
@@ -177,39 +180,51 @@ class ProfileCard extends React.Component {
                 </ListSubheader>
               }
             >
-              {this.state.topTracks.map((track, idx) => (
-                <ListItem
-                  key={idx}
-                  button={true}
-                  onClick={() => this.setPlayerSong(track.preview_url)}
-                >
-                  <Box pr={1} pt={1}>
-                    <PlayCircleOutlineIcon />
-                  </Box>
-                  <ListItemAvatar>
-                    <Avatar
-                      src={
-                        track.album.images.length
-                          ? track.album.images[0].url
-                          : null
-                      }
-                    ></Avatar>
-                  </ListItemAvatar>
-                  <ListItemText
-                    primary={track.name}
-                    secondary={track.album.artists.map(
-                      (artist, idx) =>
-                        artist.name +
-                        (idx < track.album.artists.length - 1 ? " | " : "")
-                    )}
-                  />
-                  {/*<ListItemSecondaryAction>*/}
-                  {/*  <IconButton edge="start" aria-label="delete">*/}
+              {this.state.topTracks.map((track, idx) => {
+                const isPlaybackAvailable = track.preview_url ? true : false;
+                return (
+                  <ListItem
+                    key={idx}
+                    button={isPlaybackAvailable}
+                    onClick={
+                      isPlaybackAvailable
+                        ? () => this.setPlayerSong(track.preview_url)
+                        : null
+                    }
+                  >
+                    <Box pr={1} pt={1}>
+                      {isPlaybackAvailable ? (
+                        <PlayCircleOutlineIcon />
+                      ) : (
+                        <MusicOffOutlinedIcon color={"#757ce8"} />
+                      )}
+                    </Box>
+                    <ListItemAvatar>
+                      <Avatar
+                        variant="square"
+                        src={
+                          track.album.images.length
+                            ? track.album.images[0].url
+                            : null
+                        }
+                      ></Avatar>
+                    </ListItemAvatar>
+                    <ListItemText
+                      primary={track.name}
+                      secondary={track.album.artists.map(
+                        (artist, idx) =>
+                          artist.name +
+                          (idx < track.album.artists.length - 1 ? " | " : "")
+                      )}
+                    />
+                    {/*<ListItemSecondaryAction>*/}
+                    {/*  <IconButton edge="start" aria-label="delete">*/}
 
-                  {/*  </IconButton>*/}
-                  {/*</ListItemSecondaryAction>*/}
-                </ListItem>
-              ))}
+                    {/*  </IconButton>*/}
+                    {/*</ListItemSecondaryAction>*/}
+                  </ListItem>
+                );
+              })}
             </List>
           </Box>
           <Box

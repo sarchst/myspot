@@ -185,7 +185,7 @@ class Sidebar extends React.Component {
                 <ListItemIcon>{<AccountCircleIcon />}</ListItemIcon>
                 <ListItemText
                   primary={this.props.user.username}
-                  color="inhereit"
+                  color="inherit"
                 />
               </Link>
             </ListItem>

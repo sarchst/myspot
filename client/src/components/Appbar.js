@@ -10,7 +10,7 @@ import Button from "@material-ui/core/Button";
 import SettingsIcon from "@material-ui/icons/Settings";
 import { withStyles } from "@material-ui/core";
 import { toggleSidebar } from "../app/actions";
-import { logOut } from "../app/actions/userActions";
+// import { logOut } from "../app/actions/userActions";
 import contentType from "../data/ContentTypeEnum";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
@@ -114,13 +114,14 @@ class Appbar extends React.Component {
             <Button color="inherit">{contentType.FEED}</Button>
           </Link>
 
-          <Button
-            className={classes.appbarButton}
-            color="inherit"
-            onClick={this.logOut}
-          >
-            Logout
-          </Button>
+          {/*<Button*/}
+          {/*  className={classes.appbarButton}*/}
+          {/*  color="inherit"*/}
+          {/*  onClick={this.logOut}*/}
+          {/*>*/}
+          {/*  Logout*/}
+          {/*</Button>*/}
+
           <Link
             to={"/" + this.props.user.username + "/settings"}
             className={classes.appbarButton}
@@ -145,7 +146,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     toggleSidebar: () => dispatch(toggleSidebar()),
-    logOut: () => dispatch(logOut()),
+    // logOut: () => dispatch(logOut()),
   };
 };
 
