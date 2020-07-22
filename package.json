@@ -5,7 +5,7 @@
     "pure-react-carousel": "^1.27.1"
   },
   "scripts": {
-    "devstart": "concurrently \"cd server/auth-server/authorization_code && node app.js\" \"cd server && yarn devstart\" \"cd client && yarn start\"",
+    "devstart": "concurrently \"cd server && yarn devstart\" \"cd client && yarn start\"",
     "start": "concurrently \"cd server/auth-server/authorization_code && node app.js\" \"cd server && yarn start\" \"cd client && yarn start\""
   }
 }

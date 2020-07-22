@@ -28,6 +28,8 @@ function Copyright() {
   );
 }
 
+let loginURL = "http://localhost:9000/login";
+
 const styles = (theme) => ({
   root: {
     height: "100vh",
@@ -100,7 +102,7 @@ class Login extends React.Component {
               <Button
                 className={classes.login}
                 type="login"
-                href={"http://localhost:8888/login"}
+                href={loginURL}
                 fullWidth
                 variant="contained"
                 color="secondary"
