@@ -292,6 +292,54 @@ updateProfilePic = async (req, res) => {
   });
 };
 
+getFollowers = (req, res) => {
+  User.find({ _id: req.params.id }, "followers", (err, followers) => {
+    if (err) {
+      return res.status(400).json({ success: false, error: err });
+    }
+    if (followers === null) {
+      return res.status(404).json({ sucess: false, error: "User not found" });
+    }
+  })
+    .populate({
+      path: "followers",
+    })
+    .exec((err, followers) => {
+      if (err) {
+        return res.status(400).json({ success: false, error: err });
+      }
+      return res.status(200).json({ success: true, data: followers });
+    });
+};
+
+getFollowing = (req, res) => {
+  User.find({ _id: req.params.id }, "following", (err, following) => {
+    if (err) {
+      return res.status(400).json({ success: false, error: err });
+    }
+    if (following === null) {
+      return res.status(404).json({ sucess: false, error: "User not found" });
+    }
+  })
+    .populate({
+      path: "following",
+    })
+    .exec((err, following) => {
+      if (err) {
+        return res.status(400).json({ success: false, error: err });
+      }
+      return res.status(200).json({ success: true, data: following });
+    });
+};
+
+addFollowingFollowerRelationship = (req, res) => {
+  // TODO put on user to follow and put on user following
+};
+
+removeFollowingFollowerRelationship = (req, res) => {
+  // TODO delete on user to follow and delete on user following
+};
+
 module.exports = {
   createUser,
   updateUser,
@@ -304,4 +352,8 @@ module.exports = {
   getUserSettings,
   updateProfilePic,
   getProfilePic,
+  getFollowers,
+  getFollowing,
+  addFollowingFollowerRelationship,
+  removeFollowingFollowerRelationship,
 };

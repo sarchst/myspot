@@ -17,6 +17,15 @@ router.get("/user/settings/:id", UserContrl.getUserSettings);
 
 router.put("/user/profilepic/:id", UserContrl.updateProfilePic);
 router.get("/user/profilepic/:id", UserContrl.getProfilePic);
+
+router.get("/user/followers/:id", UserContrl.getFollowers);
+router.get("/user/following/:id", UserContrl.getFollowing);
+//router.put("/user/following/:id", UserContrl.addFollowFollowingRelationship);
+// router.delete(
+//   "/user/following/:id",
+//   UserContrl.removeFollowingFollowerRelationship
+// );
+
 /* GET users listing. */
 router.get("/", function (req, res, next) {
   res.send("respond with a resource");
