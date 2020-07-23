@@ -1,36 +1,12 @@
 {
-  "name": "myspot",
-  "version": "0.1.0",
-  "private": true,
   "dependencies": {
-    "@reduxjs/toolkit": "^1.1.0",
-    "@testing-library/jest-dom": "^4.2.4",
-    "@testing-library/react": "^9.3.2",
-    "@testing-library/user-event": "^7.1.2",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1",
-    "react-redux": "^7.1.3",
-    "react-scripts": "3.4.1"
+    "concurrently": "^5.2.0",
+    "css-loader": "^3.6.0",
+    "dotenv": "^8.2.0",
+    "pure-react-carousel": "^1.27.1"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
-  },
-  "eslintConfig": {
-    "extends": "react-app"
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+    "devstart": "concurrently \"cd server && yarn devstart\" \"cd client && yarn start\"",
+    "start": "concurrently \"cd server/auth-server/authorization_code && node app.js\" \"cd server && yarn start\" \"cd client && yarn start\""
   }
 }
