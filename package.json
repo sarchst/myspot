@@ -6,7 +6,7 @@
     "pure-react-carousel": "^1.27.1"
   },
   "scripts": {
-    "start": "cd server && yarn start",
+    "start": "cd server && yarn && yarn start",
     "heroku-postbuild": "cd client && yarn && yarn build"
   }
 }
