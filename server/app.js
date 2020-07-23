@@ -124,7 +124,7 @@ app.get("/callback", function (req, res) {
 
         // we can also pass the token to the browser to make requests from there
         res.redirect(
-          "http://localhost:3000/#" +
+          "https://myspotmusic.herokuapp.com/#" +
             querystring.stringify({
               access_token: access_token,
               refresh_token: refresh_token,
