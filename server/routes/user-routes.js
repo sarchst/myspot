@@ -31,4 +31,8 @@ router.get("/", function (req, res, next) {
   res.send("respond with a resource");
 });
 
+router.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "..", "client/build/index.html"));
+});
+
 module.exports = router;

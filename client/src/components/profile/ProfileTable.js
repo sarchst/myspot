@@ -38,7 +38,7 @@ class ProfileTable extends React.Component {
         console.log("error getting top tracks");
         console.log(err);
       });
-    fetch(`http://localhost:9000/user/following/${this.props.user.id}`)
+    fetch(`/user/following/${this.props.user.id}`)
       .then((res) => res.json())
       .then((res) => {
         if (res.error) {
@@ -51,7 +51,7 @@ class ProfileTable extends React.Component {
       .catch((error) => {
         console.log("Fetch Following Error: ", error);
       });
-    fetch(`http://localhost:9000/user/followers/${this.props.user.id}`)
+    fetch(`/user/followers/${this.props.user.id}`)
       .then((res) => res.json())
       .then((res) => {
         if (res.error) {

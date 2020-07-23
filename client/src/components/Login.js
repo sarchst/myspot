@@ -28,7 +28,7 @@ function Copyright() {
   );
 }
 
-let loginURL = "http://localhost:9000/login";
+let loginURL = "/login";
 
 const styles = (theme) => ({
   root: {

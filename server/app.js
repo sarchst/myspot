@@ -9,16 +9,16 @@ var querystring = require("querystring");
 const db = require("./db");
 require("dotenv").config();
 
-// var indexRouter = require("./routes/index");
 var userRouter = require("./routes/user-routes");
 const bodyParser = require("body-parser");
-// var usersRouter = require("./routes/users");
 
 var app = express();
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "jade");
+
+app.use(express.static(path.join(__dirname, "..", "client/build")));
 
 app.use(logger("dev"));
 app.use(express.json());
@@ -35,7 +35,7 @@ app.use(bodyParser.json());
  */
 var client_id = process.env.SPOTIFY_CLIENT_ID; // Your client id
 var client_secret = process.env.SPOTIFY_CLIENT_SECRET; // Your secret
-var redirect_uri = process.env.REDIRECT_URI || "http://localhost:9000/callback"; // Your redirect uri
+var redirect_uri = process.env.REDIRECT_URI || "/callback"; // Your redirect uri
 
 /**
  * Generates a random string containing numbers and letters

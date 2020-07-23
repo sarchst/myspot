@@ -43,7 +43,7 @@ export const makePost = (post) => {
   const id = post.authorId;
   return (dispatch) => {
     return axios
-      .put(`http://localhost:9000/user/posts/${id}`, post)
+      .put(`/user/posts/${id}`, post)
 
       .then(() => {
         dispatch(fetchPosts(id));
@@ -60,7 +60,7 @@ export const makePost = (post) => {
 export function fetchPosts(id) {
   return (dispatch) => {
     dispatch(fetchPostsStarted());
-    fetch(`http://localhost:9000/user/posts/${id}`)
+    fetch(`/user/posts/${id}`)
       .then((res) => res.json())
       .then((res) => {
         if (res.error) {

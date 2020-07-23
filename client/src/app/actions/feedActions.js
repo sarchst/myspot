@@ -39,7 +39,7 @@ export function addPostsToFeed(data) {
 export function fetchFeed(id) {
   return (dispatch) => {
     dispatch(fetchFeedStarted());
-    fetch(`http://localhost:9000/user/feed/${id}`)
+    fetch(`/user/feed/${id}`)
       .then((res) => res.json())
       .then((res) => {
         if (res.error) {
@@ -59,16 +59,15 @@ export function fetchFeed(id) {
         }
 
         // console.log(followerSet);
-        
 
         // // console.log(numFollowing);
-        let feed = res[0].posts; 
+        let feed = res[0].posts;
         for (let i = 0; i < numFollowing; i++) {
           feed = feed.concat(res[0].following[i].posts);
         }
         // console.log(feed);
 
-        // add profilePic info to each feed 
+        // add profilePic info to each feed
         for (let i = 0; i < feed.length; i++) {
           feed[i].profilePic = followerSet[feed[i].authorId];
         }

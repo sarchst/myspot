@@ -41,7 +41,7 @@ export const saveAndUpdateProfilePic = (files, id) => {
           // console.log("url is " + url);
 
           return axios
-            .put(`http://localhost:9000/user/profilepic/${id}`, {
+            .put(`/user/profilepic/${id}`, {
               profilePic: url,
             })
             .then((res) => {
@@ -73,7 +73,7 @@ export const fetchProfilePicSuccess = (url) => {
 
 export const fetchProfilePic = (id) => {
   return (dispatch) => {
-    fetch(`http://localhost:9000/user/profilepic/${id}`)
+    fetch(`/user/profilepic/${id}`)
       .then((res) => res.json())
       .then((res) => {
         if (res.error) {
@@ -91,7 +91,7 @@ export const fetchProfilePic = (id) => {
 
 export async function fetchProfilePicById(id) {
   // return (dispatch) => {
-  fetch(`http://localhost:9000/user/profilepic/${id}`)
+  fetch(`/user/profilepic/${id}`)
     .then((res) => res.json())
     .then((res) => {
       if (res.error) {

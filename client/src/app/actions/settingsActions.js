@@ -35,7 +35,7 @@ export const fetchUserSettings = (id) => {
   // console.log("top of fetch user settings");
   // console.log(id);
   return (dispatch) => {
-    fetch(`http://localhost:9000/user/settings/${id}`)
+    fetch(`/user/settings/${id}`)
       .then((res) => res.json())
       .then((res) => {
         if (res.error) {
@@ -55,7 +55,7 @@ export const fetchUserSettings = (id) => {
 //   console.log("top of fetch user settings");
 //   return (dispatch) => {
 //     return axios
-//       .get(`http://localhost:9000/user/settings/${id}`)
+//       .get(`/user/settings/${id}`)
 //       .then((res) => {
 //         console.log("Res " + JSON.stringify(res));
 //         dispatch(fetchUserSettingsSuccess(res.data.settings));
@@ -75,7 +75,7 @@ export const updateSettings = (settings, id) => {
     // console.log("current user is " + id);
     // console.log("settings are :" + JSON.stringify(settings));
     axios
-      .put(`http://localhost:9000/user/settings/${id}`, settings)
+      .put(`/user/settings/${id}`, settings)
       .then((res) => {
         // console.log("Update settings response: " + JSON.stringify(res));
         // console.log("settings only: " + JSON.stringify(res.data.settings));
