@@ -6,6 +6,7 @@ import { fetchPosts } from "../app/actions/postActions";
 import Post from "./feed/Post";
 import MakePost from "./feed/MakePost";
 import ProfileCard from "./profile/ProfileCard";
+import ProfileTable from "./profile/ProfileTable";
 import { fetchUserSettings } from "../app/actions/settingsActions";
 import { fetchProfilePic } from "../app/actions/imageUploadActions";
 
@@ -38,6 +39,7 @@ class Profile extends React.Component {
     return (
       <div className={classes.root}>
         <ProfileCard />
+        <ProfileTable />
         <MakePost />
         <div>
           {this.props.posts && this.props.posts.length ? (
