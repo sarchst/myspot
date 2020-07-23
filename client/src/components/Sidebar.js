@@ -34,7 +34,7 @@ import contentType from "../data/ContentTypeEnum";
 // import FeedPage from "./content-page/FeedPage";
 // import HomePage from "./content-page/HomePage";
 
-import { Link, Route, Switch } from "react-router-dom";
+import { Link, Route, Switch, Redirect } from "react-router-dom";
 
 import Followers from "./Followers";
 import Following from "./Following";
@@ -261,6 +261,7 @@ class Sidebar extends React.Component {
               path="/:user/playlists/:playlistid"
               render={(props) => <SongList {...props} />}
             />
+            <Route render={() => <Redirect to={"/" + this.props.user.username} />}/>
           </Switch>
         </main>
       </div>

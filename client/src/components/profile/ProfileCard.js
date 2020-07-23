@@ -84,8 +84,7 @@ class ProfileCard extends React.Component {
   }
   componentDidMount = () => {
     // TODO: replace user_ID with this.props.user_ID once working
-    let user_ID =
-      this.props.user_ID || this.props.spotifyApiUserMe.display_name;
+    let user_ID = this.props.user_ID || this.props.user.id;
     // get top tracks for arbitrary user
     fetch(`http://localhost:9000/user/${user_ID}`)
       .then((response) => response.json())
