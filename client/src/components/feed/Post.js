@@ -1,8 +1,16 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { compose } from "redux";
+
+import { withStyles } from "@material-ui/core/styles";
 import {
+  Accordion,
+  AccordionActions,
+  AccordionDetails,
+  AccordionSummary,
   Avatar,
+  Button,
+  Divider,
   Grid,
   IconButton,
   FormControl,
@@ -12,25 +20,17 @@ import {
   MenuItem,
   Paper,
   InputLabel,
+  Typography,
 } from "@material-ui/core";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import EmojiEmotionsIcon from "@material-ui/icons/EmojiEmotions";
 import LibraryAddIcon from "@material-ui/icons/LibraryAdd";
 import ReplyIcon from "@material-ui/icons/Reply";
 import ShareIcon from "@material-ui/icons/Share";
-import { withStyles } from "@material-ui/core/styles";
 import AlbumIcon from "@material-ui/icons/Album";
 import MusicNoteIcon from "@material-ui/icons/MusicNote";
 import PlaylistAddIcon from "@material-ui/icons/PlaylistAdd";
-// import { Link as RouterLink } from "react-router-dom";
-import Accordion from "@material-ui/core/Accordion";
-import AccordionDetails from "@material-ui/core/AccordionDetails";
-import AccordionSummary from "@material-ui/core/AccordionSummary";
-import AccordionActions from "@material-ui/core/AccordionActions";
-import Typography from "@material-ui/core/Typography";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import Button from "@material-ui/core/Button";
-import Divider from "@material-ui/core/Divider";
 
 const styles = (theme) => ({
   root: {
@@ -43,12 +43,10 @@ const styles = (theme) => ({
     display: "flex",
     padding: 10,
     square: true,
-    // borderRadius: 16,
     borderTopLeftRadius: 16,
     borderTopRightRadius: 16,
     borderBottomLeftRadius: 0,
     borderBottomRightRadius: 0,
-    // margin: 5,
   },
   display: {
     display: "flex",
@@ -118,16 +116,6 @@ const styles = (theme) => ({
     "&:hover": {
       textDecoration: "underline",
     },
-  },
-  comment: {
-    // display: "flex",
-    // padding: 10,
-    // square: true,
-    borderBottomLeftRadius: 16,
-    borderBottomRightRadius: 16,
-    // borderTopLeftRadius: 0,
-    // borderTopRightRadius: 0,
-    // margin: 5,
   },
 });
 
@@ -346,7 +334,15 @@ class Post extends Component {
         </Paper>
         <Divider />
         <Grid>
-          <Accordion square={true} defaultExpanded={false}>
+          <Accordion
+            defaultExpanded={false}
+            style={{
+              borderBottomLeftRadius: 16,
+              borderBottomRightRadius: 16,
+              borderTopLeftRadius: 0,
+              borderTopRightRadius: 0,
+            }}
+          >
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
               aria-controls="panel1c-content"
