@@ -261,7 +261,7 @@ class Sidebar extends React.Component {
               path="/:user/playlists/:playlistid"
               render={(props) => <SongList {...props} />}
             />
-            <Route render={() => <Redirect to="/:user" />}/>
+            <Route render={() => <Redirect to={"/" + this.props.user.id} />}/>
           </Switch>
         </main>
       </div>
