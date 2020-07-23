@@ -216,9 +216,9 @@ class ProfileCard extends React.Component {
                   >
                     <Box pr={1} pt={1}>
                       {isPlaybackAvailable ? (
-                        <PlayCircleOutlineIcon />
+                        <PlayCircleOutlineIcon color={"secondary"} />
                       ) : (
-                        <MusicOffOutlinedIcon />
+                        <MusicOffOutlinedIcon color={"secondary"} />
                       )}
                     </Box>
                     <ListItemAvatar>
@@ -276,9 +276,9 @@ class ProfileCard extends React.Component {
                   >
                     <Box pr={1} pt={1}>
                       {isPlaybackAvailable ? (
-                        <PlayCircleOutlineIcon />
+                        <PlayCircleOutlineIcon color={"secondary"} />
                       ) : (
-                        <MusicOffOutlinedIcon color={"#757ce8"} />
+                        <MusicOffOutlinedIcon color={"secondary"} />
                       )}
                     </Box>
                     <ListItemAvatar>
