@@ -8,7 +8,6 @@ import Avatar from "@material-ui/core/Avatar";
 import Divider from "@material-ui/core/Divider";
 import { withStyles } from "@material-ui/core/styles";
 import { connect } from "react-redux";
-import * as palette from "@material-ui/core/colors";
 import Spotify from "spotify-web-api-js";
 import List from "@material-ui/core/List";
 import ListItemText from "@material-ui/core/ListItemText";
@@ -17,6 +16,7 @@ import ListItem from "@material-ui/core/ListItem";
 import ListSubheader from "@material-ui/core/ListSubheader";
 import PlayCircleOutlineIcon from "@material-ui/icons/PlayCircleOutline";
 import MusicOffOutlinedIcon from "@material-ui/icons/MusicOffOutlined";
+import Emoji from "react-emoji-render";
 
 const styles = (theme) => ({
   card: {
@@ -30,27 +30,29 @@ const styles = (theme) => ({
     margin: "auto",
   },
   heading: {
-    fontSize: 18,
+    fontSize: "large",
     fontWeight: "bold",
     letterSpacing: "0.5px",
     marginTop: 8,
     marginBottom: 0,
   },
   subheader: {
-    fontSize: 14,
-    color: palette.grey[500],
+    fontSize: "small",
+    color: theme.palette.secondary.main,
     marginBottom: "0.875em",
+    fontWeight: "bold",
   },
   statLabel: {
-    fontSize: 12,
-    color: palette.grey[500],
-    fontWeight: 500,
+    fontSize: "medium",
+    // color: palette.grey[500],
+    color: theme.palette.primary.main,
+    fontWeight: "bold",
     fontFamily:
       '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
     margin: 0,
   },
   statValue: {
-    fontSize: 20,
+    fontSize: "large",
     fontWeight: "bold",
     marginBottom: 4,
     letterSpacing: "1px",
@@ -66,6 +68,10 @@ const styles = (theme) => ({
   },
   audioPlayer: {
     width: "50%",
+  },
+  trackheader: {
+    fontSize: "medium",
+    fontWeight: "bold",
   },
 });
 
@@ -152,7 +158,10 @@ class ProfileCard extends React.Component {
           />
           <h3 className={classes.heading}>{this.state.userData.username}</h3>
           <span className={classes.subheader}>
-            {this.state.userData.country}
+            <Emoji text=":globe_showing_americas:" />
+            {/* unfortunately it seems like emoji flags aren't supported for windows10 so can only see it on mac */}
+            <Emoji text=":flag_canada:" />
+            <Emoji text=":globe_showing_americas:" />
           </span>
         </CardContent>
         <Divider light />
@@ -197,7 +206,12 @@ class ProfileCard extends React.Component {
               className={classes.listRoot}
               dense={true}
               subheader={
-                <ListSubheader component="div" id="nested-list-subheader">
+                <ListSubheader
+                  component="div"
+                  id="nested-list-subheader"
+                  color="primary"
+                  className={classes.trackheader}
+                >
                   My Top Tracks
                 </ListSubheader>
               }
@@ -255,7 +269,12 @@ class ProfileCard extends React.Component {
               className={classes.listRoot}
               dense={true}
               subheader={
-                <ListSubheader component="div" id="nested-list-subheader">
+                <ListSubheader
+                  component="div"
+                  id="nested-list-subheader"
+                  color="primary"
+                  className={classes.trackheader}
+                >
                   Recently Played Songs
                 </ListSubheader>
               }

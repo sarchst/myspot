@@ -6,7 +6,7 @@ import {
 
 const initialState = {
   notification: true,
-  darkMode: false,
+  darkMode: true,
   language: "English",
   disableAcc: false,
 };

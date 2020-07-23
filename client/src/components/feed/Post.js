@@ -37,7 +37,9 @@ const styles = (theme) => ({
     flexGrow: 1,
   },
   postContainer: {
-    margin: 15,
+    // margin: 15,
+    marginTop: theme.spacing(2),
+    marginBottom: theme.spacing(2),
   },
   paper: {
     display: "flex",
@@ -87,6 +89,7 @@ const styles = (theme) => ({
   },
   heading: {
     fontSize: theme.typography.pxToRem(15),
+    color: theme.palette.secondary.main,
   },
   secondaryHeading: {
     fontSize: theme.typography.pxToRem(15),
@@ -130,11 +133,11 @@ class Post extends Component {
   chooseIcon = (media) => {
     switch (media) {
       case "playlist":
-        return <PlaylistAddIcon />;
+        return <PlaylistAddIcon color={"primary"} />;
       case "album":
-        return <AlbumIcon />;
+        return <AlbumIcon color={"primary"} />;
       default:
-        return <MusicNoteIcon />;
+        return <MusicNoteIcon color={"primary"} />;
     }
   };
 
@@ -359,12 +362,13 @@ class Post extends Component {
                 <li>Comment 1</li>
               </ul>
               <FormControl fullWidth>
-                <InputLabel htmlFor="standard-basic">
+                <InputLabel htmlFor="standard-basic" color={"secondary"}>
                   Leave a comment below
                 </InputLabel>
                 <Input
                   value={this.state.content}
                   onChange={this.handleChange}
+                  color={"secondary"}
                 />
               </FormControl>
               <div className={classes.column} />
@@ -372,7 +376,7 @@ class Post extends Component {
             <Divider />
             <AccordionActions>
               <Button size="small">Cancel</Button>
-              <Button size="small" color="primary">
+              <Button size="small" color="secondary" variant="contained">
                 Post
               </Button>
             </AccordionActions>
