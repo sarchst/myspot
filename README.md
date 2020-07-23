@@ -2,7 +2,7 @@
 
 ### Description:
 
-  MySpot is a social media platform for music lovers who want to socially connect with other music lovers. Users log in through their Spotify accounts so they can access their Spotify songs and playlists on MySpot. MySpot will allow users manage, post, and share music (playlists, albums, songs) with others, follow and message other users, see what other users are listening to, and add playlists from MySpot to their Spotify accounts. 
+MySpot is a social media platform for music lovers who want to connect with other music lovers. MySpot allows users to share music posts (playlists, albums, songs), see what their fellow MySpotters are listening to, build playlists, and discover new music. 
 
 ### Project Task Requirements:
 
@@ -14,16 +14,16 @@
 4. Edit/View your own playlist
 5. Search for songs/albums
     
-**3-7 "standard" requirements (will most likely complete)**
-1. Chat/  Message ability with other User’s
-2. Show followers what you’re listening to live
-   * See what your followees are listening to live
-3. Dashboard/ Feed
+**3-7 "standard" requirements (will most likely complete)** 
+1. Show followers what you’re listening 
+   * See what your followees are listening 
+2. Dashboard/ Feed
    * Different types of posts (ie. playlists, songs, artists..)
    * Share playlists/song/album with others (default post is playlist) onto the Feed
-4. Follower/ Followee Actions
-5. Playlists on web app directly edit your Spotify playlists
-6. Get recommendations based on you like
+3. Follower/ Followee Actions
+4. Playlists on web app directly edit your Spotify playlists
+5. Get recommendations based on you like
+6. Chat/  Message ability with other User’s
 
 **2-3 stretch requirements (plan to complete 1!)**
 1. Tinderify (swipe left or right on randomly generated playlists to add them to your playlists)
