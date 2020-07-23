@@ -4,7 +4,7 @@ export const submitSpotifyApiUserMe = (SpotifyApiUserInfoMe) => {
   return (dispatch) => {
     // save to mongodb via mongoose.prototype.save()
     let mongoUserObject = {
-      _id: SpotifyApiUserInfoMe.id,
+      _id: SpotifyApiUserInfoMe.display_name,
       username: SpotifyApiUserInfoMe.display_name,
       profilePic:
         SpotifyApiUserInfoMe.images.length !== 0
