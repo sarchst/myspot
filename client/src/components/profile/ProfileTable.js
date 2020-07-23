@@ -4,13 +4,11 @@ import Spotify from "spotify-web-api-js";
 
 import MaterialTable from "material-table";
 import { Paper, Tab, Tabs } from "@material-ui/core";
-import { TabContext, TabPanel } from "@material-ui/lab";
-import { withStyles } from "@material-ui/core/styles";
+import { withStyles, createMuiTheme } from "@material-ui/core/styles";
 
 const styles = (theme) => ({
   root: {
     flexGrow: 1,
-    // display: "flex",
     padding: 10,
     borderRadius: 16,
     margin: 5,
@@ -97,8 +95,9 @@ class ProfileTable extends React.Component {
   handleChange = (event, index) => {
     if (index === this.state.tabIndex) {
       this.setState({ tabIndex: false });
+    } else {
+      this.setState({ tabIndex: index });
     }
-    this.setState({ tabIndex: index });
   };
 
   getPanel = (index) => {
@@ -106,18 +105,27 @@ class ProfileTable extends React.Component {
     if (index === 0) {
       return (
         <MaterialTable
+          components={{
+            Container: (props) => (
+              <Paper {...props} elevation={0} style={{ boxShadow: 0 }} />
+            ),
+          }}
           columns={[
             {
-              title: "Playlist Art",
+              title: "Playlist",
               field: "playlistArt",
               render: (rowData) => (
                 <img
                   src={rowData.playlistArt}
+                  alt={"Playlist Art"}
                   style={{ width: 40, height: 40, borderRadius: 16 }}
                 />
               ),
+              headerStyle: { width: "50px" },
+              cellStyle: { width: "50px" },
+              width: null,
             },
-            { title: "Title", field: "title" },
+            { title: "", field: "title" },
             { title: "# of Tracks", field: "numTracks" },
             { title: "Owner", field: "owner" },
           ]}
@@ -127,25 +135,34 @@ class ProfileTable extends React.Component {
             search: false,
             paging: false,
             toolbar: false,
+            sorting: false,
           }}
         />
       );
     } else {
       return (
         <MaterialTable
+          components={{
+            Container: (props) => (
+              <Paper {...props} elevation={0} style={{ boxShadow: 0 }} />
+            ),
+          }}
           columns={[
             {
-              title: "",
+              title: "MySpotter",
               field: "pic",
               render: (rowData) => (
                 <img
                   src={rowData.pic}
+                  alt={"ProfilePic"}
                   style={{ width: 40, height: 40, borderRadius: 16 }}
                 />
               ),
-              cellStyle: { width: 50 },
+              headerStyle: { width: "50px" },
+              cellStyle: { width: "50px" },
+              width: null,
             },
-            { title: "Username", field: "username" },
+            { title: "", field: "username" },
             { title: "# of Posts", field: "numPosts" },
             { title: "# of Followers", field: "numFollowers" },
           ]}
@@ -159,6 +176,8 @@ class ProfileTable extends React.Component {
             search: false,
             paging: false,
             toolbar: false,
+            sorting: false,
+            rowStyle: { borderBottom: 0 },
           }}
         />
       );
