@@ -217,11 +217,6 @@ class ProfileCard extends React.Component {
                           (idx < track.album.artists.length - 1 ? " | " : "")
                       )}
                     />
-                    {/*<ListItemSecondaryAction>*/}
-                    {/*  <IconButton edge="start" aria-label="delete">*/}
-
-                    {/*  </IconButton>*/}
-                    {/*</ListItemSecondaryAction>*/}
                   </ListItem>
                 );
               })}
@@ -242,27 +237,46 @@ class ProfileCard extends React.Component {
                 </ListSubheader>
               }
             >
-              {this.state.recentTracks.map((item, idx) => (
-                <ListItem
-                  key={idx}
-                  alignItems={"center"}
-                  button={true}
-                  onClick={() => this.setPlayerSong(item.track.preview_url)}
-                >
-                  <Box pr={1} pt={1}>
-                    <PlayCircleOutlineIcon />
-                  </Box>
-                  <ListItemAvatar>
-                    <Avatar src={item.track.album.images[0].url}></Avatar>
-                  </ListItemAvatar>
-                  <ListItemText
-                    primary={item.track.name}
-                    secondary={
-                      "Played: " + new Date(item.played_at).toLocaleString()
+              {this.state.recentTracks.map((item, idx) => {
+                const isPlaybackAvailable = item.track.preview_url
+                  ? true
+                  : false;
+                return (
+                  <ListItem
+                    key={idx}
+                    button={isPlaybackAvailable}
+                    onClick={
+                      isPlaybackAvailable
+                        ? () => this.setPlayerSong(item.track.preview_url)
+                        : null
                     }
-                  />
-                </ListItem>
-              ))}
+                  >
+                    <Box pr={1} pt={1}>
+                      {isPlaybackAvailable ? (
+                        <PlayCircleOutlineIcon />
+                      ) : (
+                        <MusicOffOutlinedIcon color={"#757ce8"} />
+                      )}
+                    </Box>
+                    <ListItemAvatar>
+                      <Avatar
+                        variant="square"
+                        src={
+                          item.track.album.images.length
+                            ? item.track.album.images[0].url
+                            : null
+                        }
+                      ></Avatar>
+                    </ListItemAvatar>
+                    <ListItemText
+                      primary={item.track.name}
+                      secondary={
+                        "Played: " + new Date(item.played_at).toLocaleString()
+                      }
+                    />
+                  </ListItem>
+                );
+              })}
             </List>
           </Box>
         </Box>
