@@ -180,6 +180,8 @@ class Post extends Component {
 
   render() {
     const { classes, postdata, userId } = this.props;
+    const date = new Date(postdata.createdAt).toDateString();
+
     return (
       <div className={classes.postContainer}>
         <Paper className={classes.paper}>
@@ -203,7 +205,9 @@ class Post extends Component {
             </Grid>
             {/* TODO: change to <RouterLink> once route setup */}
             <Link className={classes.routerLink}>
-              <Grid item>{postdata.username}</Grid>
+              <Grid item>
+                <Typography>{postdata.username}</Typography>
+              </Grid>
             </Link>
           </Grid>
           <Grid container spacing={1}>
@@ -217,14 +221,16 @@ class Post extends Component {
               alignItems="flex-start"
             >
               <Grid item>{this.chooseIcon(postdata.type)}</Grid>
-              <Grid item>{postdata.content}</Grid>
+              <Grid item>
+                <Typography>{postdata.content}</Typography>
+              </Grid>
               <Grid item>
                 <Link
                   component="button"
                   variant="body2"
                   onClick={() => this.goToMedia()}
                 >
-                  {postdata.media}
+                  <Typography>{postdata.media}</Typography>
                 </Link>
               </Grid>
               {/* TODO add media art component? */}
@@ -237,6 +243,9 @@ class Post extends Component {
               justify="flex-end"
               alignItems="flex-start"
             >
+              <Grid item color="primary">
+                <Typography color="primary">{date}</Typography>
+              </Grid>
               <Grid item>
                 <IconButton
                   aria-label="more"

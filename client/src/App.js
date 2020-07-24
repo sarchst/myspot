@@ -78,7 +78,7 @@ const darkTheme = createMuiTheme({
       head: {
         color: "#03DAC6",
         fontSize: "medium",
-        fontWeight: "bold",
+        // fontWeight: "bold",
       },
     },
   },

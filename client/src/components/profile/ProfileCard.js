@@ -17,6 +17,7 @@ import ListSubheader from "@material-ui/core/ListSubheader";
 import PlayCircleOutlineIcon from "@material-ui/icons/PlayCircleOutline";
 import MusicOffOutlinedIcon from "@material-ui/icons/MusicOffOutlined";
 import Emoji from "react-emoji-render";
+import Typography from "@material-ui/core/Typography";
 
 const styles = (theme) => ({
   card: {
@@ -43,12 +44,12 @@ const styles = (theme) => ({
     fontWeight: "bold",
   },
   statLabel: {
-    fontSize: "medium",
+    // fontSize: "medium",
     // color: palette.grey[500],
     color: theme.palette.primary.main,
-    fontWeight: "bold",
-    fontFamily:
-      '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
+    // fontWeight: "bold",
+    // fontFamily:
+    // '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
     margin: 0,
   },
   statValue: {
@@ -172,7 +173,7 @@ class ProfileCard extends React.Component {
             flex={"auto"}
             // className={borderedGridStyles.item}
           >
-            <p className={classes.statLabel}>Followers</p>
+            <Typography className={classes.statLabel}>Followers</Typography>
             <p className={classes.statValue}>
               {this.state.userData.followers
                 ? this.state.userData.followers.length
@@ -186,7 +187,7 @@ class ProfileCard extends React.Component {
             flex={"auto"}
             // className={borderedGridStyles.item}
           >
-            <p className={classes.statLabel}>Following</p>
+            <Typography className={classes.statLabel}>Following</Typography>
             <p className={classes.statValue}>
               {this.state.userData.following
                 ? this.state.userData.following.length
@@ -212,7 +213,7 @@ class ProfileCard extends React.Component {
                   color="primary"
                   className={classes.trackheader}
                 >
-                  My Top Tracks
+                  <Typography>My Top Tracks</Typography>
                 </ListSubheader>
               }
             >
@@ -275,7 +276,7 @@ class ProfileCard extends React.Component {
                   color="primary"
                   className={classes.trackheader}
                 >
-                  Recently Played Songs
+                  <Typography>Recently Played Songs</Typography>
                 </ListSubheader>
               }
             >
