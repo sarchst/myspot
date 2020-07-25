@@ -29,7 +29,6 @@
   opacity: 1;
 }
 .avatar-flip {
-  /* border-radius: 100px; */
   overflow: hidden;
   height: 150px;
   width: 150px;
@@ -39,15 +38,11 @@
   transition: all 0.3s ease-in-out;
   -webkit-transition: all 0.3s ease-in-out;
   -moz-transition: all 0.3s ease-in-out;
-  /* box-shadow: 0 0 0 5px #ff655b;
-  -webkit-box-shadow: 0 0 0 5px #ff655b;
-  -moz-box-shadow: 0 0 0 5px #ff655b; */
 }
 .avatar-flip img {
   position: absolute;
   left: 0;
   top: 0;
-  /* border-radius: 100px; */
   transition: all 0.3s ease-in-out;
   -webkit-transition: all 0.3s ease-in-out;
   -moz-transition: all 0.3s ease-in-out;
@@ -61,22 +56,35 @@
   -webkit-transform: rotateY(180deg);
   opacity: 0;
 }
-
-h2 {
-  font-size: 32px;
-  font-weight: 600;
-  margin-bottom: 15px;
-  font-family: "Comfortaa", cursive;
-}
-h4 {
-  font-size: 17px;
-  letter-spacing: 1px;
-  margin-bottom: 25px;
-  font-family: "Comfortaa", cursive;
-}
-
 .tinderify-title {
   font-family: "Pacifico", cursive;
   font-size: 100px;
   align-self: center;
+  margin: 0;
+  padding: 0;
+  margin-bottom: 50px;
+  text-align: center;
+}
+.carousel-buttons {
+  text-align: center;
+}
+.carousel-buttons .button-prev {
+  margin-right: 50px;
+  /* font-family: "Pacifico", cursive; */
+  padding: 5px;
+  /* background-color: #ff9a6b; */
+  border-radius: 5px;
+  font-size: 20px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+.carousel-buttons .button-next {
+  margin-left: 50px;
+  /* font-family: "Pacifico", cursive; */
+  padding: 5px;
+  /* background-color: #ff9a6b; */
+  border-radius: 5px;
+  font-size: 20px;
+  padding-left: 10px;
+  padding-right: 10px;
 }
