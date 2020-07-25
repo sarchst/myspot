@@ -157,11 +157,22 @@ class ProfileTable extends React.Component {
               title: "MySpotter",
               field: "pic",
               render: (rowData) => (
-                <img
-                  src={rowData.pic}
-                  alt={"ProfilePic"}
-                  style={{ width: 40, height: 40, borderRadius: 16 }}
-                />
+                <Link
+                  to={{
+                    pathname: "/myspotter/" + rowData.username,
+                    state: {
+                      user_ID: rowData.user_ID,
+                    },
+                  }}
+                  params={{ user_ID: rowData.user_ID }}
+                  style={{ textDecoration: "none" }}
+                >
+                  <img
+                    src={rowData.pic}
+                    alt={"ProfilePic"}
+                    style={{ width: 40, height: 40, borderRadius: 16 }}
+                  />
+                </Link>
               ),
               headerStyle: { width: "50px" },
               cellStyle: { width: "50px" },
@@ -179,6 +190,7 @@ class ProfileTable extends React.Component {
                     },
                   }}
                   params={{ user_ID: rowData.user_ID }}
+                  style={{ textDecoration: "none", color: "#03DAC6" }}
                 >
                   {rowData.username}
                 </Link>
