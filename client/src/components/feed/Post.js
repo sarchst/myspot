@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { compose } from "redux";
-
+import { connect } from "react-redux";
 import { withStyles } from "@material-ui/core/styles";
 import {
   Accordion,
@@ -31,6 +31,9 @@ import AlbumIcon from "@material-ui/icons/Album";
 import MusicNoteIcon from "@material-ui/icons/MusicNote";
 import PlaylistAddIcon from "@material-ui/icons/PlaylistAdd";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import { deletePost } from "../../app/actions/postActions";
+import DeletePostDialog from "../DeletePostDialog";
+import { submitDeletePostDialog } from "../../app/actions";
 
 const styles = (theme) => ({
   root: {
@@ -122,7 +125,7 @@ const styles = (theme) => ({
   },
 });
 
-const menuOptions = ["edit", "delete", "report"];
+// const menuOptions = ["edit", "delete", "report"];
 
 class Post extends Component {
   state = {
@@ -158,6 +161,15 @@ class Post extends Component {
     // TODO share spotify media
     console.log(type);
   };
+  handleDelete = (postId) => {
+    const payload = {
+      open: this.props.delPostDialog.open,
+      postId: postId,
+    };
+    console.log(payload);
+    this.props.submitDeletePostDialog(payload);
+    this.closeOptions();
+  };
 
   addPostMedia = (type) => {
     // TODO: add song, album, or playlist
@@ -184,6 +196,7 @@ class Post extends Component {
 
     return (
       <div className={classes.postContainer}>
+        <DeletePostDialog />
         <Paper className={classes.paper}>
           <Grid
             item
@@ -278,11 +291,14 @@ class Post extends Component {
                   },
                 }}
               >
-                {menuOptions.map((option) => (
+                {/* {menuOptions.map((option) => (
                   <MenuItem key={option} onClick={() => this.closeOptions()}>
                     {option}
                   </MenuItem>
-                ))}
+                ))} */}
+                <MenuItem onClick={() => this.handleDelete(postdata._id)}>
+                  delete
+                </MenuItem>
               </Menu>
             </Grid>
             <Grid
@@ -395,10 +411,17 @@ class Post extends Component {
     );
   }
 }
+const mapStateToProps = (state) => ({
+  user: state.user,
+  delPostDialog: state.delPostDialog,
+});
 
 Post.propTypes = {
   classes: PropTypes.object.isRequired,
   postdata: PropTypes.object.isRequired,
 };
 
-export default compose(withStyles(styles))(Post);
+export default compose(
+  withStyles(styles),
+  connect(mapStateToProps, { deletePost, submitDeletePostDialog })
+)(Post);
