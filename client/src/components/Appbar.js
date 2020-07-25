@@ -13,7 +13,7 @@ import { toggleSidebar } from "../app/actions";
 import { logOut } from "../app/actions/userActions";
 import contentType from "../data/ContentTypeEnum";
 import { connect } from "react-redux";
-import { Link } from "react-router-dom";;
+import { Link } from "react-router-dom";
 
 const drawerWidth = 240;
 
@@ -42,7 +42,7 @@ const styles = (theme) => ({
 
   appbarButton: {
     marginLeft: 50,
-    fontSize: 15,
+    fontSize: 16,
     textDecoration: "none",
     color: "white",
   },
@@ -102,17 +102,16 @@ class Appbar extends React.Component {
           <Typography noWrap={false} className={classes.appTitle}>
             MySpot
           </Typography>
-          <Link
-            to={"/" + this.props.user.username}
-            className={classes.appbarButton}
-          >
-            <Button color="inherit">{contentType.PROFILE}</Button>
+          <Link to={"/" + this.props.user.username} style={{ textDecoration: 'none' }}>
+            <Button color="inherit" className={classes.appbarButton}>
+              {contentType.PROFILE}
+            </Button>
           </Link>
           <Link
             to={"/" + this.props.user.username + "/feed"}
-            className={classes.appbarButton}
+            style={{ textDecoration: 'none' }}
           >
-            <Button color="inherit">{contentType.FEED}</Button>
+            <Button color="inherit" className={classes.appbarButton}>{contentType.FEED}</Button>
           </Link>
 
           <Button
@@ -122,6 +121,7 @@ class Appbar extends React.Component {
           >
             Logout
           </Button>
+          <SearchBar />
           <Link
             to={"/" + this.props.user.username + "/settings"}
             className={classes.appbarButton}
@@ -130,7 +130,6 @@ class Appbar extends React.Component {
               <SettingsIcon />
             </Button>
           </Link>
-          <SearchBar />
         </Toolbar>
       </AppBar>
     );

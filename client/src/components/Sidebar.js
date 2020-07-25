@@ -31,9 +31,7 @@ import { connect } from "react-redux";
 import { withStyles } from "@material-ui/core/styles";
 import { toggleSidebar } from "../app/actions";
 import contentType from "../data/ContentTypeEnum";
-// import ProfilePage from "./content-page/ProfilePage";
-// import FeedPage from "./content-page/FeedPage";
-// import HomePage from "./content-page/HomePage";
+
 
 import { Link, Route, Switch, Redirect } from "react-router-dom";
 

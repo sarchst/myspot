@@ -33,6 +33,7 @@ const styles = (theme) => ({
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
+    color: "white",
   },
   inputRoot: {
     color: "inherit",
@@ -63,34 +64,35 @@ class SearchBar extends React.Component {
   handleSearch = () => {
     console.log("in handle search", this.state.query);
     this.props.searchUserByID(this.state.query);
+    this.setState({ query: "" });
     // this.setState({ redirectToSearchPage: true });
   };
 
   render() {
     const { classes } = this.props;
     // if (this.state.redirectToSearchPage === false) {
-      return (
-        <div className={classes.search}>
-          <div className={classes.searchIcon}>
-            <SearchIcon />
-          </div>
-          <InputBase
-            placeholder="Search…"
-            classes={{
-              root: classes.inputRoot,
-              input: classes.inputInput,
-            }}
-            inputProps={{ "aria-label": "search" }}
-            onChange={this.handleChange}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                console.log("Enter pressed");
-                this.handleSearch();
-              }
-            }}
-              />
+    return (
+      <div className={classes.search}>
+        <div className={classes.searchIcon}>
+          <SearchIcon />
         </div>
-      );
+        <InputBase
+          placeholder="Search…"
+          classes={{
+            root: classes.inputRoot,
+            input: classes.inputInput,
+          }}
+          inputProps={{ "aria-label": "search" }}
+          onChange={this.handleChange}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              console.log("Enter pressed");
+              this.handleSearch();
+            }
+          }}
+        />
+      </div>
+    );
     // } else {
     //   return <Redirect to="/search" />;
     // }
