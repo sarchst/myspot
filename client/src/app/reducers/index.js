@@ -11,8 +11,6 @@ import fetchPosts from "./fetchPosts";
 import spotifyApiUserMe from "./spotifyApiUserMe";
 import updateSettings from "./updateSettings";
 
-// import selectedContentPage from "./selectedContentPage";
-
 const allReducers = combineReducers({
   isSidebarOpen: toggleSidebar,
   user: user,
@@ -24,7 +22,6 @@ const allReducers = combineReducers({
   posts: posts,
   spotifyApiUserMe: spotifyApiUserMe,
   updateSettings: updateSettings,
-  // selectedContentPage: selectedContentPage,
 });
 
 export default allReducers;

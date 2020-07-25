@@ -36,8 +36,7 @@ import contentType from "../data/ContentTypeEnum";
 
 import { Link, Route, Switch, Redirect } from "react-router-dom";
 
-import Followers from "./Followers";
-import Following from "./Following";
+import FollowTable from "./FollowTable";
 import NowPlaying from "./NowPlaying";
 import Profile from "./Profile";
 import Feed from "./feed/Feed";
@@ -242,11 +241,11 @@ class Sidebar extends React.Component {
             <Route path="/:user/playlists" exact>
               <Playlists />
             </Route>
-            <Route path="/:user/followers">
-              <Followers />
+            <Route key="followers" exact path="/:user/followers">
+              <FollowTable type={"followers"} />
             </Route>
-            <Route path="/:user/following">
-              <Following />
+            <Route key="following" exact path="/:user/following">
+              <FollowTable type={"following"} />
             </Route>
             <Route path="/:user/whatimlisteningto">
               <NowPlaying />
@@ -261,7 +260,9 @@ class Sidebar extends React.Component {
               path="/:user/playlists/:playlistid"
               render={(props) => <SongList {...props} />}
             />
-            <Route render={() => <Redirect to={"/" + this.props.user.username} />}/>
+            <Route
+              render={() => <Redirect to={"/" + this.props.user.username} />}
+            />
           </Switch>
         </main>
       </div>
