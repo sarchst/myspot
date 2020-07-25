@@ -32,6 +32,8 @@ import MusicNoteIcon from "@material-ui/icons/MusicNote";
 import PlaylistAddIcon from "@material-ui/icons/PlaylistAdd";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { deletePost } from "../../app/actions/postActions";
+import DeletePostDialog from "../DeletePostDialog";
+import { submitDeletePostDialog } from "../../app/actions";
 
 const styles = (theme) => ({
   root: {
@@ -123,7 +125,7 @@ const styles = (theme) => ({
   },
 });
 
-const menuOptions = ["edit", "delete", "report"];
+// const menuOptions = ["edit", "delete", "report"];
 
 class Post extends Component {
   state = {
@@ -160,9 +162,13 @@ class Post extends Component {
     console.log(type);
   };
   handleDelete = (postId) => {
-    console.log("delete pressed", postId);
-    const body = { postId: postId };
-    this.props.deletePost(this.props.user.id, body);
+    const payload = {
+      open: this.props.delPostDialog.open,
+      postId: postId,
+    };
+    console.log(payload);
+    this.props.submitDeletePostDialog(payload);
+    this.closeOptions();
   };
 
   addPostMedia = (type) => {
@@ -190,6 +196,7 @@ class Post extends Component {
 
     return (
       <div className={classes.postContainer}>
+        <DeletePostDialog />
         <Paper className={classes.paper}>
           <Grid
             item
@@ -406,6 +413,7 @@ class Post extends Component {
 }
 const mapStateToProps = (state) => ({
   user: state.user,
+  delPostDialog: state.delPostDialog,
 });
 
 Post.propTypes = {
@@ -413,4 +421,7 @@ Post.propTypes = {
   postdata: PropTypes.object.isRequired,
 };
 
-export default compose(withStyles(styles), connect(mapStateToProps, { deletePost }))(Post);
+export default compose(
+  withStyles(styles),
+  connect(mapStateToProps, { deletePost, submitDeletePostDialog })
+)(Post);
