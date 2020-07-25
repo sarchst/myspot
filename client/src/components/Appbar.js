@@ -41,7 +41,8 @@ const styles = (theme) => ({
   },
 
   appbarButton: {
-    marginLeft: 50,
+    marginLeft: 25,
+    marginRight: 25,
     fontSize: 16,
     textDecoration: "none",
     color: "white",
@@ -102,16 +103,21 @@ class Appbar extends React.Component {
           <Typography noWrap={false} className={classes.appTitle}>
             MySpot
           </Typography>
-          <Link to={"/" + this.props.user.username} style={{ textDecoration: 'none' }}>
+          <Link
+            to={"/" + this.props.user.username}
+            style={{ textDecoration: "none" }}
+          >
             <Button color="inherit" className={classes.appbarButton}>
               {contentType.PROFILE}
             </Button>
           </Link>
           <Link
             to={"/" + this.props.user.username + "/feed"}
-            style={{ textDecoration: 'none' }}
+            style={{ textDecoration: "none" }}
           >
-            <Button color="inherit" className={classes.appbarButton}>{contentType.FEED}</Button>
+            <Button color="inherit" className={classes.appbarButton}>
+              {contentType.FEED}
+            </Button>
           </Link>
 
           <Button

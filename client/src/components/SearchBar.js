@@ -7,7 +7,7 @@ import { withStyles } from "@material-ui/core";
 import { connect } from "react-redux";
 import { searchUserByID } from "../app/actions/searchActions";
 import { compose } from "redux";
-import { Redirect } from "react-router-dom";
+// import { Redirect } from "react-router-dom";
 
 const styles = (theme) => ({
   search: {
@@ -62,7 +62,7 @@ class SearchBar extends React.Component {
   };
 
   handleSearch = () => {
-    console.log("in handle search", this.state.query);
+    // console.log("in handle search", this.state.query);
     this.props.searchUserByID(this.state.query);
     this.setState({ query: "" });
     // this.setState({ redirectToSearchPage: true });
