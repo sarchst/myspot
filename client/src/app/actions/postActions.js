@@ -57,6 +57,24 @@ export const makePost = (post) => {
   };
 };
 
+
+export const deletePost = (id, postId) => {
+  console.log("Delete post in actions user ID", id)
+  console.log("Delete post in postBody", postId)
+  return (dispatch) => {
+    return axios
+      .put(`http://localhost:9000/user/posts/delete/${id}`, postId)
+      .then(() => {
+        dispatch(fetchPosts(id));
+      })
+      .then(() => {
+        dispatch(fetchFeed(id));
+      })
+      .catch((error) => {
+        throw error;
+      });
+  }
+}
 export function fetchPosts(id) {
   return (dispatch) => {
     dispatch(fetchPostsStarted());

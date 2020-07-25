@@ -28,7 +28,8 @@ const styles = (theme) => ({
   },
   paper: {
     padding: theme.spacing(2),
-    margin: theme.spacing(2),
+    marginTop: theme.spacing(2),
+    marginBottom: theme.spacing(2),
     textAlign: "left",
     color: theme.palette.text.secondary,
     display: "flex",
@@ -37,7 +38,11 @@ const styles = (theme) => ({
   submit: {
     float: "right",
   },
+  button: {
+    color: theme.palette.secondary.main,
+  },
 });
+
 
 class MakePost extends React.Component {
   state = {

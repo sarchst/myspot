@@ -201,6 +201,30 @@ addPost = (req, res) => {
   );
 };
 
+deletePost = (req, res) => {
+  const body = req.body;
+    if (!body) {
+      return res.status(400).json({
+        success: false,
+        error: "You must provide a body to update",
+      });
+    }
+
+  User.findOneAndUpdate(
+    { _id: req.params.id },
+    { $pull: { posts: { _id: body.postId} } },
+    (err, user) => {
+      if (err) {
+        return res.status(404).json({
+          err,
+          message: "This is an invalid update request.",
+        });
+      }
+      return res.status(200).json({ success: true, posts: user.posts });
+    }
+  );
+};
+
 getUserSettings = async (req, res) => {
   User.findOne({ _id: req.params.id }, "settings", (err, User) => {
     if (err) {
@@ -356,4 +380,5 @@ module.exports = {
   getFollowing,
   addFollowingFollowerRelationship,
   removeFollowingFollowerRelationship,
+  deletePost,
 };

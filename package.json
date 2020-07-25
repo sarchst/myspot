@@ -3,7 +3,8 @@
     "concurrently": "^5.2.0",
     "css-loader": "^3.6.0",
     "dotenv": "^8.2.0",
-    "pure-react-carousel": "^1.27.1"
+    "pure-react-carousel": "^1.27.1",
+    "react-emoji-render": "^1.2.4"
   },
   "scripts": {
     "start": "cd server && yarn && yarn start",

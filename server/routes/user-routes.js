@@ -11,6 +11,7 @@ router.get("/users", UserContrl.getUsers);
 router.get("/user/feed/:id", UserContrl.getUserFollowingFeed);
 router.get("/user/posts/:id", UserContrl.getUserPosts);
 router.put("/user/posts/:id", UserContrl.addPost);
+router.put("/user/posts/delete/:id", UserContrl.deletePost);
 
 router.put("/user/settings/:id", UserContrl.updateSettings);
 router.get("/user/settings/:id", UserContrl.getUserSettings);
@@ -20,6 +21,8 @@ router.get("/user/profilepic/:id", UserContrl.getProfilePic);
 
 router.get("/user/followers/:id", UserContrl.getFollowers);
 router.get("/user/following/:id", UserContrl.getFollowing);
+
+
 //router.put("/user/following/:id", UserContrl.addFollowFollowingRelationship);
 // router.delete(
 //   "/user/following/:id",

@@ -14,8 +14,6 @@ export const submitSpotifyApiUserMe = (SpotifyApiUserInfoMe) => {
       topTracks: SpotifyApiUserInfoMe.topTracks || null,
       recentTracks: SpotifyApiUserInfoMe.recentTracks || null,
     };
-    console.log("mongoUserOjvect in spotifyApiAction");
-    console.log(mongoUserObject.topTracks.length);
     fetch(`/user/${SpotifyApiUserInfoMe.display_name}`, {
       method: "PUT", // changed from POST
       headers: {
@@ -24,7 +22,6 @@ export const submitSpotifyApiUserMe = (SpotifyApiUserInfoMe) => {
       body: JSON.stringify(mongoUserObject),
     })
       .then((response) => {
-        console.log("user update success from spotifyAPIActions");
         dispatch(submitSpotifyApiUserMeThunk(SpotifyApiUserInfoMe));
       })
       .catch((err) => {
