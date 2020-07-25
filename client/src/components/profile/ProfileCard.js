@@ -91,19 +91,32 @@ class ProfileCard extends React.Component {
   }
   componentDidMount = () => {
     // TODO: replace user_ID with this.props.user_ID once working
-    let user_ID = this.props.user_ID || this.props.user.id;
+    console.log("this props is");
+    console.log(this.props);
+    console.log("this userid is");
+    console.log(this.user_ID);
+    let user_ID;
+    if (
+      this.props.location &&
+      this.props.location.state &&
+      this.props.location.state.user_ID
+    ) {
+      user_ID = this.props.location.state.user_ID;
+    } else {
+      user_ID = this.props.user.id;
+    }
     // get top tracks for arbitrary user
     fetch(`http://localhost:9000/user/${user_ID}`)
       .then((response) => response.json())
       .then((response) => {
-        console.log(response);
+        // console.log(response);
         this.setState({
           topTracks: response.data.topTracks,
           recentTracks: response.data.recentTracks,
           userData: response.data,
         });
-        console.log("userdata is");
-        console.log(this.state.userData);
+        // console.log("userdata is");
+        // console.log(this.state.userData);
       });
     // spotifyWebApi
     //   .getMyTopTracks()

@@ -5,6 +5,7 @@ import Spotify from "spotify-web-api-js";
 import MaterialTable from "material-table";
 import { Paper, Tab, Tabs } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
+import { Link } from "react-router-dom";
 
 const styles = (theme) => ({
   root: {
@@ -84,6 +85,7 @@ class ProfileTable extends React.Component {
   transformFollowData = (data) => {
     const follData = data.map((f) => {
       const foll = {
+        user_ID: f._id,
         pic: f.profilePic,
         username: f.username,
         numPosts: f.posts.length,
@@ -165,7 +167,23 @@ class ProfileTable extends React.Component {
               cellStyle: { width: "50px" },
               width: null,
             },
-            { title: "", field: "username" },
+            {
+              title: "",
+              field: "username",
+              render: (rowData) => (
+                <Link
+                  to={{
+                    pathname: "/myspotter/" + rowData.username,
+                    state: {
+                      user_ID: rowData.user_ID,
+                    },
+                  }}
+                  params={{ user_ID: rowData.user_ID }}
+                >
+                  {rowData.username}
+                </Link>
+              ),
+            },
             { title: "# of Posts", field: "numPosts" },
             { title: "# of Followers", field: "numFollowers" },
           ]}
