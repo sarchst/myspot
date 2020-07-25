@@ -1,13 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import Spotify from "spotify-web-api-js";
-import {
-  CarouselProvider,
-  Slider,
-  Slide,
-  ButtonBack,
-  ButtonNext,
-} from "pure-react-carousel";
+import { CarouselProvider, Slider, Slide } from "pure-react-carousel";
 import "pure-react-carousel/dist/react-carousel.es.css";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import NotInterestedIcon from "@material-ui/icons/NotInterested";
@@ -61,7 +55,7 @@ class Tinderify extends React.Component {
 
   likeSong(id) {
     console.log("Liked ", id);
-    let ids = [id];
+    // let ids = [id];
     // spotifyWebApi.addToMySavedTracks(ids).then(
     //   (data) => {
     //     console.log("save song", data);
