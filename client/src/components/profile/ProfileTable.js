@@ -16,6 +16,13 @@ const styles = (theme) => ({
     marginTop: theme.spacing(2),
     marginBottom: theme.spacing(2),
   },
+  link: {
+    color: theme.palette.secondary.main,
+    textDecoration: "none",
+    "&:hover": {
+      textDecoration: "underline",
+    },
+  },
 });
 
 const spotifyWebApi = new Spotify();
@@ -182,13 +189,14 @@ class ProfileTable extends React.Component {
               field: "username",
               render: (rowData) => (
                 <Link
+                  className={this.props.classes.link}
                   to={{
                     pathname: "/myspotter/" + rowData.username,
                     state: {
                       user_ID: rowData.user_ID,
                     },
                   }}
-                  style={{ textDecoration: "none", color: "#03DAC6" }}
+                  // style={{ textDecoration: "none", color: "#03DAC6" }}
                 >
                   {rowData.username}
                 </Link>

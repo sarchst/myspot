@@ -115,7 +115,7 @@ const styles = (theme) => ({
     padding: theme.spacing(1, 2),
   },
   link: {
-    color: theme.palette.primary.main,
+    color: theme.palette.secondary.main,
     textDecoration: "none",
     "&:hover": {
       textDecoration: "underline",
@@ -215,13 +215,14 @@ class Post extends Component {
             </Grid>
             <Grid item>
               <RouterLink
-                className={classes.routerLink}
+                className={classes.link}
                 to={{
                   pathname: `/myspotter/${postdata.authorId}`,
                   state: {
                     user_ID: postdata.authorId,
                   },
                 }}
+                // style={{ color: "#03DAC6" }}
               >
                 <Typography className={classes.routerLink}>
                   {postdata.username}
