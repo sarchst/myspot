@@ -4,14 +4,16 @@ import Spotify from "spotify-web-api-js";
 
 import MaterialTable from "material-table";
 import { Paper, Tab, Tabs } from "@material-ui/core";
-import { withStyles, createMuiTheme } from "@material-ui/core/styles";
+import { withStyles } from "@material-ui/core/styles";
 
 const styles = (theme) => ({
   root: {
     flexGrow: 1,
     padding: 10,
     borderRadius: 16,
-    margin: 5,
+    // margin: 5,
+    marginTop: theme.spacing(2),
+    marginBottom: theme.spacing(2),
   },
 });
 
@@ -136,6 +138,7 @@ class ProfileTable extends React.Component {
             paging: false,
             toolbar: false,
             sorting: false,
+            // headerStyle: { color: "#03DAC6" },
           }}
         />
       );
@@ -178,6 +181,7 @@ class ProfileTable extends React.Component {
             toolbar: false,
             sorting: false,
             rowStyle: { borderBottom: 0 },
+            // headerStyle: { color: "#03DAC6" },
           }}
         />
       );
