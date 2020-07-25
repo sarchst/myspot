@@ -31,6 +31,7 @@ import AlbumIcon from "@material-ui/icons/Album";
 import MusicNoteIcon from "@material-ui/icons/MusicNote";
 import PlaylistAddIcon from "@material-ui/icons/PlaylistAdd";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import { Link as RouterLink } from "react-router-dom";
 
 const styles = (theme) => ({
   root: {
@@ -196,19 +197,37 @@ class Post extends Component {
             className={classes.userGrid}
           >
             <Grid item>
-              <Avatar
-                className={classes.display}
-                src={postdata.profilePic}
-                alt="profile-pic"
-              />
-              {/* TODO add user profile picture */}
+              <RouterLink
+                className={classes.routerLink}
+                to={{
+                  pathname: `/myspotter/${postdata.authorId}`,
+                  state: {
+                    user_ID: postdata.authorId,
+                  },
+                }}
+              >
+                <Avatar
+                  className={classes.display}
+                  src={postdata.profilePic}
+                  alt="profile-pic"
+                />
+              </RouterLink>
             </Grid>
-            {/* TODO: change to <RouterLink> once route setup */}
-            <Link className={classes.routerLink}>
-              <Grid item>
-                <Typography>{postdata.username}</Typography>
-              </Grid>
-            </Link>
+            <Grid item>
+              <RouterLink
+                className={classes.routerLink}
+                to={{
+                  pathname: `/myspotter/${postdata.authorId}`,
+                  state: {
+                    user_ID: postdata.authorId,
+                  },
+                }}
+              >
+                <Typography className={classes.routerLink}>
+                  {postdata.username}
+                </Typography>
+              </RouterLink>
+            </Grid>
           </Grid>
           <Grid container spacing={1}>
             <Grid
