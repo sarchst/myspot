@@ -37,38 +37,7 @@ class ProfileTable extends React.Component {
         });
       })
       .catch((err) => {
-<<<<<<< HEAD
-        console.log("error getting top tracks");
-        console.log(err);
-      });
-    fetch(`/user/following/${this.props.user.id}`)
-      .then((res) => res.json())
-      .then((res) => {
-        if (res.error) {
-          throw res.error;
-        }
-        console.log("following res: ", res);
-        const following = this.transformFollowData(res.data[0].following);
-        this.setState({ following: following });
-      })
-      .catch((error) => {
-        console.log("Fetch Following Error: ", error);
-      });
-    fetch(`/user/followers/${this.props.user.id}`)
-      .then((res) => res.json())
-      .then((res) => {
-        if (res.error) {
-          throw res.error;
-        }
-        console.log("followers res: ", res);
-        const followers = this.transformFollowData(res.data[0].followers);
-        this.setState({ followers: followers });
-      })
-      .catch((error) => {
-        console.log("Fetch Followers Error: ", error);
-=======
         console.log("Error getting top tracks: ", err);
->>>>>>> master
       });
   };
 
@@ -148,7 +117,6 @@ class ProfileTable extends React.Component {
 
     return (
       <Paper className={classes.root}>
-        {/* <TabContext value={this.state.tabIndex}> */}
         <Tabs
           value={this.state.tabIndex}
           onChange={this.handleChange}
