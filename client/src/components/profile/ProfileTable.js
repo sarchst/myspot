@@ -5,6 +5,7 @@ import Spotify from "spotify-web-api-js";
 import MaterialTable from "material-table";
 import { Paper, Tab, Tabs } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
+import { Link } from "react-router-dom";
 
 const styles = (theme) => ({
   root: {
@@ -14,6 +15,13 @@ const styles = (theme) => ({
     // margin: 5,
     marginTop: theme.spacing(2),
     marginBottom: theme.spacing(2),
+  },
+  link: {
+    color: theme.palette.secondary.main,
+    textDecoration: "none",
+    "&:hover": {
+      textDecoration: "underline",
+    },
   },
 });
 
@@ -84,6 +92,7 @@ class ProfileTable extends React.Component {
   transformFollowData = (data) => {
     const follData = data.map((f) => {
       const foll = {
+        user_ID: f._id,
         pic: f.profilePic,
         username: f.username,
         numPosts: f.posts.length,
@@ -155,17 +164,44 @@ class ProfileTable extends React.Component {
               title: "MySpotter",
               field: "pic",
               render: (rowData) => (
-                <img
-                  src={rowData.pic}
-                  alt={"ProfilePic"}
-                  style={{ width: 40, height: 40, borderRadius: 16 }}
-                />
+                <Link
+                  to={{
+                    pathname: "/myspotter/" + rowData.username,
+                    state: {
+                      user_ID: rowData.user_ID,
+                    },
+                  }}
+                  style={{ textDecoration: "none" }}
+                >
+                  <img
+                    src={rowData.pic}
+                    alt={"ProfilePic"}
+                    style={{ width: 40, height: 40, borderRadius: 16 }}
+                  />
+                </Link>
               ),
               headerStyle: { width: "50px" },
               cellStyle: { width: "50px" },
               width: null,
             },
-            { title: "", field: "username" },
+            {
+              title: "",
+              field: "username",
+              render: (rowData) => (
+                <Link
+                  className={this.props.classes.link}
+                  to={{
+                    pathname: "/myspotter/" + rowData.username,
+                    state: {
+                      user_ID: rowData.user_ID,
+                    },
+                  }}
+                  // style={{ textDecoration: "none", color: "#03DAC6" }}
+                >
+                  {rowData.username}
+                </Link>
+              ),
+            },
             { title: "# of Posts", field: "numPosts" },
             { title: "# of Followers", field: "numFollowers" },
           ]}
