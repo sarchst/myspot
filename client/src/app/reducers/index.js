@@ -10,6 +10,7 @@ import fetchFeed from "./fetchFeed";
 import fetchPosts from "./fetchPosts";
 import spotifyApiUserMe from "./spotifyApiUserMe";
 import updateSettings from "./updateSettings";
+import delPostDialog  from "./delPostDialog";
 
 // import selectedContentPage from "./selectedContentPage";
 
@@ -24,6 +25,7 @@ const allReducers = combineReducers({
   posts: posts,
   spotifyApiUserMe: spotifyApiUserMe,
   updateSettings: updateSettings,
+  delPostDialog: delPostDialog,
   // selectedContentPage: selectedContentPage,
 });
 
