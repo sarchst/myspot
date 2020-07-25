@@ -109,14 +109,11 @@ class ProfileCard extends React.Component {
     fetch(`http://localhost:9000/user/${user_ID}`)
       .then((response) => response.json())
       .then((response) => {
-        // console.log(response);
         this.setState({
           topTracks: response.data.topTracks,
           recentTracks: response.data.recentTracks,
           userData: response.data,
         });
-        // console.log("userdata is");
-        // console.log(this.state.userData);
       });
     // spotifyWebApi
     //   .getMyTopTracks()
