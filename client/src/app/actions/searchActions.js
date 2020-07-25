@@ -11,9 +11,9 @@ export const searchUserError = (err) => ({
   payload: err,
 });
 
-export const searchUserByID = (id) => {
+export const searchUserByUsername = (username) => {
   return (dispatch) => {
-    fetch(`http://localhost:9000/user/${id}`)
+    fetch(`http://localhost:9000/user/username/${username}`)
       .then((res) => res.json())
       .then((res) => {
         if (res.error) {

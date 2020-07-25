@@ -6,6 +6,7 @@ const UserContrl = require("../controllers/user-controller");
 router.post("/user", UserContrl.createUser);
 router.put("/user/:id", UserContrl.updateUser);
 router.get("/user/:id", UserContrl.getUserById);
+router.get("/user/username/:id", UserContrl.getUserByUsername)
 router.get("/users", UserContrl.getUsers);
 
 router.get("/user/feed/:id", UserContrl.getUserFollowingFeed);

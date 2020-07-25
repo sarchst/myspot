@@ -5,7 +5,7 @@ import InputBase from "@material-ui/core/InputBase";
 import { fade } from "@material-ui/core/styles";
 import { withStyles } from "@material-ui/core";
 import { connect } from "react-redux";
-import { searchUserByID } from "../app/actions/searchActions";
+import { searchUserByUsername } from "../app/actions/searchActions";
 import { compose } from "redux";
 // import { Redirect } from "react-router-dom";
 
@@ -63,7 +63,7 @@ class SearchBar extends React.Component {
 
   handleSearch = () => {
     // console.log("in handle search", this.state.query);
-    this.props.searchUserByID(this.state.query);
+    this.props.searchUserByUsername(this.state.query);
     this.setState({ query: "" });
     // this.setState({ redirectToSearchPage: true });
   };
@@ -101,5 +101,5 @@ class SearchBar extends React.Component {
 
 export default compose(
   withStyles(styles),
-  connect(null, { searchUserByID })
+  connect(null, { searchUserByUsername })
 )(SearchBar);
