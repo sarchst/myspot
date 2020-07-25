@@ -1,53 +1,13 @@
 import React from "react";
 import { connect } from "react-redux";
 import Spotify from "spotify-web-api-js";
-import { CssBaseline } from "@material-ui/core";
-import Container from "@material-ui/core/Container";
-import Typography from "@material-ui/core/Typography";
-import { withStyles } from "@material-ui/core/styles";
-import {
-  CarouselProvider,
-  Slider,
-  Slide,
-  ButtonBack,
-  ButtonNext,
-} from "pure-react-carousel";
+import { CarouselProvider, Slider, Slide } from "pure-react-carousel";
 import "pure-react-carousel/dist/react-carousel.es.css";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import NotInterestedIcon from "@material-ui/icons/NotInterested";
+import Typography from "@material-ui/core/Typography";
 
 const spotifyWebApi = new Spotify();
-
-const styles = (theme) => ({
-  icon: {
-    marginRight: theme.spacing(2),
-  },
-  heroContent: {
-    padding: theme.spacing(0, 0, 0),
-  },
-  heroButtons: {
-    marginTop: theme.spacing(4),
-  },
-  cardGrid: {
-    paddingTop: theme.spacing(8),
-    paddingBottom: theme.spacing(8),
-  },
-  card: {
-    height: "100%",
-    display: "flex",
-    flexDirection: "column",
-  },
-  cardMedia: {
-    paddingTop: "56.25%", // 16:9
-  },
-  cardContent: {
-    flexGrow: 1,
-  },
-  footer: {
-    backgroundColor: theme.palette.background.paper,
-    padding: theme.spacing(0),
-  },
-});
 
 class Tinderify extends React.Component {
   constructor(props) {
@@ -125,81 +85,74 @@ class Tinderify extends React.Component {
   }
 
   render() {
-    const { classes } = this.props;
     return (
       <div>
         {/* <button onClick={() => this.testing()}>CLICK HERE PLZ</button> */}
         {this.state.discoverWeeklyId ? (
-          <CssBaseline>
-            <div className={classes.heroContent}>
-              <Container maxWidth="sm">
-                <Typography
-                  component="h1"
-                  variant="h2"
-                  align="center"
-                  color="textPrimary"
-                  gutterBottom
-                >
-                  Tinderify
-                </Typography>
-                <Typography
-                  variant="h5"
-                  align="center"
-                  color="textSecondary"
-                  paragraph
-                >
-                  Swipe through your Discover Weekly playlist and like songs to
-                  add to your Favourites!
-                </Typography>
-              </Container>
-            </div>
-          </CssBaseline>
+          <div>
+            <h1 className="tinderify-title">Tinderify</h1>
+            <Typography
+              variant="h5"
+              align="center"
+              color="textSecondary"
+              paragraph
+            >
+              Swipe through your Discover Weekly playlist and like songs to add
+              to your Favourites!
+            </Typography>
+            <CarouselProvider
+              naturalSlideWidth={5}
+              naturalSlideHeight={5}
+              totalSlides={this.state.tracks.length}
+            >
+              {/* <div className="carousel-buttons">
+                <ButtonBack className="button-prev">Back</ButtonBack>
+                <ButtonNext className="button-next">Next</ButtonNext>
+              </div> */}
+              <Slider>
+                {this.state.tracks.map((track, index) => (
+                  <Slide key={index}>
+                    {/* song html card from: https://www.bypeople.com/profile-card-hover-effect/ */}
+                    <div className="container">
+                      <div className="avatar-flip">
+                        <img
+                          src={track.track.album.images[0].url}
+                          height="150"
+                          width="150"
+                          alt="Album Art"
+                        ></img>
+                        <img
+                          src={this.state.discoverWeeklyImageUrl}
+                          height="150"
+                          width="150"
+                          alt="Discover Weekly Art"
+                        ></img>
+                      </div>
+                      <h2>{track.track.name}</h2>
+                      <h4>by</h4>
+                      <h4>{track.track.artists[0].name}</h4>
+                      <NotInterestedIcon
+                        className="not-interested"
+                        onClick={() => this.notInterested()}
+                      ></NotInterestedIcon>
+
+                      <FavoriteIcon
+                        className="favorite"
+                        onClick={() => this.likeSong(track.track.id)}
+                      ></FavoriteIcon>
+                    </div>
+                  </Slide>
+                ))}
+              </Slider>
+              {/* </div> */}
+            </CarouselProvider>
+          </div>
         ) : (
           <h1>
             To start using Tinderify please like your Discover Weekly playlist
             on Spotify!
           </h1>
         )}
-        <CarouselProvider
-          naturalSlideWidth={5}
-          naturalSlideHeight={5}
-          totalSlides={this.state.tracks.length}
-        >
-          <ButtonBack>Back</ButtonBack>
-          <ButtonNext>Next</ButtonNext>
-          <Slider>
-            {this.state.tracks.map((track, index) => (
-              <Slide key={index}>
-                <div className="container">
-                  <div className="avatar-flip">
-                    <img
-                      src={track.track.album.images[0].url}
-                      height="150"
-                      width="150"
-                      alt="Album Art"
-                    ></img>
-                    <img
-                      src={this.state.discoverWeeklyImageUrl}
-                      height="150"
-                      width="150"
-                      alt="Discover Weekly Art"
-                    ></img>
-                  </div>
-                  <h1>{track.track.name}</h1>
-                  <h2>by</h2>
-                  <h2>{track.track.artists[0].name}</h2>
-                  <NotInterestedIcon
-                    onClick={() => this.notInterested()}
-                  ></NotInterestedIcon>
-
-                  <FavoriteIcon
-                    onClick={() => this.likeSong(track.track.id)}
-                  ></FavoriteIcon>
-                </div>
-              </Slide>
-            ))}
-          </Slider>
-        </CarouselProvider>
       </div>
     );
   }
@@ -212,6 +165,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps)(
-  withStyles(styles, { withTheme: true })(Tinderify)
-);
+export default connect(mapStateToProps)(Tinderify);
