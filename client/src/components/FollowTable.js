@@ -4,6 +4,17 @@ import { Link } from "react-router-dom";
 
 import MaterialTable from "material-table";
 import { Paper } from "@material-ui/core";
+import { withStyles } from "@material-ui/core/styles";
+
+const styles = (theme) => ({
+  link: {
+    color: theme.palette.secondary.main,
+    textDecoration: "none",
+    "&:hover": {
+      textDecoration: "underline",
+    },
+  },
+});
 
 class FollowTable extends React.Component {
   state = {
@@ -110,4 +121,4 @@ const mapStateToProps = (state) => ({
   user: state.user,
 });
 
-export default connect(mapStateToProps)(FollowTable);
+export default connect(mapStateToProps)(withStyles(styles)(FollowTable));
