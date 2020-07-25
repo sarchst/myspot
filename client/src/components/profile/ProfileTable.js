@@ -164,7 +164,6 @@ class ProfileTable extends React.Component {
                       user_ID: rowData.user_ID,
                     },
                   }}
-                  params={{ user_ID: rowData.user_ID }}
                   style={{ textDecoration: "none" }}
                 >
                   <img
@@ -189,7 +188,6 @@ class ProfileTable extends React.Component {
                       user_ID: rowData.user_ID,
                     },
                   }}
-                  params={{ user_ID: rowData.user_ID }}
                   style={{ textDecoration: "none", color: "#03DAC6" }}
                 >
                   {rowData.username}
