@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { compose } from "redux";
-
+import { connect } from "react-redux";
 import { withStyles } from "@material-ui/core/styles";
 import {
   Accordion,
@@ -31,6 +31,7 @@ import AlbumIcon from "@material-ui/icons/Album";
 import MusicNoteIcon from "@material-ui/icons/MusicNote";
 import PlaylistAddIcon from "@material-ui/icons/PlaylistAdd";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import { deletePost } from "../../app/actions/postActions";
 
 const styles = (theme) => ({
   root: {
@@ -158,6 +159,11 @@ class Post extends Component {
     // TODO share spotify media
     console.log(type);
   };
+  handleDelete = (postId) => {
+    console.log("delete pressed", postId);
+    const body = { postId: postId };
+    this.props.deletePost(this.props.user.id, body);
+  };
 
   addPostMedia = (type) => {
     // TODO: add song, album, or playlist
@@ -278,11 +284,14 @@ class Post extends Component {
                   },
                 }}
               >
-                {menuOptions.map((option) => (
+                {/* {menuOptions.map((option) => (
                   <MenuItem key={option} onClick={() => this.closeOptions()}>
                     {option}
                   </MenuItem>
-                ))}
+                ))} */}
+                <MenuItem onClick={() => this.handleDelete(postdata._id)}>
+                  delete
+                </MenuItem>
               </Menu>
             </Grid>
             <Grid
@@ -395,10 +404,13 @@ class Post extends Component {
     );
   }
 }
+const mapStateToProps = (state) => ({
+  user: state.user,
+});
 
 Post.propTypes = {
   classes: PropTypes.object.isRequired,
   postdata: PropTypes.object.isRequired,
 };
 
-export default compose(withStyles(styles))(Post);
+export default compose(withStyles(styles), connect(mapStateToProps, { deletePost }))(Post);
