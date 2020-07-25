@@ -16,6 +16,13 @@ const styles = () => ({
     marginTop: theme.spacing(2),
     marginBottom: theme.spacing(2),
   },
+  link: {
+    color: theme.palette.secondary.main,
+    textDecoration: "none",
+    "&:hover": {
+      textDecoration: "underline",
+    },
+  },
 });
 
 const spotifyWebApi = new Spotify();

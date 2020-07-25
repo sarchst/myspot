@@ -42,6 +42,7 @@ import Profile from "./Profile";
 import Feed from "./feed/Feed";
 import Settings from "./Settings";
 import SongList from "./SongList";
+import ProfileCard from "./profile/ProfileCard";
 
 const drawerWidth = 240;
 
@@ -250,6 +251,14 @@ class Sidebar extends React.Component {
             <Route path="/:user/whatimlisteningto">
               <NowPlaying />
             </Route>
+            <Route
+              path="/myspotter/:user"
+              render={(props) => {
+                console.log("props in profilecard is");
+                console.log(props);
+                return <ProfileCard {...props} />;
+              }}
+            />
             <Route path="/:user/feed">
               <Feed />
             </Route>

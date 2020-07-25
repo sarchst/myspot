@@ -1,5 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 
 import MaterialTable from "material-table";
 import { Paper } from "@material-ui/core";
@@ -31,7 +32,7 @@ class FollowTable extends React.Component {
         username: f.username,
         numPosts: f.posts.length,
         numFollowers: f.followers.length,
-        id: f._id,
+        userId: f._id,
       };
       return foll;
     });
@@ -51,17 +52,43 @@ class FollowTable extends React.Component {
             title: "MySpotter",
             field: "pic",
             render: (rowData) => (
-              <img
-                src={rowData.pic}
-                alt={"ProfilePic"}
-                style={{ width: 40, height: 40, borderRadius: 16 }}
-              />
+              <Link
+                to={{
+                  pathname: "/myspotter/" + rowData.username,
+                  state: {
+                    user_ID: rowData.userId,
+                  },
+                }}
+                style={{ textDecoration: "none" }}
+              >
+                <img
+                  src={rowData.pic}
+                  alt={"ProfilePic"}
+                  style={{ width: 40, height: 40, borderRadius: 16 }}
+                />
+              </Link>
             ),
             headerStyle: { width: "50px" },
             cellStyle: { width: "50px" },
             width: null,
           },
-          { title: "", field: "username" },
+          {
+            title: "",
+            field: "username",
+            render: (rowData) => (
+              <Link
+                className={this.props.classes.link}
+                to={{
+                  pathname: "/myspotter/" + rowData.username,
+                  state: {
+                    user_ID: rowData.userId,
+                  },
+                }}
+              >
+                {rowData.username}
+              </Link>
+            ),
+          },
           { title: "# of Posts", field: "numPosts" },
           { title: "# of Followers", field: "numFollowers" },
         ]}

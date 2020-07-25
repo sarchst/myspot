@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { compose } from "redux";
-
+import { connect } from "react-redux";
 import { withStyles } from "@material-ui/core/styles";
 import {
   Accordion,
@@ -31,6 +31,10 @@ import AlbumIcon from "@material-ui/icons/Album";
 import MusicNoteIcon from "@material-ui/icons/MusicNote";
 import PlaylistAddIcon from "@material-ui/icons/PlaylistAdd";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import { Link as RouterLink } from "react-router-dom";
+import { deletePost } from "../../app/actions/postActions";
+import DeletePostDialog from "../DeletePostDialog";
+import { submitDeletePostDialog } from "../../app/actions";
 
 const styles = (theme) => ({
   root: {
@@ -114,7 +118,7 @@ const styles = (theme) => ({
     padding: theme.spacing(1, 2),
   },
   link: {
-    color: theme.palette.primary.main,
+    color: theme.palette.secondary.main,
     textDecoration: "none",
     "&:hover": {
       textDecoration: "underline",
@@ -122,7 +126,7 @@ const styles = (theme) => ({
   },
 });
 
-const menuOptions = ["edit", "delete", "report"];
+// const menuOptions = ["edit", "delete", "report"];
 
 class Post extends Component {
   state = {
@@ -158,6 +162,15 @@ class Post extends Component {
     // TODO share spotify media
     console.log(type);
   };
+  handleDelete = (postId) => {
+    const payload = {
+      open: this.props.delPostDialog.open,
+      postId: postId,
+    };
+    console.log(payload);
+    this.props.submitDeletePostDialog(payload);
+    this.closeOptions();
+  };
 
   addPostMedia = (type) => {
     // TODO: add song, album, or playlist
@@ -184,6 +197,7 @@ class Post extends Component {
 
     return (
       <div className={classes.postContainer}>
+        <DeletePostDialog />
         <Paper className={classes.paper}>
           <Grid
             item
@@ -196,19 +210,38 @@ class Post extends Component {
             className={classes.userGrid}
           >
             <Grid item>
-              <Avatar
-                className={classes.display}
-                src={postdata.profilePic}
-                alt="profile-pic"
-              />
-              {/* TODO add user profile picture */}
+              <RouterLink
+                className={classes.routerLink}
+                to={{
+                  pathname: `/myspotter/${postdata.authorId}`,
+                  state: {
+                    user_ID: postdata.authorId,
+                  },
+                }}
+              >
+                <Avatar
+                  className={classes.display}
+                  src={postdata.profilePic}
+                  alt="profile-pic"
+                />
+              </RouterLink>
             </Grid>
-            {/* TODO: change to <RouterLink> once route setup */}
-            <Link className={classes.routerLink}>
-              <Grid item>
-                <Typography>{postdata.username}</Typography>
-              </Grid>
-            </Link>
+            <Grid item>
+              <RouterLink
+                className={classes.link}
+                to={{
+                  pathname: `/myspotter/${postdata.authorId}`,
+                  state: {
+                    user_ID: postdata.authorId,
+                  },
+                }}
+                // style={{ color: "#03DAC6" }}
+              >
+                <Typography className={classes.routerLink}>
+                  {postdata.username}
+                </Typography>
+              </RouterLink>
+            </Grid>
           </Grid>
           <Grid container spacing={1}>
             <Grid
@@ -278,11 +311,14 @@ class Post extends Component {
                   },
                 }}
               >
-                {menuOptions.map((option) => (
+                {/* {menuOptions.map((option) => (
                   <MenuItem key={option} onClick={() => this.closeOptions()}>
                     {option}
                   </MenuItem>
-                ))}
+                ))} */}
+                <MenuItem onClick={() => this.handleDelete(postdata._id)}>
+                  delete
+                </MenuItem>
               </Menu>
             </Grid>
             <Grid
@@ -395,10 +431,17 @@ class Post extends Component {
     );
   }
 }
+const mapStateToProps = (state) => ({
+  user: state.user,
+  delPostDialog: state.delPostDialog,
+});
 
 Post.propTypes = {
   classes: PropTypes.object.isRequired,
   postdata: PropTypes.object.isRequired,
 };
 
-export default compose(withStyles(styles))(Post);
+export default compose(
+  withStyles(styles),
+  connect(mapStateToProps, { deletePost, submitDeletePostDialog })
+)(Post);

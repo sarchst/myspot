@@ -9,6 +9,7 @@ import ProfileCard from "./profile/ProfileCard";
 import ProfileTable from "./profile/ProfileTable";
 import { fetchUserSettings } from "../app/actions/settingsActions";
 import { fetchProfilePic } from "../app/actions/imageUploadActions";
+import DeletePostDialog from "./DeletePostDialog";
 
 const styles = (theme) => ({
   root: {
@@ -38,6 +39,7 @@ class Profile extends React.Component {
     const { classes, user, toggleLike } = this.props;
     return (
       <div className={classes.root}>
+        <DeletePostDialog />
         <ProfileCard />
         <ProfileTable />
         <MakePost />
