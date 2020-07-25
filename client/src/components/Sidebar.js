@@ -5,6 +5,7 @@ import Playlists from "./Playlists";
 import Albums from "./Albums";
 import Tinderify from "./Tinderify";
 import Favourites from "./Favourites";
+import SearchResults from "./SearchResults";
 import Drawer from "@material-ui/core/Drawer";
 import List from "@material-ui/core/List";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -224,6 +225,9 @@ class Sidebar extends React.Component {
         <main className={classes.content}>
           <div className={classes.toolbar} />
           <Switch>
+            <Route path="/search">
+              <SearchResults />
+            </Route>
             <Route path={"/:user"} exact>
               <Profile />
             </Route>

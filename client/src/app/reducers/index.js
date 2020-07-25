@@ -11,6 +11,7 @@ import fetchPosts from "./fetchPosts";
 import spotifyApiUserMe from "./spotifyApiUserMe";
 import updateSettings from "./updateSettings";
 import delPostDialog from "./delPostDialog";
+import searchResults from "./searchResults";
 
 const allReducers = combineReducers({
   isSidebarOpen: toggleSidebar,
@@ -24,6 +25,7 @@ const allReducers = combineReducers({
   spotifyApiUserMe: spotifyApiUserMe,
   updateSettings: updateSettings,
   delPostDialog: delPostDialog,
+  searchResults: searchResults,
 });
 
 export default allReducers;

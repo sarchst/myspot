@@ -4,6 +4,10 @@ import SearchIcon from "@material-ui/icons/Search";
 import InputBase from "@material-ui/core/InputBase";
 import { fade } from "@material-ui/core/styles";
 import { withStyles } from "@material-ui/core";
+import { connect } from "react-redux";
+import { searchUserByID } from "../app/actions/searchActions";
+import { compose } from "redux";
+import { Redirect } from "react-router-dom";
 
 const styles = (theme) => ({
   search: {
@@ -48,6 +52,7 @@ const styles = (theme) => ({
 class SearchBar extends React.Component {
   state = {
     query: "",
+    redirectToSearchPage: false,
   };
 
   handleChange = (e) => {
@@ -57,33 +62,42 @@ class SearchBar extends React.Component {
 
   handleSearch = () => {
     console.log("in handle search", this.state.query);
+    this.props.searchUserByID(this.state.query);
+    // this.setState({ redirectToSearchPage: true });
   };
 
   render() {
     const { classes } = this.props;
-    return (
-      <div className={classes.search}>
-        <div className={classes.searchIcon}>
-          <SearchIcon />
+    // if (this.state.redirectToSearchPage === false) {
+      return (
+        <div className={classes.search}>
+          <div className={classes.searchIcon}>
+            <SearchIcon />
+          </div>
+          <InputBase
+            placeholder="Search…"
+            classes={{
+              root: classes.inputRoot,
+              input: classes.inputInput,
+            }}
+            inputProps={{ "aria-label": "search" }}
+            onChange={this.handleChange}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                console.log("Enter pressed");
+                this.handleSearch();
+              }
+            }}
+              />
         </div>
-        <InputBase
-          placeholder="Search…"
-          classes={{
-            root: classes.inputRoot,
-            input: classes.inputInput,
-          }}
-          inputProps={{ "aria-label": "search" }}
-          onChange={this.handleChange}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              console.log("Enter pressed");
-              this.handleSearch();
-            }
-          }}
-        />
-      </div>
-    );
+      );
+    // } else {
+    //   return <Redirect to="/search" />;
+    // }
   }
 }
 
-export default withStyles(styles, { withTheme: true })(SearchBar);
+export default compose(
+  withStyles(styles),
+  connect(null, { searchUserByID })
+)(SearchBar);
