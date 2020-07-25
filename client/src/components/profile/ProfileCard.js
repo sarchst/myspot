@@ -158,14 +158,10 @@ class ProfileCard extends React.Component {
           <Avatar
             className={classes.avatar}
             src={
-              // this.props.user.profilePic
-              //   ? this.props.user.profilePic
-              //   : "./generic-user-headphone-icon.png"
               this.state.userData.profilePic
                 ? this.state.userData.profilePic
-                : "./generic-user-headphone-icon.png"
+                : ""
             }
-            // src={"https://i.pravatar.cc/300"}
           />
           <h3 className={classes.heading}>{this.state.userData.username}</h3>
           <span className={classes.subheader}>
