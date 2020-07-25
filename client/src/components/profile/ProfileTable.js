@@ -12,7 +12,9 @@ const styles = () => ({
     flexGrow: 1,
     padding: 10,
     borderRadius: 16,
-    margin: 5,
+    // margin: 5,
+    marginTop: theme.spacing(2),
+    marginBottom: theme.spacing(2),
   },
 });
 
@@ -96,6 +98,7 @@ class ProfileTable extends React.Component {
             paging: false,
             toolbar: false,
             sorting: false,
+            // headerStyle: { color: "#03DAC6" },
           }}
         />
       );

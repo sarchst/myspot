@@ -19,11 +19,32 @@ const lightTheme = createMuiTheme({
     type: "light",
     primary: {
       main: "#6200EE",
-      variant: "#3700B3",
+      variant: "#0383DA",
     },
     secondary: {
-      main: "#03DAC6",
+      main: "#0383DA",
       variant: "#018786",
+    },
+  },
+  overrides: {
+    // Style sheet name ⚛️
+    MuiToggleButton: {
+      root: {
+        "&$selected": {
+          color: "#0383DA",
+        },
+      },
+    },
+
+    MuiTableBody: {
+      root: {
+        color: "#0383DA",
+      },
+    },
+    MuiTableCell: {
+      head: {
+        color: "#0383DA",
+      },
     },
   },
 });
@@ -37,6 +58,28 @@ const darkTheme = createMuiTheme({
     },
     secondary: {
       main: "#03DAC6",
+    },
+  },
+  overrides: {
+    // Style sheet name ⚛️
+    MuiToggleButton: {
+      root: {
+        "&$selected": {
+          color: "#03DAC6",
+        },
+      },
+    },
+    MuiTableBody: {
+      root: {
+        color: "#03DAC6",
+      },
+    },
+    MuiTableCell: {
+      head: {
+        color: "#03DAC6",
+        fontSize: "medium",
+        // fontWeight: "bold",
+      },
     },
   },
 });
