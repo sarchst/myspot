@@ -1,19 +1,20 @@
 import React from "react";
 import clsx from "clsx";
-
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
 import Button from "@material-ui/core/Button";
+import SearchBar from "./SearchBar";
 import SettingsIcon from "@material-ui/icons/Settings";
 import { withStyles } from "@material-ui/core";
 import { toggleSidebar } from "../app/actions";
 import { logOut } from "../app/actions/userActions";
 import contentType from "../data/ContentTypeEnum";
 import { connect } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link } from "react-router-dom";;
+
 const drawerWidth = 240;
 
 const styles = (theme) => ({
@@ -129,6 +130,7 @@ class Appbar extends React.Component {
               <SettingsIcon />
             </Button>
           </Link>
+          <SearchBar />
         </Toolbar>
       </AppBar>
     );
