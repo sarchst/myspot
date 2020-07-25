@@ -10,8 +10,7 @@ import fetchFeed from "./fetchFeed";
 import fetchPosts from "./fetchPosts";
 import spotifyApiUserMe from "./spotifyApiUserMe";
 import updateSettings from "./updateSettings";
-
-// import selectedContentPage from "./selectedContentPage";
+import delPostDialog from "./delPostDialog";
 
 const allReducers = combineReducers({
   isSidebarOpen: toggleSidebar,
@@ -24,7 +23,7 @@ const allReducers = combineReducers({
   posts: posts,
   spotifyApiUserMe: spotifyApiUserMe,
   updateSettings: updateSettings,
-  // selectedContentPage: selectedContentPage,
+  delPostDialog: delPostDialog,
 });
 
 export default allReducers;

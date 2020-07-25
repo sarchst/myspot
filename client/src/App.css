@@ -1,14 +1,21 @@
+/* Tinderify Song Card  */
+/* Source:  https://www.bypeople.com/profile-card-hover-effect/  */
+
+@import url("https://fonts.googleapis.com/css2?family=Comfortaa:wght@700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Pacifico&display=swap");
+
 .container {
   width: 400px;
   margin: 120px auto 120px;
-  background-color: #fff;
+  /* background-image: linear-gradient(to bottom right, #df4685, #ff5864, #ff8146); */
+  background-image: linear-gradient(to bottom right, #e56b9e, #ff7982, #ff9a6b);
   padding: 0 20px 20px;
   border-radius: 6px;
   -webkit-border-radius: 6px;
   -moz-border-radius: 6px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.075);
-  -webkit-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.075);
-  -moz-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.075);
+  box-shadow: 0 20px 50px #e56b9e;
+  -webkit-box-shadow: 0 20px 50px #e56b9e;
+  -moz-box-shadow: 0 20px 50px #e56b9e;
   text-align: center;
 }
 .container:hover .avatar-flip {
@@ -22,7 +29,6 @@
   opacity: 1;
 }
 .avatar-flip {
-  /* border-radius: 100px; */
   overflow: hidden;
   height: 150px;
   width: 150px;
@@ -32,15 +38,11 @@
   transition: all 0.3s ease-in-out;
   -webkit-transition: all 0.3s ease-in-out;
   -moz-transition: all 0.3s ease-in-out;
-  box-shadow: 0 0 0 13px #f0f0f0;
-  -webkit-box-shadow: 0 0 0 13px #f0f0f0;
-  -moz-box-shadow: 0 0 0 13px #f0f0f0;
 }
 .avatar-flip img {
   position: absolute;
   left: 0;
   top: 0;
-  /* border-radius: 100px; */
   transition: all 0.3s ease-in-out;
   -webkit-transition: all 0.3s ease-in-out;
   -moz-transition: all 0.3s ease-in-out;
@@ -53,4 +55,36 @@
   transform: rotateY(180deg);
   -webkit-transform: rotateY(180deg);
   opacity: 0;
+}
+.tinderify-title {
+  font-family: "Pacifico", cursive;
+  font-size: 100px;
+  align-self: center;
+  margin: 0;
+  padding: 0;
+  margin-bottom: 50px;
+  text-align: center;
+}
+.carousel-buttons {
+  text-align: center;
+}
+.carousel-buttons .button-prev {
+  margin-right: 50px;
+  /* font-family: "Pacifico", cursive; */
+  padding: 5px;
+  /* background-color: #ff9a6b; */
+  border-radius: 5px;
+  font-size: 20px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+.carousel-buttons .button-next {
+  margin-left: 50px;
+  /* font-family: "Pacifico", cursive; */
+  padding: 5px;
+  /* background-color: #ff9a6b; */
+  border-radius: 5px;
+  font-size: 20px;
+  padding-left: 10px;
+  padding-right: 10px;
 }
