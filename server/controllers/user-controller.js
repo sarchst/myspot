@@ -277,7 +277,6 @@ addComment = async (req, res) => {
       error: "You must provide a body to update",
     });
   }
-
   console.log("Req body is " + body);
   const comment = new Comment(body);
   console.log("comment is " + comment);
@@ -287,7 +286,6 @@ addComment = async (req, res) => {
     { _id: req.params.id, "posts._id": body.postId },
     { $push: { "posts.$[outer].comments": comment } },
     { arrayFilters: [{ "outer._id": body.postId }], upsert: true },
-    // { new: true, upsert: true },
     (err, result) => {
       if (err) {
         return res.status(404).json({
@@ -297,12 +295,6 @@ addComment = async (req, res) => {
       }
       return res.status(200).json({ success: true, posts: result.posts });
     }
-    // ).catch((err) => {
-    //   return res.status(404).json({
-    //     error: err,
-    //     message: "User setting not found.",
-    //   });
-    // });
   );
 };
 

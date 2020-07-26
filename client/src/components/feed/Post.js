@@ -35,6 +35,7 @@ import { Link as RouterLink } from "react-router-dom";
 import { deletePost } from "../../app/actions/postActions";
 import DeletePostDialog from "../DeletePostDialog";
 import { submitDeletePostDialog } from "../../app/actions";
+import PostComment from "../PostComment";
 
 const styles = (theme) => ({
   root: {
@@ -417,7 +418,16 @@ class Post extends Component {
             </AccordionSummary>
             <AccordionDetails className={classes.details}>
               <ul className={classes.column}>
-                <li>Comment 1</li>
+                {/* {postdata.comments && postdata.comments.length
+                  ? postdata.comments.map((comment, index) => {
+                      return <li key={index}>{comment.content}</li>;
+                    })
+                  : null} */}
+                {postdata.comments && postdata.comments.length
+                  ? postdata.comments.map((comment, index) => {
+                      return <PostComment key={index} commentdata={comment} />;
+                    })
+                  : null}
               </ul>
               <FormControl fullWidth>
                 <InputLabel htmlFor="standard-basic" color={"secondary"}>
