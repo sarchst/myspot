@@ -194,7 +194,17 @@ class Post extends Component {
   render() {
     const { classes, postdata, userId } = this.props;
     const date = new Date(postdata.createdAt).toDateString();
-
+    let deleteOption,
+      reportOption = null;
+    if (this.props.user.id === postdata.authorId) {
+      deleteOption = (
+        <MenuItem onClick={() => this.handleDelete(postdata._id)}>
+          Delete
+        </MenuItem>
+      );
+    } else {
+      reportOption = <MenuItem>Report</MenuItem>;
+    }
     return (
       <div className={classes.postContainer}>
         <DeletePostDialog />
@@ -316,9 +326,12 @@ class Post extends Component {
                     {option}
                   </MenuItem>
                 ))} */}
-                <MenuItem onClick={() => this.handleDelete(postdata._id)}>
+
+                {/* <MenuItem onClick={() => this.handleDelete(postdata._id)}>
                   delete
-                </MenuItem>
+                </MenuItem> */}
+                {deleteOption}
+                {reportOption}
               </Menu>
             </Grid>
             <Grid
