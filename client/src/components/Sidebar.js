@@ -35,7 +35,7 @@ import { Link, Route, Switch, Redirect } from "react-router-dom";
 
 import FollowTable from "./FollowTable";
 import NowPlaying from "./NowPlaying";
-import Profile from "./Profile";
+import Profile from "./profile/Profile";
 import Feed from "./feed/Feed";
 import Settings from "./Settings";
 import SongList from "./SongList";

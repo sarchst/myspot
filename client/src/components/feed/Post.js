@@ -33,10 +33,10 @@ import PlaylistAddIcon from "@material-ui/icons/PlaylistAdd";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { Link as RouterLink } from "react-router-dom";
 import { deletePost, addComment } from "../../app/actions/postActions";
-import DeletePostDialog from "../DeletePostDialog";
+import DeletePostDialog from "./DeletePostDialog";
 import { submitDeletePostDialog } from "../../app/actions";
-import PostComment from "../PostComment";
-import EmojiEmotionsOutlinedIcon from "@material-ui/icons/EmojiEmotionsOutlined";
+import PostComment from "./PostComment";
+// import EmojiEmotionsOutlinedIcon from "@material-ui/icons/EmojiEmotionsOutlined";
 import "emoji-mart/css/emoji-mart.css";
 
 

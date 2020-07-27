@@ -5,7 +5,7 @@ import { Grid, IconButton } from "@material-ui/core";
 // import FavoriteOutlinedIcon from "@material-ui/icons/FavoriteOutlined";
 import { connect } from "react-redux";
 import { compose } from "redux";
-import { deleteComment } from "../app/actions/postActions";
+import { deleteComment } from "../../app/actions/postActions";
 import HighlightOffOutlinedIcon from "@material-ui/icons/HighlightOffOutlined";
 const styles = (theme) => ({
   root: {
