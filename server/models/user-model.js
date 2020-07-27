@@ -6,8 +6,10 @@ const CommentSchema = new Schema(
     content: { type: String, required: true },
     usersLiked: [{ type: String, ref: "User", default: [] }],
     authorId: { type: String, ref: "User", required: true },
+    authorUsername: { type: String, required: true },
     postId: { type: String, ref: "Post" },
-    time: { type: String, required: true },  // some reason timestamp doesn't seem to be working
+    postOwnerId: { type: String, ref: "User" },
+    time: { type: String, required: true }, // some reason timestamp doesn't seem to be working
   },
   { timestamps: true }
 );

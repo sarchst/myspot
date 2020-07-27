@@ -32,10 +32,13 @@ import MusicNoteIcon from "@material-ui/icons/MusicNote";
 import PlaylistAddIcon from "@material-ui/icons/PlaylistAdd";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { Link as RouterLink } from "react-router-dom";
-import { deletePost } from "../../app/actions/postActions";
+import { deletePost, addComment } from "../../app/actions/postActions";
 import DeletePostDialog from "../DeletePostDialog";
 import { submitDeletePostDialog } from "../../app/actions";
 import PostComment from "../PostComment";
+import EmojiEmotionsOutlinedIcon from "@material-ui/icons/EmojiEmotionsOutlined";
+import "emoji-mart/css/emoji-mart.css";
+import { Picker } from "emoji-mart";
 
 const styles = (theme) => ({
   root: {
@@ -133,6 +136,8 @@ class Post extends Component {
   state = {
     moreOptions: false,
     anchorEl: null,
+    emojiPickerOpen: false,
+    commentContent: "",
   };
 
   chooseIcon = (media) => {
@@ -192,11 +197,41 @@ class Post extends Component {
     });
   };
 
+  handleEmojiPicker = () => {
+    let temp = !this.state.emojiPickerOpen;
+    this.setState({
+      emojiPickerOpen: temp,
+    });
+  };
+
+  handleChangeComment = (e) => {
+    this.setState({ commentContent: e.target.value });
+  };
+
+  handleSubmitComment = (postId, postOwnerId) => {
+    let comment = {
+      content: this.state.commentContent,
+      usersLiked: [],
+      authorId: this.props.user.id,
+      authorUsername: this.props.user.username,
+      postOwnerId: postOwnerId,
+      postId: postId,
+      time: new Date().toLocaleDateString(),
+    };
+    console.log("handleSubmitComment", comment);
+    this.props.addComment(comment);
+    this.setState({
+      commentContent: "",
+    });
+  };
+
   render() {
+    // let emojiPickerOpen = false;
     const { classes, postdata, userId } = this.props;
     const date = new Date(postdata.createdAt).toDateString();
     let deleteOption,
-      reportOption = null;
+      reportOption,
+      emojiPicker = null;
     if (this.props.user.id === postdata.authorId) {
       deleteOption = (
         <MenuItem onClick={() => this.handleDelete(postdata._id)}>
@@ -206,6 +241,17 @@ class Post extends Component {
     } else {
       reportOption = <MenuItem>Report</MenuItem>;
     }
+
+    if (this.state.emojiPickerOpen) {
+      emojiPicker = (
+        <Picker
+          onSelect={this.addEmoji}
+          showPreview={false}
+          style={{ position: "absolute", bottom: "95px", right: "80px" }}
+        />
+      );
+    }
+
     return (
       <div className={classes.postContainer}>
         <DeletePostDialog />
@@ -412,39 +458,49 @@ class Post extends Component {
             >
               <div className={classes.column}>
                 <Typography className={classes.heading} color={"primary"}>
-                  Comments
+                  Comments ({postdata.comments.length})
                 </Typography>
               </div>
             </AccordionSummary>
             <AccordionDetails className={classes.details}>
               <ul className={classes.column}>
-                {/* {postdata.comments && postdata.comments.length
-                  ? postdata.comments.map((comment, index) => {
-                      return <li key={index}>{comment.content}</li>;
-                    })
-                  : null} */}
                 {postdata.comments && postdata.comments.length
                   ? postdata.comments.map((comment, index) => {
                       return <PostComment key={index} commentdata={comment} />;
                     })
                   : null}
               </ul>
-              <FormControl fullWidth>
-                <InputLabel htmlFor="standard-basic" color={"secondary"}>
-                  Leave a comment below
-                </InputLabel>
-                <Input
-                  value={this.state.content}
-                  onChange={this.handleChange}
-                  color={"secondary"}
-                />
-              </FormControl>
+              {emojiPicker}
+              <Grid item container direction="row" alignItems="center">
+                <Grid item xs={11}>
+                  <FormControl fullWidth>
+                    <InputLabel htmlFor="standard-basic" color={"secondary"}>
+                      Leave a comment below
+                    </InputLabel>
+                    <Input
+                      value={this.state.commentContent}
+                      onChange={this.handleChangeComment}
+                      color={"secondary"}
+                    />
+                  </FormControl>
+                </Grid>
+                <Grid item>
+                  <Button onClick={this.handleEmojiPicker}>
+                    <EmojiEmotionsOutlinedIcon />
+                  </Button>
+                </Grid>
+              </Grid>
               <div className={classes.column} />
             </AccordionDetails>
             <Divider />
             <AccordionActions>
               <Button size="small">Cancel</Button>
-              <Button size="small" color="secondary" variant="contained">
+              <Button
+                size="small"
+                color="secondary"
+                variant="contained"
+                onClick={() => this.handleSubmitComment(postdata._id, postdata.authorId)}
+              >
                 Post
               </Button>
             </AccordionActions>
@@ -466,5 +522,5 @@ Post.propTypes = {
 
 export default compose(
   withStyles(styles),
-  connect(mapStateToProps, { deletePost, submitDeletePostDialog })
+  connect(mapStateToProps, { deletePost, submitDeletePostDialog, addComment })
 )(Post);
