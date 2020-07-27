@@ -277,11 +277,11 @@ addComment = async (req, res) => {
       error: "You must provide a body to update",
     });
   }
-  console.log("Req body is " + body);
+  // console.log("Req body is " + body);
   const comment = new Comment(body);
-  console.log("comment is " + comment);
-  console.log("postid", body.postId);
-  console.log(req.params.id);
+  // console.log("comment is " + comment);
+  // console.log("postid", body.postId);
+  // console.log(req.params.id);
   User.findOneAndUpdate(
     { _id: req.params.id, "posts._id": body.postId },
     { $push: { "posts.$[outer].comments": comment } },
@@ -294,6 +294,31 @@ addComment = async (req, res) => {
         });
       }
       return res.status(200).json({ success: true, posts: result.posts });
+    }
+  );
+};
+
+deleteComment = (req, res) => {
+  const body = req.body;
+  if (!body) {
+    return res.status(400).json({
+      success: false,
+      error: "You must provide a body to update",
+    });
+  }
+
+  User.findOneAndUpdate(
+    { _id: req.params.id, "posts._id": body.postId },
+    { $pull: { "posts.$[outer].comments": { _id: body.commentId } } },
+    { arrayFilters: [{ "outer._id": body.postId }], new: true },
+    (err, user) => {
+      if (err) {
+        return res.status(404).json({
+          err,
+          message: "This is an invalid update request.",
+        });
+      }
+      return res.status(200).json({ success: true, posts: user.posts });
     }
   );
 };
@@ -411,4 +436,5 @@ module.exports = {
   removeFollowingFollowerRelationship,
   deletePost,
   addComment,
+  deleteComment,
 };

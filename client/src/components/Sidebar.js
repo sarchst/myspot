@@ -17,7 +17,6 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
-// import AudiotrackIcon from "@material-ui/icons/Audiotrack";
 import HeadsetIcon from "@material-ui/icons/Headset";
 import MicIcon from "@material-ui/icons/Mic";
 import FavoriteIcon from "@material-ui/icons/Favorite";
@@ -30,9 +29,7 @@ import { connect } from "react-redux";
 import { withStyles } from "@material-ui/core/styles";
 import { toggleSidebar } from "../app/actions";
 import contentType from "../data/ContentTypeEnum";
-// import ProfilePage from "./content-page/ProfilePage";
-// import FeedPage from "./content-page/FeedPage";
-// import HomePage from "./content-page/HomePage";
+
 
 import { Link, Route, Switch, Redirect } from "react-router-dom";
 

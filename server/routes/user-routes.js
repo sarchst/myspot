@@ -14,6 +14,7 @@ router.put("/user/posts/:id", UserContrl.addPost);
 router.put("/user/posts/delete/:id", UserContrl.deletePost);
 
 router.put("/user/posts/comments/:id", UserContrl.addComment);
+router.put("/user/posts/comments/delete/:id", UserContrl.deleteComment)
 
 router.put("/user/settings/:id", UserContrl.updateSettings);
 router.get("/user/settings/:id", UserContrl.getUserSettings);
