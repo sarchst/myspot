@@ -239,9 +239,20 @@ class Sidebar extends React.Component {
             <Route path="/:user/favourites" exact>
               <Favourites />
             </Route>
-            <Route path="/:user/playlists" exact>
-              <Playlists />
-            </Route>
+            <Route
+              path="/:user/playlists"
+              exact
+              component={(props) => (
+                <Playlists {...props} loggedInUserId={this.props.user.id} />
+              )}
+            />
+            <Route
+              path="/myspotter/:user/playlists"
+              exact
+              render={(props) => {
+                return <Playlists {...props} />;
+              }}
+            />
             <Route key="followers" exact path="/:user/followers">
               <FollowTable type={"followers"} />
             </Route>
