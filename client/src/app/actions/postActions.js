@@ -127,3 +127,19 @@ export const addComment = (comment) => {
       });
   };
 };
+
+export const deleteComment = (id, authorId, commentInfo) => {
+  return (dispatch) => {
+    return axios
+      .put(`http://localhost:9000/user/posts/comments/delete/${id}`, commentInfo)
+      .then(() => {
+        dispatch(fetchPosts(authorId));
+      })
+      .then(() => {
+        dispatch(fetchFeed(authorId));
+      })
+      .catch((error) => {
+        throw error;
+      });
+  };
+};
