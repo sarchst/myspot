@@ -2,7 +2,7 @@ import React from "react";
 import { Typography } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 import { Grid, IconButton } from "@material-ui/core";
-import FavoriteOutlinedIcon from "@material-ui/icons/FavoriteOutlined";
+// import FavoriteOutlinedIcon from "@material-ui/icons/FavoriteOutlined";
 import { connect } from "react-redux";
 import { compose } from "redux";
 import { deleteComment } from "../app/actions/postActions";
@@ -42,7 +42,7 @@ class PostComment extends React.Component {
 
   render() {
     const { commentdata, classes } = this.props;
-    
+
     let commentDeleteButton = null;
     if (this.props.user.id === commentdata.authorId) {
       commentDeleteButton = (

@@ -38,7 +38,7 @@ import { submitDeletePostDialog } from "../../app/actions";
 import PostComment from "../PostComment";
 import EmojiEmotionsOutlinedIcon from "@material-ui/icons/EmojiEmotionsOutlined";
 import "emoji-mart/css/emoji-mart.css";
-import { Picker } from "emoji-mart";
+
 
 const styles = (theme) => ({
   root: {
@@ -226,12 +226,10 @@ class Post extends Component {
   };
 
   render() {
-    // let emojiPickerOpen = false;
     const { classes, postdata, userId } = this.props;
     const date = new Date(postdata.createdAt).toLocaleString("en-US");
     let deleteOption,
-      reportOption,
-      emojiPicker = null;
+      reportOption = null;
     if (this.props.user.id === postdata.authorId) {
       deleteOption = (
         <MenuItem onClick={() => this.handleDelete(postdata._id)}>
@@ -242,15 +240,6 @@ class Post extends Component {
       reportOption = <MenuItem>Report</MenuItem>;
     }
 
-    if (this.state.emojiPickerOpen) {
-      emojiPicker = (
-        <Picker
-          onSelect={this.addEmoji}
-          showPreview={false}
-          style={{ position: "absolute", bottom: "95px", right: "80px" }}
-        />
-      );
-    }
 
     return (
       <div className={classes.postContainer}>
@@ -368,15 +357,6 @@ class Post extends Component {
                   },
                 }}
               >
-                {/* {menuOptions.map((option) => (
-                  <MenuItem key={option} onClick={() => this.closeOptions()}>
-                    {option}
-                  </MenuItem>
-                ))} */}
-
-                {/* <MenuItem onClick={() => this.handleDelete(postdata._id)}>
-                  delete
-                </MenuItem> */}
                 {deleteOption}
                 {reportOption}
               </Menu>
@@ -470,7 +450,6 @@ class Post extends Component {
                     })
                   : null}
               </ul>
-              {emojiPicker}
               <Grid item container direction="row" alignItems="center">
                 <Grid item xs={11}>
                   <FormControl fullWidth>
@@ -483,11 +462,6 @@ class Post extends Component {
                       color={"secondary"}
                     />
                   </FormControl>
-                </Grid>
-                <Grid item>
-                  <Button onClick={this.handleEmojiPicker}>
-                    <EmojiEmotionsOutlinedIcon />
-                  </Button>
                 </Grid>
               </Grid>
               <div className={classes.column} />
