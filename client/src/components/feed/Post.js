@@ -216,7 +216,7 @@ class Post extends Component {
       authorUsername: this.props.user.username,
       postOwnerId: postOwnerId,
       postId: postId,
-      time: new Date().toLocaleDateString(),
+      time: new Date().toLocaleString("en-US"),
     };
     console.log("handleSubmitComment", comment);
     this.props.addComment(comment);
@@ -228,7 +228,7 @@ class Post extends Component {
   render() {
     // let emojiPickerOpen = false;
     const { classes, postdata, userId } = this.props;
-    const date = new Date(postdata.createdAt).toDateString();
+    const date = new Date(postdata.createdAt).toLocaleString("en-US");
     let deleteOption,
       reportOption,
       emojiPicker = null;
@@ -499,7 +499,9 @@ class Post extends Component {
                 size="small"
                 color="secondary"
                 variant="contained"
-                onClick={() => this.handleSubmitComment(postdata._id, postdata.authorId)}
+                onClick={() =>
+                  this.handleSubmitComment(postdata._id, postdata.authorId)
+                }
               >
                 Post
               </Button>
