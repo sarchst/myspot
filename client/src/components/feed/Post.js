@@ -197,12 +197,6 @@ class Post extends Component {
     });
   };
 
-  handleEmojiPicker = () => {
-    let temp = !this.state.emojiPickerOpen;
-    this.setState({
-      emojiPickerOpen: temp,
-    });
-  };
 
   handleChangeComment = (e) => {
     this.setState({ commentContent: e.target.value });
