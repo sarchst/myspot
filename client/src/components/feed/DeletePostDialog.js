@@ -29,7 +29,7 @@ class DeletePostDialog extends React.Component {
         <div>
           <Dialog
             open={this.props.delPostDialog.open}
-            onClose={this.handleClose}
+            // onClose={this.handleClose}
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
           >
@@ -65,6 +65,7 @@ const mapStateToProps = (state) => ({
   delPostDialog: state.delPostDialog,
   user: state.user,
 });
+
 export default connect(mapStateToProps, {
   submitDeletePostDialog,
   closeDeletePostDialog,

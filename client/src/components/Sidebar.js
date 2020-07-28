@@ -280,7 +280,6 @@ const mapStateToProps = (state) => {
   return {
     open: state.isSidebarOpen,
     user: state.user,
-    // selectedContentPage: state.selectedContentPage,
   };
 };
 

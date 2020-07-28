@@ -34,10 +34,14 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { Link as RouterLink } from "react-router-dom";
 import { deletePost, addComment } from "../../app/actions/postActions";
 import DeletePostDialog from "./DeletePostDialog";
-import { submitDeletePostDialog } from "../../app/actions";
+import {
+  submitDeletePostDialog,
+  submitEditPostDialog,
+} from "../../app/actions";
 import PostComment from "./PostComment";
 // import EmojiEmotionsOutlinedIcon from "@material-ui/icons/EmojiEmotionsOutlined";
 import "emoji-mart/css/emoji-mart.css";
+import EditPostDialog from "./EditPostDialog";
 
 const styles = (theme) => ({
   root: {
@@ -129,7 +133,7 @@ const styles = (theme) => ({
   },
 });
 
-// const menuOptions = ["edit", "delete", "report"];
+// const menuOptions = ["edit", "delete", "repost"];
 
 class Post extends Component {
   state = {
@@ -217,15 +221,22 @@ class Post extends Component {
     });
   };
 
-  handleEdit = (postdata) => {
+  handleEdit = (postId, postContent) => {
+    const payload = {
+      open: this.props.editPostDialog.open,
+      postId: postId,
+      postContent: postContent
+    };
     console.log("handle Edit Post");
+    this.props.submitEditPostDialog(payload);
+    this.closeOptions();
   };
 
   render() {
     const { classes, postdata, userId } = this.props;
     const date = new Date(postdata.createdAt).toLocaleString("en-US");
     let deleteOption,
-      reportOption,
+      repostOption,
       editOption = null;
     if (this.props.user.id === postdata.authorId) {
       deleteOption = (
@@ -234,15 +245,16 @@ class Post extends Component {
         </MenuItem>
       );
       editOption = (
-        <MenuItem onClick={() => this.handleEdit(postdata._id)}>Edit</MenuItem>
+        <MenuItem onClick={() => this.handleEdit(postdata._id, postdata.content)}>Edit</MenuItem>
       );
     } else {
-      reportOption = <MenuItem>Report</MenuItem>;
+      repostOption = <MenuItem>Repost</MenuItem>;
     }
 
     return (
       <div className={classes.postContainer}>
         <DeletePostDialog />
+        <EditPostDialog  />
         <Paper className={classes.paper}>
           <Grid
             item
@@ -358,7 +370,7 @@ class Post extends Component {
               >
                 {editOption}
                 {deleteOption}
-                {reportOption}
+                {repostOption}
               </Menu>
             </Grid>
             <Grid
@@ -497,6 +509,7 @@ class Post extends Component {
 const mapStateToProps = (state) => ({
   user: state.user,
   delPostDialog: state.delPostDialog,
+  editPostDialog: state.editPostDialog,
 });
 
 Post.propTypes = {
@@ -506,5 +519,10 @@ Post.propTypes = {
 
 export default compose(
   withStyles(styles),
-  connect(mapStateToProps, { deletePost, submitDeletePostDialog, addComment })
+  connect(mapStateToProps, {
+    deletePost,
+    submitDeletePostDialog,
+    addComment,
+    submitEditPostDialog,
+  })
 )(Post);
