@@ -225,7 +225,7 @@ class Post extends Component {
     const payload = {
       open: this.props.editPostDialog.open,
       postId: postId,
-      postContent: postContent
+      postContent: postContent,
     };
     console.log("handle Edit Post");
     this.props.submitEditPostDialog(payload);
@@ -245,7 +245,11 @@ class Post extends Component {
         </MenuItem>
       );
       editOption = (
-        <MenuItem onClick={() => this.handleEdit(postdata._id, postdata.content)}>Edit</MenuItem>
+        <MenuItem
+          onClick={() => this.handleEdit(postdata._id, postdata.content)}
+        >
+          Edit
+        </MenuItem>
       );
     } else {
       repostOption = <MenuItem>Repost</MenuItem>;
@@ -254,7 +258,7 @@ class Post extends Component {
     return (
       <div className={classes.postContainer}>
         <DeletePostDialog />
-        <EditPostDialog  />
+        <EditPostDialog />
         <Paper className={classes.paper}>
           <Grid
             item
@@ -334,7 +338,17 @@ class Post extends Component {
               alignItems="flex-start"
             >
               <Grid item color="primary">
-                <Typography color="primary">{date}</Typography>
+                <Grid
+                  container
+                  direction="column"
+                  alignItems="flex-end"
+                  justify="flex-end"
+                >
+                  <Typography color="primary">{date}</Typography>
+                  {postdata.createdAt !== postdata.updatedAt && (
+                    <Typography variant="caption">Edited</Typography>
+                  )}
+                </Grid>
               </Grid>
               <Grid item>
                 <IconButton
