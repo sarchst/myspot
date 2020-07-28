@@ -51,7 +51,7 @@ class Profile extends React.Component {
               <Post
                 key={p._id}
                 postdata={p}
-                toggleLike={() => toggleLike({ post: p, userId: user.id })}
+                toggleLike={() => toggleLike(p, user.id)}
                 userId={user.id}
               />
             ))

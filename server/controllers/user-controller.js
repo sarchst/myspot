@@ -225,6 +225,7 @@ deletePost = (req, res) => {
   );
 };
 
+
 likePost = (req, res) => {
   const body = req.body;
   if (!body) {
@@ -236,7 +237,7 @@ likePost = (req, res) => {
 
   User.findOneAndUpdate(
     { _id: req.params.id, "posts._id": body.postId },
-    { $addToSet: { "posts.$[outer].usersLiked": body.userId} },
+    { $addToSet: { "posts.$[outer].usersLiked": body.userId } },
     { arrayFilters: [{ "outer._id": body.postId }], upsert: true, new: true },
     (err, result) => {
       if (err) {
@@ -249,7 +250,6 @@ likePost = (req, res) => {
     }
   );
 };
-
 
 unlikePost = (req, res) => {
   const body = req.body;
@@ -488,5 +488,5 @@ module.exports = {
   addComment,
   deleteComment,
   likePost,
-  unlikePost
+  unlikePost,
 };
