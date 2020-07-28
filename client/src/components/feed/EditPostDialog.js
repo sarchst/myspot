@@ -59,14 +59,15 @@ class EditPostDialog extends React.Component {
               ></TextField>
             </DialogContent>
             <DialogActions>
-              <Button
-                onClick={this.handleCancel}
-                color="primary"
-                variant="contained"
-              >
+              <Button onClick={this.handleCancel} color="primary">
                 Cancel
               </Button>
-              <Button onClick={this.handleConfirm} color="primary" autoFocus>
+              <Button
+                onClick={this.handleConfirm}
+                color="primary"
+                variant="contained"
+                autoFocus
+              >
                 Confirm
               </Button>
             </DialogActions>
