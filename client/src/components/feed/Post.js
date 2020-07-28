@@ -48,7 +48,6 @@ const styles = (theme) => ({
     flexGrow: 1,
   },
   postContainer: {
-    // margin: 15,
     marginTop: theme.spacing(2),
     marginBottom: theme.spacing(2),
   },
@@ -133,7 +132,6 @@ const styles = (theme) => ({
   },
 });
 
-// const menuOptions = ["edit", "delete", "repost"];
 
 class Post extends Component {
   state = {
@@ -214,7 +212,6 @@ class Post extends Component {
       postId: postId,
       time: new Date().toLocaleString("en-US"),
     };
-    console.log("handleSubmitComment", comment);
     this.props.addComment(comment);
     this.setState({
       commentContent: "",
@@ -227,7 +224,6 @@ class Post extends Component {
       postId: postId,
       postContent: postContent,
     };
-    console.log("handle Edit Post");
     this.props.submitEditPostDialog(payload);
     this.closeOptions();
   };
@@ -296,7 +292,6 @@ class Post extends Component {
                     user_ID: postdata.authorId,
                   },
                 }}
-                // style={{ color: "#03DAC6" }}
               >
                 <Typography className={classes.routerLink}>
                   {postdata.username}

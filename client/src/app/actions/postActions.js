@@ -88,10 +88,6 @@ export function fetchPosts(id) {
         return res.data;
       })
       .then((res) => {
-        // console.log("POSTS to be loaded:");
-        // console.log(res);
-
-        // add profilePic key to every post yin posts
         for (let i = 0; i < res.posts.length; i++) {
           res.posts[i].profilePic = res.profilePic;
         }
