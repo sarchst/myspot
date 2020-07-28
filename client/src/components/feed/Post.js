@@ -217,16 +217,24 @@ class Post extends Component {
     });
   };
 
+  handleEdit = (postdata) => {
+    console.log("handle Edit Post");
+  };
+
   render() {
     const { classes, postdata, userId } = this.props;
     const date = new Date(postdata.createdAt).toLocaleString("en-US");
     let deleteOption,
-      reportOption = null;
+      reportOption,
+      editOption = null;
     if (this.props.user.id === postdata.authorId) {
       deleteOption = (
         <MenuItem onClick={() => this.handleDelete(postdata._id)}>
           Delete
         </MenuItem>
+      );
+      editOption = (
+        <MenuItem onClick={() => this.handleEdit(postdata._id)}>Edit</MenuItem>
       );
     } else {
       reportOption = <MenuItem>Report</MenuItem>;
@@ -348,6 +356,7 @@ class Post extends Component {
                   },
                 }}
               >
+                {editOption}
                 {deleteOption}
                 {reportOption}
               </Menu>
