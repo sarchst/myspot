@@ -39,7 +39,6 @@ import PostComment from "./PostComment";
 // import EmojiEmotionsOutlinedIcon from "@material-ui/icons/EmojiEmotionsOutlined";
 import "emoji-mart/css/emoji-mart.css";
 
-
 const styles = (theme) => ({
   root: {
     flexGrow: 1,
@@ -197,7 +196,6 @@ class Post extends Component {
     });
   };
 
-
   handleChangeComment = (e) => {
     this.setState({ commentContent: e.target.value });
   };
@@ -233,7 +231,6 @@ class Post extends Component {
     } else {
       reportOption = <MenuItem>Report</MenuItem>;
     }
-
 
     return (
       <div className={classes.postContainer}>
@@ -454,6 +451,14 @@ class Post extends Component {
                       value={this.state.commentContent}
                       onChange={this.handleChangeComment}
                       color={"secondary"}
+                      onKeyPress={(e) => {
+                        if (e.key === "Enter") {
+                          this.handleSubmitComment(
+                            postdata._id,
+                            postdata.authorId
+                          );
+                        }
+                      }}
                     />
                   </FormControl>
                 </Grid>
