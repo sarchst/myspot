@@ -21,12 +21,17 @@ const styles = (theme) => ({
 const spotifyWebApi = new Spotify();
 
 class ProfileTable extends React.Component {
-  state = {
-    tabIndex: false,
-    playlists: [],
-    followers: [],
-    following: [],
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      tabIndex: false,
+      playlists: [],
+      followers: [],
+      following: [],
+    };
+    spotifyWebApi.setAccessToken(this.props.spotifyApi.accessToken);
+  }
+
   componentDidMount = () => {
     spotifyWebApi
       .getUserPlaylists(this.props.user.id)
@@ -136,7 +141,7 @@ class ProfileTable extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-  spotifyWebApi: state.spotifyWebApi,
+  spotifyApi: state.spotifyApi,
   user: state.user,
 });
 

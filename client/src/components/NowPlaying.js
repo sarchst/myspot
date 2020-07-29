@@ -13,15 +13,10 @@ class NowPlaying extends React.Component {
         image: "",
       },
     };
-    spotifyWebApi.setAccessToken(this.props.spotifyWebApi);
+    spotifyWebApi.setAccessToken(this.props.spotifyApi.accessToken);
   }
 
   getNowPlaying() {
-    console.log(
-      "spotifywebApi inside getnowplaying:",
-      this.props.spotifyWebApi
-    );
-    // spotifyWebApi.setAccessToken(this.props.spotifyWebApi);
     spotifyWebApi
       .getMyCurrentPlaybackState()
       .then((response) => {
@@ -128,8 +123,8 @@ class NowPlaying extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    spotifyWebApi: state.spotifyWebApi,
     mySpotPlaylists: state.mySpotPlaylists,
+    spotifyApi: state.spotifyApi,
   };
 };
 

@@ -57,10 +57,9 @@ export const makePost = (post) => {
   };
 };
 
-
 export const deletePost = (id, postId) => {
-  console.log("Delete post in actions user ID", id)
-  console.log("Delete post in postBody", postId)
+  console.log("Delete post in actions user ID", id);
+  console.log("Delete post in postBody", postId);
   return (dispatch) => {
     return axios
       .put(`http://localhost:9000/user/posts/delete/${id}`, postId)
@@ -73,8 +72,8 @@ export const deletePost = (id, postId) => {
       .catch((error) => {
         throw error;
       });
-  }
-}
+  };
+};
 export function fetchPosts(id) {
   return (dispatch) => {
     dispatch(fetchPostsStarted());
@@ -89,10 +88,6 @@ export function fetchPosts(id) {
         return res.data;
       })
       .then((res) => {
-        // console.log("POSTS to be loaded:");
-        // console.log(res);
-
-        // add profilePic key to every post yin posts
         for (let i = 0; i < res.posts.length; i++) {
           res.posts[i].profilePic = res.profilePic;
         }
@@ -110,3 +105,57 @@ export function fetchPosts(id) {
       });
   };
 }
+
+export const addComment = (comment) => {
+  let id = comment.postOwnerId;
+  let authorId = comment.authorId;
+  return (dispatch) => {
+    return axios
+      .put(`http://localhost:9000/user/posts/comments/${id}`, comment)
+      .then(() => {
+        dispatch(fetchPosts(authorId));
+      })
+      .then(() => {
+        dispatch(fetchFeed(authorId));
+      })
+      .catch((error) => {
+        throw error;
+      });
+  };
+};
+
+export const deleteComment = (id, authorId, commentInfo) => {
+  return (dispatch) => {
+    return axios
+      .put(
+        `http://localhost:9000/user/posts/comments/delete/${id}`,
+        commentInfo
+      )
+      .then(() => {
+        dispatch(fetchPosts(authorId));
+      })
+      .then(() => {
+        dispatch(fetchFeed(authorId));
+      })
+      .catch((error) => {
+        throw error;
+      });
+  };
+};
+
+export const editPost = (id, commentInfo) => {
+  console.log("edit post action");
+  return (dispatch) => {
+    return axios
+      .put(`http://localhost:9000/user/posts/edit/${id}`, commentInfo)
+      .then(() => {
+        dispatch(fetchPosts(id));
+      })
+      .then(() => {
+        dispatch(fetchFeed(id));
+      })
+      .catch((error) => {
+        throw error;
+      });
+  };
+};

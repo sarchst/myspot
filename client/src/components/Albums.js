@@ -67,7 +67,7 @@ class Albums extends React.Component {
     this.state = {
       usersAlbums: [],
     };
-    spotifyWebApi.setAccessToken(this.props.spotifyWebApi);
+    spotifyWebApi.setAccessToken(this.props.spotifyApi.accessToken);
   }
 
   componentDidMount() {
@@ -159,7 +159,7 @@ class Albums extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    spotifyWebApi: state.spotifyWebApi,
+    spotifyApi: state.spotifyApi,
     user: state.user,
   };
 };
