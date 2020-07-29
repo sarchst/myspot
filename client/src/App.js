@@ -97,37 +97,60 @@ class App extends React.Component {
       console.log("LOGGING IN: SENDING SPOTIFYWEBAPI TO REDUX STORE");
       let userObject = {};
       this.props.registerSpotifyWebApi(params.access_token);
-      spotifyWebApi
-        .getMe()
-        .then((response) => {
-          // spotify POST playlist
-          spotifyWebApi.createPlaylist(response.id, {
-            name: "mySpot-playlist-POST-test",
-          });
-          //
-          Object.assign(userObject, response);
-          return spotifyWebApi.getMyTopTracks();
-        })
-        .then((topTracksResponse) => {
-          if (topTracksResponse) {
-            userObject.topTracks = topTracksResponse.items.slice(
-              0,
-              Math.min(topTracksResponse.items.length, 3)
-            );
-          }
-          return spotifyWebApi.getMyRecentlyPlayedTracks();
-        })
-        .then((recentTracksResponse) => {
-          if (recentTracksResponse) {
-            userObject.recentTracks = recentTracksResponse.items.slice(
-              0,
-              Math.min(recentTracksResponse.items.length, 3)
-            );
-          }
-          this.props.submitSpotifyApiUserMe(userObject);
-          this.props.setSelectedUser(userObject);
-          this.props.setCurrentUser(userObject.id, userObject.display_name);
-        });
+      const spotifyMePromise = spotifyWebApi.getMe();
+      const topTracksPromise = spotifyWebApi.getMyTopTracks();
+      const recentTracksPromise = spotifyWebApi.getMyRecentlyPlayedTracks();
+      Promise.all([
+        spotifyMePromise,
+        topTracksPromise,
+        recentTracksPromise,
+      ]).then((values) => {
+        const spotifyMe = values[0];
+        const topTracks = values[1];
+        const recentTracks = values[2];
+        Object.assign(userObject, spotifyMe);
+        userObject.topTracks = topTracks.items.slice(
+          0,
+          Math.min(topTracks.items.length, 3)
+        );
+        userObject.recentTracks = recentTracks.items.slice(
+          0,
+          Math.min(recentTracks.items.length, 3)
+        );
+        this.props.setSelectedUser(userObject);
+        this.props.setCurrentUser(userObject.id, userObject.display_name);
+      });
+      // spotifyWebApi
+      //   .getMe()
+      //   .then((response) => {
+      //     // spotify POST playlist
+      //     spotifyWebApi.createPlaylist(response.id, {
+      //       name: "mySpot-playlist-POST-test",
+      //     });
+      //     //
+      //     Object.assign(userObject, response);
+      //     return spotifyWebApi.getMyTopTracks();
+      //   })
+      //   .then((topTracksResponse) => {
+      //     if (topTracksResponse) {
+      //       userObject.topTracks = topTracksResponse.items.slice(
+      //         0,
+      //         Math.min(topTracksResponse.items.length, 3)
+      //       );
+      //     }
+      //     return spotifyWebApi.getMyRecentlyPlayedTracks();
+      //   })
+      //   .then((recentTracksResponse) => {
+      //     if (recentTracksResponse) {
+      //       userObject.recentTracks = recentTracksResponse.items.slice(
+      //         0,
+      //         Math.min(recentTracksResponse.items.length, 3)
+      //       );
+      //     }
+      //     this.props.submitSpotifyApiUserMe(userObject);
+      //     this.props.setSelectedUser(userObject);
+      //     this.props.setCurrentUser(userObject.id, userObject.display_name);
+      //   });
     }
   }
 
