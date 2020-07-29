@@ -12,11 +12,9 @@ import { setCurrentUser } from "./app/actions/userActions";
 import { submitSpotifyApiUserMe } from "./app/actions/spotifyApiActions";
 import { fetchUserSettings } from "./app/actions/settingsActions";
 import { setSelectedUser } from "./app/actions/selectedUserActions";
+import { setPlayListIDs } from "./app/actions/playlistActions";
 
 const spotifyWebApi = new Spotify();
-
-const MySpot = "MySpot";
-const MySpotTinderify = "MySpot-Tinderify";
 const lightTheme = createMuiTheme({
   palette: {
     type: "light",
@@ -90,9 +88,6 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     const params = this.getHashParams();
-    // console.log("params is: ");
-    // console.log(params);
-    // console.log("access token is " + params.access_token);
 
     if (params.access_token) {
       spotifyWebApi.setAccessToken(params.access_token);
@@ -123,76 +118,28 @@ class App extends React.Component {
           Math.min(recentTracks.items.length, 3)
         );
         // set logged in user as initial selectedUser
-        this.props.setSelectedUser(userObject);
-        // get URIs for MySpot and MySpot-Tinderify playlists
-        // get list of user's playlists
-        spotifyWebApi.getUserPlaylists(spotifyMe.id).then((res) => {
-          const playlists = res.items;
-          let MySpotPlaylistID = playlists.find(
-            (playlist) => playlist.name == MySpot
-          );
-          let TinderifyPlaylistID = playlists.find(
-            (playlist) => playlist.name == MySpotTinderify
-          );
-
-          if (!MySpotPlaylistID) {
-            spotifyWebApi
-              .createPlaylist(spotifyMe.id, { name: MySpot })
-              .then((playlist) => {
-                MySpotPlaylistID = playlist.id;
-              });
-          }
-          if (!TinderifyPlaylistID) {
-            spotifyWebApi
-              .createPlaylist(spotifyMe.id, { name: MySpotTinderify })
-              .then((playlist) => {
-                TinderifyPlaylistID = playlist.id;
-              });
-          }
-
-          console.log("MySpotPlaylistID");
-          console.log(MySpotPlaylistID);
-          console.log("TinderifyPlaylistID");
-          console.log(TinderifyPlaylistID);
-          // playlists.forEach(playlist => {
-          //   if (playlist.name == "MySpot") {
-          //     MySpotPlaylistID = playlist.id;
-          //   } else if (playlist.name == "MySpot")
-          // });
-        });
+        this.props.setSelectedUser(userObject.id);
+        // dispatch updates spotify info in db
+        // TODO: replace redux action with db call instead?
+        this.props.submitSpotifyApiUserMe(userObject);
+        // set URIs for MySpot and MySpot-Tinderify playlists
+        console.log("calling setPlayListIDs in app.js");
+        this.props.setPlayListIDs(spotifyMe.id, params.access_token);
+        // set current user in redux
         this.props.setCurrentUser(userObject.id, userObject.display_name);
+
+        // if (!TinderifyPlaylistID) {
+        //   spotifyWebApi
+        //     .createPlaylist(spotifyMe.id, { name: MySpotTinderify })
+        //     .then((playlist) => {
+        //       TinderifyPlaylistID = playlist.id;
+        //     });
+        // }
+
+        // TODO: make sure URIs are sent after async completes
+        // TODO: tell Quinn not to delete submitSpotifyApiUserMe
+        // create promise all and dispatch redux in promise all.then
       });
-      // spotifyWebApi
-      //   .getMe()
-      //   .then((response) => {
-      //     // spotify POST playlist
-      //     spotifyWebApi.createPlaylist(response.id, {
-      //       name: "mySpot-playlist-POST-test",
-      //     });
-      //     //
-      //     Object.assign(userObject, response);
-      //     return spotifyWebApi.getMyTopTracks();
-      //   })
-      //   .then((topTracksResponse) => {
-      //     if (topTracksResponse) {
-      //       userObject.topTracks = topTracksResponse.items.slice(
-      //         0,
-      //         Math.min(topTracksResponse.items.length, 3)
-      //       );
-      //     }
-      //     return spotifyWebApi.getMyRecentlyPlayedTracks();
-      //   })
-      //   .then((recentTracksResponse) => {
-      //     if (recentTracksResponse) {
-      //       userObject.recentTracks = recentTracksResponse.items.slice(
-      //         0,
-      //         Math.min(recentTracksResponse.items.length, 3)
-      //       );
-      //     }
-      //     this.props.submitSpotifyApiUserMe(userObject);
-      //     this.props.setSelectedUser(userObject);
-      //     this.props.setCurrentUser(userObject.id, userObject.display_name);
-      //   });
     }
   }
 
@@ -247,6 +194,8 @@ const mapDispatchToProps = (dispatch) => {
     submitSpotifyApiUserMe: (spotifyUserMe) =>
       dispatch(submitSpotifyApiUserMe(spotifyUserMe)),
     fetchUserSettings: fetchUserSettings,
+    setPlayListIDs: (UserMeID, spotifyToken) =>
+      dispatch(setPlayListIDs(UserMeID, spotifyToken)),
   };
 };
 

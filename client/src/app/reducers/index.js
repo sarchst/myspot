@@ -12,6 +12,7 @@ import spotifyApiUserMe from "./spotifyApiUserMe";
 import updateSettings from "./updateSettings";
 import delPostDialog from "./delPostDialog";
 import selectedUser from "./selectedUser";
+import mySpotPlaylists from "./mySpotPlaylists";
 
 const allReducers = combineReducers({
   isSidebarOpen: toggleSidebar,
@@ -26,6 +27,7 @@ const allReducers = combineReducers({
   updateSettings: updateSettings,
   delPostDialog: delPostDialog,
   selectedUser: selectedUser,
+  mySpotPlaylists: mySpotPlaylists,
 });
 
 export default allReducers;

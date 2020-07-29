@@ -4,6 +4,7 @@ export const SELECT_USER = "SELECT_USER";
 export const setSelectedUser = (userID) => {
   console.log("setSelectedUser in actions called");
   return (dispatch) => {
+    console.log("inside selecteduser dispatch");
     fetch(`http://localhost:9000/user/${userID}`)
       .then((res) => {
         console.log(res);
