@@ -1,4 +1,4 @@
-const { User, Post, Setting } = require("../models/user-model");
+const { User, Post, Setting, Comment } = require("../models/user-model");
 
 createUser = (req, res) => {
   const body = req.body;
@@ -201,18 +201,43 @@ addPost = (req, res) => {
   );
 };
 
+editPost = (req, res) => {
+   const body = req.body;
+   if (!body) {
+     return res.status(400).json({
+       success: false,
+       error: "You must provide a body to update",
+     });
+   }
+
+   User.findOneAndUpdate(
+     { _id: req.params.id, "posts._id": body.postId },
+     { $set: { "posts.$[outer].content": body.content } },
+     { arrayFilters: [{ "outer._id": body.postId }], upsert: true, new: true },
+     (err, result) => {
+       if (err) {
+         return res.status(404).json({
+           err,
+           message: "This is an invalid comment update request.",
+         });
+       }
+       return res.status(200).json({ success: true, posts: result.posts });
+     }
+   );
+}
+
 deletePost = (req, res) => {
   const body = req.body;
-    if (!body) {
-      return res.status(400).json({
-        success: false,
-        error: "You must provide a body to update",
-      });
-    }
+  if (!body) {
+    return res.status(400).json({
+      success: false,
+      error: "You must provide a body to update",
+    });
+  }
 
   User.findOneAndUpdate(
     { _id: req.params.id },
-    { $pull: { posts: { _id: body.postId} } },
+    { $pull: { posts: { _id: body.postId } } },
     (err, user) => {
       if (err) {
         return res.status(404).json({
@@ -225,6 +250,56 @@ deletePost = (req, res) => {
   );
 };
 
+
+likePost = (req, res) => {
+  const body = req.body;
+  if (!body) {
+    return res.status(400).json({
+      success: false,
+      error: "You must provide a body to update",
+    });
+  }
+
+  User.findOneAndUpdate(
+    { _id: req.params.id, "posts._id": body.postId },
+    { $addToSet: { "posts.$[outer].usersLiked": body.userId } },
+    { arrayFilters: [{ "outer._id": body.postId }], upsert: true, new: true },
+    (err, result) => {
+      if (err) {
+        return res.status(404).json({
+          err,
+          message: "This is an invalid comment update request.",
+        });
+      }
+      return res.status(200).json({ success: true, posts: result.posts });
+    }
+  );
+};
+
+unlikePost = (req, res) => {
+  const body = req.body;
+  if (!body) {
+    return res.status(400).json({
+      success: false,
+      error: "You must provide a body to update",
+    });
+  }
+
+  User.findOneAndUpdate(
+    { _id: req.params.id, "posts._id": body.postId },
+    { $pull: { "posts.$[outer].usersLiked": body.userId } },
+    { arrayFilters: [{ "outer._id": body.postId }], upsert: true, new: true },
+    (err, result) => {
+      if (err) {
+        return res.status(404).json({
+          err,
+          message: "This is an invalid comment update request.",
+        });
+      }
+      return res.status(200).json({ success: true, posts: result.posts });
+    }
+  );
+};
 getUserSettings = async (req, res) => {
   User.findOne({ _id: req.params.id }, "settings", (err, User) => {
     if (err) {
@@ -267,6 +342,60 @@ updateSettings = async (req, res) => {
       message: "User setting not found.",
     });
   });
+};
+
+addComment = async (req, res) => {
+  const body = req.body;
+  if (!body) {
+    return res.status(400).json({
+      success: false,
+      error: "You must provide a body to update",
+    });
+  }
+  // console.log("Req body is " + body);
+  const comment = new Comment(body);
+  // console.log("comment is " + comment);
+  // console.log("postid", body.postId);
+  // console.log(req.params.id);
+  User.findOneAndUpdate(
+    { _id: req.params.id, "posts._id": body.postId },
+    { $push: { "posts.$[outer].comments": comment } },
+    { arrayFilters: [{ "outer._id": body.postId }], upsert: true },
+    (err, result) => {
+      if (err) {
+        return res.status(404).json({
+          err,
+          message: "This is an invalid comment update request.",
+        });
+      }
+      return res.status(200).json({ success: true, posts: result.posts });
+    }
+  );
+};
+
+deleteComment = (req, res) => {
+  const body = req.body;
+  if (!body) {
+    return res.status(400).json({
+      success: false,
+      error: "You must provide a body to update",
+    });
+  }
+
+  User.findOneAndUpdate(
+    { _id: req.params.id, "posts._id": body.postId },
+    { $pull: { "posts.$[outer].comments": { _id: body.commentId } } },
+    { arrayFilters: [{ "outer._id": body.postId }], new: true },
+    (err, user) => {
+      if (err) {
+        return res.status(404).json({
+          err,
+          message: "This is an invalid update request.",
+        });
+      }
+      return res.status(200).json({ success: true, posts: user.posts });
+    }
+  );
 };
 
 getProfilePic = async (req, res) => {
@@ -381,4 +510,9 @@ module.exports = {
   addFollowingFollowerRelationship,
   removeFollowingFollowerRelationship,
   deletePost,
+  addComment,
+  deleteComment,
+  likePost,
+  unlikePost,
+  editPost,
 };

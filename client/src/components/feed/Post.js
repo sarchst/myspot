@@ -32,16 +32,22 @@ import MusicNoteIcon from "@material-ui/icons/MusicNote";
 import PlaylistAddIcon from "@material-ui/icons/PlaylistAdd";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { Link as RouterLink } from "react-router-dom";
-import { deletePost } from "../../app/actions/postActions";
-import DeletePostDialog from "../DeletePostDialog";
-import { submitDeletePostDialog } from "../../app/actions";
+import { deletePost, addComment } from "../../app/actions/postActions";
+import DeletePostDialog from "./DeletePostDialog";
+import {
+  submitDeletePostDialog,
+  submitEditPostDialog,
+} from "../../app/actions";
+import PostComment from "./PostComment";
+// import EmojiEmotionsOutlinedIcon from "@material-ui/icons/EmojiEmotionsOutlined";
+import "emoji-mart/css/emoji-mart.css";
+import EditPostDialog from "./EditPostDialog";
 
 const styles = (theme) => ({
   root: {
     flexGrow: 1,
   },
   postContainer: {
-    // margin: 15,
     marginTop: theme.spacing(2),
     marginBottom: theme.spacing(2),
   },
@@ -126,12 +132,13 @@ const styles = (theme) => ({
   },
 });
 
-// const menuOptions = ["edit", "delete", "report"];
 
 class Post extends Component {
   state = {
     moreOptions: false,
     anchorEl: null,
+    emojiPickerOpen: false,
+    commentContent: "",
   };
 
   chooseIcon = (media) => {
@@ -191,13 +198,63 @@ class Post extends Component {
     });
   };
 
+  handleChangeComment = (e) => {
+    this.setState({ commentContent: e.target.value });
+  };
+
+  handleSubmitComment = (postId, postOwnerId) => {
+    let comment = {
+      content: this.state.commentContent,
+      usersLiked: [],
+      authorId: this.props.user.id,
+      authorUsername: this.props.user.username,
+      postOwnerId: postOwnerId,
+      postId: postId,
+      time: new Date().toLocaleString("en-US"),
+    };
+    this.props.addComment(comment);
+    this.setState({
+      commentContent: "",
+    });
+  };
+
+  handleEdit = (postId, postContent) => {
+    const payload = {
+      open: this.props.editPostDialog.open,
+      postId: postId,
+      postContent: postContent,
+    };
+    this.props.submitEditPostDialog(payload);
+    this.closeOptions();
+  };
+
   render() {
     const { classes, postdata, userId } = this.props;
-    const date = new Date(postdata.createdAt).toDateString();
+    const date = new Date(postdata.createdAt).toLocaleString("en-US");
+    let deleteOption,
+      repostOption,
+      editOption = null;
+    if (this.props.user.id === postdata.authorId) {
+      deleteOption = (
+        <MenuItem onClick={() => this.handleDelete(postdata._id)}>
+          Delete
+        </MenuItem>
+      );
+      editOption = (
+        <MenuItem
+          onClick={() => this.handleEdit(postdata._id, postdata.content)}
+        >
+          Edit
+        </MenuItem>
+      );
+    } else {
+      repostOption = <MenuItem>Repost</MenuItem>;
+    }
 
     return (
       <div className={classes.postContainer}>
         <DeletePostDialog />
+        <EditPostDialog />
         <Paper className={classes.paper}>
           <Grid
             item
@@ -235,7 +292,6 @@ class Post extends Component {
                     user_ID: postdata.authorId,
                   },
                 }}
-                // style={{ color: "#03DAC6" }}
               >
                 <Typography className={classes.routerLink}>
                   {postdata.username}
@@ -277,7 +333,17 @@ class Post extends Component {
               alignItems="flex-start"
             >
               <Grid item color="primary">
-                <Typography color="primary">{date}</Typography>
+                <Grid
+                  container
+                  direction="column"
+                  alignItems="flex-end"
+                  justify="flex-end"
+                >
+                  <Typography color="primary">{date}</Typography>
+                  {postdata.createdAt !== postdata.updatedAt && (
+                    <Typography variant="caption">Edited</Typography>
+                  )}
+                </Grid>
               </Grid>
               <Grid item>
                 <IconButton
@@ -311,14 +377,9 @@ class Post extends Component {
                   },
                 }}
               >
-                {/* {menuOptions.map((option) => (
-                  <MenuItem key={option} onClick={() => this.closeOptions()}>
-                    {option}
-                  </MenuItem>
-                ))} */}
-                <MenuItem onClick={() => this.handleDelete(postdata._id)}>
-                  delete
-                </MenuItem>
+                {editOption}
+                {deleteOption}
+                {repostOption}
               </Menu>
             </Grid>
             <Grid
@@ -398,30 +459,53 @@ class Post extends Component {
             >
               <div className={classes.column}>
                 <Typography className={classes.heading} color={"primary"}>
-                  Comments
+                  Comments ({postdata.comments.length})
                 </Typography>
               </div>
             </AccordionSummary>
             <AccordionDetails className={classes.details}>
               <ul className={classes.column}>
-                <li>Comment 1</li>
+                {postdata.comments && postdata.comments.length
+                  ? postdata.comments.map((comment, index) => {
+                      return <PostComment key={index} commentdata={comment} />;
+                    })
+                  : null}
               </ul>
-              <FormControl fullWidth>
-                <InputLabel htmlFor="standard-basic" color={"secondary"}>
-                  Leave a comment below
-                </InputLabel>
-                <Input
-                  value={this.state.content}
-                  onChange={this.handleChange}
-                  color={"secondary"}
-                />
-              </FormControl>
+              <Grid item container direction="row" alignItems="center">
+                <Grid item xs={11}>
+                  <FormControl fullWidth>
+                    <InputLabel htmlFor="standard-basic" color={"secondary"}>
+                      Leave a comment below
+                    </InputLabel>
+                    <Input
+                      value={this.state.commentContent}
+                      onChange={this.handleChangeComment}
+                      color={"secondary"}
+                      onKeyPress={(e) => {
+                        if (e.key === "Enter") {
+                          this.handleSubmitComment(
+                            postdata._id,
+                            postdata.authorId
+                          );
+                        }
+                      }}
+                    />
+                  </FormControl>
+                </Grid>
+              </Grid>
               <div className={classes.column} />
             </AccordionDetails>
             <Divider />
             <AccordionActions>
               <Button size="small">Cancel</Button>
-              <Button size="small" color="secondary" variant="contained">
+              <Button
+                size="small"
+                color="secondary"
+                variant="contained"
+                onClick={() =>
+                  this.handleSubmitComment(postdata._id, postdata.authorId)
+                }
+              >
                 Post
               </Button>
             </AccordionActions>
@@ -434,6 +518,7 @@ class Post extends Component {
 const mapStateToProps = (state) => ({
   user: state.user,
   delPostDialog: state.delPostDialog,
+  editPostDialog: state.editPostDialog,
 });
 
 Post.propTypes = {
@@ -443,5 +528,10 @@ Post.propTypes = {
 
 export default compose(
   withStyles(styles),
-  connect(mapStateToProps, { deletePost, submitDeletePostDialog })
+  connect(mapStateToProps, {
+    deletePost,
+    submitDeletePostDialog,
+    addComment,
+    submitEditPostDialog,
+  })
 )(Post);

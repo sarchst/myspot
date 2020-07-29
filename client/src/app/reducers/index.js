@@ -10,6 +10,7 @@ import fetchFeed from "./fetchFeed";
 import fetchPosts from "./fetchPosts";
 import updateSettings from "./updateSettings";
 import delPostDialog from "./delPostDialog";
+import editPostDialog from "./editPostDialog";
 
 const allReducers = combineReducers({
   isSidebarOpen: toggleSidebar,
@@ -22,6 +23,7 @@ const allReducers = combineReducers({
   posts: posts,
   updateSettings: updateSettings,
   delPostDialog: delPostDialog,
+  editPostDialog: editPostDialog,
 });
 
 export default allReducers;
