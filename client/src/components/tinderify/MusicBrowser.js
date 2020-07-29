@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 import Spotify from "spotify-web-api-js";
 import { connect } from "react-redux";
 import { withStyles } from "@material-ui/core/styles";
@@ -8,7 +8,12 @@ import PlayCircleOutlineIcon from "@material-ui/icons/PlayCircleOutline";
 import MusicOffOutlinedIcon from "@material-ui/icons/MusicOffOutlined";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import NotInterestedIcon from "@material-ui/icons/NotInterested";
-import Typography from "@material-ui/core/Typography";
+// import Typography from "@material-ui/core/Typography";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemAvatar from "@material-ui/core/ListItemAvatar";
+import Avatar from "@material-ui/core/Avatar";
+import ListItemText from "@material-ui/core/ListItemText";
+import List from "@material-ui/core/List";
 
 const styles = (theme) => ({
   audioPlayer: {
@@ -32,8 +37,9 @@ class MusicBrowser extends React.Component {
       discoverWeeklyImageUrl: "",
       songUri: "",
       trackName: "",
-      trackArtist: "",
-      trackAlbumArt: "",
+      trackArtist: [],
+      trackAlbumArt: [],
+      trackID: "",
     };
     spotifyWebApi.setAccessToken(this.props.spotifyWebApi);
   }
@@ -122,6 +128,10 @@ class MusicBrowser extends React.Component {
     console.log(track);
     this.setState({
       songUri: track.preview_url,
+      trackArtist: track.artists,
+      trackName: track.name,
+      trackAlbumArt: track.album.images,
+      trackID: track.id,
     });
   };
 
@@ -133,44 +143,46 @@ class MusicBrowser extends React.Component {
           <div>
             {this.state.songUri ? (
               // <Typography></Typography>
-              //     <List className={classes.listRoot} dense={true}>
-              //         <ListItem key={index}>
-              //           <ListItemAvatar>
-              //             <Avatar
-              //               classes={{ primary: classes.listItemText }}
-              //               variant="square"
-              //               src={
-              //                 track.track.album.images.length
-              //                   ? track.track.album.images[
-              //                       track.track.album.images.length - 1
-              //                     ].url
-              //                   : null
-              //               }
-              //             ></Avatar>
-              //           </ListItemAvatar>
-              //           <ListItemText
-              //             classes={{ primary: classes.listItemText }}
-              //             primary={track.track.name}
-              //             secondary={track.track.album.artists.map(
-              //               (artist, index) =>
-              //                 artist.name +
-              //                 (index < track.track.album.artists.length - 1
-              //                   ? " | "
-              //                   : "")
-              //             )}
-              //           />
-              //         </ListItem>
-              //       );
-              //   </List>
-
-              <Box className={classes.profileCardBox} pb={1}>
-                <audio
-                  className={classes.audioPlayer}
-                  autoPlay
-                  controls="controls"
-                  src={this.state.songUri}
-                ></audio>
-              </Box>
+              <Fragment>
+                <Box className={classes.profileCardBox} pb={1}>
+                  <List>
+                    <ListItem>
+                      <FavoriteIcon
+                        m={2}
+                        onClick={() => this.likeSong(this.state.trackID)}
+                      ></FavoriteIcon>
+                      <ListItemAvatar>
+                        <Avatar
+                          variant="square"
+                          src={
+                            this.state.trackAlbumArt.length
+                              ? this.state.trackAlbumArt[
+                                  this.state.trackAlbumArt.length - 1
+                                ].url
+                              : null
+                          }
+                        ></Avatar>
+                      </ListItemAvatar>
+                      <ListItemText
+                        primary={this.state.trackName}
+                        secondary={this.state.trackArtist.map(
+                          (artist, index) =>
+                            artist.name +
+                            (index < this.state.trackArtist.length - 1
+                              ? " | "
+                              : "")
+                        )}
+                      />
+                    </ListItem>
+                  </List>
+                  <audio
+                    className={classes.audioPlayer}
+                    autoPlay
+                    controls="controls"
+                    src={this.state.songUri}
+                  ></audio>
+                </Box>
+              </Fragment>
             ) : null}
             <CarouselProvider
               naturalSlideWidth={5}
@@ -228,7 +240,7 @@ class MusicBrowser extends React.Component {
 
                         <FavoriteIcon
                           className="favorite"
-                          onClick={() => this.likeSong(track.track.preview_url)}
+                          onClick={() => this.likeSong(track.track.id)}
                         ></FavoriteIcon>
                       </div>
                     </Slide>

@@ -3,7 +3,7 @@ import clsx from "clsx";
 // import Post from "./Post";
 import Playlists from "./Playlists";
 import Albums from "./Albums";
-import TinderifyTitleCard from "./tinderify/TinderifyTitleCard";
+import Tinderify from "./tinderify/Tinderify";
 import Favourites from "./Favourites";
 import Drawer from "@material-ui/core/Drawer";
 import List from "@material-ui/core/List";
@@ -29,7 +29,6 @@ import { connect } from "react-redux";
 import { withStyles } from "@material-ui/core/styles";
 import { toggleSidebar } from "../app/actions";
 import contentType from "../data/ContentTypeEnum";
-
 
 import { Link, Route, Switch, Redirect } from "react-router-dom";
 
@@ -231,12 +230,12 @@ class Sidebar extends React.Component {
               <Albums />
             </Route>
             <Route path="/:user/tinderify" exact>
-              <TinderifyTitleCard />
+              <Tinderify />
             </Route>
             <Route
               path="/myspotter/:user/tinderify"
               exact
-              component={(props) => <TinderifyTitleCard {...props} />}
+              component={(props) => <Tinderify {...props} />}
             />
             <Route path="/:user/favourites" exact>
               <Favourites />

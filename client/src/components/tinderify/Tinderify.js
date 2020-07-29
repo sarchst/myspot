@@ -1,6 +1,6 @@
 import React, { Fragment } from "react";
 import { connect } from "react-redux";
-import Spotify from "spotify-web-api-js";
+//import Spotify from "spotify-web-api-js";
 import FriendsDiscoverWeekly from "./FriendsDiscoverWeekly";
 
 import "pure-react-carousel/dist/react-carousel.es.css";
@@ -9,7 +9,7 @@ import Typography from "@material-ui/core/Typography";
 import { withStyles } from "@material-ui/core/styles";
 
 import { Paper, Tab, Tabs } from "@material-ui/core";
-import MaterialTable from "material-table";
+// import MaterialTable from "material-table";
 import MusicBrowser from "./MusicBrowser";
 
 const styles = (theme) => ({
@@ -23,30 +23,32 @@ const styles = (theme) => ({
   },
 });
 
-const spotifyWebApi = new Spotify();
+// const spotifyWebApi = new Spotify();
 
-class TinderifyTitleCard extends React.Component {
+class Tinderify extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       tabIndex: 0,
       otherUser: false,
       user_ID: "",
+      username: "",
     };
   }
 
-  componentDidMount() {
+  componentWillMount() {
     let user_ID;
     if (
       this.props.location &&
       this.props.location.state &&
       this.props.location.state.user_ID
     ) {
-      console.log("IN ANOTHER USERS TINDERIFY!!!", user_ID);
       this.setState({
         otherUser: true,
         user_ID: this.props.location.state.user_ID,
+        username: this.props.location.state.username,
       });
+      console.log("IN ANOTHER USERS TINDERIFY!!!", this.props.location);
     } else {
       console.log("it me", user_ID);
       this.setState({
@@ -70,11 +72,13 @@ class TinderifyTitleCard extends React.Component {
 
   render() {
     const { classes } = this.props;
-    console.log("The user is is...", this.user_ID);
+    console.log("The user is is...", this.state.user_ID);
     return (
       <div>
         <div>
-          <h1 className="tinderify-title">Tinderify</h1>
+          <h1 className="tinderify-title">
+            {this.state.otherUser ? this.state.username + "'s " : ""} Tinderify
+          </h1>
 
           {this.state.otherUser ? (
             <MusicBrowser user_ID={this.state.user_ID}></MusicBrowser>
@@ -99,7 +103,7 @@ class TinderifyTitleCard extends React.Component {
                   centered
                 >
                   <Tab label="My Discover Weekly" />
-                  <Tab label="Browse My Friends" />
+                  <Tab label="Browse" />
                 </Tabs>
                 {this.getPanel(this.state.tabIndex)}
               </Paper>
@@ -118,4 +122,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps)(withStyles(styles)(TinderifyTitleCard));
+export default connect(mapStateToProps)(withStyles(styles)(Tinderify));

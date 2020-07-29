@@ -111,6 +111,7 @@ class FriendsDiscoverWeekly extends React.Component {
                   pathname: "/myspotter/" + rowData.username + "/tinderify",
                   state: {
                     user_ID: rowData.userId,
+                    username: rowData.username,
                   },
                 }}
               >
