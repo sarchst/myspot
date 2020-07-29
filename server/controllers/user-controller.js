@@ -1,4 +1,4 @@
-const { User, Post, Setting } = require("../models/user-model");
+const { User, Post, Setting, Comment } = require("../models/user-model");
 
 createUser = (req, res) => {
   const body = req.body;
@@ -131,7 +131,10 @@ getUsers = async (req, res) => {
 
 // Returns a list of posts created by users the current user follows
 getUserFollowingFeed = async (req, res) => {
-  User.find({ _id: req.params.id }, "posts following", function (err, result) {
+  User.find({ _id: req.params.id }, "posts following profilePic", function (
+    err,
+    result
+  ) {
     if (err) {
       return res.status(400).json({ success: false, error: err });
     }
@@ -141,7 +144,7 @@ getUserFollowingFeed = async (req, res) => {
   })
     .populate({
       path: "following",
-      select: "posts",
+      select: "posts profilePic",
     })
     .exec(function (err, result) {
       // console.log(result.data.following.posts);
@@ -153,7 +156,10 @@ getUserFollowingFeed = async (req, res) => {
 
 // Returns a list of posts created by the user
 getUserPosts = async (req, res) => {
-  User.findOne({ _id: req.params.id }, function (err, result) {
+  User.findOne({ _id: req.params.id }, "posts profilePic", function (
+    err,
+    result
+  ) {
     if (err) {
       return res.status(400).json({ success: false, error: err });
     }
@@ -162,8 +168,8 @@ getUserPosts = async (req, res) => {
     }
   }).exec(function (err, user) {
     console.log("user posts");
-    console.log(user.posts);
-    return res.status(200).json({ success: true, data: user.posts });
+    console.log(user);
+    return res.status(200).json({ success: true, data: user });
   });
   // .catch((err) => console.log(err));
 };
@@ -195,6 +201,105 @@ addPost = (req, res) => {
   );
 };
 
+editPost = (req, res) => {
+   const body = req.body;
+   if (!body) {
+     return res.status(400).json({
+       success: false,
+       error: "You must provide a body to update",
+     });
+   }
+
+   User.findOneAndUpdate(
+     { _id: req.params.id, "posts._id": body.postId },
+     { $set: { "posts.$[outer].content": body.content } },
+     { arrayFilters: [{ "outer._id": body.postId }], upsert: true, new: true },
+     (err, result) => {
+       if (err) {
+         return res.status(404).json({
+           err,
+           message: "This is an invalid comment update request.",
+         });
+       }
+       return res.status(200).json({ success: true, posts: result.posts });
+     }
+   );
+}
+
+deletePost = (req, res) => {
+  const body = req.body;
+  if (!body) {
+    return res.status(400).json({
+      success: false,
+      error: "You must provide a body to update",
+    });
+  }
+
+  User.findOneAndUpdate(
+    { _id: req.params.id },
+    { $pull: { posts: { _id: body.postId } } },
+    (err, user) => {
+      if (err) {
+        return res.status(404).json({
+          err,
+          message: "This is an invalid update request.",
+        });
+      }
+      return res.status(200).json({ success: true, posts: user.posts });
+    }
+  );
+};
+
+
+likePost = (req, res) => {
+  const body = req.body;
+  if (!body) {
+    return res.status(400).json({
+      success: false,
+      error: "You must provide a body to update",
+    });
+  }
+
+  User.findOneAndUpdate(
+    { _id: req.params.id, "posts._id": body.postId },
+    { $addToSet: { "posts.$[outer].usersLiked": body.userId } },
+    { arrayFilters: [{ "outer._id": body.postId }], upsert: true, new: true },
+    (err, result) => {
+      if (err) {
+        return res.status(404).json({
+          err,
+          message: "This is an invalid comment update request.",
+        });
+      }
+      return res.status(200).json({ success: true, posts: result.posts });
+    }
+  );
+};
+
+unlikePost = (req, res) => {
+  const body = req.body;
+  if (!body) {
+    return res.status(400).json({
+      success: false,
+      error: "You must provide a body to update",
+    });
+  }
+
+  User.findOneAndUpdate(
+    { _id: req.params.id, "posts._id": body.postId },
+    { $pull: { "posts.$[outer].usersLiked": body.userId } },
+    { arrayFilters: [{ "outer._id": body.postId }], upsert: true, new: true },
+    (err, result) => {
+      if (err) {
+        return res.status(404).json({
+          err,
+          message: "This is an invalid comment update request.",
+        });
+      }
+      return res.status(200).json({ success: true, posts: result.posts });
+    }
+  );
+};
 getUserSettings = async (req, res) => {
   User.findOne({ _id: req.params.id }, "settings", (err, User) => {
     if (err) {
@@ -239,6 +344,155 @@ updateSettings = async (req, res) => {
   });
 };
 
+addComment = async (req, res) => {
+  const body = req.body;
+  if (!body) {
+    return res.status(400).json({
+      success: false,
+      error: "You must provide a body to update",
+    });
+  }
+  // console.log("Req body is " + body);
+  const comment = new Comment(body);
+  // console.log("comment is " + comment);
+  // console.log("postid", body.postId);
+  // console.log(req.params.id);
+  User.findOneAndUpdate(
+    { _id: req.params.id, "posts._id": body.postId },
+    { $push: { "posts.$[outer].comments": comment } },
+    { arrayFilters: [{ "outer._id": body.postId }], upsert: true },
+    (err, result) => {
+      if (err) {
+        return res.status(404).json({
+          err,
+          message: "This is an invalid comment update request.",
+        });
+      }
+      return res.status(200).json({ success: true, posts: result.posts });
+    }
+  );
+};
+
+deleteComment = (req, res) => {
+  const body = req.body;
+  if (!body) {
+    return res.status(400).json({
+      success: false,
+      error: "You must provide a body to update",
+    });
+  }
+
+  User.findOneAndUpdate(
+    { _id: req.params.id, "posts._id": body.postId },
+    { $pull: { "posts.$[outer].comments": { _id: body.commentId } } },
+    { arrayFilters: [{ "outer._id": body.postId }], new: true },
+    (err, user) => {
+      if (err) {
+        return res.status(404).json({
+          err,
+          message: "This is an invalid update request.",
+        });
+      }
+      return res.status(200).json({ success: true, posts: user.posts });
+    }
+  );
+};
+
+getProfilePic = async (req, res) => {
+  User.findOne({ _id: req.params.id }, "profilePic", (err, Img) => {
+    if (err) {
+      return res.status(400).json({ success: false, error: err });
+    }
+    console.log("user contrl method img link:" + Img);
+    return res.status(200).json({ success: true, data: Img });
+  }).catch((err) => console.log(err));
+};
+
+updateProfilePic = async (req, res) => {
+  const body = req.body;
+  if (!body) {
+    return res.status(400).json({
+      success: false,
+      error: "You must provide a body to update",
+    });
+  }
+
+  console.log("Req body is " + body);
+  console.log(req.params.id);
+  User.findOneAndUpdate(
+    { _id: req.params.id },
+    {
+      profilePic: body.profilePic,
+    },
+
+    { new: true },
+    (err, result) => {
+      if (err) {
+        return res.status(404).json({
+          err,
+          message: "This is an invalid profile pic update request.",
+        });
+      }
+      return res
+        .status(200)
+        .json({ success: true, profilePic: result.profilePic });
+    }
+  ).catch((err) => {
+    return res.status(404).json({
+      error: err,
+      message: "User not found.",
+    });
+  });
+};
+
+getFollowers = (req, res) => {
+  User.find({ _id: req.params.id }, "followers", (err, followers) => {
+    if (err) {
+      return res.status(400).json({ success: false, error: err });
+    }
+    if (followers === null) {
+      return res.status(404).json({ sucess: false, error: "User not found" });
+    }
+  })
+    .populate({
+      path: "followers",
+    })
+    .exec((err, followers) => {
+      if (err) {
+        return res.status(400).json({ success: false, error: err });
+      }
+      return res.status(200).json({ success: true, data: followers });
+    });
+};
+
+getFollowing = (req, res) => {
+  User.find({ _id: req.params.id }, "following", (err, following) => {
+    if (err) {
+      return res.status(400).json({ success: false, error: err });
+    }
+    if (following === null) {
+      return res.status(404).json({ sucess: false, error: "User not found" });
+    }
+  })
+    .populate({
+      path: "following",
+    })
+    .exec((err, following) => {
+      if (err) {
+        return res.status(400).json({ success: false, error: err });
+      }
+      return res.status(200).json({ success: true, data: following });
+    });
+};
+
+addFollowingFollowerRelationship = (req, res) => {
+  // TODO put on user to follow and put on user following
+};
+
+removeFollowingFollowerRelationship = (req, res) => {
+  // TODO delete on user to follow and delete on user following
+};
+
 module.exports = {
   createUser,
   updateUser,
@@ -249,4 +503,16 @@ module.exports = {
   addPost,
   updateSettings,
   getUserSettings,
+  updateProfilePic,
+  getProfilePic,
+  getFollowers,
+  getFollowing,
+  addFollowingFollowerRelationship,
+  removeFollowingFollowerRelationship,
+  deletePost,
+  addComment,
+  deleteComment,
+  likePost,
+  unlikePost,
+  editPost,
 };

@@ -1,12 +1,15 @@
 import React from "react";
 import { connect } from "react-redux";
 import { withStyles } from "@material-ui/core/styles";
-import { toggleLike } from "../app/actions/feedActions";
-import { fetchPosts } from "../app/actions/postActions";
-import Post from "./feed/Post";
-import MakePost from "./feed/MakePost";
-import ProfileCard from "./profile/ProfileCard";
-import { fetchUserSettings } from "../app/actions/settingsActions";
+import { toggleLike } from "../../app/actions/feedActions";
+import { fetchPosts } from "../../app/actions/postActions";
+import Post from "../feed/Post";
+import MakePost from "../feed/MakePost";
+import ProfileCard from "./ProfileCard";
+import ProfileTable from "./ProfileTable";
+import { fetchUserSettings } from "../../app/actions/settingsActions";
+import { fetchProfilePic } from "../../app/actions/imageUploadActions";
+import DeletePostDialog from "../feed/DeletePostDialog";
 
 const styles = (theme) => ({
   root: {
@@ -26,16 +29,19 @@ const styles = (theme) => ({
 });
 
 class Profile extends React.Component {
-  componentDidMount = (id) => {
+  componentDidMount = () => {
     this.props.fetchPosts(this.props.user.id);
     this.props.fetchUserSettings(this.props.user.id);
+    this.props.fetchProfilePic(this.props.user.id);
   };
 
   render() {
     const { classes, user, toggleLike } = this.props;
     return (
       <div className={classes.root}>
+        <DeletePostDialog />
         <ProfileCard />
+        <ProfileTable />
         <MakePost />
         <div>
           {this.props.posts && this.props.posts.length ? (
@@ -45,7 +51,7 @@ class Profile extends React.Component {
               <Post
                 key={p._id}
                 postdata={p}
-                toggleLike={() => toggleLike({ post: p, userId: user.id })}
+                toggleLike={() => toggleLike(p, user.id)}
                 userId={user.id}
               />
             ))
@@ -67,6 +73,7 @@ const mapDispatchToProps = {
   toggleLike,
   fetchPosts,
   fetchUserSettings,
+  fetchProfilePic,
 };
 
 export default connect(

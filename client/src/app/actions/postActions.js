@@ -44,9 +44,9 @@ export const makePost = (post) => {
   return (dispatch) => {
     return axios
       .put(`http://localhost:9000/user/posts/${id}`, post)
-      .then((res) => {
-        console.log("Res: ", res);
-        dispatch(makePostSuccess(res.data.posts));
+
+      .then(() => {
+        dispatch(fetchPosts(id));
       })
       .then(() => {
         dispatch(fetchFeed(id));
@@ -57,6 +57,23 @@ export const makePost = (post) => {
   };
 };
 
+export const deletePost = (id, postId) => {
+  console.log("Delete post in actions user ID", id);
+  console.log("Delete post in postBody", postId);
+  return (dispatch) => {
+    return axios
+      .put(`http://localhost:9000/user/posts/delete/${id}`, postId)
+      .then(() => {
+        dispatch(fetchPosts(id));
+      })
+      .then(() => {
+        dispatch(fetchFeed(id));
+      })
+      .catch((error) => {
+        throw error;
+      });
+  };
+};
 export function fetchPosts(id) {
   return (dispatch) => {
     dispatch(fetchPostsStarted());
@@ -71,17 +88,74 @@ export function fetchPosts(id) {
         return res.data;
       })
       .then((res) => {
-        // console.log("POSTS to be loaded:");
-        // console.log(res);
-        const sortedPosts = res.sort(
+        for (let i = 0; i < res.posts.length; i++) {
+          res.posts[i].profilePic = res.profilePic;
+        }
+
+        const sortedPosts = res.posts.sort(
           (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
         );
+
         dispatch(addPostsToPosts(sortedPosts));
         return res;
       })
       .catch((error) => {
-        // console.log("Fetch Posts Error");
+        console.log("Fetch Posts Error");
         dispatch(fetchPostsError(error));
       });
   };
 }
+
+export const addComment = (comment) => {
+  let id = comment.postOwnerId;
+  let authorId = comment.authorId;
+  return (dispatch) => {
+    return axios
+      .put(`http://localhost:9000/user/posts/comments/${id}`, comment)
+      .then(() => {
+        dispatch(fetchPosts(authorId));
+      })
+      .then(() => {
+        dispatch(fetchFeed(authorId));
+      })
+      .catch((error) => {
+        throw error;
+      });
+  };
+};
+
+export const deleteComment = (id, authorId, commentInfo) => {
+  return (dispatch) => {
+    return axios
+      .put(
+        `http://localhost:9000/user/posts/comments/delete/${id}`,
+        commentInfo
+      )
+      .then(() => {
+        dispatch(fetchPosts(authorId));
+      })
+      .then(() => {
+        dispatch(fetchFeed(authorId));
+      })
+      .catch((error) => {
+        throw error;
+      });
+  };
+};
+
+export const editPost = (id, commentInfo) => {
+  console.log("edit post action");
+  return (dispatch) => {
+    return axios
+      .put(`http://localhost:9000/user/posts/edit/${id}`, commentInfo)
+      .then(() => {
+        dispatch(fetchPosts(id));
+      })
+      .then(() => {
+        dispatch(fetchFeed(id));
+      })
+      .catch((error) => {
+        throw error;
+      });
+  };
+};

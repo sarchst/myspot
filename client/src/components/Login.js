@@ -28,6 +28,8 @@ function Copyright() {
   );
 }
 
+let loginURL = "http://localhost:9000/login";
+
 const styles = (theme) => ({
   root: {
     height: "100vh",
@@ -49,10 +51,11 @@ const styles = (theme) => ({
     alignItems: "center",
     justifyContent: "center",
     height: "85vh",
+    // backgroundColor: "#424242",
   },
   avatar: {
     margin: theme.spacing(1),
-    backgroundColor: theme.palette.default,
+    backgroundColor: "#03DAC6",
   },
   form: {
     width: "100%", // Fix IE 11 issue.
@@ -63,6 +66,7 @@ const styles = (theme) => ({
   },
   login: {
     width: "30vw",
+    backgroundColor: "#BB86FC",
   },
   loginBox: {
     display: "flex",
@@ -83,8 +87,7 @@ class Login extends React.Component {
           <div className={classes.paper}>
             <Typography component="h1" variant="h2">
               <MusicNoteRoundedIcon
-                color="secondary"
-                style={{ fontSize: 40 }}
+                style={{ fontSize: 40, color: "#BB86FC" }}
               />
               MySpot
               <br />
@@ -95,15 +98,15 @@ class Login extends React.Component {
                 Sign in
               </Typography>
               <Avatar className={classes.avatar}>
-                <LockOutlinedIcon />
+                <LockOutlinedIcon style={{ backgroundColor: "#03DAC6" }} />
               </Avatar>
               <Button
                 className={classes.login}
                 type="login"
-                href={"http://localhost:8888/login"}
+                href={loginURL}
                 fullWidth
                 variant="contained"
-                color="secondary"
+                // color="primary"
               >
                 Sign In With Spotify
               </Button>

@@ -8,7 +8,6 @@ import Avatar from "@material-ui/core/Avatar";
 import Divider from "@material-ui/core/Divider";
 import { withStyles } from "@material-ui/core/styles";
 import { connect } from "react-redux";
-import * as palette from "@material-ui/core/colors";
 import Spotify from "spotify-web-api-js";
 import List from "@material-ui/core/List";
 import ListItemText from "@material-ui/core/ListItemText";
@@ -16,10 +15,13 @@ import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import ListItem from "@material-ui/core/ListItem";
 import ListSubheader from "@material-ui/core/ListSubheader";
 import PlayCircleOutlineIcon from "@material-ui/icons/PlayCircleOutline";
+import MusicOffOutlinedIcon from "@material-ui/icons/MusicOffOutlined";
+import Emoji from "react-emoji-render";
+import Typography from "@material-ui/core/Typography";
 
 const styles = (theme) => ({
   card: {
-    borderRadius: 12,
+    borderRadius: 16,
     minWidth: 256,
     textAlign: "center",
   },
@@ -29,27 +31,29 @@ const styles = (theme) => ({
     margin: "auto",
   },
   heading: {
-    fontSize: 18,
+    fontSize: "large",
     fontWeight: "bold",
     letterSpacing: "0.5px",
     marginTop: 8,
     marginBottom: 0,
   },
   subheader: {
-    fontSize: 14,
-    color: palette.grey[500],
+    fontSize: "small",
+    color: theme.palette.secondary.main,
     marginBottom: "0.875em",
+    fontWeight: "bold",
   },
   statLabel: {
-    fontSize: 12,
-    color: palette.grey[500],
-    fontWeight: 500,
-    fontFamily:
-      '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
+    // fontSize: "medium",
+    // color: palette.grey[500],
+    color: theme.palette.primary.main,
+    // fontWeight: "bold",
+    // fontFamily:
+    // '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
     margin: 0,
   },
   statValue: {
-    fontSize: 20,
+    fontSize: "large",
     fontWeight: "bold",
     marginBottom: 4,
     letterSpacing: "1px",
@@ -66,6 +70,10 @@ const styles = (theme) => ({
   audioPlayer: {
     width: "50%",
   },
+  trackheader: {
+    fontSize: "medium",
+    fontWeight: "bold",
+  },
 });
 
 const spotifyWebApi = new Spotify();
@@ -77,33 +85,59 @@ class ProfileCard extends React.Component {
       topTracks: [],
       recentTracks: [],
       songUri: "",
+      userData: {},
     };
     spotifyWebApi.setAccessToken(this.props.spotifyWebApi);
   }
   componentDidMount = () => {
-    spotifyWebApi
-      .getMyTopTracks()
-      .then((result) => {
-        // console.log(result);
+    // TODO: replace user_ID with this.props.user_ID once working
+    console.log("this props is");
+    console.log(this.props);
+    console.log("this userid is");
+    console.log(this.user_ID);
+    let user_ID;
+    if (
+      this.props.location &&
+      this.props.location.state &&
+      this.props.location.state.user_ID
+    ) {
+      user_ID = this.props.location.state.user_ID;
+    } else {
+      user_ID = this.props.user.id;
+    }
+    // get top tracks for arbitrary user
+    fetch(`http://localhost:9000/user/${user_ID}`)
+      .then((response) => response.json())
+      .then((response) => {
         this.setState({
-          topTracks: result.items.slice(0, Math.min(result.items.length, 3)),
+          topTracks: response.data.topTracks,
+          recentTracks: response.data.recentTracks,
+          userData: response.data,
         });
-      })
-      .catch((err) => {
-        console.log("error getting top tracks");
-        console.log(err);
       });
-    spotifyWebApi
-      .getMyRecentlyPlayedTracks()
-      .then((result) => {
-        this.setState({
-          recentTracks: result.items.slice(0, Math.min(result.items.length, 3)),
-        });
-      })
-      .catch((err) => {
-        console.log("error getting recent tracks");
-        console.log(err);
-      });
+    // spotifyWebApi
+    //   .getMyTopTracks()
+    //   .then((result) => {
+    //     // console.log(result);
+    //     this.setState({
+    //       topTracks: result.items.slice(0, Math.min(result.items.length, 3)),
+    //     });
+    //   })
+    //   .catch((err) => {
+    //     console.log("error getting top tracks");
+    //     console.log(err);
+    //   });
+    // spotifyWebApi
+    //   .getMyRecentlyPlayedTracks()
+    //   .then((result) => {
+    //     this.setState({
+    //       recentTracks: result.items.slice(0, Math.min(result.items.length, 3)),
+    //     });
+    //   })
+    //   .catch((err) => {
+    //     console.log("error getting recent tracks");
+    //     console.log(err);
+    //   });
   };
 
   setPlayerSong = (songUri) => {
@@ -117,23 +151,28 @@ class ProfileCard extends React.Component {
 
     return (
       <Card
-      // className={cx(styles.card, shadowStyles.root)}
+        // className={cx(styles.card, shadowStyles.root)}
+        className={classes.card}
       >
         <CardContent className={classes.profileCardBox}>
           <Avatar
             className={classes.avatar}
             src={
-              this.props.spotifyApiUserMe.images.length
-                ? this.props.spotifyApiUserMe.images[0].url
+              // this.props.user.profilePic
+              //   ? this.props.user.profilePic
+              //   : "./generic-user-headphone-icon.png"
+              this.state.userData.profilePic
+                ? this.state.userData.profilePic
                 : "./generic-user-headphone-icon.png"
             }
             // src={"https://i.pravatar.cc/300"}
           />
-          <h3 className={classes.heading}>
-            {this.props.spotifyApiUserMe.display_name}
-          </h3>
+          <h3 className={classes.heading}>{this.state.userData.username}</h3>
           <span className={classes.subheader}>
-            {this.props.spotifyApiUserMe.country}
+            <Emoji text=":globe_showing_americas:" />
+            {/* unfortunately it seems like emoji flags aren't supported for windows10 so can only see it on mac */}
+            <Emoji text=":flag_canada:" />
+            <Emoji text=":globe_showing_americas:" />
           </span>
         </CardContent>
         <Divider light />
@@ -144,9 +183,11 @@ class ProfileCard extends React.Component {
             flex={"auto"}
             // className={borderedGridStyles.item}
           >
-            <p className={classes.statLabel}>Followers on Spotify</p>
+            <Typography className={classes.statLabel}>Followers</Typography>
             <p className={classes.statValue}>
-              {this.props.spotifyApiUserMe.followers.total}
+              {this.state.userData.followers
+                ? this.state.userData.followers.length
+                : 0}
             </p>
           </Box>
           <Divider orientation="vertical" flexItem />
@@ -156,8 +197,12 @@ class ProfileCard extends React.Component {
             flex={"auto"}
             // className={borderedGridStyles.item}
           >
-            <p className={classes.statLabel}>Following</p>
-            <p className={classes.statValue}>12</p>
+            <Typography className={classes.statLabel}>Following</Typography>
+            <p className={classes.statValue}>
+              {this.state.userData.following
+                ? this.state.userData.following.length
+                : 0}
+            </p>
           </Box>
         </Box>
         <Divider light />
@@ -172,44 +217,57 @@ class ProfileCard extends React.Component {
               className={classes.listRoot}
               dense={true}
               subheader={
-                <ListSubheader component="div" id="nested-list-subheader">
-                  My Top Tracks
+                <ListSubheader
+                  component="div"
+                  id="nested-list-subheader"
+                  color="primary"
+                  className={classes.trackheader}
+                >
+                  <Typography>My Top Tracks</Typography>
                 </ListSubheader>
               }
             >
-              {this.state.topTracks.map((track, idx) => (
-                <ListItem
-                  key={idx}
-                  button={true}
-                  onClick={() => this.setPlayerSong(track.preview_url)}
-                >
-                  <Box pr={1} pt={1}>
-                    <PlayCircleOutlineIcon />
-                  </Box>
-                  <ListItemAvatar>
-                    <Avatar
-                      src={
-                        track.album.images.length
-                          ? track.album.images[0].url
-                          : null
-                      }
-                    ></Avatar>
-                  </ListItemAvatar>
-                  <ListItemText
-                    primary={track.name}
-                    secondary={track.album.artists.map(
-                      (artist, idx) =>
-                        artist.name +
-                        (idx < track.album.artists.length - 1 ? " | " : "")
-                    )}
-                  />
-                  {/*<ListItemSecondaryAction>*/}
-                  {/*  <IconButton edge="start" aria-label="delete">*/}
-
-                  {/*  </IconButton>*/}
-                  {/*</ListItemSecondaryAction>*/}
-                </ListItem>
-              ))}
+              {this.state.topTracks.map((track, idx) => {
+                const isPlaybackAvailable = track.preview_url ? true : false;
+                return (
+                  <ListItem
+                    key={idx}
+                    button={isPlaybackAvailable}
+                    onClick={
+                      isPlaybackAvailable
+                        ? () => this.setPlayerSong(track.preview_url)
+                        : null
+                    }
+                  >
+                    <Box pr={1} pt={1}>
+                      {isPlaybackAvailable ? (
+                        <PlayCircleOutlineIcon color={"secondary"} />
+                      ) : (
+                        <MusicOffOutlinedIcon color={"secondary"} />
+                      )}
+                    </Box>
+                    <ListItemAvatar>
+                      <Avatar
+                        variant="square"
+                        src={
+                          track.album.images.length
+                            ? track.album.images[track.album.images.length - 1]
+                                .url
+                            : null
+                        }
+                      ></Avatar>
+                    </ListItemAvatar>
+                    <ListItemText
+                      primary={track.name}
+                      secondary={track.album.artists.map(
+                        (artist, idx) =>
+                          artist.name +
+                          (idx < track.album.artists.length - 1 ? " | " : "")
+                      )}
+                    />
+                  </ListItem>
+                );
+              })}
             </List>
           </Box>
           <Box
@@ -222,32 +280,56 @@ class ProfileCard extends React.Component {
               className={classes.listRoot}
               dense={true}
               subheader={
-                <ListSubheader component="div" id="nested-list-subheader">
-                  Recently Played Songs
+                <ListSubheader
+                  component="div"
+                  id="nested-list-subheader"
+                  color="primary"
+                  className={classes.trackheader}
+                >
+                  <Typography>Recently Played Songs</Typography>
                 </ListSubheader>
               }
             >
-              {this.state.recentTracks.map((item, idx) => (
-                <ListItem
-                  key={idx}
-                  alignItems={"center"}
-                  button={true}
-                  onClick={() => this.setPlayerSong(item.track.preview_url)}
-                >
-                  <Box pr={1} pt={1}>
-                    <PlayCircleOutlineIcon />
-                  </Box>
-                  <ListItemAvatar>
-                    <Avatar src={item.track.album.images[0].url}></Avatar>
-                  </ListItemAvatar>
-                  <ListItemText
-                    primary={item.track.name}
-                    secondary={
-                      "Played: " + new Date(item.played_at).toLocaleString()
+              {this.state.recentTracks.map((item, idx) => {
+                const isPlaybackAvailable = item.track.preview_url
+                  ? true
+                  : false;
+                return (
+                  <ListItem
+                    key={idx}
+                    button={isPlaybackAvailable}
+                    onClick={
+                      isPlaybackAvailable
+                        ? () => this.setPlayerSong(item.track.preview_url)
+                        : null
                     }
-                  />
-                </ListItem>
-              ))}
+                  >
+                    <Box pr={1} pt={1}>
+                      {isPlaybackAvailable ? (
+                        <PlayCircleOutlineIcon color={"secondary"} />
+                      ) : (
+                        <MusicOffOutlinedIcon color={"secondary"} />
+                      )}
+                    </Box>
+                    <ListItemAvatar>
+                      <Avatar
+                        variant="square"
+                        src={
+                          item.track.album.images.length
+                            ? item.track.album.images[0].url
+                            : null
+                        }
+                      ></Avatar>
+                    </ListItemAvatar>
+                    <ListItemText
+                      primary={item.track.name}
+                      secondary={
+                        "Played: " + new Date(item.played_at).toLocaleString()
+                      }
+                    />
+                  </ListItem>
+                );
+              })}
             </List>
           </Box>
         </Box>
@@ -270,6 +352,7 @@ const mapStateToProps = (state) => ({
   spotifyWebApi: state.spotifyWebApi,
   spotifyApiUserMe: state.spotifyApiUserMe,
   posts: state.posts,
+  user: state.user,
 });
 
 export default connect(mapStateToProps)(withStyles(styles)(ProfileCard));

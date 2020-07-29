@@ -71,7 +71,13 @@ class Playlists extends React.Component {
   }
 
   componentDidMount() {
-    spotifyWebApi.getUserPlaylists().then(
+    let user_ID;
+    if (this.props.location.state) {
+      user_ID = this.props.location.state.user_ID;
+    } else {
+      user_ID = this.props.loggedInUserId;
+    }
+    spotifyWebApi.getUserPlaylists(user_ID).then(
       (data) => {
         console.log("User playlists", data);
         this.setState({
@@ -136,7 +142,7 @@ class Playlists extends React.Component {
                       <Link
                         to={"/" + user.username + "/playlists/" + playlist.id}
                       >
-                        <Button size="small" color="primary">
+                        <Button size="small" color="secondary">
                           View Songs
                         </Button>
                       </Link>
