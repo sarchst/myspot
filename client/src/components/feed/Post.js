@@ -32,9 +32,13 @@ import MusicNoteIcon from "@material-ui/icons/MusicNote";
 import PlaylistAddIcon from "@material-ui/icons/PlaylistAdd";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { Link as RouterLink } from "react-router-dom";
-import { deletePost } from "../../app/actions/postActions";
-import DeletePostDialog from "../DeletePostDialog";
+import { deletePost, addComment } from "../../app/actions/postActions";
+import DeletePostDialog from "./DeletePostDialog";
 import { submitDeletePostDialog } from "../../app/actions";
+import PostComment from "./PostComment";
+// import EmojiEmotionsOutlinedIcon from "@material-ui/icons/EmojiEmotionsOutlined";
+import "emoji-mart/css/emoji-mart.css";
+
 
 const styles = (theme) => ({
   root: {
@@ -132,6 +136,8 @@ class Post extends Component {
   state = {
     moreOptions: false,
     anchorEl: null,
+    emojiPickerOpen: false,
+    commentContent: "",
   };
 
   chooseIcon = (media) => {
@@ -191,9 +197,43 @@ class Post extends Component {
     });
   };
 
+
+  handleChangeComment = (e) => {
+    this.setState({ commentContent: e.target.value });
+  };
+
+  handleSubmitComment = (postId, postOwnerId) => {
+    let comment = {
+      content: this.state.commentContent,
+      usersLiked: [],
+      authorId: this.props.user.id,
+      authorUsername: this.props.user.username,
+      postOwnerId: postOwnerId,
+      postId: postId,
+      time: new Date().toLocaleString("en-US"),
+    };
+    console.log("handleSubmitComment", comment);
+    this.props.addComment(comment);
+    this.setState({
+      commentContent: "",
+    });
+  };
+
   render() {
     const { classes, postdata, userId } = this.props;
-    const date = new Date(postdata.createdAt).toDateString();
+    const date = new Date(postdata.createdAt).toLocaleString("en-US");
+    let deleteOption,
+      reportOption = null;
+    if (this.props.user.id === postdata.authorId) {
+      deleteOption = (
+        <MenuItem onClick={() => this.handleDelete(postdata._id)}>
+          Delete
+        </MenuItem>
+      );
+    } else {
+      reportOption = <MenuItem>Report</MenuItem>;
+    }
+
 
     return (
       <div className={classes.postContainer}>
@@ -311,14 +351,8 @@ class Post extends Component {
                   },
                 }}
               >
-                {/* {menuOptions.map((option) => (
-                  <MenuItem key={option} onClick={() => this.closeOptions()}>
-                    {option}
-                  </MenuItem>
-                ))} */}
-                <MenuItem onClick={() => this.handleDelete(postdata._id)}>
-                  delete
-                </MenuItem>
+                {deleteOption}
+                {reportOption}
               </Menu>
             </Grid>
             <Grid
@@ -398,30 +432,45 @@ class Post extends Component {
             >
               <div className={classes.column}>
                 <Typography className={classes.heading} color={"primary"}>
-                  Comments
+                  Comments ({postdata.comments.length})
                 </Typography>
               </div>
             </AccordionSummary>
             <AccordionDetails className={classes.details}>
               <ul className={classes.column}>
-                <li>Comment 1</li>
+                {postdata.comments && postdata.comments.length
+                  ? postdata.comments.map((comment, index) => {
+                      return <PostComment key={index} commentdata={comment} />;
+                    })
+                  : null}
               </ul>
-              <FormControl fullWidth>
-                <InputLabel htmlFor="standard-basic" color={"secondary"}>
-                  Leave a comment below
-                </InputLabel>
-                <Input
-                  value={this.state.content}
-                  onChange={this.handleChange}
-                  color={"secondary"}
-                />
-              </FormControl>
+              <Grid item container direction="row" alignItems="center">
+                <Grid item xs={11}>
+                  <FormControl fullWidth>
+                    <InputLabel htmlFor="standard-basic" color={"secondary"}>
+                      Leave a comment below
+                    </InputLabel>
+                    <Input
+                      value={this.state.commentContent}
+                      onChange={this.handleChangeComment}
+                      color={"secondary"}
+                    />
+                  </FormControl>
+                </Grid>
+              </Grid>
               <div className={classes.column} />
             </AccordionDetails>
             <Divider />
             <AccordionActions>
               <Button size="small">Cancel</Button>
-              <Button size="small" color="secondary" variant="contained">
+              <Button
+                size="small"
+                color="secondary"
+                variant="contained"
+                onClick={() =>
+                  this.handleSubmitComment(postdata._id, postdata.authorId)
+                }
+              >
                 Post
               </Button>
             </AccordionActions>
@@ -443,5 +492,5 @@ Post.propTypes = {
 
 export default compose(
   withStyles(styles),
-  connect(mapStateToProps, { deletePost, submitDeletePostDialog })
+  connect(mapStateToProps, { deletePost, submitDeletePostDialog, addComment })
 )(Post);

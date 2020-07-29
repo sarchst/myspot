@@ -9,8 +9,8 @@ import { connect } from "react-redux";
 import {
   submitDeletePostDialog,
   closeDeletePostDialog,
-} from "../app/actions/index";
-import { deletePost } from "../app/actions/postActions";
+} from "../../app/actions/index";
+import { deletePost } from "../../app/actions/postActions";
 
 class DeletePostDialog extends React.Component {
   handleConfirm = () => {

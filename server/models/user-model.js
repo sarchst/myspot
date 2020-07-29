@@ -1,6 +1,19 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
+const CommentSchema = new Schema(
+  {
+    content: { type: String, required: true },
+    usersLiked: [{ type: String, ref: "User", default: [] }],
+    authorId: { type: String, ref: "User", required: true },
+    authorUsername: { type: String, required: true },
+    postId: { type: String, ref: "Post" },
+    postOwnerId: { type: String, ref: "User" },
+    time: { type: String, required: true }, // some reason timestamp doesn't seem to be working
+  },
+  { timestamps: true }
+);
+
 const SettingSchema = new Schema(
   {
     notification: { type: Boolean, default: true, required: true },
@@ -25,6 +38,7 @@ const PostSchema = new Schema(
     repost: { type: Boolean, default: false, required: true },
     authorId: { type: String, ref: "User", required: true },
     username: { type: String, required: true },
+    comments: [{ type: CommentSchema, default: [] }],
   },
   { timestamps: true }
 );
@@ -48,9 +62,11 @@ const UserSchema = new Schema(
 const User = mongoose.model("User", UserSchema);
 const Post = mongoose.model("Post", PostSchema);
 const Setting = mongoose.model("Setting", SettingSchema);
+const Comment = mongoose.model("Comment", CommentSchema);
 
 module.exports = {
   Post: Post,
   User: User,
   Setting: Setting,
+  Comment: Comment,
 };
