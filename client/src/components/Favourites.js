@@ -5,6 +5,7 @@ import { CssBaseline } from "@material-ui/core";
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import { withStyles } from "@material-ui/core/styles";
+
 const spotifyWebApi = new Spotify();
 
 const styles = (theme) => ({
@@ -44,7 +45,7 @@ class Favourites extends React.Component {
     this.state = {
       tracks: [],
     };
-    spotifyWebApi.setAccessToken(this.props.spotifyWebApi);
+    spotifyWebApi.setAccessToken(this.props.spotifyApi.accessToken);
   }
 
   componentDidMount() {
@@ -110,7 +111,7 @@ class Favourites extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    spotifyWebApi: state.spotifyWebApi,
+    spotifyApi: state.spotifyApi,
     user: state.user,
   };
 };
