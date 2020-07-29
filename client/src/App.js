@@ -1,16 +1,17 @@
 import React from "react";
-import "./App.css";
+import Spotify from "spotify-web-api-js";
 import { connect } from "react-redux";
+import { BrowserRouter as Router } from "react-router-dom";
+
 import Sidebar from "./components/Sidebar";
 import Appbar from "./components/Appbar";
 import Login from "./components/Login";
-import { BrowserRouter as Router } from "react-router-dom";
-import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
-import Spotify from "spotify-web-api-js";
-import { registerSpotifyWebApi } from "./app/actions";
+import { registerSpotifyApi } from "./app/actions/spotifyApiActions";
 import { setCurrentUser } from "./app/actions/userActions";
-import { submitSpotifyApiUserMe } from "./app/actions/spotifyApiActions";
 import { fetchUserSettings } from "./app/actions/settingsActions";
+
+import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
+import "./App.css";
 
 const spotifyWebApi = new Spotify();
 
@@ -87,15 +88,12 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     const params = this.getHashParams();
-    // console.log("params is: ");
-    // console.log(params);
-    // console.log("access token is " + params.access_token);
 
     if (params.access_token) {
       spotifyWebApi.setAccessToken(params.access_token);
-      console.log("LOGGING IN: SENDING SPOTIFYWEBAPI TO REDUX STORE");
       let userObject = {};
-      this.props.registerSpotifyWebApi(params.access_token);
+      // Pass refresh token as well for further use if a new access token is needed
+      this.props.registerSpotifyApi(params);
       spotifyWebApi
         .getMe()
         .then((response) => {
@@ -118,9 +116,6 @@ class App extends React.Component {
               Math.min(recentTracksResponse.items.length, 3)
             );
           }
-          console.log("submitSpotifyApiUserMe from App.js");
-          // console.log(userObject);
-          this.props.submitSpotifyApiUserMe(userObject);
           this.props.setCurrentUser(userObject.id, userObject.display_name);
         });
     }
@@ -139,11 +134,10 @@ class App extends React.Component {
   }
 
   selectTheme = () =>
-    // TODO swith this too user from database?
     this.props.accountSettings.darkMode ? darkTheme : lightTheme;
 
   render() {
-    if (this.props.spotifyWebApi && this.props.user.id) {
+    if (this.props.spotifyApi.accessToken && this.props.user.id) {
       return (
         <ThemeProvider theme={this.selectTheme()}>
           <Router>
@@ -164,17 +158,15 @@ const mapStateToProps = (state) => {
   return {
     user: state.user,
     accountSettings: state.accountSettings,
-    spotifyWebApi: state.spotifyWebApi,
+    spotifyApi: state.spotifyApi,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
     setCurrentUser: (id, username) => dispatch(setCurrentUser(id, username)),
-    registerSpotifyWebApi: (spotifyWebApi) =>
-      dispatch(registerSpotifyWebApi(spotifyWebApi)),
-    submitSpotifyApiUserMe: (spotifyUserMe) =>
-      dispatch(submitSpotifyApiUserMe(spotifyUserMe)),
+    registerSpotifyApi: (spotifyApi) =>
+      dispatch(registerSpotifyApi(spotifyApi)),
     fetchUserSettings: fetchUserSettings,
   };
 };
