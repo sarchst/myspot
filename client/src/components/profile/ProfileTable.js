@@ -137,7 +137,6 @@ class ProfileTable extends React.Component {
 
 const mapStateToProps = (state) => ({
   spotifyWebApi: state.spotifyWebApi,
-  spotifyApiUserMe: state.spotifyApiUserMe,
   user: state.user,
 });
 

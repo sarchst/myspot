@@ -11,6 +11,7 @@ import { registerSpotifyWebApi } from "./app/actions";
 import { setCurrentUser } from "./app/actions/userActions";
 import { submitSpotifyApiUserMe } from "./app/actions/spotifyApiActions";
 import { fetchUserSettings } from "./app/actions/settingsActions";
+import { setSelectedUser } from "./app/actions/selectedUserActions";
 
 const spotifyWebApi = new Spotify();
 
@@ -99,6 +100,11 @@ class App extends React.Component {
       spotifyWebApi
         .getMe()
         .then((response) => {
+          // spotify POST playlist
+          spotifyWebApi.createPlaylist(response.id, {
+            name: "mySpot-playlist-POST-test",
+          });
+          //
           Object.assign(userObject, response);
           return spotifyWebApi.getMyTopTracks();
         })
@@ -118,9 +124,8 @@ class App extends React.Component {
               Math.min(recentTracksResponse.items.length, 3)
             );
           }
-          console.log("submitSpotifyApiUserMe from App.js");
-          // console.log(userObject);
           this.props.submitSpotifyApiUserMe(userObject);
+          this.props.setSelectedUser(userObject);
           this.props.setCurrentUser(userObject.id, userObject.display_name);
         });
     }
@@ -171,6 +176,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     setCurrentUser: (id, username) => dispatch(setCurrentUser(id, username)),
+    setSelectedUser: (id) => dispatch(setSelectedUser(id)),
     registerSpotifyWebApi: (spotifyWebApi) =>
       dispatch(registerSpotifyWebApi(spotifyWebApi)),
     submitSpotifyApiUserMe: (spotifyUserMe) =>

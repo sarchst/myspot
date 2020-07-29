@@ -5,6 +5,8 @@ import { Link } from "react-router-dom";
 import MaterialTable from "material-table";
 import { Paper } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
+import selectedUser from "../app/reducers/selectedUser";
+import { setSelectedUser } from "../app/actions/selectedUserActions";
 
 const styles = (theme) => ({
   link: {
@@ -95,6 +97,11 @@ class FollowTable extends React.Component {
                     user_ID: rowData.userId,
                   },
                 }}
+                onClick={() => {
+                  console.log("clicked in followTable");
+                  console.log("calling setselecteduser");
+                  this.props.setSelectedUser("1282918791");
+                }}
               >
                 {rowData.username}
               </Link>
@@ -119,6 +126,16 @@ class FollowTable extends React.Component {
 
 const mapStateToProps = (state) => ({
   user: state.user,
+  selectedUser: state.selectedUser,
 });
 
-export default connect(mapStateToProps)(withStyles(styles)(FollowTable));
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setSelectedUser: (userID) => dispatch(setSelectedUser(userID)),
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withStyles(styles)(FollowTable));

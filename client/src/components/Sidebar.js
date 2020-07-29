@@ -254,8 +254,8 @@ class Sidebar extends React.Component {
             <Route
               path="/myspotter/:user"
               render={(props) => {
-                console.log("props in profilecard is");
-                console.log(props);
+                // console.log("props in profilecard is");
+                // console.log(props);
                 return <ProfileCard {...props} />;
               }}
             />
