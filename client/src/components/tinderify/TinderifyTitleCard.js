@@ -29,7 +29,7 @@ class TinderifyTitleCard extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      tabIndex: false,
+      tabIndex: 0,
       otherUser: false,
       user_ID: "",
     };
@@ -57,15 +57,10 @@ class TinderifyTitleCard extends React.Component {
   }
 
   handleChange = (event, index) => {
-    if (index === this.state.tabIndex) {
-      this.setState({ tabIndex: false });
-    } else {
-      this.setState({ tabIndex: index });
-    }
+    this.setState({ tabIndex: index });
   };
 
   getPanel = (index) => {
-    if (this.state.tabIndex === false) return null;
     if (index === 0) {
       return <MusicBrowser></MusicBrowser>;
     } else {
@@ -75,7 +70,7 @@ class TinderifyTitleCard extends React.Component {
 
   render() {
     const { classes } = this.props;
-    console.log("hehe", this.user_ID);
+    console.log("The user is is...", this.user_ID);
     return (
       <div>
         <div>
