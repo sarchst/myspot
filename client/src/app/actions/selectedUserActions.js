@@ -1,4 +1,3 @@
-import axios from "axios";
 export const SELECT_USER = "SELECT_USER";
 
 export const setSelectedUser = (userID) => {

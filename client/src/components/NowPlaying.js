@@ -1,7 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
 import Spotify from "spotify-web-api-js";
-import mySpotPlaylists from "../app/reducers/mySpotPlaylists";
 
 const spotifyWebApi = new Spotify();
 
