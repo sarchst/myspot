@@ -6,7 +6,10 @@ import { BrowserRouter as Router } from "react-router-dom";
 import Sidebar from "./components/Sidebar";
 import Appbar from "./components/Appbar";
 import Login from "./components/Login";
-import { registerSpotifyApi } from "./app/actions/spotifyApiActions";
+import {
+  registerSpotifyApi,
+  submitSpotifyApiUserMe,
+} from "./app/actions/spotifyApiActions";
 import { setCurrentUser } from "./app/actions/userActions";
 import { fetchUserSettings } from "./app/actions/settingsActions";
 
@@ -116,6 +119,7 @@ class App extends React.Component {
               Math.min(recentTracksResponse.items.length, 3)
             );
           }
+          this.props.submitSpotifyApiUserMe(userObject);
           this.props.setCurrentUser(userObject.id, userObject.display_name);
         });
     }
@@ -167,6 +171,8 @@ const mapDispatchToProps = (dispatch) => {
     setCurrentUser: (id, username) => dispatch(setCurrentUser(id, username)),
     registerSpotifyApi: (spotifyApi) =>
       dispatch(registerSpotifyApi(spotifyApi)),
+    submitSpotifyApiUserMe: (spotifyUserMe) =>
+      dispatch(submitSpotifyApiUserMe(spotifyUserMe)),
     fetchUserSettings: fetchUserSettings,
   };
 };
