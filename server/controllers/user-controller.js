@@ -201,6 +201,31 @@ addPost = (req, res) => {
   );
 };
 
+editPost = (req, res) => {
+   const body = req.body;
+   if (!body) {
+     return res.status(400).json({
+       success: false,
+       error: "You must provide a body to update",
+     });
+   }
+
+   User.findOneAndUpdate(
+     { _id: req.params.id, "posts._id": body.postId },
+     { $set: { "posts.$[outer].content": body.content } },
+     { arrayFilters: [{ "outer._id": body.postId }], upsert: true, new: true },
+     (err, result) => {
+       if (err) {
+         return res.status(404).json({
+           err,
+           message: "This is an invalid comment update request.",
+         });
+       }
+       return res.status(200).json({ success: true, posts: result.posts });
+     }
+   );
+}
+
 deletePost = (req, res) => {
   const body = req.body;
   if (!body) {
@@ -489,4 +514,5 @@ module.exports = {
   deleteComment,
   likePost,
   unlikePost,
+  editPost,
 };
