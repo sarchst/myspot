@@ -15,6 +15,8 @@ import { setSelectedUser } from "./app/actions/selectedUserActions";
 
 const spotifyWebApi = new Spotify();
 
+const MySpot = "MySpot";
+const MySpotTinderify = "MySpot-Tinderify";
 const lightTheme = createMuiTheme({
   palette: {
     type: "light",
@@ -108,16 +110,56 @@ class App extends React.Component {
         const spotifyMe = values[0];
         const topTracks = values[1];
         const recentTracks = values[2];
+        // create db object using spotify user object
         Object.assign(userObject, spotifyMe);
+        // add top tracks to db object
         userObject.topTracks = topTracks.items.slice(
           0,
           Math.min(topTracks.items.length, 3)
         );
+        // add recent tracks to db object
         userObject.recentTracks = recentTracks.items.slice(
           0,
           Math.min(recentTracks.items.length, 3)
         );
+        // set logged in user as initial selectedUser
         this.props.setSelectedUser(userObject);
+        // get URIs for MySpot and MySpot-Tinderify playlists
+        // get list of user's playlists
+        spotifyWebApi.getUserPlaylists(spotifyMe.id).then((res) => {
+          const playlists = res.items;
+          let MySpotPlaylistID = playlists.find(
+            (playlist) => playlist.name == MySpot
+          );
+          let TinderifyPlaylistID = playlists.find(
+            (playlist) => playlist.name == MySpotTinderify
+          );
+
+          if (!MySpotPlaylistID) {
+            spotifyWebApi
+              .createPlaylist(spotifyMe.id, { name: MySpot })
+              .then((playlist) => {
+                MySpotPlaylistID = playlist.id;
+              });
+          }
+          if (!TinderifyPlaylistID) {
+            spotifyWebApi
+              .createPlaylist(spotifyMe.id, { name: MySpotTinderify })
+              .then((playlist) => {
+                TinderifyPlaylistID = playlist.id;
+              });
+          }
+
+          console.log("MySpotPlaylistID");
+          console.log(MySpotPlaylistID);
+          console.log("TinderifyPlaylistID");
+          console.log(TinderifyPlaylistID);
+          // playlists.forEach(playlist => {
+          //   if (playlist.name == "MySpot") {
+          //     MySpotPlaylistID = playlist.id;
+          //   } else if (playlist.name == "MySpot")
+          // });
+        });
         this.props.setCurrentUser(userObject.id, userObject.display_name);
       });
       // spotifyWebApi
