@@ -3,7 +3,7 @@ import clsx from "clsx";
 // import Post from "./Post";
 import Playlists from "./Playlists";
 import Albums from "./Albums";
-import Tinderify from "./Tinderify";
+import TinderifyTitleCard from "./tinderify/TinderifyTitleCard";
 import Favourites from "./Favourites";
 import Drawer from "@material-ui/core/Drawer";
 import List from "@material-ui/core/List";
@@ -234,8 +234,13 @@ class Sidebar extends React.Component {
               <Albums />
             </Route>
             <Route path="/:user/tinderify" exact>
-              <Tinderify />
+              <TinderifyTitleCard />
             </Route>
+            <Route
+              path="/myspotter/:user/tinderify"
+              exact
+              component={(props) => <TinderifyTitleCard {...props} />}
+            />
             <Route path="/:user/favourites" exact>
               <Favourites />
             </Route>
