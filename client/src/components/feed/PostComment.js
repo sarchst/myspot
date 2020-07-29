@@ -79,7 +79,7 @@ class PostComment extends React.Component {
             // fontWeight="bold"
             // className="commentItem"
           >
-            {commentdata.authorId}:
+            {commentdata.authorUsername}:
           </Typography>
         </Grid>
         <Grid item>
