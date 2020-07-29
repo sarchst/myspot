@@ -112,7 +112,6 @@ class Favourites extends React.Component {
                 <ListItem key={index}>
                   <ListItemAvatar>
                     <Avatar
-                      classes={{ primary: classes.listItemText }}
                       variant="square"
                       src={
                         track.track.album.images.length
