@@ -26,8 +26,9 @@ class FilterPosts extends React.Component {
   };
   handleClose = (e) => {
     this.setState({ anchorE1: null, open: false });
-    const { filter } = e.currentTarget.dataset;
-    this.props.changeFilter(filter);
+    const { myFilter } = e.currentTarget.dataset;
+    console.log(myFilter);
+    this.props.changeFilter(myFilter);
   };
   render() {
     return (
@@ -57,16 +58,16 @@ class FilterPosts extends React.Component {
           open={this.state.open}
           onClose={this.handleClose}
         >
-          <MenuItem data-my-value={"newToOld"} onClick={this.handleClose}>
+          <MenuItem data-my-filter={"newToOld"} onClick={this.handleClose}>
             <Typography variant="caption">Newest to Oldest</Typography>
           </MenuItem>
-          <MenuItem data-my-value={"oldToNew"} onClick={this.handleClose}>
+          <MenuItem data-my-filter={"oldToNew"} onClick={this.handleClose}>
             <Typography variant="caption">Oldest to Newest</Typography>
           </MenuItem>
-          <MenuItem data-my-value={"mostLiked"} onClick={this.handleClose}>
+          <MenuItem data-my-filter={"mostLiked"} onClick={this.handleClose}>
             <Typography variant="caption">Most Liked</Typography>
           </MenuItem>
-          <MenuItem data-my-value={"mostCommented"} onClick={this.handleClose}>
+          <MenuItem data-my-filter={"mostCommented"} onClick={this.handleClose}>
             <Typography variant="caption">Most Commented</Typography>
           </MenuItem>
         </Menu>

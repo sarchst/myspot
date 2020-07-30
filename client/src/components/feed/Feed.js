@@ -4,7 +4,11 @@ import { connect } from "react-redux";
 import Post from "./Post";
 import MakePost from "./MakePost";
 import FilterPosts from "./FilterPosts";
-import { toggleLike, fetchFeed } from "../../app/actions/feedActions";
+import {
+  toggleLike,
+  fetchFeed,
+  fetchFeedWithFilter,
+} from "../../app/actions/feedActions";
 import { fetchPosts } from "../../app/actions/postActions";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { Typography } from "@material-ui/core";
@@ -20,6 +24,7 @@ class Feed extends React.Component {
 
   componentDidMount() {
     // change fetchFeed to take second filter param
+    console.log("feed: ", this.props.feed.filter);
     this.props.fetchFeed(this.props.user.id);
   }
 
@@ -30,10 +35,14 @@ class Feed extends React.Component {
         hasMore: true,
       });
     }
+    // check if filter has been changed
+    if (this.props.feed.filter !== prevProps.feed.filter) {
+      console.log("new filter is", this.props.feed.filter);
+      this.props.fetchFeedWithFilter(this.props.user.id, this.props.feed.filter);
+    }
   }
 
   fetchMoreData = () => {
-
     if (this.state.items.length >= this.props.feed.posts.length) {
       this.setState({ hasMore: false });
       return;
@@ -109,6 +118,7 @@ const mapDispatchToProps = {
   toggleLike,
   fetchFeed,
   fetchPosts,
+  fetchFeedWithFilter,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Feed);

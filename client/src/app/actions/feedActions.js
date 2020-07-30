@@ -129,3 +129,73 @@ export function fetchFeed(id) {
       });
   };
 }
+
+export function fetchFeedWithFilter(id, filter) {
+  console.log("top of fetch feed with filter");
+  console.log(filter);
+  return (dispatch) => {
+    dispatch(fetchFeedStarted());
+    fetch(`http://localhost:9000/user/feed/${id}`)
+      .then((res) => res.json())
+      .then((res) => {
+        if (res.error) {
+          throw res.error;
+        }
+        dispatch(fetchFeedSuccess());
+        return res.data;
+      })
+      .then((res) => {
+        let followerSet = {};
+        let numFollowing = res[0].following.length;
+        followerSet[res[0]._id] = res[0].profilePic;
+        for (let i = 0; i < numFollowing; i++) {
+          followerSet[res[0].following[i]._id] = res[0].following[i].profilePic;
+        }
+
+        let feed = res[0].posts;
+        for (let i = 0; i < numFollowing; i++) {
+          feed = feed.concat(res[0].following[i].posts);
+        }
+
+        for (let i = 0; i < feed.length; i++) {
+          feed[i].profilePic = followerSet[feed[i].authorId];
+        }
+
+        let sortedFeed = [];
+        // apply filtering here..
+        switch (filter) {
+          case "newToOld":
+            sortedFeed = feed.sort(
+              (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+            );
+            break;
+          case "oldToNew":
+            sortedFeed = feed.sort(
+              (a, b) => new Date(a.createdAt) - new Date(b.createdAt)
+            );
+            break;
+          case "mostLiked":
+            sortedFeed = feed.sort(
+              (a, b) =>
+                b.usersLiked.length - a.usersLiked.length ||
+                new Date(b.createdAt) - new Date(a.createdAt)
+            );
+            break;
+          default:
+            sortedFeed = feed.sort(
+              (a, b) =>
+                b.comments.length - a.comments.length ||
+                new Date(b.createdAt) - new Date(a.createdAt)
+            );
+            break;
+        }
+
+        console.log("sortedFeed", sortedFeed);
+        dispatch(addPostsToFeed(sortedFeed));
+        return res;
+      })
+      .catch((error) => {
+        dispatch(fetchFeedError(error));
+      });
+  };
+}
