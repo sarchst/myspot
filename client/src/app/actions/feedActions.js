@@ -1,5 +1,5 @@
 import axios from "axios";
-import { fetchPosts, fetchPostsWithFilter } from "./postActions";
+import { fetchPostsWithFilter } from "./postActions";
 import { applyFilter } from "./filterActions";
 
 // export const TOGGLE_LIKE = "TOGGLE_LIKE";
@@ -68,47 +68,47 @@ export const toggleLike = (post, id, profileFeedFilter, feedFilter) => {
   };
 };
 
-export function fetchFeed(id) {
-  return (dispatch) => {
-    dispatch(fetchFeedStarted());
-    fetch(`http://localhost:9000/user/feed/${id}`)
-      .then((res) => res.json())
-      .then((res) => {
-        if (res.error) {
-          throw res.error;
-        }
-        dispatch(fetchFeedSuccess());
-        return res.data;
-      })
-      .then((res) => {
-        let followerSet = {};
-        let numFollowing = res[0].following.length;
-        followerSet[res[0]._id] = res[0].profilePic;
-        for (let i = 0; i < numFollowing; i++) {
-          followerSet[res[0].following[i]._id] = res[0].following[i].profilePic;
-        }
+// export function fetchFeed(id) {
+//   return (dispatch) => {
+//     dispatch(fetchFeedStarted());
+//     fetch(`http://localhost:9000/user/feed/${id}`)
+//       .then((res) => res.json())
+//       .then((res) => {
+//         if (res.error) {
+//           throw res.error;
+//         }
+//         dispatch(fetchFeedSuccess());
+//         return res.data;
+//       })
+//       .then((res) => {
+//         let followerSet = {};
+//         let numFollowing = res[0].following.length;
+//         followerSet[res[0]._id] = res[0].profilePic;
+//         for (let i = 0; i < numFollowing; i++) {
+//           followerSet[res[0].following[i]._id] = res[0].following[i].profilePic;
+//         }
 
-        let feed = res[0].posts;
-        for (let i = 0; i < numFollowing; i++) {
-          feed = feed.concat(res[0].following[i].posts);
-        }
+//         let feed = res[0].posts;
+//         for (let i = 0; i < numFollowing; i++) {
+//           feed = feed.concat(res[0].following[i].posts);
+//         }
 
-        for (let i = 0; i < feed.length; i++) {
-          feed[i].profilePic = followerSet[feed[i].authorId];
-        }
+//         for (let i = 0; i < feed.length; i++) {
+//           feed[i].profilePic = followerSet[feed[i].authorId];
+//         }
 
-        // apply filtering here..
-        const sortedFeed = feed.sort(
-          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
-        );
-        dispatch(addPostsToFeed(sortedFeed));
-        return res;
-      })
-      .catch((error) => {
-        dispatch(fetchFeedError(error));
-      });
-  };
-}
+//         // apply filtering here..
+//         const sortedFeed = feed.sort(
+//           (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+//         );
+//         dispatch(addPostsToFeed(sortedFeed));
+//         return res;
+//       })
+//       .catch((error) => {
+//         dispatch(fetchFeedError(error));
+//       });
+//   };
+// }
 
 export function fetchFeedWithFilter(id, filter) {
   console.log("top of fetch feed with filter");

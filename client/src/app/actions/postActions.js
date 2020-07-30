@@ -1,5 +1,5 @@
 import axios from "axios";
-import { fetchFeed, fetchFeedWithFilter } from "./feedActions";
+import { fetchFeedWithFilter } from "./feedActions";
 import { applyFilter } from "./filterActions";
 
 export const FETCH_POSTS_SUCCESS = "FETCH_POSTS_SUCCESS";
@@ -94,37 +94,37 @@ export const deletePost = (id, postId, profileFeedFilter, feedFilter) => {
       });
   };
 };
-export function fetchPosts(id) {
-  return (dispatch) => {
-    dispatch(fetchPostsStarted());
-    fetch(`http://localhost:9000/user/posts/${id}`)
-      .then((res) => res.json())
-      .then((res) => {
-        if (res.error) {
-          throw res.error;
-        }
-        // console.log("fetchPosts method:");
-        dispatch(fetchPostsSuccess());
-        return res.data;
-      })
-      .then((res) => {
-        for (let i = 0; i < res.posts.length; i++) {
-          res.posts[i].profilePic = res.profilePic;
-        }
+// export function fetchPosts(id) {
+//   return (dispatch) => {
+//     dispatch(fetchPostsStarted());
+//     fetch(`http://localhost:9000/user/posts/${id}`)
+//       .then((res) => res.json())
+//       .then((res) => {
+//         if (res.error) {
+//           throw res.error;
+//         }
+//         // console.log("fetchPosts method:");
+//         dispatch(fetchPostsSuccess());
+//         return res.data;
+//       })
+//       .then((res) => {
+//         for (let i = 0; i < res.posts.length; i++) {
+//           res.posts[i].profilePic = res.profilePic;
+//         }
 
-        const sortedPosts = res.posts.sort(
-          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
-        );
+//         const sortedPosts = res.posts.sort(
+//           (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+//         );
 
-        dispatch(addPostsToPosts(sortedPosts));
-        return res;
-      })
-      .catch((error) => {
-        console.log("Fetch Posts Error");
-        dispatch(fetchPostsError(error));
-      });
-  };
-}
+//         dispatch(addPostsToPosts(sortedPosts));
+//         return res;
+//       })
+//       .catch((error) => {
+//         console.log("Fetch Posts Error");
+//         dispatch(fetchPostsError(error));
+//       });
+//   };
+// }
 
 export function fetchPostsWithFilter(id, profileFeedFilter) {
   return (dispatch) => {

@@ -6,7 +6,7 @@ import MakePost from "./MakePost";
 import FilterPosts from "./FilterPosts";
 import {
   toggleLike,
-  fetchFeed,
+  // fetchFeed,
   fetchFeedWithFilter,
 } from "../../app/actions/feedActions";
 // import { fetchPosts } from "../../app/actions/postActions";
@@ -25,7 +25,7 @@ class Feed extends React.Component {
   componentDidMount() {
     // change fetchFeed to take second filter param
     console.log("feed: ", this.props.feed.filter);
-    this.props.fetchFeed(this.props.user.id);
+    this.props.fetchFeedWithFilter(this.props.user.id, this.props.feed.filter);
   }
 
   componentDidUpdate(prevProps) {
@@ -94,7 +94,14 @@ class Feed extends React.Component {
                 <Post
                   key={p._id}
                   postdata={p}
-                  toggleLike={() => toggleLike(p, user.id, this.props.profileFeedFilter, this.props.feedFilter)}
+                  toggleLike={() =>
+                    toggleLike(
+                      p,
+                      user.id,
+                      this.props.profileFeedFilter,
+                      this.props.feedFilter
+                    )
+                  }
                   userId={user.id}
                 />
               ))}
@@ -118,12 +125,12 @@ const mapStateToProps = (state) => ({
   posts: state.profileFeed.posts,
   user: state.user,
   profileFeedFilter: state.profileFeed.filter,
-   feedFilter: state.feed.filter,
+  feedFilter: state.feed.filter,
 });
 
 const mapDispatchToProps = {
   toggleLike,
-  fetchFeed,
+  // fetchFeed,
   // fetchPosts,
   fetchFeedWithFilter,
 };
