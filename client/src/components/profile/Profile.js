@@ -34,8 +34,7 @@ const styles = (theme) => ({
 class Profile extends React.Component {
   state = {
     items: [],
-    hasMore: true,
-    count: 0
+    hasMore: true
   };
 
   componentDidMount = () => {
@@ -53,9 +52,8 @@ class Profile extends React.Component {
         items: this.props.posts.slice(0, 5),
       });
     }
-    console.log("count", this.state.count);
-    console.log("length", this.state.items.length);
-    console.log("items", this.state.items);
+    console.log("PROFILE: length", this.state.items.length);
+    console.log("PROFILE: items", this.state.items);
   }
 
   fetchMoreData = () => {

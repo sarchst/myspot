@@ -21,18 +21,21 @@ class Feed extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    console.log("CDU");
+    console.log("FEED: CDU");
     // Typical usage (don't forget to compare props):
     if (this.props.feed.posts !== prevProps.feed.posts) {
-      console.log("CDU if");
+      console.log("FEED: CDU if");
       this.setState({
         items: this.props.feed.posts.slice(0, 5),
       });
     }
-    console.log("length", this.state.items.length);
-    console.log("items", this.state.items);
+    console.log("FEED: length", this.state.items.length);
+    console.log("FEED: items", this.state.items);
   }
 
+  componentWillUnmount() {
+    console.log("component will unmount");git 
+  }
   fetchMoreData = () => {
     if (this.state.items.length >= this.props.feed.posts.length) {
       this.setState({ hasMore: false });
