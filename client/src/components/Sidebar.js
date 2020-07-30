@@ -17,7 +17,6 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
-// import AudiotrackIcon from "@material-ui/icons/Audiotrack";
 import HeadsetIcon from "@material-ui/icons/Headset";
 import MicIcon from "@material-ui/icons/Mic";
 import FavoriteIcon from "@material-ui/icons/Favorite";
@@ -30,15 +29,13 @@ import { connect } from "react-redux";
 import { withStyles } from "@material-ui/core/styles";
 import { toggleSidebar } from "../app/actions";
 import contentType from "../data/ContentTypeEnum";
-// import ProfilePage from "./content-page/ProfilePage";
-// import FeedPage from "./content-page/FeedPage";
-// import HomePage from "./content-page/HomePage";
+
 
 import { Link, Route, Switch, Redirect } from "react-router-dom";
 
 import FollowTable from "./FollowTable";
 import NowPlaying from "./NowPlaying";
-import Profile from "./Profile";
+import Profile from "./profile/Profile";
 import Feed from "./feed/Feed";
 import Settings from "./Settings";
 import SongList from "./SongList";
@@ -239,9 +236,20 @@ class Sidebar extends React.Component {
             <Route path="/:user/favourites" exact>
               <Favourites />
             </Route>
-            <Route path="/:user/playlists" exact>
-              <Playlists />
-            </Route>
+            <Route
+              path="/:user/playlists"
+              exact
+              component={(props) => (
+                <Playlists {...props} loggedInUserId={this.props.user.id} />
+              )}
+            />
+            <Route
+              path="/myspotter/:user/playlists"
+              exact
+              render={(props) => {
+                return <Playlists {...props} />;
+              }}
+            />
             <Route key="followers" exact path="/:user/followers">
               <FollowTable type={"followers"} />
             </Route>
@@ -283,7 +291,6 @@ const mapStateToProps = (state) => {
   return {
     open: state.isSidebarOpen,
     user: state.user,
-    // selectedContentPage: state.selectedContentPage,
   };
 };
 

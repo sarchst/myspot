@@ -87,7 +87,7 @@ class ProfileCard extends React.Component {
       songUri: "",
       userData: {},
     };
-    spotifyWebApi.setAccessToken(this.props.spotifyWebApi);
+    spotifyWebApi.setAccessToken(this.props.spotifyApi.accessToken);
   }
   componentDidMount = () => {
     // TODO: replace user_ID with this.props.user_ID once working
@@ -345,8 +345,7 @@ class ProfileCard extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-  spotifyWebApi: state.spotifyWebApi,
-  spotifyApiUserMe: state.spotifyApiUserMe,
+  spotifyApi: state.spotifyApi,
   posts: state.posts,
   user: state.user,
 });

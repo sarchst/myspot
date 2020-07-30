@@ -1,15 +1,15 @@
 import React from "react";
 import { connect } from "react-redux";
 import { withStyles } from "@material-ui/core/styles";
-import { toggleLike } from "../app/actions/feedActions";
-import { fetchPosts } from "../app/actions/postActions";
-import Post from "./feed/Post";
-import MakePost from "./feed/MakePost";
-import ProfileCard from "./profile/ProfileCard";
-import ProfileTable from "./profile/ProfileTable";
-import { fetchUserSettings } from "../app/actions/settingsActions";
-import { fetchProfilePic } from "../app/actions/imageUploadActions";
-import DeletePostDialog from "./DeletePostDialog";
+import { toggleLike } from "../../app/actions/feedActions";
+import { fetchPosts } from "../../app/actions/postActions";
+import Post from "../feed/Post";
+import MakePost from "../feed/MakePost";
+import ProfileCard from "./ProfileCard";
+import ProfileTable from "./ProfileTable";
+import { fetchUserSettings } from "../../app/actions/settingsActions";
+import { fetchProfilePic } from "../../app/actions/imageUploadActions";
+import DeletePostDialog from "../feed/DeletePostDialog";
 
 const styles = (theme) => ({
   root: {
@@ -51,7 +51,7 @@ class Profile extends React.Component {
               <Post
                 key={p._id}
                 postdata={p}
-                toggleLike={() => toggleLike({ post: p, userId: user.id })}
+                toggleLike={() => toggleLike(p, user.id)}
                 userId={user.id}
               />
             ))

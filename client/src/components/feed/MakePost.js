@@ -43,7 +43,6 @@ const styles = (theme) => ({
   },
 });
 
-
 class MakePost extends React.Component {
   state = {
     authorId: this.props.user.id, // user id, ref to user schema
@@ -103,6 +102,11 @@ class MakePost extends React.Component {
                   id="standard-basic"
                   value={this.state.content}
                   onChange={this.handleChange}
+                  onKeyPress={(e) => {
+                    if (e.key === "Enter") {
+                      this.handleSubmitPost();
+                    }
+                  }}
                 />
               </FormControl>
             </Grid>

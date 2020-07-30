@@ -67,11 +67,17 @@ class Playlists extends React.Component {
     this.state = {
       usersPlaylists: [],
     };
-    spotifyWebApi.setAccessToken(this.props.spotifyWebApi);
+    spotifyWebApi.setAccessToken(this.props.spotifyApi.accessToken);
   }
 
   componentDidMount() {
-    spotifyWebApi.getUserPlaylists().then(
+    let user_ID;
+    if (this.props.location.state) {
+      user_ID = this.props.location.state.user_ID;
+    } else {
+      user_ID = this.props.loggedInUserId;
+    }
+    spotifyWebApi.getUserPlaylists(user_ID).then(
       (data) => {
         console.log("User playlists", data);
         this.setState({
@@ -154,7 +160,7 @@ class Playlists extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    spotifyWebApi: state.spotifyWebApi,
+    spotifyApi: state.spotifyApi,
     user: state.user,
   };
 };
