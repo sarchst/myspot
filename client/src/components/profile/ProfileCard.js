@@ -107,7 +107,10 @@ class ProfileCard extends React.Component {
     }
     // get top tracks for arbitrary user
     fetch(`/user/${user_ID}`)
-      .then((response) => response.json())
+      .then((response) => {
+        console.log("response: ", response);
+        response.json();
+      })
       .then((response) => {
         this.setState({
           topTracks: response.data.topTracks,
