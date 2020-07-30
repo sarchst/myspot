@@ -17,7 +17,7 @@ class Tinderify extends React.Component {
       discoverWeeklyId: "",
       discoverWeeklyImageUrl: "",
     };
-    spotifyWebApi.setAccessToken(this.props.spotifyWebApi);
+    spotifyWebApi.setAccessToken(this.props.spotifyApi.accessToken);
 
     this.likeSong = this.likeSong.bind(this);
     this.testing = this.testing.bind(this);
@@ -160,7 +160,7 @@ class Tinderify extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    spotifyWebApi: state.spotifyWebApi,
+    spotifyApi: state.spotifyApi,
     user: state.user,
   };
 };
