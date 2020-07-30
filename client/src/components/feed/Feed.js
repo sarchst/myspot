@@ -30,6 +30,7 @@ class Feed extends React.Component {
 
   componentDidUpdate(prevProps) {
     if (this.props.feed.posts !== prevProps.feed.posts) {
+      console.log("CDU-------------------------");
       this.setState({
         items: this.props.feed.posts.slice(0, 5),
         hasMore: true,
@@ -37,6 +38,7 @@ class Feed extends React.Component {
     }
     // check if filter has been changed
     if (this.props.feed.filter !== prevProps.feed.filter) {
+      console.log("FILTER CHANGE-------------------------");
       console.log("new filter is", this.props.feed.filter);
       this.props.fetchFeedWithFilter(
         this.props.user.id,
@@ -92,7 +94,7 @@ class Feed extends React.Component {
                 <Post
                   key={p._id}
                   postdata={p}
-                  toggleLike={() => toggleLike(p, user.id)}
+                  toggleLike={() => toggleLike(p, user.id, this.props.profileFeedFilter, this.props.feedFilter)}
                   userId={user.id}
                 />
               ))}
@@ -115,6 +117,8 @@ const mapStateToProps = (state) => ({
   feed: state.feed,
   posts: state.profileFeed.posts,
   user: state.user,
+  profileFeedFilter: state.profileFeed.filter,
+   feedFilter: state.feed.filter,
 });
 
 const mapDispatchToProps = {
