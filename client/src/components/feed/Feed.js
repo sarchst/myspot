@@ -34,7 +34,7 @@ class Feed extends React.Component {
   }
 
   componentWillUnmount() {
-    console.log("component will unmount");git 
+    console.log("component will unmount");
   }
   fetchMoreData = () => {
     if (this.state.items.length >= this.props.feed.posts.length) {
