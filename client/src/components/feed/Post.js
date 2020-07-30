@@ -137,7 +137,6 @@ class Post extends Component {
   state = {
     moreOptions: false,
     anchorEl: null,
-    emojiPickerOpen: false,
     commentContent: "",
   };
 

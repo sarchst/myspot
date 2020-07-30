@@ -7,7 +7,10 @@ export const FETCH_FEED_ERROR = "FETCH_FEED_ERROR";
 export const FETCH_FEED_STARTED = "FETCH_FEED_STARTED";
 export const ADD_POSTS_TO_FEED = "ADD_POSTS_TO_FEED";
 export const COMBINE_P_POSTS_WITH_FEED = "COMBINE_P_POSTS_WITH_FEED";
-
+export const FILTER_NEW_TO_OLD = "FILTER_NEW_TO_OLD";
+export const FILTER_OLD_TO_NEW = "FILTER_OLD_TO_NEW";
+export const FILTER_MOST_LIKED = "FILTER_MOST_LIKED";
+export const FILTER_MOST_COMMENTED = "FILTER_MOST_COMMENTED";
 
 // export const toggleLike = (payload) => ({
 //   type: TOGGLE_LIKE,
@@ -39,6 +42,27 @@ export function addPostsToFeed(data) {
     payload: data,
   };
 }
+
+export const changeFilter = (filter) => {
+  switch (filter) {
+    case "newToOld":
+      return {
+        type: FILTER_NEW_TO_OLD,
+      };
+    case "oldToNew":
+      return {
+        type: FILTER_OLD_TO_NEW,
+      };
+    case "mostLiked":
+      return {
+        type: FILTER_MOST_LIKED,
+      };
+    default:
+      return {
+        type: FILTER_MOST_COMMENTED,
+      };
+  }
+};
 
 export const toggleLike = (post, id) => {
   let postInfo = { postId: post._id, userId: id };
@@ -93,6 +117,7 @@ export function fetchFeed(id) {
           feed[i].profilePic = followerSet[feed[i].authorId];
         }
 
+        // apply filtering here..
         const sortedFeed = feed.sort(
           (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
         );

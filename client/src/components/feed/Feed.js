@@ -3,11 +3,13 @@ import { connect } from "react-redux";
 
 import Post from "./Post";
 import MakePost from "./MakePost";
+import FilterPosts from "./FilterPosts";
 import { toggleLike, fetchFeed } from "../../app/actions/feedActions";
 import { fetchPosts } from "../../app/actions/postActions";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { Typography } from "@material-ui/core";
 import Emoji from "react-emoji-render";
+import { Grid } from "@material-ui/core";
 
 class Feed extends React.Component {
   state = {
@@ -17,25 +19,21 @@ class Feed extends React.Component {
   };
 
   componentDidMount() {
+    // change fetchFeed to take second filter param
     this.props.fetchFeed(this.props.user.id);
   }
 
   componentDidUpdate(prevProps) {
-    // console.log("FEED: CDU ----------");
-    // Typical usage (don't forget to compare props):
     if (this.props.feed.posts !== prevProps.feed.posts) {
-      // console.log("FEED: CDU if ------------------------------");
       this.setState({
         items: this.props.feed.posts.slice(0, 5),
         hasMore: true,
       });
     }
-    // console.log("FEED: length", this.state.items.length);
-    // console.log("FEED: items", this.state.items);
   }
 
   fetchMoreData = () => {
-    // console.log("FETCH MORE DATA ----------");
+
     if (this.state.items.length >= this.props.feed.posts.length) {
       this.setState({ hasMore: false });
       return;
@@ -57,6 +55,10 @@ class Feed extends React.Component {
       return (
         <div>
           <MakePost />
+          <Grid container justify="flex-end">
+            <FilterPosts />
+          </Grid>
+
           <div>
             <InfiniteScroll
               dataLength={this.state.items.length}
@@ -107,7 +109,6 @@ const mapDispatchToProps = {
   toggleLike,
   fetchFeed,
   fetchPosts,
-  // toggleActivity,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Feed);
