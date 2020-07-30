@@ -12,6 +12,8 @@ import {
 } from "./app/actions/spotifyApiActions";
 import { setCurrentUser } from "./app/actions/userActions";
 import { fetchUserSettings } from "./app/actions/settingsActions";
+import { setSelectedUser } from "./app/actions/selectedUserActions";
+import { setPlayListIDs } from "./app/actions/playlistActions";
 
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import "./App.css";
@@ -94,34 +96,44 @@ class App extends React.Component {
 
     if (params.access_token) {
       spotifyWebApi.setAccessToken(params.access_token);
+      console.log("LOGGING IN: SENDING SPOTIFYWEBAPI TO REDUX STORE");
       let userObject = {};
       // Pass refresh token as well for further use if a new access token is needed
       this.props.registerSpotifyApi(params);
-      spotifyWebApi
-        .getMe()
-        .then((response) => {
-          Object.assign(userObject, response);
-          return spotifyWebApi.getMyTopTracks();
-        })
-        .then((topTracksResponse) => {
-          if (topTracksResponse) {
-            userObject.topTracks = topTracksResponse.items.slice(
-              0,
-              Math.min(topTracksResponse.items.length, 3)
-            );
-          }
-          return spotifyWebApi.getMyRecentlyPlayedTracks();
-        })
-        .then((recentTracksResponse) => {
-          if (recentTracksResponse) {
-            userObject.recentTracks = recentTracksResponse.items.slice(
-              0,
-              Math.min(recentTracksResponse.items.length, 3)
-            );
-          }
-          this.props.submitSpotifyApiUserMe(userObject);
-          this.props.setCurrentUser(userObject.id, userObject.display_name);
-        });
+      const spotifyMePromise = spotifyWebApi.getMe();
+      const topTracksPromise = spotifyWebApi.getMyTopTracks();
+      const recentTracksPromise = spotifyWebApi.getMyRecentlyPlayedTracks();
+      Promise.all([
+        spotifyMePromise,
+        topTracksPromise,
+        recentTracksPromise,
+      ]).then((values) => {
+        const spotifyMe = values[0];
+        const topTracks = values[1];
+        const recentTracks = values[2];
+        // create db object using spotify user object
+        Object.assign(userObject, spotifyMe);
+        // add top tracks to db object
+        userObject.topTracks = topTracks.items.slice(
+          0,
+          Math.min(topTracks.items.length, 3)
+        );
+        // add recent tracks to db object
+        userObject.recentTracks = recentTracks.items.slice(
+          0,
+          Math.min(recentTracks.items.length, 3)
+        );
+        // set logged in user as initial selectedUser
+        this.props.setSelectedUser(userObject.id);
+        // dispatch updates spotify info in db
+        // TODO: replace redux action with db call instead?
+        this.props.submitSpotifyApiUserMe(userObject);
+        // set URIs for MySpot and MySpot-Tinderify playlists
+        console.log("calling setPlayListIDs in app.js");
+        this.props.setPlayListIDs(spotifyMe.id, params.access_token);
+        // set current user in redux
+        this.props.setCurrentUser(userObject.id, userObject.display_name);
+      });
     }
   }
 
@@ -171,9 +183,12 @@ const mapDispatchToProps = (dispatch) => {
     setCurrentUser: (id, username) => dispatch(setCurrentUser(id, username)),
     registerSpotifyApi: (spotifyApi) =>
       dispatch(registerSpotifyApi(spotifyApi)),
+    setSelectedUser: (id) => dispatch(setSelectedUser(id)),
     submitSpotifyApiUserMe: (spotifyUserMe) =>
       dispatch(submitSpotifyApiUserMe(spotifyUserMe)),
     fetchUserSettings: fetchUserSettings,
+    setPlayListIDs: (UserMeID, spotifyToken) =>
+      dispatch(setPlayListIDs(UserMeID, spotifyToken)),
   };
 };
 

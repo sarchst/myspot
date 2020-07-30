@@ -11,6 +11,8 @@ import fetchPosts from "./fetchPosts";
 import updateSettings from "./updateSettings";
 import delPostDialog from "./delPostDialog";
 import editPostDialog from "./editPostDialog";
+import selectedUser from "./selectedUser";
+import mySpotPlaylists from "./mySpotPlaylists";
 
 const allReducers = combineReducers({
   isSidebarOpen: toggleSidebar,
@@ -23,6 +25,8 @@ const allReducers = combineReducers({
   posts: posts,
   updateSettings: updateSettings,
   delPostDialog: delPostDialog,
+  selectedUser: selectedUser,
+  mySpotPlaylists: mySpotPlaylists,
   editPostDialog: editPostDialog,
 });
 

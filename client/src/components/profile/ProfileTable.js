@@ -50,7 +50,7 @@ class ProfileTable extends React.Component {
     const playlists = data.items.map((pl) => {
       const playlist = {
         title: pl.name,
-        playlistArt: pl.images[0].url,
+        playlistArt: pl.images.length ? pl.images[0].url : "",
         owner: pl.owner.display_name,
         numTracks: pl.tracks.total,
       };
