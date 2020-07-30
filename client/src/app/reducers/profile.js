@@ -1,8 +1,8 @@
-// const initialState = [];
+// // const initialState = [];
 
-export const posts = (state = initialState, action) => {
-  switch (action.type) {
-    default:
-      return state;
-  }
-};
+// export const posts = (state = initialState, action) => {
+//   switch (action.type) {
+//     default:
+//       return state;
+//   }
+// };

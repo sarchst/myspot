@@ -211,7 +211,7 @@ class Post extends Component {
       postId: postId,
       time: new Date().toLocaleString("en-US"),
     };
-    this.props.addComment(comment);
+    this.props.addComment(comment, this.props.profileFeedFilter, this.props.feedFilter);
     this.setState({
       commentContent: "",
     });
@@ -518,6 +518,8 @@ const mapStateToProps = (state) => ({
   user: state.user,
   delPostDialog: state.delPostDialog,
   editPostDialog: state.editPostDialog,
+  feedFilter: state.feed.filter,
+  profileFeedFilter: state.profileFeed.filter,
 });
 
 Post.propTypes = {

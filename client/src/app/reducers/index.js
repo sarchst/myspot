@@ -4,7 +4,7 @@ import toggleSidebar from "./toggleSidebar";
 import user from "./user";
 import feed from "./feed";
 import settings from "./settings";
-import posts from "./makePost";
+import profileFeed from "./profileFeed";
 import spotifyApi from "./spotifyApi";
 import fetchFeed from "./fetchFeed";
 import fetchPosts from "./fetchPosts";
@@ -20,7 +20,7 @@ const allReducers = combineReducers({
   spotifyApi: spotifyApi,
   fetchFeed: fetchFeed,
   fetchPosts: fetchPosts,
-  posts: posts,
+  profileFeed: profileFeed,
   updateSettings: updateSettings,
   delPostDialog: delPostDialog,
   editPostDialog: editPostDialog,

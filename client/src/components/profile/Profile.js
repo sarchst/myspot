@@ -2,17 +2,22 @@ import React from "react";
 import { connect } from "react-redux";
 import { withStyles } from "@material-ui/core/styles";
 import { toggleLike } from "../../app/actions/feedActions";
-import { fetchPosts } from "../../app/actions/postActions";
+import {
+  // fetchPosts,
+  fetchPostsWithFilter,
+} from "../../app/actions/postActions";
 import Post from "../feed/Post";
 import MakePost from "../feed/MakePost";
 import ProfileCard from "./ProfileCard";
 import ProfileTable from "./ProfileTable";
+import FilterPosts from "../feed/FilterPosts";
 import { fetchUserSettings } from "../../app/actions/settingsActions";
 import { fetchProfilePic } from "../../app/actions/imageUploadActions";
 import DeletePostDialog from "../feed/DeletePostDialog";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { Typography } from "@material-ui/core";
 import Emoji from "react-emoji-render";
+import { Grid } from "@material-ui/core";
 
 const styles = (theme) => ({
   root: {
@@ -38,14 +43,16 @@ class Profile extends React.Component {
   };
 
   componentDidMount = () => {
-    this.props.fetchPosts(this.props.user.id);
+    // this.props.fetchPosts(this.props.user.id);
+    this.props.fetchPostsWithFilter(
+      this.props.user.id,
+      this.props.filter
+    );
     this.props.fetchUserSettings(this.props.user.id);
     this.props.fetchProfilePic(this.props.user.id);
   };
 
   componentDidUpdate(prevProps) {
-    // console.log("PROFILE: COMPONENT DID UPDATE");
-    // Typical usage (don't forget to compare props):
     if (this.props.posts !== prevProps.posts) {
       // console.log("PROFILE: CDU if ------------------------------");
       this.setState({
@@ -53,8 +60,14 @@ class Profile extends React.Component {
         hasMore: true,
       });
     }
-        // console.log("PROFILE: length", this.state.items.length);
-        // console.log("PROFILE: items", this.state.items);
+    // check if filter has been changed
+    if (this.props.filter !== prevProps.filter) {
+      console.log("new filter is", this.props.filter);
+      this.props.fetchPostsWithFilter(
+        this.props.user.id,
+        this.props.filter
+      );
+    }
   }
 
   fetchMoreData = () => {
@@ -67,9 +80,9 @@ class Profile extends React.Component {
     // a fake async api call like which sends
     // 5 more records in 0.5 secs
     setTimeout(() => {
-    this.setState({
-      items: this.state.items.concat(this.props.posts.slice(n, n + 5)),
-    });
+      this.setState({
+        items: this.state.items.concat(this.props.posts.slice(n, n + 5)),
+      });
     }, 500);
   };
 
@@ -81,6 +94,9 @@ class Profile extends React.Component {
         <ProfileCard />
         <ProfileTable />
         <MakePost />
+        <Grid container justify="flex-end">
+          <FilterPosts page="PROFILE" />
+        </Grid>
         <InfiniteScroll
           dataLength={this.state.items.length}
           next={this.fetchMoreData}
@@ -121,12 +137,14 @@ class Profile extends React.Component {
 
 const mapStateToProps = (state) => ({
   user: state.user,
-  posts: state.posts,
+  posts: state.profileFeed.posts,
+  filter: state.profileFeed.filter,
 });
 
 const mapDispatchToProps = {
   toggleLike,
-  fetchPosts,
+  // fetchPosts,
+  fetchPostsWithFilter,
   fetchUserSettings,
   fetchProfilePic,
 };

@@ -346,7 +346,7 @@ class ProfileCard extends React.Component {
 
 const mapStateToProps = (state) => ({
   spotifyApi: state.spotifyApi,
-  posts: state.posts,
+  posts: state.profileFeed.posts,
   user: state.user,
 });
 

@@ -9,7 +9,7 @@ import {
   fetchFeed,
   fetchFeedWithFilter,
 } from "../../app/actions/feedActions";
-import { fetchPosts } from "../../app/actions/postActions";
+// import { fetchPosts } from "../../app/actions/postActions";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { Typography } from "@material-ui/core";
 import Emoji from "react-emoji-render";
@@ -38,7 +38,10 @@ class Feed extends React.Component {
     // check if filter has been changed
     if (this.props.feed.filter !== prevProps.feed.filter) {
       console.log("new filter is", this.props.feed.filter);
-      this.props.fetchFeedWithFilter(this.props.user.id, this.props.feed.filter);
+      this.props.fetchFeedWithFilter(
+        this.props.user.id,
+        this.props.feed.filter
+      );
     }
   }
 
@@ -65,7 +68,7 @@ class Feed extends React.Component {
         <div>
           <MakePost />
           <Grid container justify="flex-end">
-            <FilterPosts />
+            <FilterPosts page="FEED" />
           </Grid>
 
           <div>
@@ -110,14 +113,14 @@ class Feed extends React.Component {
 
 const mapStateToProps = (state) => ({
   feed: state.feed,
-  posts: state.posts,
+  posts: state.profileFeed.posts,
   user: state.user,
 });
 
 const mapDispatchToProps = {
   toggleLike,
   fetchFeed,
-  fetchPosts,
+  // fetchPosts,
   fetchFeedWithFilter,
 };
 

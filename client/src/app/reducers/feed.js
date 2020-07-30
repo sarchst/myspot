@@ -1,10 +1,13 @@
 import {
   ADD_POSTS_TO_FEED,
+} from "../actions/feedActions";
+import {
   FILTER_MOST_LIKED,
   FILTER_MOST_COMMENTED,
   FILTER_NEW_TO_OLD,
   FILTER_OLD_TO_NEW,
-} from "../actions/feedActions";
+} from "../actions/filterActions";
+
 
 const initialState = {
   activity: true,

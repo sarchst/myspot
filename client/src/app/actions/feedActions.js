@@ -1,5 +1,6 @@
 import axios from "axios";
 import { fetchPosts } from "./postActions";
+import { applyFilter } from "./filterActions";
 
 // export const TOGGLE_LIKE = "TOGGLE_LIKE";
 export const FETCH_FEED_SUCCESS = "FETCH_FEED_SUCCESS";
@@ -43,26 +44,26 @@ export function addPostsToFeed(data) {
   };
 }
 
-export const changeFilter = (filter) => {
-  switch (filter) {
-    case "newToOld":
-      return {
-        type: FILTER_NEW_TO_OLD,
-      };
-    case "oldToNew":
-      return {
-        type: FILTER_OLD_TO_NEW,
-      };
-    case "mostLiked":
-      return {
-        type: FILTER_MOST_LIKED,
-      };
-    default:
-      return {
-        type: FILTER_MOST_COMMENTED,
-      };
-  }
-};
+// export const changeFilter = (filter, page) => {
+//   switch (filter) {
+//     case "newToOld":
+//       return {
+//         type: FILTER_NEW_TO_OLD,
+//       };
+//     case "oldToNew":
+//       return {
+//         type: FILTER_OLD_TO_NEW,
+//       };
+//     case "mostLiked":
+//       return {
+//         type: FILTER_MOST_LIKED,
+//       };
+//     default:
+//       return {
+//         type: FILTER_MOST_COMMENTED,
+//       };
+//   }
+// };
 
 export const toggleLike = (post, id) => {
   let postInfo = { postId: post._id, userId: id };
@@ -161,34 +162,34 @@ export function fetchFeedWithFilter(id, filter) {
           feed[i].profilePic = followerSet[feed[i].authorId];
         }
 
-        let sortedFeed = [];
+        let sortedFeed = applyFilter(feed, filter);
         // apply filtering here..
-        switch (filter) {
-          case "newToOld":
-            sortedFeed = feed.sort(
-              (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
-            );
-            break;
-          case "oldToNew":
-            sortedFeed = feed.sort(
-              (a, b) => new Date(a.createdAt) - new Date(b.createdAt)
-            );
-            break;
-          case "mostLiked":
-            sortedFeed = feed.sort(
-              (a, b) =>
-                b.usersLiked.length - a.usersLiked.length ||
-                new Date(b.createdAt) - new Date(a.createdAt)
-            );
-            break;
-          default:
-            sortedFeed = feed.sort(
-              (a, b) =>
-                b.comments.length - a.comments.length ||
-                new Date(b.createdAt) - new Date(a.createdAt)
-            );
-            break;
-        }
+        // switch (filter) {
+        //   case "newToOld":
+        //     sortedFeed = feed.sort(
+        //       (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+        //     );
+        //     break;
+        //   case "oldToNew":
+        //     sortedFeed = feed.sort(
+        //       (a, b) => new Date(a.createdAt) - new Date(b.createdAt)
+        //     );
+        //     break;
+        //   case "mostLiked":
+        //     sortedFeed = feed.sort(
+        //       (a, b) =>
+        //         b.usersLiked.length - a.usersLiked.length ||
+        //         new Date(b.createdAt) - new Date(a.createdAt)
+        //     );
+        //     break;
+        //   default:
+        //     sortedFeed = feed.sort(
+        //       (a, b) =>
+        //         b.comments.length - a.comments.length ||
+        //         new Date(b.createdAt) - new Date(a.createdAt)
+        //     );
+        //     break;
+        // }
 
         console.log("sortedFeed", sortedFeed);
         dispatch(addPostsToFeed(sortedFeed));

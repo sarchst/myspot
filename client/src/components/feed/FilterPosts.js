@@ -3,7 +3,9 @@ import { Button, Menu, MenuItem, Typography } from "@material-ui/core";
 import { compose } from "redux";
 import { connect } from "react-redux";
 import { withStyles } from "@material-ui/core/styles";
-import { changeFilter } from "../../app/actions/feedActions";
+import {
+  changeFilter
+} from "../../app/actions/filterActions";
 
 const styles = (theme) => ({
   root: {
@@ -24,13 +26,21 @@ class FilterPosts extends React.Component {
   handleClick = (e) => {
     this.setState({ anchorE1: e.currentTarget, open: true });
   };
-  handleClose = (e) => {
+  handleClose = (e, page) => {
     this.setState({ anchorE1: null, open: false });
     const { myFilter } = e.currentTarget.dataset;
     console.log(myFilter);
+    // console.log(page);
+    // if (page === "FEED") {
+    //   this.props.changeFeedFilter(myFilter);
+    // } else {
+    //   this.props.changeProfileFilter(myFilter);
+    // }
     this.props.changeFilter(myFilter);
   };
+
   render() {
+    const { page } = this.props;
     return (
       <div>
         <Button
@@ -58,16 +68,28 @@ class FilterPosts extends React.Component {
           open={this.state.open}
           onClose={this.handleClose}
         >
-          <MenuItem data-my-filter={"newToOld"} onClick={this.handleClose}>
+          <MenuItem
+            data-my-filter={"newToOld" + page}
+            onClick={(e) => this.handleClose(e)}
+          >
             <Typography variant="caption">Newest to Oldest</Typography>
           </MenuItem>
-          <MenuItem data-my-filter={"oldToNew"} onClick={this.handleClose}>
+          <MenuItem
+            data-my-filter={"oldToNew" + page}
+            onClick={(e) => this.handleClose(e)}
+          >
             <Typography variant="caption">Oldest to Newest</Typography>
           </MenuItem>
-          <MenuItem data-my-filter={"mostLiked"} onClick={this.handleClose}>
+          <MenuItem
+            data-my-filter={"mostLiked" + page}
+            onClick={(e) => this.handleClose(e)}
+          >
             <Typography variant="caption">Most Liked</Typography>
           </MenuItem>
-          <MenuItem data-my-filter={"mostCommented"} onClick={this.handleClose}>
+          <MenuItem
+            data-my-filter={"mostCommented" + page}
+            onClick={(e) => this.handleClose(e)}
+          >
             <Typography variant="caption">Most Commented</Typography>
           </MenuItem>
         </Menu>
