@@ -34,7 +34,7 @@ const styles = (theme) => ({
 class Profile extends React.Component {
   state = {
     items: [],
-    hasMore: true
+    hasMore: false,
   };
 
   componentDidMount = () => {
@@ -44,19 +44,21 @@ class Profile extends React.Component {
   };
 
   componentDidUpdate(prevProps) {
-    console.log("PROFILE: CDU");
+    // console.log("PROFILE: COMPONENT DID UPDATE");
     // Typical usage (don't forget to compare props):
     if (this.props.posts !== prevProps.posts) {
-      console.log("PROFILE: CDU if");
+      // console.log("PROFILE: CDU if ------------------------------");
       this.setState({
         items: this.props.posts.slice(0, 5),
+        hasMore: true,
       });
     }
-    console.log("PROFILE: length", this.state.items.length);
-    console.log("PROFILE: items", this.state.items);
+        // console.log("PROFILE: length", this.state.items.length);
+        // console.log("PROFILE: items", this.state.items);
   }
 
   fetchMoreData = () => {
+    // console.log("PROFILE FETCH MORE DATA ----------");
     if (this.state.items.length >= this.props.posts.length) {
       this.setState({ hasMore: false });
       return;
@@ -65,9 +67,9 @@ class Profile extends React.Component {
     // a fake async api call like which sends
     // 5 more records in 0.5 secs
     setTimeout(() => {
-      this.setState({
-        items: this.state.items.concat(this.props.posts.slice(n, n + 5)),
-      });
+    this.setState({
+      items: this.state.items.concat(this.props.posts.slice(n, n + 5)),
+    });
     }, 500);
   };
 
@@ -83,9 +85,10 @@ class Profile extends React.Component {
           dataLength={this.state.items.length}
           next={this.fetchMoreData}
           hasMore={this.state.hasMore}
+          scrollThreshold={1}
           loader={
             <Typography color="primary" style={{ textAlign: "center" }}>
-              <Emoji text="Loading... :eyes:"/>
+              <Emoji text="Loading... :eyes:" />
             </Typography>
           }
           endMessage={
@@ -98,7 +101,7 @@ class Profile extends React.Component {
             {this.props.posts && this.props.posts.length ? (
               // ALSO this could be a Feed component potentially with a is profile feed prop or something, not front burner issue though
               // this.props.posts.map((p) => (
-              this.props.posts.map((p) => (
+              this.state.items.map((p) => (
                 <Post
                   key={p._id}
                   postdata={p}

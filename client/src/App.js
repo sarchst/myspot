@@ -6,6 +6,7 @@ import { BrowserRouter as Router } from "react-router-dom";
 import Sidebar from "./components/Sidebar";
 import Appbar from "./components/Appbar";
 import Login from "./components/Login";
+import ScrollToTop from "./components/ScrollToTop";
 import {
   registerSpotifyApi,
   submitSpotifyApiUserMe,
@@ -146,6 +147,7 @@ class App extends React.Component {
         <ThemeProvider theme={this.selectTheme()}>
           <Router>
             <div className="App">
+              <ScrollToTop />
               <Appbar />
               <Sidebar />
             </div>

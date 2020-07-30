@@ -13,7 +13,7 @@ class Feed extends React.Component {
   state = {
     userProfilePics: {},
     items: [],
-    hasMore: true,
+    hasMore: false,
   };
 
   componentDidMount() {
@@ -21,22 +21,21 @@ class Feed extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    console.log("FEED: CDU");
+    // console.log("FEED: CDU ----------");
     // Typical usage (don't forget to compare props):
     if (this.props.feed.posts !== prevProps.feed.posts) {
-      console.log("FEED: CDU if");
+      // console.log("FEED: CDU if ------------------------------");
       this.setState({
         items: this.props.feed.posts.slice(0, 5),
+        hasMore: true,
       });
     }
-    console.log("FEED: length", this.state.items.length);
-    console.log("FEED: items", this.state.items);
+    // console.log("FEED: length", this.state.items.length);
+    // console.log("FEED: items", this.state.items);
   }
 
-  componentWillUnmount() {
-    console.log("component will unmount");
-  }
   fetchMoreData = () => {
+    // console.log("FETCH MORE DATA ----------");
     if (this.state.items.length >= this.props.feed.posts.length) {
       this.setState({ hasMore: false });
       return;
@@ -46,7 +45,7 @@ class Feed extends React.Component {
     // 5 more records in 0.5 secs
     setTimeout(() => {
       this.setState({
-        items: this.state.items.concat(this.props.feed.posts.slice(n, n + 5)),
+        items: this.state.items.concat(this.props.feed.posts.slice(n, n + 3)),
       });
     }, 500);
   };
@@ -63,6 +62,7 @@ class Feed extends React.Component {
               dataLength={this.state.items.length}
               next={this.fetchMoreData}
               hasMore={this.state.hasMore}
+              scrollThreshold={1}
               loader={
                 <Typography color="primary" style={{ textAlign: "center" }}>
                   <Emoji text="Loading... :eyes:" />
