@@ -58,7 +58,7 @@ const ImageUpload = ({ saveAndUpdateProfilePic, user, fetchProfilePic }) => {
         />
         <CardContent>
           <Typography gutterBottom variant="h5" component="h2">
-            {user.id}
+            {user.username}
           </Typography>
           {/* <Typography variant="body2" color="textSecondary" component="p">
               Cool description of me
