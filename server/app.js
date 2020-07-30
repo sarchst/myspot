@@ -173,6 +173,10 @@ app.get("/refresh_token", function (req, res) {
  * SPOTIFY AUTH SERVER CODE END
  */
 
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "..", "client/build/index.html"));
+});
+
 // app.use("/", indexRouter);
 app.use("/", userRouter);
 
