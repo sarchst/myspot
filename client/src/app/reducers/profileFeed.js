@@ -7,7 +7,7 @@ import {
   FILTER_P_OLD_TO_NEW,
 } from "../actions/filterActions";
 
-const initialState = { posts: [], filter: "newToOld" };
+const initialState = { posts: [], filter: "New To Old" };
 
 export const profileFeed = (state = initialState, action) => {
   switch (action.type) {
@@ -24,22 +24,22 @@ export const profileFeed = (state = initialState, action) => {
     case FILTER_P_NEW_TO_OLD:
       return {
         ...state,
-        filter: "newToOld",
+        filter: "New To Old",
       };
     case FILTER_P_OLD_TO_NEW:
       return {
         ...state,
-        filter: "oldToNew",
+        filter: "Old To New",
       };
     case FILTER_P_MOST_LIKED:
       return {
         ...state,
-        filter: "mostLiked",
+        filter: "Most Liked",
       };
     case FILTER_P_MOST_COMMENTED:
       return {
         ...state,
-        filter: "mostCommented",
+        filter: "Most Commented",
       };
     default:
       return state;

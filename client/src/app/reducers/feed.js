@@ -1,6 +1,4 @@
-import {
-  ADD_POSTS_TO_FEED,
-} from "../actions/feedActions";
+import { ADD_POSTS_TO_FEED } from "../actions/feedActions";
 import {
   FILTER_MOST_LIKED,
   FILTER_MOST_COMMENTED,
@@ -8,11 +6,10 @@ import {
   FILTER_OLD_TO_NEW,
 } from "../actions/filterActions";
 
-
 const initialState = {
   activity: true,
   posts: [],
-  filter: "newToOld",
+  filter: "New To Old",
 };
 
 export const feed = (state = initialState, action) => {
@@ -44,22 +41,22 @@ export const feed = (state = initialState, action) => {
     case FILTER_NEW_TO_OLD:
       return {
         ...state,
-        filter: "newToOld",
+        filter: "New To Old",
       };
     case FILTER_OLD_TO_NEW:
       return {
         ...state,
-        filter: "oldToNew",
+        filter: "Old To New",
       };
     case FILTER_MOST_LIKED:
       return {
         ...state,
-        filter: "mostLiked",
+        filter: "Most Liked",
       };
     case FILTER_MOST_COMMENTED:
       return {
         ...state,
-        filter: "mostCommented",
+        filter: "Most Commented",
       };
     default:
       return state;

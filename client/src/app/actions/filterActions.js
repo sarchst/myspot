@@ -48,17 +48,17 @@ export const changeFilter = (filter) => {
 
 export const applyFilter = (posts, filter) => {
   switch (filter) {
-    case "newToOld":
+    case "New To Old":
       let newToOldFeed = posts.sort(
         (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
       );
       return newToOldFeed;
-    case "oldToNew":
+    case "Old To New":
       let oldToNewFeed = posts.sort(
         (a, b) => new Date(a.createdAt) - new Date(b.createdAt)
       );
       return oldToNewFeed;
-    case "mostLiked":
+    case "Most Liked":
       let mostLikedFeed = posts.sort(
         (a, b) =>
           b.usersLiked.length - a.usersLiked.length ||

@@ -3,9 +3,7 @@ import { Button, Menu, MenuItem, Typography } from "@material-ui/core";
 import { compose } from "redux";
 import { connect } from "react-redux";
 import { withStyles } from "@material-ui/core/styles";
-import {
-  changeFilter
-} from "../../app/actions/filterActions";
+import { changeFilter } from "../../app/actions/filterActions";
 
 const styles = (theme) => ({
   root: {
@@ -26,18 +24,20 @@ class FilterPosts extends React.Component {
   handleClick = (e) => {
     this.setState({ anchorE1: e.currentTarget, open: true });
   };
-  handleClose = (e, page) => {
+  handleClose = (e) => {
     this.setState({ anchorE1: null, open: false });
     const { myFilter } = e.currentTarget.dataset;
     console.log(myFilter);
-    // console.log(page);
-    // if (page === "FEED") {
-    //   this.props.changeFeedFilter(myFilter);
-    // } else {
-    //   this.props.changeProfileFilter(myFilter);
-    // }
     this.props.changeFilter(myFilter);
   };
+
+//   getButtonLabel = (page) => {
+//     if (page === "FEED") {
+//       return "Filter: " + this.props.feedFilter;
+//     } else {
+//       return "Filter: " + this.props.profileFeedFilter;
+//     }
+//   };
 
   render() {
     const { page } = this.props;
@@ -51,7 +51,8 @@ class FilterPosts extends React.Component {
           color="secondary"
           size="small"
         >
-          Filters
+          {page === "FEED" && "Filter: " + this.props.feedFilter}
+          {page === "PROFILE" && "Filter: " + this.props.profileFeedFilter}
         </Button>
         <Menu
           id="simple-menu"
@@ -100,6 +101,8 @@ class FilterPosts extends React.Component {
 
 const mapStateToProps = (state) => ({
   user: state.user,
+  feedFilter: state.feed.filter,
+  profileFeedFilter: state.profileFeed.filter,
 });
 
 export default compose(
