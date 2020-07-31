@@ -38,7 +38,7 @@ import Profile from "./profile/Profile";
 import Feed from "./feed/Feed";
 import Settings from "./Settings";
 import SongList from "./SongList";
-import ProfileCard from "./profile/ProfileCard";
+import { fetchSelectedUser } from "../app/actions/selectedUserActions";
 
 const drawerWidth = 240;
 
@@ -177,6 +177,9 @@ class Sidebar extends React.Component {
               <Link
                 className={classes.sidebarItem}
                 to={"/" + this.props.user.id}
+                onClick={() => {
+                  this.props.fetchSelectedUser(this.props.user.id);
+                }}
               >
                 <ListItemIcon>{<AccountCircleIcon />}</ListItemIcon>
                 <ListItemText
@@ -204,7 +207,7 @@ class Sidebar extends React.Component {
                   className={classes.sidebarItem}
                   to={
                     "/" +
-                    this.props.user.username +
+                    this.props.user.id +
                     "/" +
                     this.processTextForURL(text)
                   }
@@ -276,6 +279,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     toggleSideBar: () => dispatch(toggleSidebar()),
+    fetchSelectedUser: (userID) => dispatch(fetchSelectedUser(userID)),
   };
 };
 

@@ -12,7 +12,6 @@ import {
   submitSpotifyApiUserMe,
 } from "./app/actions/spotifyApiActions";
 import { setCurrentUser } from "./app/actions/userActions";
-import { fetchUserSettings } from "./app/actions/settingsActions";
 import { fetchSelectedUser } from "./app/actions/selectedUserActions";
 import { setPlayListIDs } from "./app/actions/playlistActions";
 

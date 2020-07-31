@@ -14,6 +14,7 @@ import { logOut } from "../app/actions/userActions";
 import contentType from "../data/ContentTypeEnum";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
+import { fetchSelectedUser } from "../app/actions/selectedUserActions";
 const drawerWidth = 240;
 
 const styles = (theme) => ({
@@ -101,7 +102,11 @@ class Appbar extends React.Component {
           <Typography noWrap={false} className={classes.appTitle}>
             MySpot
           </Typography>
-          <Link to={"/" + this.props.user.id} className={classes.appbarButton}>
+          <Link
+            to={"/" + this.props.user.id}
+            className={classes.appbarButton}
+            onClick={() => this.props.fetchSelectedUser(this.props.user.id)}
+          >
             <Button color="inherit">{contentType.PROFILE}</Button>
           </Link>
           <Link
@@ -143,6 +148,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     toggleSidebar: () => dispatch(toggleSidebar()),
     logOut: () => dispatch(logOut()),
+    fetchSelectedUser: (userID) => dispatch(fetchSelectedUser(userID)),
   };
 };
 

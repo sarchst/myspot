@@ -140,6 +140,7 @@ class Playlists extends React.Component {
                         {playlist.name}
                       </Typography>
                       {/* todo: (Sarchen) fix element tags in description */}
+                      {console.log("plyalists")}
                       <Typography>{playlist.description}</Typography>
                     </CardContent>
                     <CardActions>
