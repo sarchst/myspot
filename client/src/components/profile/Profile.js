@@ -38,8 +38,8 @@ class Profile extends React.Component {
     const { match } = this.props;
     this.props.fetchSelectedUser(match.params.user);
     this.props.fetchPosts(match.params.user);
-    this.props.fetchUserSettings(match.params.user);
     this.props.fetchProfilePic(match.params.user);
+    this.props.fetchUserSettings(this.props.user.id);
   };
 
   componentDidUpdate(prevProps, prevState, snapshot) {
