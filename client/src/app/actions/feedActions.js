@@ -1,5 +1,5 @@
-import axios from "axios";
-import { fetchPostsWithFilter } from "./postActions";
+// import axios from "axios";
+// import { fetchPostsWithFilter } from "./postActions";
 import { applyFilter } from "./filterActions";
 
 // export const TOGGLE_LIKE = "TOGGLE_LIKE";
@@ -44,29 +44,29 @@ export function addPostsToFeed(data) {
   };
 }
 
-export const toggleLike = (post, id, profileFeedFilter, feedFilter) => {
-  let postInfo = { postId: post._id, userId: id };
-  let toggle = "like";
-  if (post.usersLiked.includes(id)) {
-    toggle = "unlike";
-  }
-  return (dispatch) => {
-    return axios
-      .put(
-        `http://localhost:9000/user/posts/${toggle}/${post.authorId}`,
-        postInfo
-      )
-      .then(() => {
-        dispatch(fetchPostsWithFilter(id, profileFeedFilter));
-      })
-      .then(() => {
-        dispatch(fetchFeedWithFilter(id, feedFilter));
-      })
-      .catch((error) => {
-        throw error;
-      });
-  };
-};
+// export const toggleLike = (post, id, profileFeedFilter, feedFilter) => {
+//   let postInfo = { postId: post._id, userId: id };
+//   let toggle = "like";
+//   if (post.usersLiked.includes(id)) {
+//     toggle = "unlike";
+//   }
+//   return (dispatch) => {
+//     return axios
+//       .put(
+//         `http://localhost:9000/user/posts/${toggle}/${post.authorId}`,
+//         postInfo
+//       )
+//       .then(() => {
+//         dispatch(fetchPostsWithFilter(id, profileFeedFilter));
+//       })
+//       .then(() => {
+//         dispatch(fetchFeedWithFilter(id, feedFilter));
+//       })
+//       .catch((error) => {
+//         throw error;
+//       });
+//   };
+// };
 
 // export function fetchFeed(id) {
 //   return (dispatch) => {

@@ -214,3 +214,27 @@ export const editPost = (id, commentInfo, profileFeedFilter, feedFilter) => {
       });
   };
 };
+
+export const toggleLike = (post, id, profileFeedFilter, feedFilter) => {
+  let postInfo = { postId: post._id, userId: id };
+  let toggle = "like";
+  if (post.usersLiked.includes(id)) {
+    toggle = "unlike";
+  }
+  return (dispatch) => {
+    return axios
+      .put(
+        `http://localhost:9000/user/posts/${toggle}/${post.authorId}`,
+        postInfo
+      )
+      .then(() => {
+        dispatch(fetchPostsWithFilter(id, profileFeedFilter));
+      })
+      .then(() => {
+        dispatch(fetchFeedWithFilter(id, feedFilter));
+      })
+      .catch((error) => {
+        throw error;
+      });
+  };
+};

@@ -4,11 +4,8 @@ import { connect } from "react-redux";
 import Post from "./Post";
 import MakePost from "./MakePost";
 import FilterPosts from "./FilterPosts";
-import {
-  toggleLike,
-  // fetchFeed,
-  fetchFeedWithFilter,
-} from "../../app/actions/feedActions";
+import { fetchFeedWithFilter } from "../../app/actions/feedActions";
+import { toggleLike } from "../../app/actions/postActions";
 // import { fetchPosts } from "../../app/actions/postActions";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { Typography } from "@material-ui/core";

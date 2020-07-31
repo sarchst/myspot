@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { withStyles } from "@material-ui/core/styles";
-import { toggleLike } from "../../app/actions/feedActions";
+import { toggleLike } from "../../app/actions/postActions";
 import {
   // fetchPosts,
   fetchPostsWithFilter,

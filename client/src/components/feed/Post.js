@@ -301,7 +301,7 @@ class Post extends Component {
               </RouterLink>
             </Grid>
           </Grid>
-    
+
           <Grid container spacing={1}>
             <Grid
               item
@@ -312,7 +312,9 @@ class Post extends Component {
               justify="center"
               alignItems="flex-start"
             >
-              {/* <Grid item>{this.chooseIcon(postdata.type)}</Grid> */}
+              <Grid item>
+                {postdata.repost ? <Typography variant="button" color="secondary">Repost</Typography> : null}
+              </Grid>
               <Grid item>
                 <Typography>{postdata.content}</Typography>
               </Grid>
