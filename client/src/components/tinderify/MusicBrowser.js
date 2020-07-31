@@ -104,18 +104,27 @@ class MusicBrowser extends React.Component {
     }
   }
 
-  likeSong(id) {
-    // console.log("Liked ", id);
-    // let ids = [id];
-    // spotifyWebApi.addToMySavedTracks(ids).then(
-    //   (data) => {
-    //     console.log("save song", data);
-    //   },
-    //   function (err) {
-    //     console.error(err);
-    //   }
-    // );
-  }
+  addSongToTinderifyPlayList = (id) => {
+    console.log(id);
+    spotifyWebApi
+      .removeTracksFromPlaylist(
+        this.props.mySpotPlaylists.TinderifyPlaylistID,
+        ["spotify:track:" + id]
+      )
+      .then(() => {
+        return spotifyWebApi.addTracksToPlaylist(
+          this.props.mySpotPlaylists.TinderifyPlaylistID,
+          ["spotify:track:" + id]
+        );
+      })
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log("error adding song to tinderify playlist");
+        console.log(err);
+      });
+  };
 
   setPlayerSong = (track) => {
     console.log(track);
@@ -141,7 +150,9 @@ class MusicBrowser extends React.Component {
                     <ListItem>
                       <FavoriteIcon
                         m={2}
-                        onClick={() => this.likeSong(this.state.trackID)}
+                        onClick={() =>
+                          this.addSongToTinderifyPlayList(this.state.trackID)
+                        }
                       ></FavoriteIcon>
                       <ListItemAvatar>
                         <Avatar
@@ -207,7 +218,13 @@ class MusicBrowser extends React.Component {
                         <h2>{track.track.name}</h2>
                         <h4>by</h4>
                         <h4>{track.track.artists[0].name}</h4>
-                        <Box pr={1} pt={1}>
+                        <FavoriteIcon
+                          className="favorite"
+                          onClick={() =>
+                            this.addSongToTinderifyPlayList(track.track.id)
+                          }
+                        ></FavoriteIcon>
+                        <Box>
                           {isPlaybackAvailable ? (
                             <PlayCircleOutlineIcon
                               onClick={
@@ -225,10 +242,6 @@ class MusicBrowser extends React.Component {
                             />
                           )}
                         </Box>
-                        <FavoriteIcon
-                          className="favorite"
-                          onClick={() => this.likeSong(track.track.id)}
-                        ></FavoriteIcon>
                       </div>
                     </Slide>
                   );
@@ -249,6 +262,7 @@ class MusicBrowser extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
+    mySpotPlaylists: state.mySpotPlaylists,
     spotifyApi: state.spotifyApi,
     user: state.user,
   };
