@@ -24,7 +24,7 @@ class EditPostDialog extends React.Component {
       content: this.state.editedContent,
     };
     console.log(body);
-    this.props.editPost(this.props.user.id, body);
+    this.props.editPost(this.props.user.id, body, this.props.profileFeedFilter, this.props.feedFilter);
     this.props.closeEditPostDialog();
   };
   handleCancel = () => {
@@ -81,6 +81,8 @@ class EditPostDialog extends React.Component {
 const mapStateToProps = (state) => ({
   editPostDialog: state.editPostDialog,
   user: state.user,
+  feedFilter: state.feed.filter,
+  profileFeedFilter: state.profileFeed.filter,
 });
 export default connect(mapStateToProps, {
   submitEditPostDialog,

@@ -4,7 +4,7 @@ import toggleSidebar from "./toggleSidebar";
 import user from "./user";
 import feed from "./feed";
 import settings from "./settings";
-import posts from "./makePost";
+import profileFeed from "./profileFeed";
 import spotifyApi from "./spotifyApi";
 import fetchFeed from "./fetchFeed";
 import fetchPosts from "./fetchPosts";
@@ -12,20 +12,24 @@ import updateSettings from "./updateSettings";
 import delPostDialog from "./delPostDialog";
 import editPostDialog from "./editPostDialog";
 import unfollowDialog from "./unfollowDialog";
+import selectedUser from "./selectedUser";
+import mySpotPlaylists from "./mySpotPlaylists";
 
 const allReducers = combineReducers({
   isSidebarOpen: toggleSidebar,
+  spotifyApi: spotifyApi,
   user: user,
   feed: feed,
-  accountSettings: settings,
-  spotifyApi: spotifyApi,
+  profileFeed: profileFeed,
   fetchFeed: fetchFeed,
   fetchPosts: fetchPosts,
-  posts: posts,
-  updateSettings: updateSettings,
   delPostDialog: delPostDialog,
+  selectedUser: selectedUser,
+  mySpotPlaylists: mySpotPlaylists,
   editPostDialog: editPostDialog,
   unfollowDialog: unfollowDialog,
+  accountSettings: settings,
+  updateSettings: updateSettings,
 });
 
 export default allReducers;
