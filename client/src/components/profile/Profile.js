@@ -29,6 +29,11 @@ const styles = (theme) => ({
 });
 
 class Profile extends React.Component {
+  constructor(props) {
+    super(props);
+    console.log("match is ", this.props);
+  }
+
   componentDidMount = () => {
     this.props.fetchPosts(this.props.user.id);
     this.props.fetchUserSettings(this.props.user.id);

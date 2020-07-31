@@ -129,7 +129,9 @@ class Playlists extends React.Component {
                     <CardMedia
                       className={classes.cardMedia}
                       image={
-                        playlist.images.length > 0 ? playlist.images[0].url : ""
+                        playlist.images.length > 0
+                          ? playlist.images[0].url
+                          : null
                       }
                       title="Image title"
                     />

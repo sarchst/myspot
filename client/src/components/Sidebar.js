@@ -30,7 +30,6 @@ import { withStyles } from "@material-ui/core/styles";
 import { toggleSidebar } from "../app/actions";
 import contentType from "../data/ContentTypeEnum";
 
-
 import { Link, Route, Switch, Redirect } from "react-router-dom";
 
 import FollowTable from "./FollowTable";
@@ -177,7 +176,7 @@ class Sidebar extends React.Component {
             >
               <Link
                 className={classes.sidebarItem}
-                to={"/" + this.props.user.username}
+                to={"/" + this.props.user.id}
               >
                 <ListItemIcon>{<AccountCircleIcon />}</ListItemIcon>
                 <ListItemText
@@ -221,21 +220,11 @@ class Sidebar extends React.Component {
         <main className={classes.content}>
           <div className={classes.toolbar} />
           <Switch>
-            <Route path={"/:user"} exact>
-              <Profile />
-            </Route>
-            <Route path="/:user/posts">
-              <Feed />
-            </Route>
-            <Route path="/:user/albums" exact>
-              <Albums />
-            </Route>
-            <Route path="/:user/tinderify" exact>
-              <Tinderify />
-            </Route>
-            <Route path="/:user/favourites" exact>
-              <Favourites />
-            </Route>
+            <Route path={"/:user"} exact component={Profile} />
+            <Route path="/:user/posts" component={Feed} />
+            <Route path="/:user/albums" exact component={Albums} />
+            <Route path="/:user/tinderify" exact component={Tinderify} />
+            <Route path="/:user/favourites" exact component={Favourites} />
             <Route
               path="/:user/playlists"
               exact
@@ -250,15 +239,19 @@ class Sidebar extends React.Component {
                 return <Playlists {...props} />;
               }}
             />
-            <Route key="followers" exact path="/:user/followers">
-              <FollowTable type={"followers"} />
-            </Route>
-            <Route key="following" exact path="/:user/following">
-              <FollowTable type={"following"} />
-            </Route>
-            <Route path="/:user/whatimlisteningto">
-              <NowPlaying />
-            </Route>
+            <Route
+              key="followers"
+              exact
+              path="/:user/followers"
+              component={(props) => <FollowTable type={"followers"} />}
+            />
+            <Route
+              key="following"
+              exact
+              path="/:user/following"
+              component={(props) => <FollowTable type={"following"} />}
+            />
+            <Route path="/:user/whatimlisteningto" component={NowPlaying} />
             <Route
               path="/myspotter/:user"
               render={(props) => {
@@ -267,19 +260,13 @@ class Sidebar extends React.Component {
                 return <ProfileCard {...props} />;
               }}
             />
-            <Route path="/:user/feed">
-              <Feed />
-            </Route>
-            <Route path="/:user/settings">
-              <Settings />
-            </Route>
+            <Route path="/:user/feed" component={Feed} />
+            <Route path="/:user/settings" component={Settings} />
             <Route
               path="/:user/playlists/:playlistid"
               render={(props) => <SongList {...props} />}
             />
-            <Route
-              render={() => <Redirect to={"/" + this.props.user.username} />}
-            />
+            <Route render={() => <Redirect to={"/" + this.props.user.id} />} />
           </Switch>
         </main>
       </div>
