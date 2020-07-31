@@ -1,6 +1,7 @@
 import React from "react";
 import Button from "@material-ui/core/Button";
 import { connect } from "react-redux";
+import Spotify from "spotify-web-api-js";
 
 import {
   FormControl,
@@ -17,6 +18,8 @@ import MusicNoteIcon from "@material-ui/icons/MusicNote";
 import PlaylistAddIcon from "@material-ui/icons/PlaylistAdd";
 import { withStyles } from "@material-ui/core/styles";
 import { makePost } from "../../app/actions/postActions";
+
+const spotifyWebApi = new Spotify();
 
 const styles = (theme) => ({
   root: {
@@ -44,18 +47,31 @@ const styles = (theme) => ({
 });
 
 class MakePost extends React.Component {
-  state = {
-    authorId: this.props.user.id, // user id, ref to user schema
-    content: "",
-    media: "",
-    type: "playlist",
-    usersLiked: [this.props.user.id], // automatically liking your own post
-    // mediaOptions: [],
-    username: this.props.user.username,
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      authorId: this.props.user.id, // user id, ref to user schema
+      content: "",
+      media: "",
+      type: "playlist",
+      usersLiked: [this.props.user.id], // automatically liking your own post
+      mediaOptions: [],
+      username: this.props.user.username,
+    };
+    spotifyWebApi.setAccessToken(this.props.spotifyApi.accessToken);
+  }
 
   componentDidMount = () => {
-    // // TODO STILL NEED componentDidMount to get playlists and set state mediaOptions
+    spotifyWebApi.getUserPlaylists(this.props.user.id).then(
+      (data) => {
+        this.setState({
+          mediaOptions: data.items,
+        });
+      },
+      function (err) {
+        console.error(err);
+      }
+    );
   };
 
   handleChange = (e) => {
@@ -63,8 +79,54 @@ class MakePost extends React.Component {
   };
 
   handleTypeSelect = (event, type) => {
+    console.log("Type: ", type);
     if (type !== null) {
       this.setState({ type: type });
+    }
+    switch (type) {
+      case "playlist": {
+        spotifyWebApi.getUserPlaylists(this.props.user.id).then(
+          (data) => {
+            this.setState({
+              mediaOptions: data.items,
+            });
+          },
+          function (err) {
+            console.error(err);
+          }
+        );
+        break;
+      }
+      case "album": {
+        spotifyWebApi.getMySavedAlbums().then(
+          (data) => {
+            console.log("ALBUMS: ", data.items);
+            this.setState({
+              mediaOptions: data.items,
+            });
+          },
+          function (err) {
+            console.error(err);
+          }
+        );
+        break;
+      }
+      case "song": {
+        spotifyWebApi.getMySavedTracks().then(
+          (data) => {
+            this.setState({
+              mediaOptions: data.items,
+            });
+          },
+          function (err) {
+            console.error(err);
+          }
+        );
+        break;
+      }
+      default: {
+        break;
+      }
     }
   };
 
@@ -142,11 +204,15 @@ class MakePost extends React.Component {
                   value={this.state.media}
                   onChange={this.handleMediaSelect}
                 >
-                  {/* TODO REPLACE temporary option with this mapping once api has connect with spotify
-                  {this.state.mediaOptions.map((mc) => {
-                    return <option value={mc}>{mc}</option>;
-                  })} */}
-                  <MenuItem value="my awesome playlist">
+                  {this.state.mediaOptions.map((mo) => {
+                    console.log(mo);
+                    return (
+                      <MenuItem key={mo.id} value={mo.id}>
+                        {mo.name}
+                      </MenuItem>
+                    );
+                  })}
+                  {/* <MenuItem value="my awesome playlist">
                     my awesome playlist
                   </MenuItem>
                   <MenuItem value="my firday night playlist">
@@ -154,7 +220,7 @@ class MakePost extends React.Component {
                   </MenuItem>
                   <MenuItem value="my workout playlist">
                     my workout playlist
-                  </MenuItem>
+                  </MenuItem> */}
                 </Select>
               </FormControl>
             </Grid>
@@ -177,7 +243,7 @@ class MakePost extends React.Component {
 
 const mapStateToProps = (state) => ({
   user: state.user,
-  posts: state.profileFeed.posts,
+  spotifyApi: state.spotifyApi,
   profileFeedFilter: state.profileFeed.filter,
   feedFilter: state.feed.filter,
 });
