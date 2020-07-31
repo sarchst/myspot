@@ -18,6 +18,7 @@ import PlayCircleOutlineIcon from "@material-ui/icons/PlayCircleOutline";
 import MusicOffOutlinedIcon from "@material-ui/icons/MusicOffOutlined";
 import Emoji from "react-emoji-render";
 import Typography from "@material-ui/core/Typography";
+import FollowButton from "../follow/FollowButton";
 
 const styles = (theme) => ({
   card: {
@@ -85,7 +86,9 @@ class ProfileCard extends React.Component {
       topTracks: [],
       recentTracks: [],
       songUri: "",
-      userData: {},
+      userData: {
+        followers: [],
+      },
     };
     spotifyWebApi.setAccessToken(this.props.spotifyApi.accessToken);
   }
@@ -148,6 +151,7 @@ class ProfileCard extends React.Component {
 
   render() {
     const { classes } = this.props;
+    console.log("PC: ", this.state.userData.followers);
 
     return (
       <Card
@@ -170,6 +174,11 @@ class ProfileCard extends React.Component {
             <Emoji text=":flag_canada:" />
             <Emoji text=":globe_showing_americas:" />
           </span>
+          <FollowButton
+            profileUserId={this.state.userData._id}
+            profileUsername={this.state.userData.username}
+            profileFollowers={this.state.userData.followers}
+          />
         </CardContent>
         <Divider light />
         <Box display={"flex"}>

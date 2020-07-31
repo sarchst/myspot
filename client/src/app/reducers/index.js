@@ -11,6 +11,7 @@ import fetchPosts from "./fetchPosts";
 import updateSettings from "./updateSettings";
 import delPostDialog from "./delPostDialog";
 import editPostDialog from "./editPostDialog";
+import unfollowDialog from "./unfollowDialog";
 
 const allReducers = combineReducers({
   isSidebarOpen: toggleSidebar,
@@ -24,6 +25,7 @@ const allReducers = combineReducers({
   updateSettings: updateSettings,
   delPostDialog: delPostDialog,
   editPostDialog: editPostDialog,
+  unfollowDialog: unfollowDialog,
 });
 
 export default allReducers;

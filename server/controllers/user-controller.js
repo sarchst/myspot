@@ -202,29 +202,29 @@ addPost = (req, res) => {
 };
 
 editPost = (req, res) => {
-   const body = req.body;
-   if (!body) {
-     return res.status(400).json({
-       success: false,
-       error: "You must provide a body to update",
-     });
-   }
+  const body = req.body;
+  if (!body) {
+    return res.status(400).json({
+      success: false,
+      error: "You must provide a body to update",
+    });
+  }
 
-   User.findOneAndUpdate(
-     { _id: req.params.id, "posts._id": body.postId },
-     { $set: { "posts.$[outer].content": body.content } },
-     { arrayFilters: [{ "outer._id": body.postId }], upsert: true, new: true },
-     (err, result) => {
-       if (err) {
-         return res.status(404).json({
-           err,
-           message: "This is an invalid comment update request.",
-         });
-       }
-       return res.status(200).json({ success: true, posts: result.posts });
-     }
-   );
-}
+  User.findOneAndUpdate(
+    { _id: req.params.id, "posts._id": body.postId },
+    { $set: { "posts.$[outer].content": body.content } },
+    { arrayFilters: [{ "outer._id": body.postId }], upsert: true, new: true },
+    (err, result) => {
+      if (err) {
+        return res.status(404).json({
+          err,
+          message: "This is an invalid comment update request.",
+        });
+      }
+      return res.status(200).json({ success: true, posts: result.posts });
+    }
+  );
+};
 
 deletePost = (req, res) => {
   const body = req.body;
@@ -249,7 +249,6 @@ deletePost = (req, res) => {
     }
   );
 };
-
 
 likePost = (req, res) => {
   const body = req.body;
@@ -485,12 +484,116 @@ getFollowing = (req, res) => {
     });
 };
 
-addFollowingFollowerRelationship = (req, res) => {
-  // TODO put on user to follow and put on user following
+addFollowingFollowerRelationship = async (req, res) => {
+  const followerId = req.params.id;
+  const followeeId = req.body.id;
+  if (!followeeId) {
+    return res.status(400).json({
+      success: false,
+      error: "You must provide a body/ id to update",
+    });
+  }
+
+  const followerQuery = { _id: followerId };
+  const followeeQuery = { _id: followeeId };
+
+  const followerUpdate = { $addToSet: { following: followeeId } };
+  const followeeUpdate = { $addToSet: { followers: followerId } };
+
+  const followerUpdated = await User.updateOne(followerQuery, followerUpdate);
+  const followeeUpdated = await User.updateOne(followeeQuery, followeeUpdate);
+
+  if (!followerUpdated || !followeeUpdated) {
+    return res.status(404).json({ error: "Unable to follow that user" });
+  }
+  return res.status(200).json({ success: true });
 };
 
+//   User.find(
+//     { _id: { $in: [followerId, followeeId] } },
+//     (err, usersInRelationship) => {
+//       if (err) {
+//         return res.status(400).json({ success: false, error: err });
+//       }
+//       if (usersInRelationship === null) {
+//         return res
+//           .status(404)
+//           .json({ sucess: false, error: "Users not found" });
+//       }
+//     }
+//   ).forEach((usersInRelationship) => {
+//     if (usersInRelationship._id === followerId) {
+//       // push followeeId to followerId's following list
+//       User.update({ _id: followerId }, { $push: { following: followeeId } });
+//     }
+//     if (usersInRelationship._id === followeeId) {
+//       // push followerId to followeeId's followers list
+//       User.update({ _id: followeeId }, { $push: { followers: followerId } });
+//     }
+//   });
+// };
+
 removeFollowingFollowerRelationship = (req, res) => {
-  // TODO delete on user to follow and delete on user following
+  console.log("BODY: ", req.body);
+  const followerId = req.params.id;
+  const followeeId = req.body.id;
+  if (!followeeId) {
+    console.log("the followee id is bad???");
+    return res.status(400).json({
+      success: false,
+      error: "You must provide a body/ id to update",
+    });
+  }
+
+  User.updateMany(
+    { _id: { $in: [followerId, followeeId] } },
+    { $pull: { following: followeeId, followers: followerId } },
+    (err, user) => {
+      if (err) {
+        return res.status(404).json({
+          err,
+          message: "This is an invalid update request.",
+        });
+      }
+      return res.status(200).json({ success: true });
+    }
+  );
+};
+
+updateFollowRelationship = async (req, res) => {
+  const followerId = req.params.id;
+  const followeeId = req.body.id;
+  if (!followeeId) {
+    return res.status(400).json({
+      success: false,
+      error: "You must provide a body/ id to update",
+    });
+  }
+
+  const followerQuery = { _id: followerId };
+  const followeeQuery = { _id: followeeId };
+
+  let followerUpdate = {};
+  let followeeUpdate = {};
+
+  if (req.body.remove) {
+    followerUpdate = { $pull: { following: followeeId } };
+    followeeUpdate = { $pull: { followers: followerId } };
+  } else {
+    followerUpdate = { $addToSet: { following: followeeId } };
+    followeeUpdate = { $addToSet: { followers: followerId } };
+  }
+
+  const followerUpdated = await User.updateOne(followerQuery, followerUpdate);
+  const followeeUpdated = await User.updateOne(followeeQuery, followeeUpdate);
+
+  console.log("followerUpdate: ", followerUpdated);
+  console.log("followeeUpdate: ", followeeUpdated);
+
+  if (!followerUpdated || !followeeUpdated) {
+    return res.status(404).json({ error: "Unable to follow that user" });
+  }
+  return res.status(200).json({ success: true });
 };
 
 module.exports = {
@@ -507,8 +610,9 @@ module.exports = {
   getProfilePic,
   getFollowers,
   getFollowing,
-  addFollowingFollowerRelationship,
-  removeFollowingFollowerRelationship,
+  updateFollowRelationship,
+  // addFollowingFollowerRelationship,
+  // removeFollowingFollowerRelationship,
   deletePost,
   addComment,
   deleteComment,
