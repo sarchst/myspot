@@ -64,14 +64,26 @@ class MakePost extends React.Component {
   componentDidMount = () => {
     spotifyWebApi.getUserPlaylists(this.props.user.id).then(
       (data) => {
+        const playlistOptions = this.getOptions(this.state.type, data.items);
         this.setState({
-          mediaOptions: data.items,
+          mediaOptions: playlistOptions,
         });
       },
       function (err) {
         console.error(err);
       }
     );
+    // spotifyWebApi.getMySavedAlbums().then(
+    //   (data) => {
+    //     console.log("ALBUMS: ", data.items);
+    //     this.setState({
+    //       mediaOptions: data.items,
+    //     });
+    //   },
+    //   function (err) {
+    //     console.error(err);
+    //   }
+    // );
   };
 
   handleChange = (e) => {
@@ -87,8 +99,9 @@ class MakePost extends React.Component {
       case "playlist": {
         spotifyWebApi.getUserPlaylists(this.props.user.id).then(
           (data) => {
+            const playlistOptions = this.getOptions(type, data.items);
             this.setState({
-              mediaOptions: data.items,
+              mediaOptions: playlistOptions,
             });
           },
           function (err) {
@@ -100,9 +113,9 @@ class MakePost extends React.Component {
       case "album": {
         spotifyWebApi.getMySavedAlbums().then(
           (data) => {
-            console.log("ALBUMS: ", data.items);
+            const albumOptions = this.getOptions(type, data.items);
             this.setState({
-              mediaOptions: data.items,
+              mediaOptions: albumOptions,
             });
           },
           function (err) {
@@ -111,11 +124,12 @@ class MakePost extends React.Component {
         );
         break;
       }
-      case "song": {
+      case "track": {
         spotifyWebApi.getMySavedTracks().then(
           (data) => {
+            const trackOptions = this.getOptions(type, data.items);
             this.setState({
-              mediaOptions: data.items,
+              mediaOptions: trackOptions,
             });
           },
           function (err) {
@@ -127,6 +141,27 @@ class MakePost extends React.Component {
       default: {
         break;
       }
+    }
+  };
+
+  getOptions = (type, mediaOptions) => {
+    if (this.state.type === "playlist") {
+      return mediaOptions.map((mo) => {
+        console.log(mo);
+        return (
+          <MenuItem key={mo.id} value={mo.id}>
+            {mo.name}
+          </MenuItem>
+        );
+      });
+    } else {
+      return mediaOptions.map((mo) => {
+        return (
+          <MenuItem key={mo[type].id} value={mo[type].id}>
+            {mo[type].name}
+          </MenuItem>
+        );
+      });
     }
   };
 
@@ -190,7 +225,7 @@ class MakePost extends React.Component {
                   <ToggleButton value="album" aria-label="album">
                     <AlbumIcon />
                   </ToggleButton>
-                  <ToggleButton value="song" aria-label="song">
+                  <ToggleButton value="track" aria-label="track">
                     <MusicNoteIcon />
                   </ToggleButton>
                 </ToggleButtonGroup>
@@ -204,14 +239,15 @@ class MakePost extends React.Component {
                   value={this.state.media}
                   onChange={this.handleMediaSelect}
                 >
-                  {this.state.mediaOptions.map((mo) => {
+                  {/* {this.state.mediaOptions.map((mo) => {
                     console.log(mo);
                     return (
                       <MenuItem key={mo.id} value={mo.id}>
                         {mo.name}
                       </MenuItem>
                     );
-                  })}
+                  })} */}
+                  {this.state.mediaOptions}
                   {/* <MenuItem value="my awesome playlist">
                     my awesome playlist
                   </MenuItem>
