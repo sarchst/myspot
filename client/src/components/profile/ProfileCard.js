@@ -90,15 +90,6 @@ class ProfileCard extends React.Component {
     spotifyWebApi.setAccessToken(this.props.spotifyApi.accessToken);
   }
 
-  // componentWillReceiveProps = () => {
-  //   console.log("profile card props", this.props);
-  //   this.setState({
-  //     topTracks: this.props.selectedUser.topTracks || [],
-  //     recentTracks: this.props.selectedUser.recentTracks || [],
-  //     userData: this.props.selectedUser || {},
-  //   });
-  // };
-
   setPlayerSong = (songUri) => {
     this.setState({
       songUri: songUri,
@@ -315,6 +306,7 @@ const mapStateToProps = (state) => ({
   spotifyApi: state.spotifyApi,
   // posts: state.posts,
   // user: state.user,
+  posts: state.profileFeed.posts,
   selectedUser: state.selectedUser,
 });
 

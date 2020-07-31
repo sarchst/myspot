@@ -15,7 +15,7 @@ import { deletePost } from "../../app/actions/postActions";
 class DeletePostDialog extends React.Component {
   handleConfirm = () => {
     const body = { postId: this.props.delPostDialog.postId };
-    this.props.deletePost(this.props.user.id, body);
+    this.props.deletePost(this.props.user.id, body, this.props.profileFeedFilter, this.props.feedFilter);
     this.props.closeDeletePostDialog();
   };
   handleCancel = () => {
@@ -64,6 +64,8 @@ class DeletePostDialog extends React.Component {
 const mapStateToProps = (state) => ({
   delPostDialog: state.delPostDialog,
   user: state.user,
+  feedFilter: state.feed.filter,
+  profileFeedFilter: state.profileFeed.filter,
 });
 
 export default connect(mapStateToProps, {

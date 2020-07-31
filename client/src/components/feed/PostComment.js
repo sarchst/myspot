@@ -30,13 +30,26 @@ class PostComment extends React.Component {
 
   handleDeleteComment = (commentdata) => {
     let postOwnerId = commentdata.postOwnerId;
-    let authorId = commentdata.authorId;
+    // let authorId = commentdata.authorId;
 
-    let commentInfo = {
-      postId: commentdata.postId,
-      commentId: commentdata._id,
+    // let commentInfo = {
+    //   postId: commentdata.postId,
+    //   commentId: commentdata._id,
+    // };
+    let body = {
+      authorId: commentdata.authorId,
+      commentInfo: {
+        postId: commentdata.postId,
+        commentId: commentdata._id,
+      },
     };
-    this.props.deleteComment(postOwnerId, authorId, commentInfo);
+    // this.props.deleteComment(postOwnerId, authorId, commentInfo);
+    this.props.deleteComment(
+      postOwnerId,
+      body,
+      this.props.profileFeedFilter,
+      this.props.feedFilter
+    );
     console.log("Delete comment!");
   };
 

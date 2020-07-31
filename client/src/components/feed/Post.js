@@ -137,7 +137,6 @@ class Post extends Component {
   state = {
     moreOptions: false,
     anchorEl: null,
-    emojiPickerOpen: false,
     commentContent: "",
   };
 
@@ -212,7 +211,11 @@ class Post extends Component {
       postId: postId,
       time: new Date().toLocaleString("en-US"),
     };
-    this.props.addComment(comment);
+    this.props.addComment(
+      comment,
+      this.props.profileFeedFilter,
+      this.props.feedFilter
+    );
     this.setState({
       commentContent: "",
     });
@@ -295,6 +298,7 @@ class Post extends Component {
               </RouterLink>
             </Grid>
           </Grid>
+
           <Grid container spacing={1}>
             <Grid
               item
@@ -302,14 +306,17 @@ class Post extends Component {
               xs={9}
               spacing={2}
               direction="column"
-              justify="space-between"
+              justify="center"
               alignItems="flex-start"
             >
-              <Grid item>{this.chooseIcon(postdata.type)}</Grid>
+              <Grid item>
+                {postdata.repost ? <Typography variant="button" color="secondary">Repost</Typography> : null}
+              </Grid>
               <Grid item>
                 <Typography>{postdata.content}</Typography>
               </Grid>
-              <Grid item>
+              <Grid container item alignItems="center">
+                {this.chooseIcon(postdata.type)}
                 <Link
                   component="button"
                   variant="body2"
@@ -515,6 +522,8 @@ const mapStateToProps = (state) => ({
   user: state.user,
   delPostDialog: state.delPostDialog,
   editPostDialog: state.editPostDialog,
+  feedFilter: state.feed.filter,
+  profileFeedFilter: state.profileFeed.filter,
 });
 
 Post.propTypes = {
