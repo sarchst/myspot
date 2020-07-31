@@ -91,10 +91,10 @@ class ProfileCard extends React.Component {
   }
   componentDidMount = () => {
     // TODO: replace user_ID with this.props.user_ID once working
-    console.log("this props is");
-    console.log(this.props);
-    console.log("this userid is");
-    console.log(this.user_ID);
+    // console.log("this props is");
+    // console.log(this.props);
+    // console.log("this userid is");
+    // console.log(this.user_ID);
     let user_ID;
     if (
       this.props.location &&
@@ -115,29 +115,6 @@ class ProfileCard extends React.Component {
           userData: response.data,
         });
       });
-    // spotifyWebApi
-    //   .getMyTopTracks()
-    //   .then((result) => {
-    //     // console.log(result);
-    //     this.setState({
-    //       topTracks: result.items.slice(0, Math.min(result.items.length, 3)),
-    //     });
-    //   })
-    //   .catch((err) => {
-    //     console.log("error getting top tracks");
-    //     console.log(err);
-    //   });
-    // spotifyWebApi
-    //   .getMyRecentlyPlayedTracks()
-    //   .then((result) => {
-    //     this.setState({
-    //       recentTracks: result.items.slice(0, Math.min(result.items.length, 3)),
-    //     });
-    //   })
-    //   .catch((err) => {
-    //     console.log("error getting recent tracks");
-    //     console.log(err);
-    //   });
   };
 
   setPlayerSong = (songUri) => {
@@ -346,8 +323,9 @@ class ProfileCard extends React.Component {
 
 const mapStateToProps = (state) => ({
   spotifyApi: state.spotifyApi,
-  posts: state.posts,
+  posts: state.profileFeed.posts,
   user: state.user,
+  selectedUser: state.selectedUser,
 });
 
 export default connect(mapStateToProps)(withStyles(styles)(ProfileCard));

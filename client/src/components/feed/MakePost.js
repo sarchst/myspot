@@ -81,7 +81,11 @@ class MakePost extends React.Component {
   };
 
   handleSubmitPost = () => {
-    this.props.makePost(this.state);
+    this.props.makePost(
+      this.state,
+      this.props.profileFeedFilter,
+      this.props.feedFilter
+    );
     // TODO media options will have to change after spotify integration
     this.setState({ content: "", media: "", type: "playlist" });
     console.log(this.state);
@@ -173,7 +177,9 @@ class MakePost extends React.Component {
 
 const mapStateToProps = (state) => ({
   user: state.user,
-  posts: state.posts,
+  posts: state.profileFeed.posts,
+  profileFeedFilter: state.profileFeed.filter,
+  feedFilter: state.feed.filter,
 });
 
 const mapDispatchToProps = {
