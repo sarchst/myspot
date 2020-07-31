@@ -14,16 +14,16 @@ import editPostDialog from "./editPostDialog";
 
 const allReducers = combineReducers({
   isSidebarOpen: toggleSidebar,
+  spotifyApi: spotifyApi,
   user: user,
   feed: feed,
-  accountSettings: settings,
-  spotifyApi: spotifyApi,
+  profileFeed: profileFeed,
   fetchFeed: fetchFeed,
   fetchPosts: fetchPosts,
-  profileFeed: profileFeed,
-  updateSettings: updateSettings,
   delPostDialog: delPostDialog,
   editPostDialog: editPostDialog,
+  accountSettings: settings,
+  updateSettings: updateSettings,
 });
 
 export default allReducers;
