@@ -10,6 +10,7 @@ import ProfileTable from "./ProfileTable";
 import { fetchUserSettings } from "../../app/actions/settingsActions";
 import { fetchProfilePic } from "../../app/actions/imageUploadActions";
 import DeletePostDialog from "../feed/DeletePostDialog";
+import { fetchSelectedUser } from "../../app/actions/selectedUserActions";
 
 const styles = (theme) => ({
   root: {
@@ -29,15 +30,16 @@ const styles = (theme) => ({
 });
 
 class Profile extends React.Component {
-  constructor(props) {
-    super(props);
-    console.log("match is ", this.props);
-  }
+  // constructor(props) {
+  //   super(props);
+  // }
 
   componentDidMount = () => {
-    this.props.fetchPosts(this.props.user.id);
-    this.props.fetchUserSettings(this.props.user.id);
-    this.props.fetchProfilePic(this.props.user.id);
+    const { match } = this.props;
+    this.props.fetchSelectedUser(match.params.user);
+    this.props.fetchPosts(match.params.user);
+    this.props.fetchUserSettings(match.params.user);
+    this.props.fetchProfilePic(match.params.user);
   };
 
   render() {
@@ -49,9 +51,9 @@ class Profile extends React.Component {
         <ProfileTable />
         <MakePost />
         <div>
+          {/*this.props.selectedUser && this.props.selectedUser.posts && this.props.selectedUser.posts.length*/}
           {this.props.posts && this.props.posts.length ? (
             // ALSO this could be a Feed component potentially with a is profile feed prop or something, not front burner issue though
-            // this.props.posts.map((p) => (
             this.props.posts.map((p) => (
               <Post
                 key={p._id}
@@ -72,6 +74,7 @@ class Profile extends React.Component {
 const mapStateToProps = (state) => ({
   user: state.user,
   posts: state.posts,
+  selectedUser: state.selectedUser,
 });
 
 const mapDispatchToProps = {
@@ -79,6 +82,7 @@ const mapDispatchToProps = {
   fetchPosts,
   fetchUserSettings,
   fetchProfilePic,
+  fetchSelectedUser,
 };
 
 export default connect(

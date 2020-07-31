@@ -101,14 +101,11 @@ class Appbar extends React.Component {
           <Typography noWrap={false} className={classes.appTitle}>
             MySpot
           </Typography>
-          <Link
-            to={"/" + this.props.user.username}
-            className={classes.appbarButton}
-          >
+          <Link to={"/" + this.props.user.id} className={classes.appbarButton}>
             <Button color="inherit">{contentType.PROFILE}</Button>
           </Link>
           <Link
-            to={"/" + this.props.user.username + "/feed"}
+            to={"/" + this.props.user.id + "/feed"}
             className={classes.appbarButton}
           >
             <Button color="inherit">{contentType.FEED}</Button>

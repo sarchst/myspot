@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import MaterialTable from "material-table";
 import { Paper } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
-import { setSelectedUser } from "../app/actions/selectedUserActions";
+import { fetchSelectedUser } from "../app/actions/selectedUserActions";
 
 const styles = (theme) => ({
   link: {
@@ -130,7 +130,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    setSelectedUser: (userID) => dispatch(setSelectedUser(userID)),
+    setSelectedUser: (userID) => dispatch(fetchSelectedUser(userID)),
   };
 };
 

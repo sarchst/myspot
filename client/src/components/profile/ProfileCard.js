@@ -89,33 +89,15 @@ class ProfileCard extends React.Component {
     };
     spotifyWebApi.setAccessToken(this.props.spotifyApi.accessToken);
   }
-  componentDidMount = () => {
-    // TODO: replace user_ID with this.props.user_ID once working
-    // console.log("this props is");
-    // console.log(this.props);
-    // console.log("this userid is");
-    // console.log(this.user_ID);
-    let user_ID;
-    if (
-      this.props.location &&
-      this.props.location.state &&
-      this.props.location.state.user_ID
-    ) {
-      user_ID = this.props.location.state.user_ID;
-    } else {
-      user_ID = this.props.user.id;
-    }
-    // get top tracks for arbitrary user
-    fetch(`http://localhost:9000/user/${user_ID}`)
-      .then((response) => response.json())
-      .then((response) => {
-        this.setState({
-          topTracks: response.data.topTracks,
-          recentTracks: response.data.recentTracks,
-          userData: response.data,
-        });
-      });
-  };
+
+  // componentWillReceiveProps = () => {
+  //   console.log("profile card props", this.props);
+  //   this.setState({
+  //     topTracks: this.props.selectedUser.topTracks || [],
+  //     recentTracks: this.props.selectedUser.recentTracks || [],
+  //     userData: this.props.selectedUser || {},
+  //   });
+  // };
 
   setPlayerSong = (songUri) => {
     this.setState({
@@ -134,13 +116,11 @@ class ProfileCard extends React.Component {
         <CardContent className={classes.profileCardBox}>
           <Avatar
             className={classes.avatar}
-            src={
-              this.state.userData.profilePic
-                ? this.state.userData.profilePic
-                : ""
-            }
+            src={this.props.selectedUser.profilePic || ""}
           />
-          <h3 className={classes.heading}>{this.state.userData.username}</h3>
+          <h3 className={classes.heading}>
+            {this.props.selectedUser.username || ""}
+          </h3>
           <span className={classes.subheader}>
             <Emoji text=":globe_showing_americas:" />
             {/* unfortunately it seems like emoji flags aren't supported for windows10 so can only see it on mac */}
@@ -158,8 +138,8 @@ class ProfileCard extends React.Component {
           >
             <Typography className={classes.statLabel}>Followers</Typography>
             <p className={classes.statValue}>
-              {this.state.userData.followers
-                ? this.state.userData.followers.length
+              {this.props.selectedUser.followers
+                ? this.props.selectedUser.followers.length
                 : 0}
             </p>
           </Box>
@@ -172,8 +152,8 @@ class ProfileCard extends React.Component {
           >
             <Typography className={classes.statLabel}>Following</Typography>
             <p className={classes.statValue}>
-              {this.state.userData.following
-                ? this.state.userData.following.length
+              {this.props.selectedUser.following
+                ? this.props.selectedUser.following.length
                 : 0}
             </p>
           </Box>
@@ -200,47 +180,54 @@ class ProfileCard extends React.Component {
                 </ListSubheader>
               }
             >
-              {this.state.topTracks.map((track, idx) => {
-                const isPlaybackAvailable = track.preview_url ? true : false;
-                return (
-                  <ListItem
-                    key={idx}
-                    button={isPlaybackAvailable}
-                    onClick={
-                      isPlaybackAvailable
-                        ? () => this.setPlayerSong(track.preview_url)
-                        : null
-                    }
-                  >
-                    <Box pr={1} pt={1}>
-                      {isPlaybackAvailable ? (
-                        <PlayCircleOutlineIcon color={"secondary"} />
-                      ) : (
-                        <MusicOffOutlinedIcon color={"secondary"} />
-                      )}
-                    </Box>
-                    <ListItemAvatar>
-                      <Avatar
-                        variant="square"
-                        src={
-                          track.album.images.length
-                            ? track.album.images[track.album.images.length - 1]
-                                .url
+              {this.props.selectedUser.topTracks
+                ? this.props.selectedUser.topTracks.map((track, idx) => {
+                    const isPlaybackAvailable = track.preview_url
+                      ? true
+                      : false;
+                    return (
+                      <ListItem
+                        key={idx}
+                        button={isPlaybackAvailable}
+                        onClick={
+                          isPlaybackAvailable
+                            ? () => this.setPlayerSong(track.preview_url)
                             : null
                         }
-                      ></Avatar>
-                    </ListItemAvatar>
-                    <ListItemText
-                      primary={track.name}
-                      secondary={track.album.artists.map(
-                        (artist, idx) =>
-                          artist.name +
-                          (idx < track.album.artists.length - 1 ? " | " : "")
-                      )}
-                    />
-                  </ListItem>
-                );
-              })}
+                      >
+                        <Box pr={1} pt={1}>
+                          {isPlaybackAvailable ? (
+                            <PlayCircleOutlineIcon color={"secondary"} />
+                          ) : (
+                            <MusicOffOutlinedIcon color={"secondary"} />
+                          )}
+                        </Box>
+                        <ListItemAvatar>
+                          <Avatar
+                            variant="square"
+                            src={
+                              track.album.images.length
+                                ? track.album.images[
+                                    track.album.images.length - 1
+                                  ].url
+                                : null
+                            }
+                          ></Avatar>
+                        </ListItemAvatar>
+                        <ListItemText
+                          primary={track.name}
+                          secondary={track.album.artists.map(
+                            (artist, idx) =>
+                              artist.name +
+                              (idx < track.album.artists.length - 1
+                                ? " | "
+                                : "")
+                          )}
+                        />
+                      </ListItem>
+                    );
+                  })
+                : null}
             </List>
           </Box>
           <Box
@@ -263,46 +250,49 @@ class ProfileCard extends React.Component {
                 </ListSubheader>
               }
             >
-              {this.state.recentTracks.map((item, idx) => {
-                const isPlaybackAvailable = item.track.preview_url
-                  ? true
-                  : false;
-                return (
-                  <ListItem
-                    key={idx}
-                    button={isPlaybackAvailable}
-                    onClick={
-                      isPlaybackAvailable
-                        ? () => this.setPlayerSong(item.track.preview_url)
-                        : null
-                    }
-                  >
-                    <Box pr={1} pt={1}>
-                      {isPlaybackAvailable ? (
-                        <PlayCircleOutlineIcon color={"secondary"} />
-                      ) : (
-                        <MusicOffOutlinedIcon color={"secondary"} />
-                      )}
-                    </Box>
-                    <ListItemAvatar>
-                      <Avatar
-                        variant="square"
-                        src={
-                          item.track.album.images.length
-                            ? item.track.album.images[0].url
+              {this.props.selectedUser.recentTracks
+                ? this.props.selectedUser.recentTracks.map((item, idx) => {
+                    const isPlaybackAvailable = item.track.preview_url
+                      ? true
+                      : false;
+                    return (
+                      <ListItem
+                        key={idx}
+                        button={isPlaybackAvailable}
+                        onClick={
+                          isPlaybackAvailable
+                            ? () => this.setPlayerSong(item.track.preview_url)
                             : null
                         }
-                      ></Avatar>
-                    </ListItemAvatar>
-                    <ListItemText
-                      primary={item.track.name}
-                      secondary={
-                        "Played: " + new Date(item.played_at).toLocaleString()
-                      }
-                    />
-                  </ListItem>
-                );
-              })}
+                      >
+                        <Box pr={1} pt={1}>
+                          {isPlaybackAvailable ? (
+                            <PlayCircleOutlineIcon color={"secondary"} />
+                          ) : (
+                            <MusicOffOutlinedIcon color={"secondary"} />
+                          )}
+                        </Box>
+                        <ListItemAvatar>
+                          <Avatar
+                            variant="square"
+                            src={
+                              item.track.album.images.length
+                                ? item.track.album.images[0].url
+                                : null
+                            }
+                          ></Avatar>
+                        </ListItemAvatar>
+                        <ListItemText
+                          primary={item.track.name}
+                          secondary={
+                            "Played: " +
+                            new Date(item.played_at).toLocaleString()
+                          }
+                        />
+                      </ListItem>
+                    );
+                  })
+                : null}
             </List>
           </Box>
         </Box>
@@ -323,8 +313,8 @@ class ProfileCard extends React.Component {
 
 const mapStateToProps = (state) => ({
   spotifyApi: state.spotifyApi,
-  posts: state.posts,
-  user: state.user,
+  // posts: state.posts,
+  // user: state.user,
   selectedUser: state.selectedUser,
 });
 
