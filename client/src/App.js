@@ -121,7 +121,7 @@ class App extends React.Component {
           Math.min(recentTracks.items.length, 3)
         );
         // set logged in user as initial selectedUser
-        this.props.setSelectedUser(userObject.id);
+        this.props.fetchSelectedUser(userObject.id);
         // dispatch updates spotify info in db
         // TODO: replace redux action with db call instead?
         this.props.submitSpotifyApiUserMe(userObject);
@@ -180,10 +180,9 @@ const mapDispatchToProps = (dispatch) => {
     setCurrentUser: (id, username) => dispatch(setCurrentUser(id, username)),
     registerSpotifyApi: (spotifyApi) =>
       dispatch(registerSpotifyApi(spotifyApi)),
-    setSelectedUser: (id) => dispatch(fetchSelectedUser(id)),
+    fetchSelectedUser: (id) => dispatch(fetchSelectedUser(id)),
     submitSpotifyApiUserMe: (spotifyUserMe) =>
       dispatch(submitSpotifyApiUserMe(spotifyUserMe)),
-    fetchUserSettings: fetchUserSettings,
     setPlayListIDs: (UserMeID, spotifyToken) =>
       dispatch(setPlayListIDs(UserMeID, spotifyToken)),
   };

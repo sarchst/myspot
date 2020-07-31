@@ -42,6 +42,10 @@ class Profile extends React.Component {
     this.props.fetchProfilePic(match.params.user);
   };
 
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    window.scrollTo(0, 0);
+  }
+
   render() {
     const { classes, user, toggleLike } = this.props;
     return (
