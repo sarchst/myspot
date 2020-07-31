@@ -61,7 +61,7 @@ class SongList extends React.Component {
       name: "",
       description: "",
     };
-    spotifyWebApi.setAccessToken(this.props.spotifyWebApi);
+    spotifyWebApi.setAccessToken(this.props.spotifyApi.accessToken);
   }
 
   componentDidMount() {
@@ -159,7 +159,7 @@ class SongList extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    spotifyWebApi: state.spotifyWebApi,
+    spotifyApi: state.spotifyApi,
     user: state.user,
   };
 };

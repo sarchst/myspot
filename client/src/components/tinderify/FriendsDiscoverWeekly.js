@@ -115,7 +115,7 @@ class FriendsDiscoverWeekly extends React.Component {
                   },
                 }}
               >
-                <WhatshotIcon />;
+                <WhatshotIcon />
               </Link>
             ),
           },

@@ -7,7 +7,6 @@ import Box from "@material-ui/core/Box";
 import PlayCircleOutlineIcon from "@material-ui/icons/PlayCircleOutline";
 import MusicOffOutlinedIcon from "@material-ui/icons/MusicOffOutlined";
 import FavoriteIcon from "@material-ui/icons/Favorite";
-import NotInterestedIcon from "@material-ui/icons/NotInterested";
 // import Typography from "@material-ui/core/Typography";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
@@ -41,7 +40,7 @@ class MusicBrowser extends React.Component {
       trackAlbumArt: [],
       trackID: "",
     };
-    spotifyWebApi.setAccessToken(this.props.spotifyWebApi);
+    spotifyWebApi.setAccessToken(this.props.spotifyApi.accessToken);
   }
   componentDidMount() {
     if (this.props.user_ID) {
@@ -106,7 +105,7 @@ class MusicBrowser extends React.Component {
   }
 
   likeSong(id) {
-    console.log("Liked ", id);
+    // console.log("Liked ", id);
     // let ids = [id];
     // spotifyWebApi.addToMySavedTracks(ids).then(
     //   (data) => {
@@ -116,10 +115,6 @@ class MusicBrowser extends React.Component {
     //     console.error(err);
     //   }
     // );
-  }
-
-  notInterested() {
-    console.log("Not into it");
   }
 
   setPlayerSong = (track) => {
@@ -230,11 +225,6 @@ class MusicBrowser extends React.Component {
                             />
                           )}
                         </Box>
-                        <NotInterestedIcon
-                          className="not-interested"
-                          onClick={() => this.notInterested()}
-                        ></NotInterestedIcon>
-
                         <FavoriteIcon
                           className="favorite"
                           onClick={() => this.likeSong(track.track.id)}
@@ -259,7 +249,7 @@ class MusicBrowser extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    spotifyWebApi: state.spotifyWebApi,
+    spotifyApi: state.spotifyApi,
     user: state.user,
   };
 };
