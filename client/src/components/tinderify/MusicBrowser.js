@@ -19,7 +19,7 @@ const styles = (theme) => ({
   audioPlayer: {
     width: "50%",
   },
-  profileCardBox: {
+  musicPlayerBox: {
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
@@ -43,12 +43,10 @@ class MusicBrowser extends React.Component {
     };
     spotifyWebApi.setAccessToken(this.props.spotifyWebApi);
   }
-  //"rmu8czqk3wc8on8ym4xnwq88o"
   componentDidMount() {
     if (this.props.user_ID) {
       console.log("its a friend!");
       spotifyWebApi.getUserPlaylists(this.props.user_ID).then(
-        //spotifyWebApi.getUserPlaylists("rmu8czqk3wc8on8ym4xnwq88o").then(
         (data) => {
           let playlist = data.items.find((o) => o.name === "Discover Weekly");
           if (playlist) {
@@ -142,9 +140,8 @@ class MusicBrowser extends React.Component {
         {this.state.discoverWeeklyId ? (
           <div>
             {this.state.songUri ? (
-              // <Typography></Typography>
               <Fragment>
-                <Box className={classes.profileCardBox} pb={1}>
+                <Box className={classes.musicPlayerBox} pb={1}>
                   <List>
                     <ListItem>
                       <FavoriteIcon
