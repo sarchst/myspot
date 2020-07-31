@@ -50,6 +50,7 @@ class Profile extends React.Component {
     this.props.fetchPostsWithFilter(match.params.user, this.props.filter);
     this.props.fetchUserSettings(this.props.user.id);
     this.props.fetchProfilePic(match.params.user);
+    window.scrollTo(0, 0);
   };
 
   componentDidUpdate(prevProps) {
@@ -63,7 +64,6 @@ class Profile extends React.Component {
     if (this.props.filter !== prevProps.filter) {
       this.props.fetchPostsWithFilter(this.props.user.id, this.props.filter);
     }
-    window.scrollTo(0, 0);
   }
 
   fetchMoreData = () => {
@@ -79,8 +79,6 @@ class Profile extends React.Component {
         items: this.state.items.concat(this.props.posts.slice(n, n + 5)),
       });
     }, 500);
-
-
   };
 
   render() {
