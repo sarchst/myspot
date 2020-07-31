@@ -24,13 +24,11 @@ class Feed extends React.Component {
 
   componentDidMount() {
     // change fetchFeed to take second filter param
-    console.log("feed: ", this.props.feed.filter);
     this.props.fetchFeedWithFilter(this.props.user.id, this.props.feed.filter);
   }
 
   componentDidUpdate(prevProps) {
     if (this.props.feed.posts !== prevProps.feed.posts) {
-      console.log("CDU-------------------------");
       this.setState({
         items: this.props.feed.posts.slice(0, 5),
         hasMore: true,
@@ -38,8 +36,6 @@ class Feed extends React.Component {
     }
     // check if filter has been changed
     if (this.props.feed.filter !== prevProps.feed.filter) {
-      console.log("FILTER CHANGE-------------------------");
-      console.log("new filter is", this.props.feed.filter);
       this.props.fetchFeedWithFilter(
         this.props.user.id,
         this.props.feed.filter

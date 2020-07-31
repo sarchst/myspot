@@ -44,17 +44,13 @@ class Profile extends React.Component {
 
   componentDidMount = () => {
     // this.props.fetchPosts(this.props.user.id);
-    this.props.fetchPostsWithFilter(
-      this.props.user.id,
-      this.props.filter
-    );
+    this.props.fetchPostsWithFilter(this.props.user.id, this.props.filter);
     this.props.fetchUserSettings(this.props.user.id);
     this.props.fetchProfilePic(this.props.user.id);
   };
 
   componentDidUpdate(prevProps) {
     if (this.props.posts !== prevProps.posts) {
-      // console.log("PROFILE: CDU if ------------------------------");
       this.setState({
         items: this.props.posts.slice(0, 5),
         hasMore: true,
@@ -62,16 +58,11 @@ class Profile extends React.Component {
     }
     // check if filter has been changed
     if (this.props.filter !== prevProps.filter) {
-      console.log("new filter is", this.props.filter);
-      this.props.fetchPostsWithFilter(
-        this.props.user.id,
-        this.props.filter
-      );
+      this.props.fetchPostsWithFilter(this.props.user.id, this.props.filter);
     }
   }
 
   fetchMoreData = () => {
-    // console.log("PROFILE FETCH MORE DATA ----------");
     if (this.state.items.length >= this.props.posts.length) {
       this.setState({ hasMore: false });
       return;
@@ -143,7 +134,6 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = {
   toggleLike,
-  // fetchPosts,
   fetchPostsWithFilter,
   fetchUserSettings,
   fetchProfilePic,
