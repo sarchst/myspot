@@ -100,13 +100,10 @@ class App extends React.Component {
       let userObject = {};
       // Pass refresh token as well for further use if a new access token is needed
       this.props.registerSpotifyApi(params);
-      const spotifyMePromise = spotifyWebApi.getMe();
-      const topTracksPromise = spotifyWebApi.getMyTopTracks();
-      const recentTracksPromise = spotifyWebApi.getMyRecentlyPlayedTracks();
       Promise.all([
-        spotifyMePromise,
-        topTracksPromise,
-        recentTracksPromise,
+        spotifyWebApi.getMe(),
+        spotifyWebApi.getMyTopTracks(),
+        spotifyWebApi.getMyRecentlyPlayedTracks(),
       ]).then((values) => {
         const spotifyMe = values[0];
         const topTracks = values[1];
