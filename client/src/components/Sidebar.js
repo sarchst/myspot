@@ -252,14 +252,6 @@ class Sidebar extends React.Component {
               component={(props) => <FollowTable type={"following"} />}
             />
             <Route path="/:user/whatimlisteningto" component={NowPlaying} />
-            <Route
-              path="/myspotter/:user"
-              render={(props) => {
-                // console.log("props in profilecard is");
-                // console.log(props);
-                return <ProfileCard {...props} />;
-              }}
-            />
             <Route path="/:user/feed" component={Feed} />
             <Route path="/:user/settings" component={Settings} />
             <Route

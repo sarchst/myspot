@@ -15,7 +15,10 @@ class Feed extends React.Component {
     this.props.fetchFeed(this.props.user.id);
   }
 
- 
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    window.scrollTo(0, 0);
+  }
+
   render() {
     const { toggleLike, user } = this.props;
 
@@ -28,7 +31,7 @@ class Feed extends React.Component {
               <Post
                 key={p._id}
                 postdata={p}
-                toggleLike={() => toggleLike(p, user.id )}
+                toggleLike={() => toggleLike(p, user.id)}
                 userId={user.id}
               />
             ))}
