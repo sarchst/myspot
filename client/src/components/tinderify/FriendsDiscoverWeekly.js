@@ -60,7 +60,6 @@ class FriendsDiscoverWeekly extends React.Component {
         }}
         columns={[
           {
-            title: "MySpotter",
             field: "pic",
             render: (rowData) => (
               <Link
@@ -102,7 +101,6 @@ class FriendsDiscoverWeekly extends React.Component {
           },
 
           {
-            title: "Discover Weekly",
             field: "",
             render: (rowData) => (
               <Link

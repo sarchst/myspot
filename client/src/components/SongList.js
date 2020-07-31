@@ -90,7 +90,7 @@ class SongList extends React.Component {
       }
     );
   }
-  // this component is just a stand in to display info, will replace with prettier version
+
   render() {
     const { classes } = this.props;
     return (

@@ -1,15 +1,10 @@
 import React, { Fragment } from "react";
 import { connect } from "react-redux";
-//import Spotify from "spotify-web-api-js";
 import FriendsDiscoverWeekly from "./FriendsDiscoverWeekly";
-
 import "pure-react-carousel/dist/react-carousel.es.css";
-
 import Typography from "@material-ui/core/Typography";
 import { withStyles } from "@material-ui/core/styles";
-
 import { Paper, Tab, Tabs } from "@material-ui/core";
-// import MaterialTable from "material-table";
 import MusicBrowser from "./MusicBrowser";
 
 const styles = (theme) => ({
@@ -23,8 +18,6 @@ const styles = (theme) => ({
   },
 });
 
-// const spotifyWebApi = new Spotify();
-
 class Tinderify extends React.Component {
   constructor(props) {
     super(props);
@@ -37,7 +30,6 @@ class Tinderify extends React.Component {
   }
 
   componentWillMount() {
-    let user_ID;
     if (
       this.props.location &&
       this.props.location.state &&
@@ -48,9 +40,7 @@ class Tinderify extends React.Component {
         user_ID: this.props.location.state.user_ID,
         username: this.props.location.state.username,
       });
-      console.log("IN ANOTHER USERS TINDERIFY!!!", this.props.location);
     } else {
-      console.log("it me", user_ID);
       this.setState({
         otherUser: false,
         user_ID: this.props.user.id,
@@ -72,7 +62,6 @@ class Tinderify extends React.Component {
 
   render() {
     const { classes } = this.props;
-    console.log("The user is is...", this.state.user_ID);
     return (
       <div>
         <div>

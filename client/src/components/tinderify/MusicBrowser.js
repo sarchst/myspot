@@ -7,7 +7,6 @@ import Box from "@material-ui/core/Box";
 import PlayCircleOutlineIcon from "@material-ui/icons/PlayCircleOutline";
 import MusicOffOutlinedIcon from "@material-ui/icons/MusicOffOutlined";
 import FavoriteIcon from "@material-ui/icons/Favorite";
-// import Typography from "@material-ui/core/Typography";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import Avatar from "@material-ui/core/Avatar";
@@ -32,8 +31,8 @@ class MusicBrowser extends React.Component {
     super(props);
     this.state = {
       tracks: [],
-      discoverWeeklyId: "",
-      discoverWeeklyImageUrl: "",
+      playlistId: "",
+      playlistImageUrl: "",
       songUri: "",
       trackName: "",
       trackArtist: [],
@@ -43,69 +42,40 @@ class MusicBrowser extends React.Component {
     spotifyWebApi.setAccessToken(this.props.spotifyApi.accessToken);
   }
   componentDidMount() {
-    if (this.props.user_ID) {
-      console.log("its a friend!");
-      spotifyWebApi.getUserPlaylists(this.props.user_ID).then(
-        (data) => {
-          let playlist = data.items.find((o) => o.name === "Discover Weekly");
-          if (playlist) {
-            this.setState({
-              discoverWeeklyId: playlist.id,
-            });
-          }
-          console.log("Discover weekly ", playlist);
-          // get the songs
-          spotifyWebApi.getPlaylist(this.state.discoverWeeklyId).then(
-            (data) => {
-              console.log("Songs in Discover Weekly", data);
-              this.setState({
-                tracks: data.tracks.items,
-                discoverWeeklyImageUrl: data.images[0].url,
-              });
-            },
-            function (err) {
-              console.error(err);
-            }
-          );
-        },
-        function (err) {
-          console.error(err);
+    let user_ID = this.props.user_ID ? this.props.user_ID : this.props.user.id;
+    spotifyWebApi.getUserPlaylists(user_ID).then(
+      (data) => {
+        let playlist = data.items.find((o) => o.name === "Discover Weekly");
+        if (playlist) {
+          this.setState({
+            playlistId: playlist.id,
+          });
+        } else {
+          this.setState({
+            playlistId: data.items[0].id,
+          });
         }
-      );
-    } else {
-      console.log("ITS ME");
-      spotifyWebApi.getUserPlaylists().then(
-        (data) => {
-          let playlist = data.items.find((o) => o.name === "Discover Weekly");
-          if (playlist) {
+        // get the songs
+        spotifyWebApi.getPlaylist(this.state.playlistId).then(
+          (data) => {
+            console.log("Songs in Playlist", data);
             this.setState({
-              discoverWeeklyId: playlist.id,
+              tracks: data.tracks.items,
+              playlistImageUrl: data.images[0].url,
             });
+          },
+          function (err) {
+            console.error(err);
           }
-          console.log("Discover weekly ", playlist);
-          // get the songs
-          spotifyWebApi.getPlaylist(this.state.discoverWeeklyId).then(
-            (data) => {
-              console.log("Songs in Discover Weekly", data);
-              this.setState({
-                tracks: data.tracks.items,
-                discoverWeeklyImageUrl: data.images[0].url,
-              });
-            },
-            function (err) {
-              console.error(err);
-            }
-          );
-        },
-        function (err) {
-          console.error(err);
-        }
-      );
-    }
+        );
+      },
+      function (err) {
+        console.error(err);
+      }
+    );
   }
 
   addSongToTinderifyPlayList = (id) => {
-    console.log(id);
     spotifyWebApi
       .removeTracksFromPlaylist(
         this.props.mySpotPlaylists.TinderifyPlaylistID,
@@ -127,7 +97,6 @@ class MusicBrowser extends React.Component {
   };
 
   setPlayerSong = (track) => {
-    console.log(track);
     this.setState({
       songUri: track.preview_url,
       trackArtist: track.artists,
@@ -141,7 +110,7 @@ class MusicBrowser extends React.Component {
     const { classes } = this.props;
     return (
       <div>
-        {this.state.discoverWeeklyId ? (
+        {this.state.playlistId ? (
           <div>
             {this.state.songUri ? (
               <Fragment>
@@ -209,7 +178,7 @@ class MusicBrowser extends React.Component {
                             alt="Album Art"
                           ></img>
                           <img
-                            src={this.state.discoverWeeklyImageUrl}
+                            src={this.state.playlistImageUrl}
                             height="150"
                             width="150"
                             alt="Discover Weekly Art"
