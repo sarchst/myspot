@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import MaterialTable from "material-table";
 import { Paper } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
-import { setSelectedUser } from "../app/actions/selectedUserActions";
+import { fetchSelectedUser } from "../app/actions/selectedUserActions";
 
 const styles = (theme) => ({
   link: {
@@ -65,11 +65,9 @@ class FollowTable extends React.Component {
             field: "pic",
             render: (rowData) => (
               <Link
-                to={{
-                  pathname: "/myspotter/" + rowData.username,
-                  state: {
-                    user_ID: rowData.userId,
-                  },
+                to={`/${rowData.userId}`}
+                onClick={() => {
+                  this.props.fetchSelectedUser(rowData.userId);
                 }}
                 style={{ textDecoration: "none" }}
               >
@@ -90,16 +88,9 @@ class FollowTable extends React.Component {
             render: (rowData) => (
               <Link
                 className={this.props.classes.link}
-                to={{
-                  pathname: "/myspotter/" + rowData.username,
-                  state: {
-                    user_ID: rowData.userId,
-                  },
-                }}
+                to={`/${rowData.userId}`}
                 onClick={() => {
-                  console.log("clicked in followTable");
-                  console.log("calling setselecteduser");
-                  this.props.setSelectedUser("1282918791");
+                  this.props.fetchSelectedUser(rowData.userId);
                 }}
               >
                 {rowData.username}
@@ -130,7 +121,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    setSelectedUser: (userID) => dispatch(setSelectedUser(userID)),
+    fetchSelectedUser: (userID) => dispatch(fetchSelectedUser(userID)),
   };
 };
 

@@ -12,8 +12,7 @@ import {
   submitSpotifyApiUserMe,
 } from "./app/actions/spotifyApiActions";
 import { setCurrentUser } from "./app/actions/userActions";
-import { fetchUserSettings } from "./app/actions/settingsActions";
-import { setSelectedUser } from "./app/actions/selectedUserActions";
+import { fetchSelectedUser } from "./app/actions/selectedUserActions";
 import { setPlayListIDs } from "./app/actions/playlistActions";
 
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
@@ -101,13 +100,10 @@ class App extends React.Component {
       let userObject = {};
       // Pass refresh token as well for further use if a new access token is needed
       this.props.registerSpotifyApi(params);
-      const spotifyMePromise = spotifyWebApi.getMe();
-      const topTracksPromise = spotifyWebApi.getMyTopTracks();
-      const recentTracksPromise = spotifyWebApi.getMyRecentlyPlayedTracks();
       Promise.all([
-        spotifyMePromise,
-        topTracksPromise,
-        recentTracksPromise,
+        spotifyWebApi.getMe(),
+        spotifyWebApi.getMyTopTracks(),
+        spotifyWebApi.getMyRecentlyPlayedTracks(),
       ]).then((values) => {
         const spotifyMe = values[0];
         const topTracks = values[1];
@@ -125,7 +121,7 @@ class App extends React.Component {
           Math.min(recentTracks.items.length, 3)
         );
         // set logged in user as initial selectedUser
-        this.props.setSelectedUser(userObject.id);
+        this.props.fetchSelectedUser(userObject.id);
         // dispatch updates spotify info in db
         // TODO: replace redux action with db call instead?
         this.props.submitSpotifyApiUserMe(userObject);
@@ -185,10 +181,9 @@ const mapDispatchToProps = (dispatch) => {
     setCurrentUser: (id, username) => dispatch(setCurrentUser(id, username)),
     registerSpotifyApi: (spotifyApi) =>
       dispatch(registerSpotifyApi(spotifyApi)),
-    setSelectedUser: (id) => dispatch(setSelectedUser(id)),
+    fetchSelectedUser: (id) => dispatch(fetchSelectedUser(id)),
     submitSpotifyApiUserMe: (spotifyUserMe) =>
       dispatch(submitSpotifyApiUserMe(spotifyUserMe)),
-    fetchUserSettings: fetchUserSettings,
     setPlayListIDs: (UserMeID, spotifyToken) =>
       dispatch(setPlayListIDs(UserMeID, spotifyToken)),
   };
