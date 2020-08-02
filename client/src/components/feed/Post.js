@@ -42,6 +42,7 @@ import PostComment from "./PostComment";
 // import EmojiEmotionsOutlinedIcon from "@material-ui/icons/EmojiEmotionsOutlined";
 import "emoji-mart/css/emoji-mart.css";
 import EditPostDialog from "./EditPostDialog";
+import { fetchSelectedUser } from "../../app/actions/selectedUserActions";
 
 const styles = (theme) => ({
   root: {
@@ -271,11 +272,9 @@ class Post extends Component {
             <Grid item>
               <RouterLink
                 className={classes.routerLink}
-                to={{
-                  pathname: `/myspotter/${postdata.authorId}`,
-                  state: {
-                    user_ID: postdata.authorId,
-                  },
+                to={`/${postdata.authorId}`}
+                onClick={() => {
+                  this.props.fetchSelectedUser(postdata.authorId);
                 }}
               >
                 <Avatar
@@ -288,11 +287,9 @@ class Post extends Component {
             <Grid item>
               <RouterLink
                 className={classes.link}
-                to={{
-                  pathname: `/myspotter/${postdata.authorId}`,
-                  state: {
-                    user_ID: postdata.authorId,
-                  },
+                to={`/${postdata.authorId}`}
+                onClick={() => {
+                  this.props.fetchSelectedUser(postdata.authorId);
                 }}
               >
                 <Typography className={classes.routerLink}>
@@ -541,5 +538,6 @@ export default compose(
     submitDeletePostDialog,
     addComment,
     submitEditPostDialog,
+    fetchSelectedUser,
   })
 )(Post);

@@ -14,6 +14,7 @@ import FilterPosts from "../feed/FilterPosts";
 import { fetchUserSettings } from "../../app/actions/settingsActions";
 import { fetchProfilePic } from "../../app/actions/imageUploadActions";
 import DeletePostDialog from "../feed/DeletePostDialog";
+import { fetchSelectedUser } from "../../app/actions/selectedUserActions";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { Typography } from "@material-ui/core";
 import Emoji from "react-emoji-render";
@@ -43,10 +44,13 @@ class Profile extends React.Component {
   };
 
   componentDidMount = () => {
+    const { match } = this.props;
+    this.props.fetchSelectedUser(match.params.user);
     // this.props.fetchPosts(this.props.user.id);
-    this.props.fetchPostsWithFilter(this.props.user.id, this.props.filter);
+    this.props.fetchPostsWithFilter(match.params.user, this.props.filter);
     this.props.fetchUserSettings(this.props.user.id);
-    this.props.fetchProfilePic(this.props.user.id);
+    this.props.fetchProfilePic(match.params.user);
+    window.scrollTo(0, 0);
   };
 
   componentDidUpdate(prevProps) {
@@ -130,6 +134,7 @@ const mapStateToProps = (state) => ({
   user: state.user,
   posts: state.profileFeed.posts,
   filter: state.profileFeed.filter,
+  selectedUser: state.selectedUser,
 });
 
 const mapDispatchToProps = {
@@ -137,6 +142,7 @@ const mapDispatchToProps = {
   fetchPostsWithFilter,
   fetchUserSettings,
   fetchProfilePic,
+  fetchSelectedUser,
 };
 
 export default connect(

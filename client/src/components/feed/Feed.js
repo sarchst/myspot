@@ -22,6 +22,7 @@ class Feed extends React.Component {
   componentDidMount() {
     // change fetchFeed to take second filter param
     this.props.fetchFeedWithFilter(this.props.user.id, this.props.feed.filter);
+    window.scrollTo(0, 0);
   }
 
   componentDidUpdate(prevProps) {
