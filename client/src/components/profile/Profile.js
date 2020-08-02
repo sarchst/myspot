@@ -11,8 +11,14 @@ import MakePost from "../feed/MakePost";
 import ProfileCard from "./ProfileCard";
 import ProfileTable from "./ProfileTable";
 import FilterPosts from "../feed/FilterPosts";
-import { fetchUserSettings } from "../../app/actions/settingsActions";
-import { fetchProfilePic } from "../../app/actions/imageUploadActions";
+import {
+  fetchUserSettings,
+  fetchUserSettingsSuccess,
+} from "../../app/actions/settingsActions";
+import {
+  fetchProfilePic,
+  fetchProfilePicSuccess,
+} from "../../app/actions/imageUploadActions";
 import DeletePostDialog from "../feed/DeletePostDialog";
 import { fetchSelectedUser } from "../../app/actions/selectedUserActions";
 import InfiniteScroll from "react-infinite-scroll-component";
@@ -47,9 +53,20 @@ class Profile extends React.Component {
     const { match } = this.props;
     this.props.fetchSelectedUser(match.params.user);
     // this.props.fetchPosts(this.props.user.id);
+    // get selected user's posts
     this.props.fetchPostsWithFilter(match.params.user, this.props.filter);
-    this.props.fetchUserSettings(this.props.user.id);
-    this.props.fetchProfilePic(match.params.user);
+    // get current user's profile pic
+    if (this.props.user && this.props.user.profilePic) {
+      this.props.fetchProfilePicSuccess(this.props.user.profilePic);
+    } else {
+      this.props.fetchProfilePic(match.params.user);
+    }
+    // get current user's settings
+    if (this.props.user && this.props.user.settings) {
+      this.props.fetchUserSettingsSuccess(this.props.user.settings);
+    } else {
+      this.props.fetchUserSettings(this.props.user.id);
+    }
     window.scrollTo(0, 0);
   };
 
@@ -143,6 +160,8 @@ const mapDispatchToProps = {
   fetchUserSettings,
   fetchProfilePic,
   fetchSelectedUser,
+  fetchUserSettingsSuccess,
+  fetchProfilePicSuccess,
 };
 
 export default connect(
