@@ -32,8 +32,8 @@ export const submitSpotifyApiUserMe = (SpotifyApiUserInfoMe) => {
       .then((res) =>
         res.json().then((response) => {
           console.log("response  in useractions", response);
-          dispatch(setCurrentUser(response.User));
           dispatch(fetchSelectedUserThunk(response.User));
+          dispatch(setCurrentUser(response.User));
         })
       )
       .catch((err) => {

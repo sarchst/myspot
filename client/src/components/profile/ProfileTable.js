@@ -33,18 +33,36 @@ class ProfileTable extends React.Component {
   }
 
   componentDidMount = () => {
-    spotifyWebApi
-      .getUserPlaylists(this.props.user.id)
-      .then((result) => {
-        const playlists = this.transformPlaylistData(result);
-        this.setState({
-          playlists: playlists,
-        });
-      })
-      .catch((err) => {
-        console.log("Error getting top tracks: ", err);
-      });
+    console.log("profile table props", this.props);
   };
+
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    // update state playlists when tab is clicked for the first time for selectedUser
+    if (
+      this.isTabIndexUpdatedToZero(prevState) &&
+      (!this.state.playlists.length || this.isSelectedUserUpdated(prevProps))
+    ) {
+      this.fetchSpotifyPlaylists();
+    }
+
+    // collapse profile table and wipe state playlists when selectedUser updates
+    if (this.isSelectedUserUpdated(prevProps)) {
+      this.setState({
+        tabIndex: false,
+        playlists: [],
+      });
+    }
+  }
+
+  isTabIndexUpdatedToZero = (prevState) =>
+    this.state.tabIndex === 0 && this.state.tabIndex !== prevState.tabIndex;
+
+  isSelectedUserUpdated = (prevProps) =>
+    !(
+      prevProps.selectedUser &&
+      this.props.selectedUser &&
+      prevProps.selectedUser === this.props.selectedUser
+    );
 
   transformPlaylistData = (data) => {
     const playlists = data.items.map((pl) => {
@@ -57,6 +75,20 @@ class ProfileTable extends React.Component {
       return playlist;
     });
     return playlists;
+  };
+
+  fetchSpotifyPlaylists = () => {
+    spotifyWebApi
+      .getUserPlaylists(this.props.selectedUser._id)
+      .then((result) => {
+        const playlists = this.transformPlaylistData(result);
+        this.setState({
+          playlists: playlists,
+        });
+      })
+      .catch((err) => {
+        console.log("Error getting top tracks: ", err);
+      });
   };
 
   handleChange = (event, index) => {
@@ -143,6 +175,7 @@ class ProfileTable extends React.Component {
 const mapStateToProps = (state) => ({
   spotifyApi: state.spotifyApi,
   user: state.user,
+  selectedUser: state.selectedUser,
 });
 
 export default connect(mapStateToProps)(withStyles(styles)(ProfileTable));

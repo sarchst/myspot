@@ -51,8 +51,8 @@ class Profile extends React.Component {
 
   componentDidMount = () => {
     const { match } = this.props;
+    // get selected user
     this.props.fetchSelectedUser(match.params.user);
-    // this.props.fetchPosts(this.props.user.id);
     // get selected user's posts
     this.props.fetchPostsWithFilter(match.params.user, this.props.filter);
     // get current user's profile pic
@@ -78,8 +78,10 @@ class Profile extends React.Component {
       });
     }
     // check if filter has been changed
+    const { match } = this.props;
     if (this.props.filter !== prevProps.filter) {
-      this.props.fetchPostsWithFilter(this.props.user.id, this.props.filter);
+      // get posts from selectedUser if possible, else get from db
+      this.props.fetchPostsWithFilter(match.params.user, this.props.filter);
     }
   }
 
@@ -138,7 +140,7 @@ class Profile extends React.Component {
                 />
               ))
             ) : (
-              <h3 color="primary">Hmm..no posts yet. You should make one!</h3>
+              <h3 color="primary">Hmm...no posts yet. You should make one!</h3>
             )}
           </div>
         </InfiniteScroll>
