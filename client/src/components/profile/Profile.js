@@ -82,7 +82,6 @@ class Profile extends React.Component {
   };
 
   render() {
-    console.log("Params: ", this.props.params);
     const { classes, user, toggleLike } = this.props;
     return (
       <div className={classes.root}>

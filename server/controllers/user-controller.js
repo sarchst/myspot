@@ -484,82 +484,6 @@ getFollowing = (req, res) => {
     });
 };
 
-addFollowingFollowerRelationship = async (req, res) => {
-  const followerId = req.params.id;
-  const followeeId = req.body.id;
-  if (!followeeId) {
-    return res.status(400).json({
-      success: false,
-      error: "You must provide a body/ id to update",
-    });
-  }
-
-  const followerQuery = { _id: followerId };
-  const followeeQuery = { _id: followeeId };
-
-  const followerUpdate = { $addToSet: { following: followeeId } };
-  const followeeUpdate = { $addToSet: { followers: followerId } };
-
-  const followerUpdated = await User.updateOne(followerQuery, followerUpdate);
-  const followeeUpdated = await User.updateOne(followeeQuery, followeeUpdate);
-
-  if (!followerUpdated || !followeeUpdated) {
-    return res.status(404).json({ error: "Unable to follow that user" });
-  }
-  return res.status(200).json({ success: true });
-};
-
-//   User.find(
-//     { _id: { $in: [followerId, followeeId] } },
-//     (err, usersInRelationship) => {
-//       if (err) {
-//         return res.status(400).json({ success: false, error: err });
-//       }
-//       if (usersInRelationship === null) {
-//         return res
-//           .status(404)
-//           .json({ sucess: false, error: "Users not found" });
-//       }
-//     }
-//   ).forEach((usersInRelationship) => {
-//     if (usersInRelationship._id === followerId) {
-//       // push followeeId to followerId's following list
-//       User.update({ _id: followerId }, { $push: { following: followeeId } });
-//     }
-//     if (usersInRelationship._id === followeeId) {
-//       // push followerId to followeeId's followers list
-//       User.update({ _id: followeeId }, { $push: { followers: followerId } });
-//     }
-//   });
-// };
-
-removeFollowingFollowerRelationship = (req, res) => {
-  console.log("BODY: ", req.body);
-  const followerId = req.params.id;
-  const followeeId = req.body.id;
-  if (!followeeId) {
-    console.log("the followee id is bad???");
-    return res.status(400).json({
-      success: false,
-      error: "You must provide a body/ id to update",
-    });
-  }
-
-  User.updateMany(
-    { _id: { $in: [followerId, followeeId] } },
-    { $pull: { following: followeeId, followers: followerId } },
-    (err, user) => {
-      if (err) {
-        return res.status(404).json({
-          err,
-          message: "This is an invalid update request.",
-        });
-      }
-      return res.status(200).json({ success: true });
-    }
-  );
-};
-
 updateFollowRelationship = async (req, res) => {
   const followerId = req.params.id;
   const followeeId = req.body.id;
@@ -585,15 +509,16 @@ updateFollowRelationship = async (req, res) => {
   }
 
   const followerUpdated = await User.updateOne(followerQuery, followerUpdate);
-  const followeeUpdated = await User.updateOne(followeeQuery, followeeUpdate);
-
-  console.log("followerUpdate: ", followerUpdated);
-  console.log("followeeUpdate: ", followeeUpdated);
+  const followeeUpdated = await User.findOneAndUpdate(
+    followeeQuery,
+    followeeUpdate,
+    { new: true }
+  );
 
   if (!followerUpdated || !followeeUpdated) {
     return res.status(404).json({ error: "Unable to follow that user" });
   }
-  return res.status(200).json({ success: true });
+  return res.status(200).json({ success: true, data: followeeUpdated });
 };
 
 module.exports = {
