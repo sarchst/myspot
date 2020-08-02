@@ -80,7 +80,7 @@ class Tinderify extends React.Component {
                 paragraph
               >
                 Swipe through your Discover Weekly playlist and like songs to
-                add to your Favourites!
+                add to your MySpot-Tinderify playlist!
               </Typography>
               <Paper className={classes.root}>
                 {/* <TabContext value={this.state.tabIndex}> */}
@@ -92,7 +92,7 @@ class Tinderify extends React.Component {
                   centered
                 >
                   <Tab label="My Discover Weekly" />
-                  <Tab label="Browse" />
+                  <Tab label="Browse Friends Music" />
                 </Tabs>
                 {this.getPanel(this.state.tabIndex)}
               </Paper>

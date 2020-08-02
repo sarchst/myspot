@@ -5,7 +5,6 @@ import { Link } from "react-router-dom";
 import MaterialTable from "material-table";
 import { Paper } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
-import WhatshotIcon from "@material-ui/icons/Whatshot";
 
 const styles = (theme) => ({
   link: {
@@ -62,42 +61,15 @@ class FriendsDiscoverWeekly extends React.Component {
           {
             field: "pic",
             render: (rowData) => (
-              <Link
-                to={{
-                  pathname: "/myspotter/" + rowData.username,
-                  state: {
-                    user_ID: rowData.userId,
-                  },
-                }}
-                style={{ textDecoration: "none" }}
-              >
-                <img
-                  src={rowData.pic}
-                  alt={"ProfilePic"}
-                  style={{ width: 40, height: 40, borderRadius: 16 }}
-                />
-              </Link>
+              <img
+                src={rowData.pic}
+                alt={"ProfilePic"}
+                style={{ width: 40, height: 40, borderRadius: 16 }}
+              />
             ),
             headerStyle: { width: "50px" },
             cellStyle: { width: "50px" },
             width: null,
-          },
-          {
-            title: "",
-            field: "username",
-            render: (rowData) => (
-              <Link
-                className={this.props.classes.link}
-                to={{
-                  pathname: "/myspotter/" + rowData.username,
-                  state: {
-                    user_ID: rowData.userId,
-                  },
-                }}
-              >
-                {rowData.username}
-              </Link>
-            ),
           },
 
           {
@@ -113,7 +85,7 @@ class FriendsDiscoverWeekly extends React.Component {
                   },
                 }}
               >
-                <WhatshotIcon />
+                Browse {rowData.username}'s Music
               </Link>
             ),
           },

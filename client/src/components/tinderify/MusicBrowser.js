@@ -12,6 +12,14 @@ import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import Avatar from "@material-ui/core/Avatar";
 import ListItemText from "@material-ui/core/ListItemText";
 import List from "@material-ui/core/List";
+import Snackbar from "@material-ui/core/Snackbar";
+import MuiAlert from "@material-ui/lab/Alert";
+import IconButton from "@material-ui/core/IconButton";
+import Tooltip from "@material-ui/core/Tooltip";
+
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
 const styles = (theme) => ({
   audioPlayer: {
@@ -21,6 +29,20 @@ const styles = (theme) => ({
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
+  },
+  root: {
+    width: "100%",
+    "& > * + *": {
+      marginTop: theme.spacing(2),
+    },
+  },
+  fab: {
+    margin: theme.spacing(2),
+  },
+  absolute: {
+    position: "absolute",
+    bottom: theme.spacing(2),
+    right: theme.spacing(3),
   },
 });
 
@@ -38,6 +60,8 @@ class MusicBrowser extends React.Component {
       trackArtist: [],
       trackAlbumArt: [],
       trackID: "",
+      successSnackOpen: false,
+      errorSnackOpen: false,
     };
     spotifyWebApi.setAccessToken(this.props.spotifyApi.accessToken);
   }
@@ -88,12 +112,29 @@ class MusicBrowser extends React.Component {
         );
       })
       .then((res) => {
+        this.setState({
+          successSnackOpen: true,
+        });
         console.log(res);
       })
       .catch((err) => {
         console.log("error adding song to tinderify playlist");
+        this.setState({
+          errorSnackOpen: true,
+        });
         console.log(err);
       });
+  };
+
+  handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    this.setState({
+      successSnackOpen: false,
+      errorSnackOpen: false,
+    });
   };
 
   setPlayerSong = (track) => {
@@ -117,12 +158,17 @@ class MusicBrowser extends React.Component {
                 <Box className={classes.musicPlayerBox} pb={1}>
                   <List>
                     <ListItem>
-                      <FavoriteIcon
-                        m={2}
-                        onClick={() =>
-                          this.addSongToTinderifyPlayList(this.state.trackID)
-                        }
-                      ></FavoriteIcon>
+                      <Tooltip title="Add Song">
+                        <IconButton
+                          aria-label="delete"
+                          onClick={() =>
+                            this.addSongToTinderifyPlayList(this.state.trackID)
+                          }
+                        >
+                          <FavoriteIcon className="favorite" />
+                        </IconButton>
+                      </Tooltip>
+
                       <ListItemAvatar>
                         <Avatar
                           variant="square"
@@ -187,36 +233,68 @@ class MusicBrowser extends React.Component {
                         <h2>{track.track.name}</h2>
                         <h4>by</h4>
                         <h4>{track.track.artists[0].name}</h4>
-                        <FavoriteIcon
-                          className="favorite"
-                          onClick={() =>
-                            this.addSongToTinderifyPlayList(track.track.id)
-                          }
-                        ></FavoriteIcon>
                         <Box>
                           {isPlaybackAvailable ? (
-                            <PlayCircleOutlineIcon
-                              onClick={
-                                isPlaybackAvailable
-                                  ? () => this.setPlayerSong(track.track)
-                                  : null
-                              }
-                              color={"secondary"}
-                              fontSize="large"
-                            />
+                            <Tooltip title="Play Song">
+                              <IconButton
+                                onClick={
+                                  isPlaybackAvailable
+                                    ? () => this.setPlayerSong(track.track)
+                                    : null
+                                }
+                              >
+                                <PlayCircleOutlineIcon
+                                  color={"secondary"}
+                                  fontSize="large"
+                                />
+                              </IconButton>
+                            </Tooltip>
                           ) : (
-                            <MusicOffOutlinedIcon
-                              color={"secondary"}
-                              fontSize="large"
-                            />
+                            <Tooltip title="No song preview available">
+                              <IconButton>
+                                <MusicOffOutlinedIcon
+                                  color={"secondary"}
+                                  fontSize="large"
+                                />
+                              </IconButton>
+                            </Tooltip>
                           )}
                         </Box>
+                        <Tooltip title="Add Song">
+                          <IconButton
+                            onClick={() =>
+                              this.addSongToTinderifyPlayList(track.track.id)
+                            }
+                          >
+                            <FavoriteIcon className="favorite" />
+                          </IconButton>
+                        </Tooltip>
                       </div>
                     </Slide>
                   );
                 })}
               </Slider>
             </CarouselProvider>
+            <div className={classes.root}>
+              <Snackbar
+                open={this.state.successSnackOpen}
+                autoHideDuration={6000}
+                onClose={() => this.handleClose()}
+              >
+                <Alert onClose={() => this.handleClose()} severity="success">
+                  Song added to MySpot-Tinderify!
+                </Alert>
+              </Snackbar>
+              <Snackbar
+                open={this.state.errorSnackOpen}
+                autoHideDuration={6000}
+                onClose={() => this.handleClose()}
+              >
+                <Alert onClose={() => this.handleClose()} severity="error">
+                  Error adding song to MySpot-Tinderify.
+                </Alert>
+              </Snackbar>
+            </div>
           </div>
         ) : (
           <h1>
