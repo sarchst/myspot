@@ -121,7 +121,7 @@ class App extends React.Component {
           Math.min(recentTracks.items.length, 3)
         );
         // set logged in user as initial selectedUser
-        this.props.fetchSelectedUser(userObject.id);
+        // this.props.fetchSelectedUser(userObject.id);
         // dispatch updated spotify info to db
         // then assign db user as current user in redux
         this.props.submitSpotifyApiUserMe(userObject);

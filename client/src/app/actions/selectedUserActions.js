@@ -16,7 +16,7 @@ export const fetchSelectedUser = (userID) => {
   };
 };
 
-const setSelectedUserThunk = (userObject) => ({
+export const setSelectedUserThunk = (userObject) => ({
   type: SELECT_USER,
   payload: userObject,
 });
