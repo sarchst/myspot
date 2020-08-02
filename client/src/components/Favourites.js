@@ -10,8 +10,15 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import Avatar from "@material-ui/core/Avatar";
 import ListItemText from "@material-ui/core/ListItemText";
+import IconButton from "@material-ui/core/IconButton";
+import Tooltip from "@material-ui/core/Tooltip";
+import FavoriteIcon from "@material-ui/icons/Favorite";
+import Snackbar from "@material-ui/core/Snackbar";
+import MuiAlert from "@material-ui/lab/Alert";
 
-const spotifyWebApi = new Spotify();
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
 const styles = (theme) => ({
   listItemText: {
@@ -50,13 +57,23 @@ const styles = (theme) => ({
     backgroundColor: theme.palette.background.paper,
     padding: theme.spacing(0),
   },
+  root: {
+    width: "100%",
+    "& > * + *": {
+      marginTop: theme.spacing(2),
+    },
+  },
 });
+
+const spotifyWebApi = new Spotify();
 
 class Favourites extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       tracks: [],
+      successSnackOpen: false,
+      errorSnackOpen: false,
     };
     spotifyWebApi.setAccessToken(this.props.spotifyApi.accessToken);
   }
@@ -74,6 +91,44 @@ class Favourites extends React.Component {
       }
     );
   }
+
+  addSongToMySpotPlayList = (id) => {
+    console.log(id);
+    spotifyWebApi
+      .removeTracksFromPlaylist(this.props.mySpotPlaylists.MySpotPlaylistID, [
+        "spotify:track:" + id,
+      ])
+      .then(() => {
+        return spotifyWebApi.addTracksToPlaylist(
+          this.props.mySpotPlaylists.MySpotPlaylistID,
+          ["spotify:track:" + id]
+        );
+      })
+      .then((res) => {
+        this.setState({
+          successSnackOpen: true,
+        });
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log("error adding song to MySpot playlist");
+        this.setState({
+          errorSnackOpen: true,
+        });
+        console.log(err);
+      });
+  };
+
+  handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    this.setState({
+      successSnackOpen: false,
+      errorSnackOpen: false,
+    });
+  };
 
   render() {
     const { classes } = this.props;
@@ -110,6 +165,16 @@ class Favourites extends React.Component {
             {this.state.tracks.map((track, index) => {
               return (
                 <ListItem key={index}>
+                  <Tooltip title="Add to MySpot playlist">
+                    <IconButton
+                      aria-label="delete"
+                      onClick={() =>
+                        this.addSongToMySpotPlayList(track.track.id)
+                      }
+                    >
+                      <FavoriteIcon className="favorite" />
+                    </IconButton>
+                  </Tooltip>
                   <ListItemAvatar>
                     <Avatar
                       variant="square"
@@ -138,6 +203,26 @@ class Favourites extends React.Component {
             })}
           </List>
         </Container>
+        <div className={classes.root}>
+          <Snackbar
+            open={this.state.successSnackOpen}
+            autoHideDuration={6000}
+            onClose={() => this.handleClose()}
+          >
+            <Alert onClose={() => this.handleClose()} severity="success">
+              Song added to MySpot playlist!
+            </Alert>
+          </Snackbar>
+          <Snackbar
+            open={this.state.errorSnackOpen}
+            autoHideDuration={6000}
+            onClose={() => this.handleClose()}
+          >
+            <Alert onClose={() => this.handleClose()} severity="error">
+              Error adding song to MySpot playlist.
+            </Alert>
+          </Snackbar>
+        </div>
       </div>
     );
   }
@@ -145,6 +230,7 @@ class Favourites extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
+    mySpotPlaylists: state.mySpotPlaylists,
     spotifyApi: state.spotifyApi,
     user: state.user,
   };
