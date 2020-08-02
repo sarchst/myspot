@@ -102,9 +102,6 @@ class Favourites extends React.Component {
             </Container>
           </div>
         </CssBaseline>
-
-        <h1>{this.state.name}</h1>
-        <h4>{this.state.description}</h4>
         <Container maxWidth="lg">
           <List className={classes.listRoot} dense={true}>
             {this.state.tracks.map((track, index) => {

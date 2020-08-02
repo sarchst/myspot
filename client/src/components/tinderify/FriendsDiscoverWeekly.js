@@ -1,10 +1,11 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Link } from "react-router-dom";
-
+import Button from "@material-ui/core/Button";
 import MaterialTable from "material-table";
 import { Paper } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
+import MusicBrowser from "./MusicBrowser";
+import Box from "@material-ui/core/Box";
 
 const styles = (theme) => ({
   link: {
@@ -13,12 +14,19 @@ const styles = (theme) => ({
     "&:hover": {
       textDecoration: "underline",
     },
+    button: {
+      textTransform: "none",
+    },
+    submit: {
+      float: "right",
+    },
   },
 });
 
 class FriendsDiscoverWeekly extends React.Component {
   state = {
     followList: [],
+    selectedUser: "",
   };
   componentDidMount = () => {
     const type = "following";
@@ -49,57 +57,82 @@ class FriendsDiscoverWeekly extends React.Component {
     return follData;
   };
 
-  render() {
-    return (
-      <MaterialTable
-        components={{
-          Container: (props) => (
-            <Paper {...props} elevation={0} style={{ boxShadow: 0 }} />
-          ),
-        }}
-        columns={[
-          {
-            field: "pic",
-            render: (rowData) => (
-              <img
-                src={rowData.pic}
-                alt={"ProfilePic"}
-                style={{ width: 40, height: 40, borderRadius: 16 }}
-              />
-            ),
-            headerStyle: { width: "50px" },
-            cellStyle: { width: "50px" },
-            width: null,
-          },
+  goToFriendsTinderify = (id) => {
+    this.setState({
+      selectedUser: id,
+    });
+  };
 
-          {
-            field: "",
-            render: (rowData) => (
-              <Link
-                className={this.props.classes.link}
-                to={{
-                  pathname: "/myspotter/" + rowData.username + "/tinderify",
-                  state: {
-                    user_ID: rowData.userId,
-                    username: rowData.username,
-                  },
-                }}
+  goBackToFriendsList = () => {
+    this.setState({
+      selectedUser: "",
+    });
+  };
+
+  render() {
+    const { classes } = this.props;
+    return (
+      <div>
+        {this.state.selectedUser === "" ? (
+          <MaterialTable
+            components={{
+              Container: (props) => (
+                <Paper {...props} elevation={0} style={{ boxShadow: 0 }} />
+              ),
+            }}
+            columns={[
+              {
+                field: "pic",
+                render: (rowData) => (
+                  <img
+                    src={rowData.pic}
+                    alt={"ProfilePic"}
+                    style={{ width: 40, height: 40, borderRadius: 16 }}
+                  />
+                ),
+                headerStyle: { width: "50px" },
+                cellStyle: { width: "50px" },
+                width: null,
+              },
+
+              {
+                field: "",
+                render: (rowData) => (
+                  <Button
+                    onClick={() => this.goToFriendsTinderify(rowData.userId)}
+                  >
+                    Browse {rowData.username}'s Music
+                  </Button>
+                ),
+              },
+            ]}
+            data={this.state.followList}
+            options={{
+              showTitle: false,
+              search: false,
+              paging: false,
+              toolbar: false,
+              sorting: false,
+              rowStyle: { borderBottom: 0 },
+            }}
+          />
+        ) : (
+          <div>
+            <Box ml={5}>
+              <Button
+                className={classes.submit}
+                variant="contained"
+                onClick={() => this.goBackToFriendsList()}
+                color="primary"
               >
-                Browse {rowData.username}'s Music
-              </Link>
-            ),
-          },
-        ]}
-        data={this.state.followList}
-        options={{
-          showTitle: false,
-          search: false,
-          paging: false,
-          toolbar: false,
-          sorting: false,
-          rowStyle: { borderBottom: 0 },
-        }}
-      />
+                Go Back
+              </Button>
+            </Box>
+
+            <MusicBrowser otherUser={this.state.selectedUser}></MusicBrowser>
+          </div>
+        )}
+      </div>
     );
   }
 }
