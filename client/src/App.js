@@ -7,11 +7,11 @@ import Sidebar from "./components/Sidebar";
 import Appbar from "./components/Appbar";
 import Login from "./components/Login";
 import ScrollToTop from "./components/ScrollToTop";
+import { registerSpotifyApi } from "./app/actions/spotifyApiActions";
 import {
-  registerSpotifyApi,
+  setCurrentUser,
   submitSpotifyApiUserMe,
-} from "./app/actions/spotifyApiActions";
-import { setCurrentUser } from "./app/actions/userActions";
+} from "./app/actions/userActions";
 import { fetchSelectedUser } from "./app/actions/selectedUserActions";
 import { setPlayListIDs } from "./app/actions/playlistActions";
 
@@ -122,14 +122,11 @@ class App extends React.Component {
         );
         // set logged in user as initial selectedUser
         this.props.fetchSelectedUser(userObject.id);
-        // dispatch updates spotify info in db
-        // TODO: replace redux action with db call instead?
+        // dispatch updated spotify info to db
+        // then assign db user as current user in redux
         this.props.submitSpotifyApiUserMe(userObject);
         // set URIs for MySpot and MySpot-Tinderify playlists
-        console.log("calling setPlayListIDs in app.js");
         this.props.setPlayListIDs(spotifyMe.id, params.access_token);
-        // set current user in redux
-        this.props.setCurrentUser(userObject.id, userObject.display_name);
       });
     }
   }

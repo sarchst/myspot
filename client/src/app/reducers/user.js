@@ -12,8 +12,9 @@ export const user = (state = initialState, action) => {
     case SET_CURRENT_USER:
       return {
         ...state,
-        id: action.id,
-        username: action.username,
+        ...action.payload,
+        id: action.payload._id,
+        username: action.payload.username,
       };
     case LOG_OUT:
       return {
