@@ -11,6 +11,7 @@ import fetchPosts from "./fetchPosts";
 import updateSettings from "./updateSettings";
 import delPostDialog from "./delPostDialog";
 import editPostDialog from "./editPostDialog";
+import unfollowDialog from "./unfollowDialog";
 import selectedUser from "./selectedUser";
 import mySpotPlaylists from "./mySpotPlaylists";
 
@@ -26,6 +27,7 @@ const allReducers = combineReducers({
   selectedUser: selectedUser,
   mySpotPlaylists: mySpotPlaylists,
   editPostDialog: editPostDialog,
+  unfollowDialog: unfollowDialog,
   accountSettings: settings,
   updateSettings: updateSettings,
 });

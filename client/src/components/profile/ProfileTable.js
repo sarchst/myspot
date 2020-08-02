@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import Spotify from "spotify-web-api-js";
-import FollowTable from "../FollowTable";
+import FollowTable from "../follow/FollowTable";
 
 import MaterialTable from "material-table";
 import { Paper, Tab, Tabs } from "@material-ui/core";

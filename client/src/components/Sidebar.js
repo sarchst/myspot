@@ -32,7 +32,7 @@ import contentType from "../data/ContentTypeEnum";
 
 import { Link, Route, Switch, Redirect } from "react-router-dom";
 
-import FollowTable from "./FollowTable";
+import FollowTable from "./follow/FollowTable";
 import NowPlaying from "./NowPlaying";
 import Profile from "./profile/Profile";
 import Feed from "./feed/Feed";

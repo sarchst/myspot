@@ -1,6 +1,8 @@
 import { SELECT_USER } from "../actions/selectedUserActions";
 
-const initialState = {};
+const initialState = {
+  followers: [],
+};
 
 export const selectedUser = (state = initialState, action) => {
   switch (action.type) {
