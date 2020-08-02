@@ -60,42 +60,122 @@ class SongList extends React.Component {
       tracks: [],
       name: "",
       description: "",
+      songlistType: "",
+      albumImage: "",
     };
     spotifyWebApi.setAccessToken(this.props.spotifyApi.accessToken);
   }
 
   componentDidMount() {
-    spotifyWebApi.getPlaylistTracks(this.props.match.params.playlistid).then(
-      (data) => {
-        console.log("Songs in playlist", data);
-        this.setState({
-          tracks: data.items,
-        });
-      },
-      function (err) {
-        console.error(err);
-      }
-    );
+    if ("playlistid" in this.props.match.params) {
+      // get playlist songs
+      spotifyWebApi.getPlaylistTracks(this.props.match.params.playlistid).then(
+        (data) => {
+          console.log("Songs in playlist", data);
+          this.setState({
+            songlistType: "playlist",
+          });
+          const tracks = this.organizeTrackData(data.items);
+          this.setState({
+            tracks: tracks,
+          });
+        },
+        function (err) {
+          console.error(err);
+        }
+      );
 
-    spotifyWebApi.getPlaylist(this.props.match.params.playlistid).then(
-      (data) => {
-        console.log("Playlist data", data);
-        this.setState({
-          name: data.name,
-          description: data.description,
-        });
-      },
-      function (err) {
-        console.error(err);
-      }
-    );
+      spotifyWebApi.getPlaylist(this.props.match.params.playlistid).then(
+        (data) => {
+          console.log("Playlist data", data);
+          this.setState({
+            name: data.name,
+            description: data.description,
+          });
+        },
+        function (err) {
+          console.error(err);
+        }
+      );
+    } else if ("albumid" in this.props.match.params) {
+      // get album songs
+      spotifyWebApi.getAlbumTracks(this.props.match.params.albumid).then(
+        (data) => {
+          console.log("Songs in album", data);
+          this.setState({
+            songlistType: "album",
+          });
+          const tracks = this.organizeTrackData(data.items);
+          this.setState({
+            tracks: tracks,
+          });
+        },
+        function (err) {
+          console.error(err);
+        }
+      );
+      spotifyWebApi.getAlbum(this.props.match.params.albumid).then(
+        (data) => {
+          console.log("Album data", data);
+          this.setState({
+            name: data.name,
+            description: data.artists.map(
+              (artist, index) =>
+                artist.name + (index < data.artists.length - 1 ? " | " : "")
+            ),
+            albumImage: data.images.length
+              ? data.images[data.images.length - 1].url
+              : null,
+          });
+        },
+        function (err) {
+          console.error(err);
+        }
+      );
+    }
   }
+
+  organizeTrackData = (data) => {
+    const tracks = [];
+    if (this.state.songlistType === "playlist") {
+      data.map((track, index) =>
+        tracks.push({
+          image: track.track.album.images.length
+            ? track.track.album.images[track.track.album.images.length - 1].url
+            : null,
+          name: track.track.name,
+          artists: track.track.artists.map(
+            (artist, index) =>
+              artist.name +
+              (index < track.track.artists.length - 1 ? " | " : "")
+          ),
+        })
+      );
+    } else if (this.state.songlistType === "album") {
+      data.map((track, index) =>
+        tracks.push({
+          name: track.name,
+          artists: track.artists.map(
+            (artist, index) =>
+              artist.name + (index < track.artists.length - 1 ? " | " : "")
+          ),
+        })
+      );
+    }
+    return tracks;
+  };
 
   render() {
     const { classes } = this.props;
     return (
       <div>
-        <Link to={"/" + this.props.user.username + "/playlists"}>Go Back</Link>
+        {this.state.songlistType === "playlist" ? (
+          <Link to={"/" + this.props.user.username + "/playlists"}>
+            Go Back
+          </Link>
+        ) : (
+          <Link to={"/" + this.props.user.username + "/albums"}>Go Back</Link>
+        )}
         <CssBaseline>
           <div className={classes.heroContent}>
             <Container maxWidth="md">
@@ -128,24 +208,16 @@ class SongList extends React.Component {
                     <Avatar
                       variant="square"
                       src={
-                        track.track.album.images.length
-                          ? track.track.album.images[
-                              track.track.album.images.length - 1
-                            ].url
-                          : null
+                        this.state.songlistType === "playlist"
+                          ? track.image
+                          : this.state.albumImage
                       }
                     ></Avatar>
                   </ListItemAvatar>
                   <ListItemText
                     classes={{ primary: classes.listItemText }}
-                    primary={track.track.name}
-                    secondary={track.track.album.artists.map(
-                      (artist, index) =>
-                        artist.name +
-                        (index < track.track.album.artists.length - 1
-                          ? " | "
-                          : "")
-                    )}
+                    primary={track.name}
+                    secondary={track.artists}
                   />
                 </ListItem>
               );

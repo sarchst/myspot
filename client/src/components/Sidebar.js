@@ -228,7 +228,7 @@ class Sidebar extends React.Component {
             <Route path="/:user/albums" exact component={Albums} />
             <Route path="/:user/tinderify" exact component={Tinderify} />
             <Route path="/:user/favourites" exact component={Favourites} />
-                        <Route
+            <Route
               path="/myspotter/:user/tinderify"
               exact
               component={(props) => <Tinderify {...props} />}
@@ -264,6 +264,11 @@ class Sidebar extends React.Component {
             <Route path="/:user/settings" component={Settings} />
             <Route
               path="/:user/playlists/:playlistid"
+              render={(props) => <SongList {...props} />}
+            />
+            <Route
+              exact
+              path="/:user/albums/:albumid"
               render={(props) => <SongList {...props} />}
             />
             <Route render={() => <Redirect to={"/" + this.props.user.id} />} />
