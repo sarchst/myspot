@@ -12,7 +12,9 @@ import UnfollowDialog from "./UnfollowDialog";
 
 class FollowButton extends React.Component {
   performAction = (followeeId) => {
-    const buttonText = this.props.profileFollowers.includes(this.props.user.id)
+    const buttonText = this.props.selectedUser.followers.includes(
+      this.props.user.id
+    )
       ? "Following"
       : "Follow";
 
@@ -31,7 +33,7 @@ class FollowButton extends React.Component {
     } else if (buttonText === "Following") {
       const payload = {
         open: this.props.unfollowDialog.open,
-        username: this.props.profileUsername,
+        username: this.props.selectedUser.username,
       };
       this.props.confirmUnfollowDialog(payload);
     }
@@ -52,7 +54,9 @@ class FollowButton extends React.Component {
   };
 
   getButtonIcon = () => {
-    const buttonText = this.props.profileFollowers.includes(this.props.user.id)
+    const buttonText = this.props.selectedUser.followers.includes(
+      this.props.user.id
+    )
       ? "Following"
       : "Follow";
     switch (buttonText) {
@@ -66,22 +70,22 @@ class FollowButton extends React.Component {
   };
 
   render() {
-    const { user, profileUserId, profileFollowers } = this.props;
+    const { user, selectedUser } = this.props;
 
-    if (profileUserId !== user.id) {
+    if (selectedUser._id !== user.id) {
       return (
         <div>
-          <UnfollowDialog handleUnfollow={() => this.unfollow(profileUserId)} />
+          <UnfollowDialog
+            handleUnfollow={() => this.unfollow(selectedUser._id)}
+          />
           <Button
             variant="outlined"
             color="secondary"
             size="small"
             endIcon={this.getButtonIcon()}
-            onClick={() => this.performAction(profileUserId)}
+            onClick={() => this.performAction(selectedUser._id)}
           >
-            {profileFollowers.includes(this.props.user.id)
-              ? "Following"
-              : "Follow"}
+            {selectedUser.followers.includes(user.id) ? "Following" : "Follow"}
           </Button>
         </div>
       );
@@ -93,6 +97,7 @@ class FollowButton extends React.Component {
 
 const mapStateToProps = (state) => ({
   user: state.user,
+  selectedUser: state.selectedUser,
   unfollowDialog: state.unfollowDialog,
 });
 

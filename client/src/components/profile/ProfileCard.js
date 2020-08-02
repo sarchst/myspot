@@ -116,11 +116,7 @@ class ProfileCard extends React.Component {
             <Emoji text=":flag_canada:" />
             <Emoji text=":globe_showing_americas:" />
           </span>
-          <FollowButton
-            profileUserId={selectedUser._id}
-            profileUsername={selectedUser.username}
-            profileFollowers={selectedUser.followers}
-          />
+          <FollowButton />
         </CardContent>
         <Divider light />
         <Box display={"flex"}>

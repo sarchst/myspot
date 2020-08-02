@@ -70,36 +70,6 @@ updateUser = async (req, res) => {
       });
     }
   );
-
-  // User.findOne({ _id: req.params.id }, (err, User) => {
-  //   if (err) {
-  //     return res.status(404).json({
-  //       err,
-  //       message: "User not found!",
-  //     });
-  //   }
-  //   // confirm that these attributes we want the user to be able to update
-  //   User.profilePic = body.profilePic;
-  //   User.email = body.email;
-  //   User.settings = body.settings;
-  //   User.followers = body.followers;
-  //   User.following = body.following;
-  //   User.posts = body.posts;
-  //   User.save()
-  //     .then(() => {
-  //       return res.status(200).json({
-  //         success: true,
-  //         id: User._id,
-  //         message: "User updated!",
-  //       });
-  //     })
-  //     .catch((error) => {
-  //       return res.status(404).json({
-  //         error,
-  //         message: "User not updated!",
-  //       });
-  //     });
-  // });
 };
 
 // No deleteUser because we don't want user to be able to remove themselves from our db entirely

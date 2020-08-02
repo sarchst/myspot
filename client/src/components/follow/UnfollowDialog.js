@@ -48,7 +48,7 @@ class UnfollowDialog extends React.Component {
                 Cancel
               </Button>
               <Button onClick={this.handleConfirm} color="primary" autoFocus>
-                Confirm
+                Unfollow
               </Button>
             </DialogActions>
           </Dialog>
