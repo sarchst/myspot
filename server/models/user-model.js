@@ -20,6 +20,8 @@ const MediaSchema = new Schema({
   // mediaArt: { type: String, default: "" }, // Sportify URI to media art TODO add default
   spotifyLink: { type: String, required: true }, // Link to media on Spotify webpage
   artist: { type: String, default: "" }, // Artist name for tracks and albums
+  ownerId: { type: String, default: "" }, // the Id of the playlists's owner
+  ownerUsername: { type: String, default: "" }, // the username of the playlists's owner
   // maybe more?
 });
 

@@ -87,6 +87,7 @@ class MakePost extends React.Component {
       case "playlist": {
         spotifyWebApi.getUserPlaylists(this.props.user.id).then(
           (data) => {
+            console.log("playlist items: ", data.items);
             const playlistOptions = this.getOptions(type, data.items);
             this.setState({
               mediaOptions: playlistOptions,
@@ -149,6 +150,8 @@ class MakePost extends React.Component {
           _id: mo.id,
           name: mo.name,
           spotifyLink: mo.external_urls.spotify,
+          ownerId: mo.owner.id,
+          ownerUsername: mo.owner.display_name,
         };
       });
     } else {

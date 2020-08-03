@@ -1,8 +1,20 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
+import Spotify from "spotify-web-api-js";
 import { compose } from "redux";
 import { connect } from "react-redux";
-import { withStyles } from "@material-ui/core/styles";
+import { Link as RouterLink } from "react-router-dom";
+
+import PostComment from "./PostComment";
+import EditPostDialog from "./EditPostDialog";
+import DeletePostDialog from "./DeletePostDialog";
+import { deletePost, addComment } from "../../app/actions/postActions";
+import { fetchSelectedUser } from "../../app/actions/selectedUserActions";
+import {
+  submitDeletePostDialog,
+  submitEditPostDialog,
+} from "../../app/actions";
+
 import {
   Accordion,
   AccordionActions,
@@ -15,14 +27,16 @@ import {
   IconButton,
   FormControl,
   Input,
+  InputLabel,
   Link,
   Menu,
   MenuItem,
   Paper,
-  InputLabel,
+  Snackbar,
   Tooltip,
   Typography,
 } from "@material-ui/core";
+import MuiAlert from "@material-ui/lab/Alert";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import EmojiEmotionsIcon from "@material-ui/icons/EmojiEmotions";
 import LibraryAddIcon from "@material-ui/icons/LibraryAdd";
@@ -32,18 +46,12 @@ import AlbumIcon from "@material-ui/icons/Album";
 import MusicNoteIcon from "@material-ui/icons/MusicNote";
 import PlaylistAddIcon from "@material-ui/icons/PlaylistAdd";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import { Link as RouterLink } from "react-router-dom";
-import { deletePost, addComment } from "../../app/actions/postActions";
-import DeletePostDialog from "./DeletePostDialog";
-import {
-  submitDeletePostDialog,
-  submitEditPostDialog,
-} from "../../app/actions";
-import PostComment from "./PostComment";
-// import EmojiEmotionsOutlinedIcon from "@material-ui/icons/EmojiEmotionsOutlined";
+import { withStyles } from "@material-ui/core/styles";
 import "emoji-mart/css/emoji-mart.css";
-import EditPostDialog from "./EditPostDialog";
-import { fetchSelectedUser } from "../../app/actions/selectedUserActions";
+
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
 const styles = (theme) => ({
   root: {
@@ -134,12 +142,21 @@ const styles = (theme) => ({
   },
 });
 
+const spotifyWebApi = new Spotify();
+
 class Post extends Component {
-  state = {
-    moreOptions: false,
-    anchorEl: null,
-    commentContent: "",
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      moreOptions: false,
+      anchorEl: null,
+      commentContent: "",
+      successSnackOpen: false,
+      errorSnackOpen: false,
+      containsSnackOpen: false,
+    };
+    spotifyWebApi.setAccessToken(this.props.spotifyApi.accessToken);
+  }
 
   chooseIcon = (type) => {
     switch (type) {
@@ -152,8 +169,8 @@ class Post extends Component {
     }
   };
 
-  goToMedia = () => {
-    // TODO GOTO media
+  goToMedia = (url) => {
+    window.open(url);
   };
 
   like = () => {
@@ -167,8 +184,10 @@ class Post extends Component {
 
   share = (type) => {
     // TODO share spotify media
+    // Copy URL to clipboard? maybe add filter that just shows one post?
     console.log(type);
   };
+
   handleDelete = (postId) => {
     const payload = {
       open: this.props.delPostDialog.open,
@@ -180,9 +199,58 @@ class Post extends Component {
   };
 
   addPostMedia = (type, media) => {
-    // TODO: add song, album, or playlist
-    console.log(type);
-    console.log(media);
+    if (type === "playlist") {
+      // ADD playlist to spotify
+    } else if (type === "album") {
+      spotifyWebApi
+        .containsMySavedAlbums([media._id])
+        .then((res) => {
+          if (res[0]) {
+            return false;
+          } else {
+            return spotifyWebApi.addToMySavedAlbums([media._id]);
+          }
+        })
+        .then((res) => {
+          if (res === "") {
+            this.setState({
+              successSnackOpen: true,
+            });
+          } else {
+            this.setState({
+              containsSnackOpen: true,
+            });
+          }
+        })
+        .catch((err) => {
+          this.setState({
+            errorSnackOpen: true,
+          });
+          console.log("error adding song to MySpot playlist: ", err);
+        });
+    } else {
+      spotifyWebApi
+        .removeTracksFromPlaylist(this.props.mySpotPlaylists.MySpotPlaylistID, [
+          "spotify:track:" + media._id,
+        ])
+        .then(() => {
+          return spotifyWebApi.addTracksToPlaylist(
+            this.props.mySpotPlaylists.MySpotPlaylistID,
+            ["spotify:track:" + media._id]
+          );
+        })
+        .then((res) => {
+          this.setState({
+            successSnackOpen: true,
+          });
+        })
+        .catch((err) => {
+          this.setState({
+            errorSnackOpen: true,
+          });
+          console.log("error adding song to MySpot playlist: ", err);
+        });
+    }
   };
 
   openMoreOptions = (e) => {
@@ -231,6 +299,38 @@ class Post extends Component {
     };
     this.props.submitEditPostDialog(payload);
     this.closeOptions();
+  };
+
+  handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    this.setState({
+      successSnackOpen: false,
+      containssSnackOpen: false,
+      errorSnackOpen: false,
+    });
+  };
+
+  getAlertMessage = (postdata) => {
+    if (postdata.type === "playlist") {
+      return postdata.media.name + " playlist added to your Spotify";
+    } else if (postdata.type === "track") {
+      return (
+        postdata.media.name +
+        " - " +
+        postdata.media.artist +
+        " added to your MySpot playlist!"
+      );
+    } else if (postdata.type === "album") {
+      return (
+        postdata.media.name +
+        " - " +
+        postdata.media.artist +
+        " added to your Spotify"
+      );
+    }
   };
 
   render() {
@@ -326,9 +426,15 @@ class Post extends Component {
                 <Link
                   component="button"
                   variant="body2"
-                  onClick={() => this.goToMedia()}
+                  onClick={() => this.goToMedia(postdata.media.spotifyLink)}
                 >
-                  <Typography>{postdata.media.name}</Typography>
+                  <Typography>
+                    {postdata.media.artist
+                      ? postdata.media.name + " - " + postdata.media.artist
+                      : postdata.media.name +
+                        " - " +
+                        postdata.media.ownerUsername}
+                  </Typography>
                 </Link>
               </Grid>
               {/* TODO add media art component? */}
@@ -446,7 +552,11 @@ class Post extends Component {
               </Grid>
               <Grid item>
                 <Tooltip
-                  title={"Add " + postdata.type + " to you Spotify Library"}
+                  title={
+                    postdata.type === "track"
+                      ? "Add " + postdata.type + " to your MySpot Playlist"
+                      : "Add " + postdata.type + " to your Spotify"
+                  }
                 >
                   <IconButton
                     className={classes.button}
@@ -534,12 +644,43 @@ class Post extends Component {
             </AccordionActions>
           </Accordion>
         </Grid>
+        <div className={classes.root}>
+          <Snackbar
+            open={this.state.successSnackOpen}
+            autoHideDuration={6000}
+            onClose={() => this.handleClose()}
+          >
+            <Alert onClose={() => this.handleClose()} severity="success">
+              {this.getAlertMessage(postdata)}
+            </Alert>
+          </Snackbar>
+          <Snackbar
+            open={this.state.containsSnackOpen}
+            autoHideDuration={6000}
+            onClose={() => this.handleClose()}
+          >
+            <Alert onClose={() => this.handleClose()} severity="info">
+              This media is already in your library.
+            </Alert>
+          </Snackbar>
+          <Snackbar
+            open={this.state.errorSnackOpen}
+            autoHideDuration={6000}
+            onClose={() => this.handleClose()}
+          >
+            <Alert onClose={() => this.handleClose()} severity="error">
+              Error adding selected Media.
+            </Alert>
+          </Snackbar>
+        </div>
       </div>
     );
   }
 }
 const mapStateToProps = (state) => ({
   user: state.user,
+  mySpotPlaylists: state.mySpotPlaylists,
+  spotifyApi: state.spotifyApi,
   delPostDialog: state.delPostDialog,
   editPostDialog: state.editPostDialog,
   feedFilter: state.feed.filter,
