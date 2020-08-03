@@ -9,6 +9,7 @@ export const SUBMIT_EDIT_POST_DIALOG = "SUBMIT_EDIT_POST_DIALOG";
 export const CLOSE_EDIT_POST_DIALOG = "CLOSE_EDIT_POST_DIALOG";
 export const CONFIRM_UNFOLLOW_DIALOG = "CONFIRM_UNFOLLOW_DIALOG";
 export const CLOSE_UNFOLLOW_DIALOG = "CLOSE_UNFOLLOW_DIALOG";
+export const LOG_OUT = "LOG_OUT";
 
 export const toggleSidebar = () => ({
   type: TOGGLE_SIDEBAR,
@@ -54,4 +55,8 @@ export const confirmUnfollowDialog = (payload) => ({
 
 export const closeUnfollowDialog = () => ({
   type: CLOSE_UNFOLLOW_DIALOG,
+});
+
+export const logOut = () => ({
+  type: LOG_OUT,
 });

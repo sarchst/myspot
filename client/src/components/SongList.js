@@ -81,7 +81,6 @@ class SongList extends React.Component {
 
     // get playlist name and desc from Spotify API if can't retrieve from Link props
     if (!this.state.name) {
-      console.log("songlist got playlist details from Spotify API instead");
       spotifyWebApi.getPlaylist(this.props.match.params.playlistid).then(
         (data) => {
           console.log("Playlist data", data);
@@ -91,7 +90,7 @@ class SongList extends React.Component {
           });
         },
         function (err) {
-          console.error(err);
+          console.error("error fetching list of songs from Spotify API", err);
         }
       );
     }

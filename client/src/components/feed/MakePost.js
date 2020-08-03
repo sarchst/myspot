@@ -55,8 +55,6 @@ class MakePost extends React.Component {
   };
 
   componentDidMount = () => {
-    console.log("makepost this, ", this);
-    console.log(this.constructor.name);
     // // TODO STILL NEED componentDidMount to get playlists and set state mediaOptions
   };
 
@@ -99,12 +97,6 @@ class MakePost extends React.Component {
 
   render() {
     if (!this.isRenderedFromOtherUserProfile()) {
-      console.log(
-        "makepost parent",
-        this.props.parentComponentType === "Profile"
-      );
-      console.log("makepost selUser", this.props.selectedUser);
-      console.log("makepost currUser", this.props.user);
       const { classes } = this.props;
       return (
         <div className={classes.root}>

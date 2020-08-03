@@ -27,7 +27,6 @@ class FollowTable extends React.Component {
 
   fetchFollowPeople = () => {
     const type = this.props.type;
-    console.log("props in follow table is ", this.props);
     fetch(`http://localhost:9000/user/${type}/${this.props.selectedUser._id}`)
       .then((res) => res.json())
       .then((res) => {

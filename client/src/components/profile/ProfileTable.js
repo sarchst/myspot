@@ -40,13 +40,8 @@ class ProfileTable extends React.Component {
     spotifyWebApi.setAccessToken(this.props.spotifyApi.accessToken);
   }
 
-  componentDidMount = () => {
-    console.log("profile table props", this.props);
-  };
-
   componentDidUpdate(prevProps, prevState, snapshot) {
     // update state playlists when tab is clicked for the first time for selectedUser
-    // conso
     if (
       this.isTabIndexUpdatedToZero(prevState) &&
       (!this.state.playlists.length || this.isSelectedUserUpdated(prevProps))
@@ -56,12 +51,6 @@ class ProfileTable extends React.Component {
 
     // collapse profile table and wipe state playlists when selectedUser updates
     if (this.isSelectedUserUpdated(prevProps)) {
-      console.log("prev seluser", prevProps.selectedUser);
-      console.log("curr seluser", this.props.selectedUser);
-      console.log(
-        "check selected user updated in profile table",
-        prevProps.selectedUser === this.props.selectedUser
-      );
       this.setState({
         tabIndex: false,
         playlists: [],
@@ -104,7 +93,10 @@ class ProfileTable extends React.Component {
         });
       })
       .catch((err) => {
-        console.log("Error getting top tracks: ", err);
+        console.log(
+          "Error getting selected user's playlists from Spotify API: ",
+          err
+        );
       });
   };
 

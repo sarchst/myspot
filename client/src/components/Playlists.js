@@ -72,15 +72,8 @@ class Playlists extends React.Component {
   }
 
   componentDidMount() {
-    console.log("playlists props", this.props);
     const userID = this.props.match.params.user;
-    // get userplaylists from hash params
-    // let user_ID;
-    // if (this.props.location.state) {
-    //   user_ID = this.props.location.state.user_ID;
-    // } else {
-    //   user_ID = this.props.loggedInUserId;
-    // }
+    // identify user with React Router match.params instead because of race conditions with Redux store updating
     spotifyWebApi.getUserPlaylists(userID).then(
       (data) => {
         console.log("User playlists", data);
@@ -90,13 +83,12 @@ class Playlists extends React.Component {
         });
       },
       function (err) {
-        console.error(err);
+        console.error("Failed to fetch playlists for match params user", err);
       }
     );
   }
 
   render() {
-    // TODO: change user to selectedUser
     const { classes } = this.props;
     return (
       <React.Fragment>

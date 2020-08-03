@@ -12,7 +12,6 @@ import {
   setCurrentUser,
   submitSpotifyApiUserMe,
 } from "./app/actions/userActions";
-// import { fetchSelectedUser } from "./app/actions/selectedUserActions";
 import { setPlayListIDs } from "./app/actions/playlistActions";
 
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
@@ -96,7 +95,6 @@ class App extends React.Component {
 
     if (params.access_token) {
       spotifyWebApi.setAccessToken(params.access_token);
-      console.log("LOGGING IN: SENDING SPOTIFYWEBAPI TO REDUX STORE");
       let userObject = {};
       // Pass refresh token as well for further use if a new access token is needed
       this.props.registerSpotifyApi(params);
@@ -120,12 +118,10 @@ class App extends React.Component {
           0,
           Math.min(recentTracks.items.length, 3)
         );
-        // set logged in user as initial selectedUser
-        // this.props.fetchSelectedUser(userObject.id);
         // dispatch updated spotify info to db
-        // then assign db user as current user in redux
+        // then store db response as current user and as initial selectedUser in redux
         this.props.submitSpotifyApiUserMe(userObject);
-        // set URIs for MySpot and MySpot-Tinderify playlists
+        // fetch and store URIs for MySpot and MySpot-Tinderify playlists in redux
         this.props.setPlayListIDs(spotifyMe.id, params.access_token);
       });
     }
@@ -178,7 +174,6 @@ const mapDispatchToProps = (dispatch) => {
     setCurrentUser: (id, username) => dispatch(setCurrentUser(id, username)),
     registerSpotifyApi: (spotifyApi) =>
       dispatch(registerSpotifyApi(spotifyApi)),
-    // fetchSelectedUser: (id) => dispatch(fetchSelectedUser(id)),
     submitSpotifyApiUserMe: (spotifyUserMe) =>
       dispatch(submitSpotifyApiUserMe(spotifyUserMe)),
     setPlayListIDs: (UserMeID, spotifyToken) =>

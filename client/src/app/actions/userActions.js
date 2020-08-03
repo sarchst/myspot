@@ -1,7 +1,6 @@
 import { setSelectedUser } from "./selectedUserActions";
 
 export const SET_CURRENT_USER = "SET_CURRENT_USER";
-export const LOG_OUT = "LOG_OUT";
 
 export const setCurrentUser = (payload) => ({
   type: SET_CURRENT_USER,
@@ -31,18 +30,12 @@ export const submitSpotifyApiUserMe = (SpotifyApiUserInfoMe) => {
     })
       .then((res) =>
         res.json().then((response) => {
-          console.log("response  in useractions", response);
           dispatch(setSelectedUser(response.User));
           dispatch(setCurrentUser(response.User));
         })
       )
       .catch((err) => {
-        console.log("user update error from spotifyAPIActions");
-        console.log(err);
+        console.log("user update error from spotifyAPIActions", err);
       });
   };
 };
-
-export const logOut = () => ({
-  type: LOG_OUT,
-});

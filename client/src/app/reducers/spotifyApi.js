@@ -1,4 +1,5 @@
 import { SPOTIFY_WEB_API } from "../actions/spotifyApiActions";
+import { LOG_OUT } from "../actions";
 // import { SPOTIFY_USER_ME } from "../actions/spotifyApiActions";
 
 const initialState = {
@@ -20,6 +21,8 @@ export const spotifyWebApi = (state = initialState, action) => {
     //     ...state,
     //     user: action.payload,
     //   };
+    case LOG_OUT:
+      return initialState;
     default:
       return state;
   }
