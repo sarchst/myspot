@@ -77,9 +77,12 @@ class Profile extends React.Component {
         hasMore: true,
       });
     }
-    // check if filter has been changed
+    // check if filter has been changed or selectedUser has changed
     const { match } = this.props;
-    if (this.props.filter !== prevProps.filter) {
+    if (
+      this.props.filter !== prevProps.filter ||
+      prevProps.selectedUser.username !== this.props.selectedUser.username
+    ) {
       // get posts from selectedUser if possible, else get from db
       this.props.fetchPostsWithFilter(match.params.user, this.props.filter);
     }
