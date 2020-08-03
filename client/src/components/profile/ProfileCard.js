@@ -18,6 +18,7 @@ import PlayCircleOutlineIcon from "@material-ui/icons/PlayCircleOutline";
 import MusicOffOutlinedIcon from "@material-ui/icons/MusicOffOutlined";
 import Emoji from "react-emoji-render";
 import Typography from "@material-ui/core/Typography";
+import FollowButton from "../follow/FollowButton";
 
 const styles = (theme) => ({
   card: {
@@ -85,7 +86,6 @@ class ProfileCard extends React.Component {
       topTracks: [],
       recentTracks: [],
       songUri: "",
-      userData: {},
     };
     spotifyWebApi.setAccessToken(this.props.spotifyApi.accessToken);
   }
@@ -97,7 +97,7 @@ class ProfileCard extends React.Component {
   };
 
   render() {
-    const { classes } = this.props;
+    const { classes, selectedUser } = this.props;
 
     return (
       <Card
@@ -107,17 +107,16 @@ class ProfileCard extends React.Component {
         <CardContent className={classes.profileCardBox}>
           <Avatar
             className={classes.avatar}
-            src={this.props.selectedUser.profilePic || ""}
+            src={selectedUser.profilePic || ""}
           />
-          <h3 className={classes.heading}>
-            {this.props.selectedUser.username || ""}
-          </h3>
+          <h3 className={classes.heading}>{selectedUser.username || ""}</h3>
           <span className={classes.subheader}>
             <Emoji text=":globe_showing_americas:" />
             {/* unfortunately it seems like emoji flags aren't supported for windows10 so can only see it on mac */}
             <Emoji text=":flag_canada:" />
             <Emoji text=":globe_showing_americas:" />
           </span>
+          <FollowButton />
         </CardContent>
         <Divider light />
         <Box display={"flex"}>
@@ -129,9 +128,7 @@ class ProfileCard extends React.Component {
           >
             <Typography className={classes.statLabel}>Followers</Typography>
             <p className={classes.statValue}>
-              {this.props.selectedUser.followers
-                ? this.props.selectedUser.followers.length
-                : 0}
+              {selectedUser.followers ? selectedUser.followers.length : 0}
             </p>
           </Box>
           <Divider orientation="vertical" flexItem />
@@ -143,9 +140,7 @@ class ProfileCard extends React.Component {
           >
             <Typography className={classes.statLabel}>Following</Typography>
             <p className={classes.statValue}>
-              {this.props.selectedUser.following
-                ? this.props.selectedUser.following.length
-                : 0}
+              {selectedUser.following ? selectedUser.following.length : 0}
             </p>
           </Box>
         </Box>
@@ -171,8 +166,8 @@ class ProfileCard extends React.Component {
                 </ListSubheader>
               }
             >
-              {this.props.selectedUser.topTracks
-                ? this.props.selectedUser.topTracks.map((track, idx) => {
+              {selectedUser.topTracks
+                ? selectedUser.topTracks.map((track, idx) => {
                     const isPlaybackAvailable = track.preview_url
                       ? true
                       : false;
@@ -241,8 +236,8 @@ class ProfileCard extends React.Component {
                 </ListSubheader>
               }
             >
-              {this.props.selectedUser.recentTracks
-                ? this.props.selectedUser.recentTracks.map((item, idx) => {
+              {selectedUser.recentTracks
+                ? selectedUser.recentTracks.map((item, idx) => {
                     const isPlaybackAvailable = item.track.preview_url
                       ? true
                       : false;
