@@ -87,6 +87,7 @@ class MakePost extends React.Component {
       case "playlist": {
         spotifyWebApi.getUserPlaylists(this.props.user.id).then(
           (data) => {
+            console.log("playlist: ", data.items);
             const playlistOptions = this.getOptions(type, data.items);
             this.setState({
               mediaOptions: playlistOptions,
@@ -102,6 +103,7 @@ class MakePost extends React.Component {
       case "album": {
         spotifyWebApi.getMySavedAlbums().then(
           (data) => {
+            console.log("albums: ", data.items);
             const albumOptions = this.getOptions(type, data.items);
             this.setState({
               mediaOptions: albumOptions,
@@ -117,6 +119,7 @@ class MakePost extends React.Component {
       case "track": {
         spotifyWebApi.getMySavedTracks().then(
           (data) => {
+            console.log("tracks: ", data.items);
             const trackOptions = this.getOptions(type, data.items);
             this.setState({
               mediaOptions: trackOptions,
@@ -141,6 +144,7 @@ class MakePost extends React.Component {
         return {
           _id: mo.id,
           name: mo.name,
+          spotifyLink: mo.external_urls.spotify,
         };
       });
     } else {
@@ -148,30 +152,12 @@ class MakePost extends React.Component {
         return {
           _id: mo[type].id,
           name: mo[type].name,
+          spotifyLink: mo[type].external_urls.spotify,
+          artist: mo[type].artists[0].name,
         };
       });
     }
   };
-
-  // getOptions = (type, mediaOptions) => {
-  //   if (this.state.type === "playlist") {
-  //     return mediaOptions.map((mo) => {
-  //       return (
-  //         <MenuItem key={mo.id} value={mo.id}>
-  //           {mo.name}
-  //         </MenuItem>
-  //       );
-  //     });
-  //   } else {
-  //     return mediaOptions.map((mo) => {
-  //       return (
-  //         <MenuItem key={mo[type].id} value={mo[type].id}>
-  //           {mo[type].name}
-  //         </MenuItem>
-  //       );
-  //     });
-  //   }
-  // };
 
   handleMediaSelect = (e, value) => {
     if (value) {
@@ -208,11 +194,8 @@ class MakePost extends React.Component {
     );
     this.setState({
       content: "",
-      media: null,
-      type: "playlist",
     });
-    this.handleTypeSelect("", "playlist"); // dummy even as first param
-    console.log(this.state);
+    this.handleTypeSelect("", "playlist"); // dummy event as first param
   };
 
   capitalizeFirstLetter = (string) => {
@@ -264,14 +247,6 @@ class MakePost extends React.Component {
             </Grid>
             <Grid item xs={8}>
               <FormControl style={{ minWidth: 300 }}>
-                {/* <InputLabel id="media">Media</InputLabel> */}
-                {/* <Select
-                  // native
-                  value={this.state.media}
-                  onChange={this.handleMediaSelect}
-                >
-                  {this.state.mediaOptions}
-                </Select> */}
                 <Autocomplete
                   options={this.state.mediaOptions}
                   getOptionLabel={(option) => option.name}

@@ -59,7 +59,6 @@ export function addPostsToPosts(data) {
 // };
 
 export const makePost = (post, profileFeedFilter, feedFilter) => {
-  console.log("Post from actions: ", post);
   const id = post.authorId;
   return (dispatch) => {
     return axios
