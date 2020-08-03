@@ -3,7 +3,7 @@ import clsx from "clsx";
 // import Post from "./Post";
 import Playlists from "./Playlists";
 import Albums from "./Albums";
-import Tinderify from "./Tinderify";
+import Tinderify from "./tinderify/Tinderify";
 import Favourites from "./Favourites";
 import Drawer from "@material-ui/core/Drawer";
 import List from "@material-ui/core/List";
@@ -32,7 +32,7 @@ import contentType from "../data/ContentTypeEnum";
 
 import { Link, Route, Switch, Redirect } from "react-router-dom";
 
-import FollowTable from "./FollowTable";
+import FollowTable from "./follow/FollowTable";
 import NowPlaying from "./NowPlaying";
 import Profile from "./profile/Profile";
 import Feed from "./feed/Feed";

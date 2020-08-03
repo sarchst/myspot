@@ -29,7 +29,7 @@ router.get("/user/profilepic/:id", UserContrl.getProfilePic);
 router.get("/user/followers/:id", UserContrl.getFollowers);
 router.get("/user/following/:id", UserContrl.getFollowing);
 
-//router.put("/user/following/:id", UserContrl.addFollowFollowingRelationship);
+router.put("/user/following/:id", UserContrl.updateFollowRelationship);
 // router.delete(
 //   "/user/following/:id",
 //   UserContrl.removeFollowingFollowerRelationship
