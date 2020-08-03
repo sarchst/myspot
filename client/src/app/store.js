@@ -9,7 +9,7 @@ const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const persistConfig = {
   key: "userSpotifyApi",
   storage: storage,
-  whitelist: ["user", "spotifyApi"],
+  whitelist: ["user", "spotifyApi", "mySpotPlaylists"],
 };
 
 const persReducer = persistReducer(persistConfig, allReducers);

@@ -129,7 +129,9 @@ class Playlists extends React.Component {
                     <CardMedia
                       className={classes.cardMedia}
                       image={
-                        playlist.images.length > 0 ? playlist.images[0].url : ""
+                        playlist.images.length > 0
+                          ? playlist.images[0].url
+                          : null
                       }
                       title="Image title"
                     />
@@ -138,6 +140,7 @@ class Playlists extends React.Component {
                         {playlist.name}
                       </Typography>
                       {/* todo: (Sarchen) fix element tags in description */}
+                      {console.log("plyalists")}
                       <Typography>{playlist.description}</Typography>
                     </CardContent>
                     <CardActions>
