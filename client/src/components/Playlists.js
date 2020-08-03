@@ -66,22 +66,27 @@ class Playlists extends React.Component {
     super(props);
     this.state = {
       usersPlaylists: [],
+      userID: "",
     };
     spotifyWebApi.setAccessToken(this.props.spotifyApi.accessToken);
   }
 
   componentDidMount() {
-    let user_ID;
-    if (this.props.location.state) {
-      user_ID = this.props.location.state.user_ID;
-    } else {
-      user_ID = this.props.loggedInUserId;
-    }
-    spotifyWebApi.getUserPlaylists(user_ID).then(
+    console.log("playlists props", this.props);
+    const userID = this.props.match.params.user;
+    // get userplaylists from hash params
+    // let user_ID;
+    // if (this.props.location.state) {
+    //   user_ID = this.props.location.state.user_ID;
+    // } else {
+    //   user_ID = this.props.loggedInUserId;
+    // }
+    spotifyWebApi.getUserPlaylists(userID).then(
       (data) => {
         console.log("User playlists", data);
         this.setState({
           usersPlaylists: data.items,
+          userID: userID,
         });
       },
       function (err) {
@@ -91,7 +96,8 @@ class Playlists extends React.Component {
   }
 
   render() {
-    const { classes, user } = this.props;
+    // TODO: change user to selectedUser
+    const { classes } = this.props;
     return (
       <React.Fragment>
         <CssBaseline />
@@ -140,12 +146,14 @@ class Playlists extends React.Component {
                         {playlist.name}
                       </Typography>
                       {/* todo: (Sarchen) fix element tags in description */}
-                      {console.log("plyalists")}
                       <Typography>{playlist.description}</Typography>
                     </CardContent>
                     <CardActions>
                       <Link
-                        to={"/" + user.username + "/playlists/" + playlist.id}
+                        // TODO: change user to selectedUser._id
+                        to={
+                          "/" + this.state.userID + "/playlists/" + playlist.id
+                        }
                       >
                         <Button size="small" color="secondary">
                           View Songs

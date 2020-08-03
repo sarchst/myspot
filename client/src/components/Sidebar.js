@@ -228,13 +228,7 @@ class Sidebar extends React.Component {
             <Route path="/:user/albums" exact component={Albums} />
             <Route path="/:user/tinderify" exact component={Tinderify} />
             <Route path="/:user/favourites" exact component={Favourites} />
-            <Route
-              path="/:user/playlists"
-              exact
-              component={(props) => (
-                <Playlists {...props} loggedInUserId={this.props.user.id} />
-              )}
-            />
+            <Route path="/:user/playlists" exact component={Playlists} />
             <Route
               path="/myspotter/:user/playlists"
               exact
