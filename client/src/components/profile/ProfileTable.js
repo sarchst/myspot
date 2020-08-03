@@ -56,6 +56,12 @@ class ProfileTable extends React.Component {
 
     // collapse profile table and wipe state playlists when selectedUser updates
     if (this.isSelectedUserUpdated(prevProps)) {
+      console.log("prev seluser", prevProps.selectedUser);
+      console.log("curr seluser", this.props.selectedUser);
+      console.log(
+        "check selected user updated in profile table",
+        prevProps.selectedUser === this.props.selectedUser
+      );
       this.setState({
         tabIndex: false,
         playlists: [],
@@ -70,7 +76,7 @@ class ProfileTable extends React.Component {
     !(
       prevProps.selectedUser &&
       this.props.selectedUser &&
-      prevProps.selectedUser === this.props.selectedUser
+      prevProps.selectedUser._id === this.props.selectedUser._id
     );
 
   transformPlaylistData = (data) => {

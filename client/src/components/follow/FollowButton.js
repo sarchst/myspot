@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import axios from "axios";
 
 import { confirmUnfollowDialog } from "../../app/actions";
-import { fetchSelectedUser } from "../../app/actions/selectedUserActions";
+import { setSelectedUser } from "../../app/actions/selectedUserActions";
 
 import { Button } from "@material-ui/core";
 import PersonAddIcon from "@material-ui/icons/PersonAdd";
@@ -25,7 +25,7 @@ class FollowButton extends React.Component {
           remove: false,
         })
         .then((res) => {
-          // this.props.fetchSelectedUser(res.data.data);
+          this.props.setSelectedUser(res.data.data);
         })
         .catch((error) => {
           throw error;
@@ -46,7 +46,7 @@ class FollowButton extends React.Component {
         remove: true,
       })
       .then((res) => {
-        // this.props.fetchSelectedUser(res.data.data);
+        this.props.setSelectedUser(res.data.data);
       })
       .catch((error) => {
         throw error;
@@ -103,7 +103,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = {
   confirmUnfollowDialog,
-  fetchSelectedUser,
+  setSelectedUser,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(FollowButton);
