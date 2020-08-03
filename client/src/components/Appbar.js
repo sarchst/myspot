@@ -114,13 +114,8 @@ class Appbar extends React.Component {
           >
             <Button color="inherit">{contentType.FEED}</Button>
           </Link>
-          <Link to={"/"}>
-            {" "}
-            <Button
-              className={classes.appbarButton}
-              color="inherit"
-              onClick={this.logOut}
-            >
+          <Link to={"/"} className={classes.appbarButton}>
+            <Button color="inherit" onClick={this.logOut}>
               Log Out
             </Button>
           </Link>
