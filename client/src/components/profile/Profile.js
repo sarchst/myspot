@@ -110,7 +110,7 @@ class Profile extends React.Component {
         <DeletePostDialog />
         <ProfileCard />
         <ProfileTable />
-        <MakePost />
+        <MakePost parentComponentType={this.constructor.name} />
         <Grid container justify="flex-end">
           <FilterPosts page="PROFILE" />
         </Grid>
