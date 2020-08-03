@@ -3,7 +3,7 @@ import clsx from "clsx";
 // import Post from "./Post";
 import Playlists from "./Playlists";
 import Albums from "./Albums";
-import Tinderify from "./Tinderify";
+import Tinderify from "./tinderify/Tinderify";
 import Favourites from "./Favourites";
 import Drawer from "@material-ui/core/Drawer";
 import List from "@material-ui/core/List";
