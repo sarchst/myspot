@@ -200,7 +200,32 @@ class Post extends Component {
 
   addPostMedia = (type, media) => {
     if (type === "playlist") {
-      // ADD playlist to spotify
+      spotifyWebApi
+        .areFollowingPlaylist([media._id], [this.props.user.id])
+        .then((res) => {
+          if (res[0]) {
+            return false;
+          } else {
+            return spotifyWebApi.followPlaylist(media._id);
+          }
+        })
+        .then((res) => {
+          if (res === "") {
+            this.setState({
+              successSnackOpen: true,
+            });
+          } else {
+            this.setState({
+              containsSnackOpen: true,
+            });
+          }
+        })
+        .catch((err) => {
+          this.setState({
+            errorSnackOpen: true,
+          });
+          console.log("error adding song to MySpot playlist: ", err);
+        });
     } else if (type === "album") {
       spotifyWebApi
         .containsMySavedAlbums([media._id])
@@ -315,7 +340,12 @@ class Post extends Component {
 
   getAlertMessage = (postdata) => {
     if (postdata.type === "playlist") {
-      return postdata.media.name + " playlist added to your Spotify";
+      return (
+        postdata.media.name +
+        " - " +
+        postdata.media.ownerUsername +
+        " playlist added to your Spotify"
+      );
     } else if (postdata.type === "track") {
       return (
         postdata.media.name +
