@@ -79,7 +79,7 @@ class MakePost extends React.Component {
     this.setState({ content: e.target.value });
   };
 
-  handleTypeSelect = (event, type) => {
+  handleTypeSelect = async (event, type) => {
     if (type !== null) {
       this.setState({ type: type });
     }
@@ -87,7 +87,6 @@ class MakePost extends React.Component {
       case "playlist": {
         spotifyWebApi.getUserPlaylists(this.props.user.id).then(
           (data) => {
-            console.log("playlist: ", data.items);
             const playlistOptions = this.getOptions(type, data.items);
             this.setState({
               mediaOptions: playlistOptions,
@@ -103,7 +102,6 @@ class MakePost extends React.Component {
       case "album": {
         spotifyWebApi.getMySavedAlbums().then(
           (data) => {
-            console.log("albums: ", data.items);
             const albumOptions = this.getOptions(type, data.items);
             this.setState({
               mediaOptions: albumOptions,
@@ -117,19 +115,25 @@ class MakePost extends React.Component {
         break;
       }
       case "track": {
-        spotifyWebApi.getMySavedTracks().then(
-          (data) => {
-            console.log("tracks: ", data.items);
-            const trackOptions = this.getOptions(type, data.items);
-            this.setState({
-              mediaOptions: trackOptions,
-              media: null,
-            });
-          },
-          function (err) {
-            console.error(err);
-          }
-        );
+        let allTracks = [];
+        let offset = 0;
+        let tracks = await spotifyWebApi.getMySavedTracks({
+          limit: 50,
+          offset: offset,
+        });
+        while (tracks.items.length !== 0) {
+          allTracks.push(...tracks.items);
+          offset += 50;
+          tracks = await spotifyWebApi.getMySavedTracks({
+            limit: 50,
+            offset: offset,
+          });
+        }
+        const trackOptions = this.getOptions(type, allTracks);
+        this.setState({
+          mediaOptions: trackOptions,
+          media: null,
+        });
         break;
       }
       default: {
@@ -178,6 +182,7 @@ class MakePost extends React.Component {
   };
 
   handleSubmitPost = () => {
+    if (this.state.medsi === null || this.state.content === "") return;
     const postObj = {
       username: this.props.user.username,
       authorId: this.props.user.id, // user id, ref to user schema

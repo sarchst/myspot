@@ -10,7 +10,7 @@ import {
   closeEditPostDialog,
 } from "../../app/actions/index";
 import { editPost } from "../../app/actions/postActions";
-import {TextField } from "@material-ui/core";
+import { TextField } from "@material-ui/core";
 
 class EditPostDialog extends React.Component {
   state = {
@@ -18,13 +18,16 @@ class EditPostDialog extends React.Component {
   };
 
   handleConfirm = () => {
-    console.log("new msg is", this.state.editedContent);
     const body = {
       postId: this.props.editPostDialog.postId,
       content: this.state.editedContent,
     };
-    console.log(body);
-    this.props.editPost(this.props.user.id, body, this.props.profileFeedFilter, this.props.feedFilter);
+    this.props.editPost(
+      this.props.user.id,
+      body,
+      this.props.profileFeedFilter,
+      this.props.feedFilter
+    );
     this.props.closeEditPostDialog();
   };
   handleCancel = () => {

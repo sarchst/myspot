@@ -50,7 +50,6 @@ class PostComment extends React.Component {
       this.props.profileFeedFilter,
       this.props.feedFilter
     );
-    console.log("Delete comment!");
   };
 
   render() {
