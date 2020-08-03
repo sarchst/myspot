@@ -11,7 +11,7 @@ export const fetchSelectedUser = (userID) => {
         dispatch(setSelectedUser(res.data));
       })
       .catch((error) => {
-        console.log("error fetching db user", error);
+        console.error("Failed to fetch db user", error);
       });
   };
 };

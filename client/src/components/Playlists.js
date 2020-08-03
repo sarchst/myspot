@@ -66,31 +66,29 @@ class Playlists extends React.Component {
     super(props);
     this.state = {
       usersPlaylists: [],
+      userID: "",
     };
     spotifyWebApi.setAccessToken(this.props.spotifyApi.accessToken);
   }
 
   componentDidMount() {
-    let user_ID;
-    if (this.props.location.state) {
-      user_ID = this.props.location.state.user_ID;
-    } else {
-      user_ID = this.props.loggedInUserId;
-    }
-    spotifyWebApi.getUserPlaylists(user_ID).then(
+    const userID = this.props.match.params.user;
+    // identify user with React Router match.params instead because of race conditions with Redux store updating
+    spotifyWebApi.getUserPlaylists(userID).then(
       (data) => {
         this.setState({
           usersPlaylists: data.items,
+          userID: userID,
         });
       },
       function (err) {
-        console.error(err);
+        console.error("Failed to fetch playlists for match params user", err);
       }
     );
   }
 
   render() {
-    const { classes, user } = this.props;
+    const { classes } = this.props;
     return (
       <React.Fragment>
         <CssBaseline />
@@ -105,6 +103,9 @@ class Playlists extends React.Component {
                 color="textPrimary"
                 gutterBottom
               >
+                {this.props.match.params.user === this.props.user.id
+                  ? "My"
+                  : `${this.props.selectedUser.username}'s`}{" "}
                 Playlists
               </Typography>
               {/* <Typography
@@ -143,7 +144,17 @@ class Playlists extends React.Component {
                     </CardContent>
                     <CardActions>
                       <Link
-                        to={"/" + user.username + "/playlists/" + playlist.id}
+                        // TODO: change user to selectedUser._id
+                        // to={
+                        //   "/" + this.state.userID + "/playlists/" + playlist.id
+                        // }
+                        to={{
+                          pathname: `/${this.state.userID}/playlists/${playlist.id}`,
+                          state: {
+                            playlistName: playlist.name,
+                            playlistDescription: playlist.description,
+                          },
+                        }}
                       >
                         <Button size="small" color="secondary">
                           View Songs
@@ -165,6 +176,7 @@ const mapStateToProps = (state) => {
   return {
     spotifyApi: state.spotifyApi,
     user: state.user,
+    selectedUser: state.selectedUser,
   };
 };
 

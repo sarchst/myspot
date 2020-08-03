@@ -34,10 +34,10 @@ createUser = (req, res) => {
 // updateUser updates user if they exist in the db
 // else create new user with req.body
 updateUser = async (req, res) => {
-  console.log("calling updateUser in user-controller");
-
-  console.log(req.body.recentTracks.length);
-  console.log(req.body.topTracks.length);
+  // console.log("calling updateUser in user-controller");
+  //
+  // console.log(req.body.recentTracks.length);
+  // console.log(req.body.topTracks.length);
   const body = req.body;
   if (!body) {
     return res.status(400).json({
@@ -45,7 +45,7 @@ updateUser = async (req, res) => {
       error: "You must provide a body to update",
     });
   }
-  console.log("inside user-controller");
+  // console.log("inside user-controller");
   User.findByIdAndUpdate(
     req.body._id,
     req.body,

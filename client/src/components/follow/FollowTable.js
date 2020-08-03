@@ -22,8 +22,12 @@ class FollowTable extends React.Component {
     followList: [],
   };
   componentDidMount = () => {
+    this.fetchFollowPeople();
+  };
+
+  fetchFollowPeople = () => {
     const type = this.props.type;
-    fetch(`http://localhost:9000/user/${type}/${this.props.user.id}`)
+    fetch(`http://localhost:9000/user/${type}/${this.props.selectedUser._id}`)
       .then((res) => res.json())
       .then((res) => {
         if (res.error) {
