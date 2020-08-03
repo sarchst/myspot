@@ -288,6 +288,7 @@ const mapStateToProps = (state) => ({
   spotifyApi: state.spotifyApi,
   profileFeedFilter: state.profileFeed.filter,
   feedFilter: state.feed.filter,
+  selectedUser: state.selectedUser,
 });
 
 const mapDispatchToProps = {

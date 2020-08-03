@@ -7,12 +7,11 @@ import Sidebar from "./components/Sidebar";
 import Appbar from "./components/Appbar";
 import Login from "./components/Login";
 import ScrollToTop from "./components/ScrollToTop";
+import { registerSpotifyApi } from "./app/actions/spotifyApiActions";
 import {
-  registerSpotifyApi,
+  setCurrentUser,
   submitSpotifyApiUserMe,
-} from "./app/actions/spotifyApiActions";
-import { setCurrentUser } from "./app/actions/userActions";
-import { fetchSelectedUser } from "./app/actions/selectedUserActions";
+} from "./app/actions/userActions";
 import { setPlayListIDs } from "./app/actions/playlistActions";
 
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
@@ -119,15 +118,11 @@ class App extends React.Component {
           0,
           Math.min(recentTracks.items.length, 3)
         );
-        // set logged in user as initial selectedUser
-        this.props.fetchSelectedUser(userObject.id);
-        // dispatch updates spotify info in db
-        // TODO: replace redux action with db call instead?
+        // dispatch updated spotify info to db
+        // then store db response as current user and as initial selectedUser in redux
         this.props.submitSpotifyApiUserMe(userObject);
-        // set URIs for MySpot and MySpot-Tinderify playlists
+        // fetch and store URIs for MySpot and MySpot-Tinderify playlists in redux
         this.props.setPlayListIDs(spotifyMe.id, params.access_token);
-        // set current user in redux
-        this.props.setCurrentUser(userObject.id, userObject.display_name);
       });
     }
   }
@@ -179,7 +174,6 @@ const mapDispatchToProps = (dispatch) => {
     setCurrentUser: (id, username) => dispatch(setCurrentUser(id, username)),
     registerSpotifyApi: (spotifyApi) =>
       dispatch(registerSpotifyApi(spotifyApi)),
-    fetchSelectedUser: (id) => dispatch(fetchSelectedUser(id)),
     submitSpotifyApiUserMe: (spotifyUserMe) =>
       dispatch(submitSpotifyApiUserMe(spotifyUserMe)),
     setPlayListIDs: (UserMeID, spotifyToken) =>

@@ -73,8 +73,10 @@ class SongList extends React.Component {
     super(props);
     this.state = {
       tracks: [],
-      name: "",
-      description: "",
+      name: this.props.location ? this.props.location.state.playlistName : "",
+      description: this.props.location
+        ? this.props.location.state.playlistDescription
+        : "",
       songlistType: "",
       albumImage: "",
       successSnackOpen: false,
@@ -100,18 +102,20 @@ class SongList extends React.Component {
           console.error(err);
         }
       );
-
-      spotifyWebApi.getPlaylist(this.props.match.params.playlistid).then(
-        (data) => {
-          this.setState({
-            name: data.name,
-            description: data.description,
-          });
-        },
-        function (err) {
-          console.error(err);
-        }
-      );
+      // get playlist name and desc from Spotify API if can't retrieve from Link props
+      if (!this.state.name) {
+        spotifyWebApi.getPlaylist(this.props.match.params.playlistid).then(
+            (data) => {
+              this.setState({
+                name: data.name,
+                description: data.description,
+              });
+            },
+            function (err) {
+              console.error(err);
+            }
+        );
+      }
     } else if ("albumid" in this.props.match.params) {
       // get album songs
       spotifyWebApi.getAlbumTracks(this.props.match.params.albumid).then(
@@ -220,11 +224,11 @@ class SongList extends React.Component {
     return (
       <div>
         {this.state.songlistType === "playlist" ? (
-          <Link to={"/" + this.props.user.username + "/playlists"}>
+          <Link to={"/" + this.props.match.params.user + "/playlists"}>
             Go Back
           </Link>
         ) : (
-          <Link to={"/" + this.props.user.username + "/albums"}>Go Back</Link>
+          <Link to={"/" + this.props.match.params.user + "/albums"}>Go Back</Link>
         )}
         <CssBaseline>
           <div className={classes.heroContent}>

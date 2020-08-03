@@ -9,8 +9,7 @@ import MenuIcon from "@material-ui/icons/Menu";
 import Button from "@material-ui/core/Button";
 import SettingsIcon from "@material-ui/icons/Settings";
 import { withStyles } from "@material-ui/core";
-import { toggleSidebar } from "../app/actions";
-import { logOut } from "../app/actions/userActions";
+import { logOut, toggleSidebar } from "../app/actions";
 import contentType from "../data/ContentTypeEnum";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
@@ -115,14 +114,12 @@ class Appbar extends React.Component {
           >
             <Button color="inherit">{contentType.FEED}</Button>
           </Link>
+          <Link to={"/"} className={classes.appbarButton}>
+            <Button color="inherit" onClick={this.logOut}>
+              Log Out
+            </Button>
+          </Link>
 
-          <Button
-            className={classes.appbarButton}
-            color="inherit"
-            onClick={this.logOut}
-          >
-            Logout
-          </Button>
           <Link
             to={"/" + this.props.user.username + "/settings"}
             className={classes.appbarButton}
@@ -144,12 +141,10 @@ const mapStateToProps = (state) => {
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    toggleSidebar: () => dispatch(toggleSidebar()),
-    logOut: () => dispatch(logOut()),
-    fetchSelectedUser: (userID) => dispatch(fetchSelectedUser(userID)),
-  };
+const mapDispatchToProps = {
+  toggleSidebar,
+  logOut,
+  fetchSelectedUser,
 };
 
 export default connect(
