@@ -1,5 +1,5 @@
 import React from "react";
-// import { Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import Spotify from "spotify-web-api-js";
 import { CssBaseline } from "@material-ui/core";
@@ -11,8 +11,15 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import Avatar from "@material-ui/core/Avatar";
 import ListItemText from "@material-ui/core/ListItemText";
+import IconButton from "@material-ui/core/IconButton";
+import Tooltip from "@material-ui/core/Tooltip";
+import FavoriteIcon from "@material-ui/icons/Favorite";
+import Snackbar from "@material-ui/core/Snackbar";
+import MuiAlert from "@material-ui/lab/Alert";
 
-const spotifyWebApi = new Spotify();
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
 const styles = (theme) => ({
   listItemText: {
@@ -51,7 +58,15 @@ const styles = (theme) => ({
     backgroundColor: theme.palette.background.paper,
     padding: theme.spacing(0),
   },
+  root: {
+    width: "100%",
+    "& > * + *": {
+      marginTop: theme.spacing(2),
+    },
+  },
 });
+
+const spotifyWebApi = new Spotify();
 
 class SongList extends React.Component {
   constructor(props) {
@@ -62,45 +77,159 @@ class SongList extends React.Component {
       description: this.props.location
         ? this.props.location.state.playlistDescription
         : "",
+      songlistType: "",
+      albumImage: "",
+      successSnackOpen: false,
+      errorSnackOpen: false,
     };
     spotifyWebApi.setAccessToken(this.props.spotifyApi.accessToken);
   }
 
   componentDidMount() {
-    spotifyWebApi.getPlaylistTracks(this.props.match.params.playlistid).then(
-      (data) => {
-        console.log("Songs in playlist", data);
-        this.setState({
-          tracks: data.items,
-        });
-      },
-      function (err) {
-        console.error(err);
-      }
-    );
-
-    // get playlist name and desc from Spotify API if can't retrieve from Link props
-    if (!this.state.name) {
-      spotifyWebApi.getPlaylist(this.props.match.params.playlistid).then(
+    if ("playlistid" in this.props.match.params) {
+      // get playlist songs
+      spotifyWebApi.getPlaylistTracks(this.props.match.params.playlistid).then(
         (data) => {
-          console.log("Playlist data", data);
           this.setState({
-            name: data.name,
-            description: data.description,
+            songlistType: "playlist",
+          });
+          const tracks = this.organizeTrackData(data.items);
+          this.setState({
+            tracks: tracks,
           });
         },
         function (err) {
-          console.error("error fetching list of songs from Spotify API", err);
+          console.error(err);
+        }
+      );
+      // get playlist name and desc from Spotify API if can't retrieve from Link props
+      if (!this.state.name) {
+        spotifyWebApi.getPlaylist(this.props.match.params.playlistid).then(
+            (data) => {
+              this.setState({
+                name: data.name,
+                description: data.description,
+              });
+            },
+            function (err) {
+              console.error(err);
+            }
+        );
+      }
+    } else if ("albumid" in this.props.match.params) {
+      // get album songs
+      spotifyWebApi.getAlbumTracks(this.props.match.params.albumid).then(
+        (data) => {
+          this.setState({
+            songlistType: "album",
+          });
+          const tracks = this.organizeTrackData(data.items);
+          this.setState({
+            tracks: tracks,
+          });
+        },
+        function (err) {
+          console.error(err);
+        }
+      );
+      spotifyWebApi.getAlbum(this.props.match.params.albumid).then(
+        (data) => {
+          this.setState({
+            name: data.name,
+            description: data.artists.map(
+              (artist, index) =>
+                artist.name + (index < data.artists.length - 1 ? " | " : "")
+            ),
+            albumImage: data.images.length
+              ? data.images[data.images.length - 1].url
+              : null,
+          });
+        },
+        function (err) {
+          console.error(err);
         }
       );
     }
   }
 
+  organizeTrackData = (data) => {
+    const tracks = [];
+    if (this.state.songlistType === "playlist") {
+      data.map((track, index) =>
+        tracks.push({
+          id: track.track.id,
+          image: track.track.album.images.length
+            ? track.track.album.images[track.track.album.images.length - 1].url
+            : null,
+          name: track.track.name,
+          artists: track.track.artists.map(
+            (artist, index) =>
+              artist.name +
+              (index < track.track.artists.length - 1 ? " | " : "")
+          ),
+        })
+      );
+    } else if (this.state.songlistType === "album") {
+      data.map((track, index) =>
+        tracks.push({
+          id: track.id,
+          name: track.name,
+          artists: track.artists.map(
+            (artist, index) =>
+              artist.name + (index < track.artists.length - 1 ? " | " : "")
+          ),
+        })
+      );
+    }
+    return tracks;
+  };
+
+  addSongToMySpotPlayList = (id) => {
+    spotifyWebApi
+      .removeTracksFromPlaylist(this.props.mySpotPlaylists.MySpotPlaylistID, [
+        "spotify:track:" + id,
+      ])
+      .then(() => {
+        return spotifyWebApi.addTracksToPlaylist(
+          this.props.mySpotPlaylists.MySpotPlaylistID,
+          ["spotify:track:" + id]
+        );
+      })
+      .then((res) => {
+        this.setState({
+          successSnackOpen: true,
+        });
+      })
+      .catch((err) => {
+        this.setState({
+          errorSnackOpen: true,
+        });
+        console.log("error adding song to MySpot playlist: ", err);
+      });
+  };
+
+  handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    this.setState({
+      successSnackOpen: false,
+      errorSnackOpen: false,
+    });
+  };
+
   render() {
     const { classes } = this.props;
     return (
       <div>
-        {/*<Link to={"/" + this.props.user.username + "/playlists"}>Go Back</Link>*/}
+        {this.state.songlistType === "playlist" ? (
+          <Link to={"/" + this.props.match.params.user + "/playlists"}>
+            Go Back
+          </Link>
+        ) : (
+          <Link to={"/" + this.props.match.params.user + "/albums"}>Go Back</Link>
+        )}
         <CssBaseline>
           <div className={classes.heroContent}>
             <Container maxWidth="md">
@@ -129,34 +258,54 @@ class SongList extends React.Component {
             {this.state.tracks.map((track, index) => {
               return (
                 <ListItem key={index}>
+                  <Tooltip title="Add to MySpot playlist">
+                    <IconButton
+                      aria-label="delete"
+                      onClick={() => this.addSongToMySpotPlayList(track.id)}
+                    >
+                      <FavoriteIcon className="favorite" />
+                    </IconButton>
+                  </Tooltip>
                   <ListItemAvatar>
                     <Avatar
                       variant="square"
                       src={
-                        track.track.album.images.length
-                          ? track.track.album.images[
-                              track.track.album.images.length - 1
-                            ].url
-                          : null
+                        this.state.songlistType === "playlist"
+                          ? track.image
+                          : this.state.albumImage
                       }
                     ></Avatar>
                   </ListItemAvatar>
                   <ListItemText
                     classes={{ primary: classes.listItemText }}
-                    primary={track.track.name}
-                    secondary={track.track.album.artists.map(
-                      (artist, index) =>
-                        artist.name +
-                        (index < track.track.album.artists.length - 1
-                          ? " | "
-                          : "")
-                    )}
+                    primary={track.name}
+                    secondary={track.artists}
                   />
                 </ListItem>
               );
             })}
           </List>
         </Container>
+        <div className={classes.root}>
+          <Snackbar
+            open={this.state.successSnackOpen}
+            autoHideDuration={6000}
+            onClose={() => this.handleClose()}
+          >
+            <Alert onClose={() => this.handleClose()} severity="success">
+              Song added to MySpot playlist!
+            </Alert>
+          </Snackbar>
+          <Snackbar
+            open={this.state.errorSnackOpen}
+            autoHideDuration={6000}
+            onClose={() => this.handleClose()}
+          >
+            <Alert onClose={() => this.handleClose()} severity="error">
+              Error adding song to MySpot playlist.
+            </Alert>
+          </Snackbar>
+        </div>
       </div>
     );
   }
@@ -164,6 +313,7 @@ class SongList extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
+    mySpotPlaylists: state.mySpotPlaylists,
     spotifyApi: state.spotifyApi,
     user: state.user,
   };

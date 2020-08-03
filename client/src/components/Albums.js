@@ -8,9 +8,10 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import { withStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
-// import Link from "@material-ui/core/Link";
+import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import Spotify from "spotify-web-api-js";
+import Button from "@material-ui/core/Button";
 
 const spotifyWebApi = new Spotify();
 
@@ -73,7 +74,6 @@ class Albums extends React.Component {
   componentDidMount() {
     spotifyWebApi.getMySavedAlbums().then(
       (data) => {
-        console.log("User albums", data);
         this.setState({
           usersAlbums: data.items,
         });
@@ -85,7 +85,7 @@ class Albums extends React.Component {
   }
 
   render() {
-    const { classes } = this.props;
+    const { classes, user } = this.props;
     return (
       <React.Fragment>
         <CssBaseline />
@@ -117,34 +117,28 @@ class Albums extends React.Component {
           <Container className={classes.cardGrid} maxWidth="md">
             {/* End hero unit */}
             <Grid container spacing={4}>
-              {this.state.usersAlbums.map((playlist, index) => (
+              {this.state.usersAlbums.map((album, index) => (
                 <Grid item key={index} xs={12} sm={6} md={4}>
                   <Card className={classes.card}>
                     <CardMedia
                       className={classes.cardMedia}
-                      image={playlist.album.images[0].url}
+                      image={album.album.images[0].url}
                       title="Image title"
                     />
                     <CardContent className={classes.cardContent}>
                       <Typography gutterBottom variant="h5" component="h2">
-                        {playlist.album.name}
+                        {album.album.name}
                       </Typography>
-                      <Typography>{playlist.album.artists[0].name}</Typography>
+                      <Typography>{album.album.artists[0].name}</Typography>
                     </CardContent>
                     <CardActions>
-                      {/* todo: (Sarchen) setup link to songlist for album*/}
-                      {/* <Link
-                        to={
-                          "/" +
-                          user.username +
-                          "/playlists/" +
-                          playlist.album.id
-                        }
-                      > */}
-                      {/* <Button size="small" color="primary">
-                        View Songs
-                      </Button> */}
-                      {/* </Link> */}
+                      <Link
+                        to={"/" + user.username + "/albums/" + album.album.id}
+                      >
+                        <Button size="small" color="secondary">
+                          View Songs
+                        </Button>
+                      </Link>
                     </CardActions>
                   </Card>
                 </Grid>

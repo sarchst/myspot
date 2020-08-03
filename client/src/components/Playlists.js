@@ -76,7 +76,6 @@ class Playlists extends React.Component {
     // identify user with React Router match.params instead because of race conditions with Redux store updating
     spotifyWebApi.getUserPlaylists(userID).then(
       (data) => {
-        console.log("User playlists", data);
         this.setState({
           usersPlaylists: data.items,
           userID: userID,
