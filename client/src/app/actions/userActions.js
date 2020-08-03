@@ -1,4 +1,4 @@
-import { fetchSelectedUserThunk } from "./selectedUserActions";
+import { setSelectedUser } from "./selectedUserActions";
 
 export const SET_CURRENT_USER = "SET_CURRENT_USER";
 export const LOG_OUT = "LOG_OUT";
@@ -32,7 +32,7 @@ export const submitSpotifyApiUserMe = (SpotifyApiUserInfoMe) => {
       .then((res) =>
         res.json().then((response) => {
           console.log("response  in useractions", response);
-          dispatch(fetchSelectedUserThunk(response.User));
+          dispatch(setSelectedUser(response.User));
           dispatch(setCurrentUser(response.User));
         })
       )
