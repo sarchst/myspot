@@ -12,7 +12,7 @@ import {
   setCurrentUser,
   submitSpotifyApiUserMe,
 } from "./app/actions/userActions";
-import { fetchSelectedUser } from "./app/actions/selectedUserActions";
+// import { fetchSelectedUser } from "./app/actions/selectedUserActions";
 import { setPlayListIDs } from "./app/actions/playlistActions";
 
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
@@ -178,7 +178,7 @@ const mapDispatchToProps = (dispatch) => {
     setCurrentUser: (id, username) => dispatch(setCurrentUser(id, username)),
     registerSpotifyApi: (spotifyApi) =>
       dispatch(registerSpotifyApi(spotifyApi)),
-    fetchSelectedUser: (id) => dispatch(fetchSelectedUser(id)),
+    // fetchSelectedUser: (id) => dispatch(fetchSelectedUser(id)),
     submitSpotifyApiUserMe: (spotifyUserMe) =>
       dispatch(submitSpotifyApiUserMe(spotifyUserMe)),
     setPlayListIDs: (UserMeID, spotifyToken) =>

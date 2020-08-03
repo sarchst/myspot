@@ -151,9 +151,16 @@ class Playlists extends React.Component {
                     <CardActions>
                       <Link
                         // TODO: change user to selectedUser._id
-                        to={
-                          "/" + this.state.userID + "/playlists/" + playlist.id
-                        }
+                        // to={
+                        //   "/" + this.state.userID + "/playlists/" + playlist.id
+                        // }
+                        to={{
+                          pathname: `/${this.state.userID}/playlists/${playlist.id}`,
+                          state: {
+                            playlistName: playlist.name,
+                            playlistDescription: playlist.description,
+                          },
+                        }}
                       >
                         <Button size="small" color="secondary">
                           View Songs

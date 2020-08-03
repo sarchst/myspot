@@ -10,8 +10,10 @@ class SongList extends React.Component {
     super(props);
     this.state = {
       tracks: [],
-      name: "",
-      description: "",
+      name: this.props.location ? this.props.location.state.playlistName : "",
+      description: this.props.location
+        ? this.props.location.state.playlistDescription
+        : "",
     };
     spotifyWebApi.setAccessToken(this.props.spotifyApi.accessToken);
   }
@@ -29,24 +31,28 @@ class SongList extends React.Component {
       }
     );
 
-    spotifyWebApi.getPlaylist(this.props.match.params.playlistid).then(
-      (data) => {
-        console.log("Playlist data", data);
-        this.setState({
-          name: data.name,
-          description: data.description,
-        });
-      },
-      function (err) {
-        console.error(err);
-      }
-    );
+    // get playlist name and desc from Spotify API if can't retrieve from Link props
+    if (!this.state.name) {
+      console.log("songlist got playlist details from Spotify API instead");
+      spotifyWebApi.getPlaylist(this.props.match.params.playlistid).then(
+        (data) => {
+          console.log("Playlist data", data);
+          this.setState({
+            name: data.name,
+            description: data.description,
+          });
+        },
+        function (err) {
+          console.error(err);
+        }
+      );
+    }
   }
   // this component is just a stand in to display info, will replace with prettier version
   render() {
     return (
       <div>
-        <Link to={"/" + this.props.user.username + "/playlists"}>Go Back</Link>
+        {/*<Link to={"/" + this.props.user.username + "/playlists"}>Go Back</Link>*/}
         <h1>{this.state.name}</h1>
         <h4>{this.state.description}</h4>
         <ul style={{ listStyleType: "none" }}>

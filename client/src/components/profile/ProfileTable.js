@@ -38,6 +38,7 @@ class ProfileTable extends React.Component {
 
   componentDidUpdate(prevProps, prevState, snapshot) {
     // update state playlists when tab is clicked for the first time for selectedUser
+    // conso
     if (
       this.isTabIndexUpdatedToZero(prevState) &&
       (!this.state.playlists.length || this.isSelectedUserUpdated(prevProps))
