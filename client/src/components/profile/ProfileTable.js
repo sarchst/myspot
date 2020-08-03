@@ -6,6 +6,7 @@ import FollowTable from "../FollowTable";
 import MaterialTable from "material-table";
 import { Paper, Tab, Tabs } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
+import { Link } from "react-router-dom";
 
 const styles = (theme) => ({
   root: {
@@ -15,6 +16,13 @@ const styles = (theme) => ({
     // margin: 5,
     marginTop: theme.spacing(2),
     marginBottom: theme.spacing(2),
+  },
+  link: {
+    color: theme.palette.secondary.main,
+    textDecoration: "none",
+    "&:hover": {
+      textDecoration: "underline",
+    },
   },
 });
 
@@ -72,6 +80,8 @@ class ProfileTable extends React.Component {
         playlistArt: pl.images.length ? pl.images[0].url : "",
         owner: pl.owner.display_name,
         numTracks: pl.tracks.total,
+        playlistID: pl.id,
+        playlistDescription: pl.description,
       };
       return playlist;
     });
@@ -115,17 +125,44 @@ class ProfileTable extends React.Component {
               title: "Playlist",
               field: "playlistArt",
               render: (rowData) => (
-                <img
-                  src={rowData.playlistArt}
-                  alt={"Playlist Art"}
-                  style={{ width: 40, height: 40, borderRadius: 16 }}
-                />
+                <Link
+                  to={{
+                    pathname: `/${this.props.selectedUser._id}/playlists/${rowData.playlistID}`,
+                    state: {
+                      playlistName: rowData.title,
+                      playlistDescription: rowData.playlistDescription,
+                    },
+                  }}
+                >
+                  <img
+                    src={rowData.playlistArt}
+                    alt={"Playlist Art"}
+                    style={{ width: 40, height: 40, borderRadius: 16 }}
+                  />
+                </Link>
               ),
               headerStyle: { width: "50px" },
               cellStyle: { width: "50px" },
               width: null,
             },
-            { title: "", field: "title" },
+            {
+              title: "",
+              field: "title",
+              render: (rowData) => (
+                <Link
+                  to={{
+                    pathname: `/${this.props.selectedUser._id}/playlists/${rowData.playlistID}`,
+                    state: {
+                      playlistName: rowData.title,
+                      playlistDescription: rowData.playlistDescription,
+                    },
+                  }}
+                  className={this.props.classes.link}
+                >
+                  {rowData.title}
+                </Link>
+              ),
+            },
             { title: "# of Tracks", field: "numTracks" },
             { title: "Owner", field: "owner" },
           ]}

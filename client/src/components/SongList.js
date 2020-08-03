@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import Spotify from "spotify-web-api-js";
 
@@ -59,7 +59,10 @@ class SongList extends React.Component {
           {this.state.tracks.map((track, index) => (
             <li key={index}>
               <img
-                src={track.track.album.images[0].url}
+                src={
+                  track.track.album.images[track.track.album.images.length - 1]
+                    .url
+                }
                 style={{ width: 50, height: 50 }}
                 alt="this is album art"
               />
