@@ -103,6 +103,9 @@ class Playlists extends React.Component {
                 color="textPrimary"
                 gutterBottom
               >
+                {this.props.match.params.user === this.props.user.id
+                  ? "My"
+                  : `${this.props.selectedUser.username}'s`}{" "}
                 Playlists
               </Typography>
               {/* <Typography
@@ -173,6 +176,7 @@ const mapStateToProps = (state) => {
   return {
     spotifyApi: state.spotifyApi,
     user: state.user,
+    selectedUser: state.selectedUser,
   };
 };
 
