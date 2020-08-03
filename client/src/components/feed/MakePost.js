@@ -9,10 +9,13 @@ import {
   Grid,
   Input,
   InputLabel,
-  MenuItem,
-  Select,
+  TextField,
 } from "@material-ui/core";
-import { ToggleButton, ToggleButtonGroup } from "@material-ui/lab";
+import {
+  ToggleButton,
+  ToggleButtonGroup,
+  Autocomplete,
+} from "@material-ui/lab";
 import AlbumIcon from "@material-ui/icons/Album";
 import MusicNoteIcon from "@material-ui/icons/MusicNote";
 import PlaylistAddIcon from "@material-ui/icons/PlaylistAdd";
@@ -50,13 +53,10 @@ class MakePost extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      authorId: this.props.user.id, // user id, ref to user schema
       content: "",
-      media: "",
+      media: null,
       type: "playlist",
-      usersLiked: [this.props.user.id], // automatically liking your own post
       mediaOptions: [],
-      username: this.props.user.username,
     };
     spotifyWebApi.setAccessToken(this.props.spotifyApi.accessToken);
   }
@@ -73,17 +73,6 @@ class MakePost extends React.Component {
         console.error(err);
       }
     );
-    // spotifyWebApi.getMySavedAlbums().then(
-    //   (data) => {
-    //     console.log("ALBUMS: ", data.items);
-    //     this.setState({
-    //       mediaOptions: data.items,
-    //     });
-    //   },
-    //   function (err) {
-    //     console.error(err);
-    //   }
-    // );
   };
 
   handleChange = (e) => {
@@ -91,7 +80,6 @@ class MakePost extends React.Component {
   };
 
   handleTypeSelect = (event, type) => {
-    console.log("Type: ", type);
     if (type !== null) {
       this.setState({ type: type });
     }
@@ -102,6 +90,7 @@ class MakePost extends React.Component {
             const playlistOptions = this.getOptions(type, data.items);
             this.setState({
               mediaOptions: playlistOptions,
+              media: null,
             });
           },
           function (err) {
@@ -116,6 +105,7 @@ class MakePost extends React.Component {
             const albumOptions = this.getOptions(type, data.items);
             this.setState({
               mediaOptions: albumOptions,
+              media: null,
             });
           },
           function (err) {
@@ -130,6 +120,7 @@ class MakePost extends React.Component {
             const trackOptions = this.getOptions(type, data.items);
             this.setState({
               mediaOptions: trackOptions,
+              media: null,
             });
           },
           function (err) {
@@ -145,28 +136,51 @@ class MakePost extends React.Component {
   };
 
   getOptions = (type, mediaOptions) => {
-    if (this.state.type === "playlist") {
+    if (type === "playlist") {
       return mediaOptions.map((mo) => {
-        console.log(mo);
-        return (
-          <MenuItem key={mo.id} value={mo.id}>
-            {mo.name}
-          </MenuItem>
-        );
+        return {
+          _id: mo.id,
+          name: mo.name,
+        };
       });
     } else {
       return mediaOptions.map((mo) => {
-        return (
-          <MenuItem key={mo[type].id} value={mo[type].id}>
-            {mo[type].name}
-          </MenuItem>
-        );
+        return {
+          _id: mo[type].id,
+          name: mo[type].name,
+        };
       });
     }
   };
 
-  handleMediaSelect = (e) => {
-    this.setState({ media: e.target.value });
+  // getOptions = (type, mediaOptions) => {
+  //   if (this.state.type === "playlist") {
+  //     return mediaOptions.map((mo) => {
+  //       return (
+  //         <MenuItem key={mo.id} value={mo.id}>
+  //           {mo.name}
+  //         </MenuItem>
+  //       );
+  //     });
+  //   } else {
+  //     return mediaOptions.map((mo) => {
+  //       return (
+  //         <MenuItem key={mo[type].id} value={mo[type].id}>
+  //           {mo[type].name}
+  //         </MenuItem>
+  //       );
+  //     });
+  //   }
+  // };
+
+  handleMediaSelect = (e, value) => {
+    if (value) {
+      this.setState({ media: value });
+    } else {
+      this.setState({
+        media: null,
+      });
+    }
   };
 
   updateTitle = (title) => {
@@ -178,14 +192,31 @@ class MakePost extends React.Component {
   };
 
   handleSubmitPost = () => {
+    const postObj = {
+      username: this.props.user.username,
+      authorId: this.props.user.id, // user id, ref to user schema
+      usersLiked: [this.props.user.id], // automatically liking your own post
+      repost: false,
+      content: this.state.content,
+      media: this.state.media,
+      type: this.state.type,
+    };
     this.props.makePost(
-      this.state,
+      postObj,
       this.props.profileFeedFilter,
       this.props.feedFilter
     );
-    // TODO media options will have to change after spotify integration
-    this.setState({ content: "", media: "", type: "playlist" });
+    this.setState({
+      content: "",
+      media: null,
+      type: "playlist",
+    });
+    this.handleTypeSelect("", "playlist"); // dummy even as first param
     console.log(this.state);
+  };
+
+  capitalizeFirstLetter = (string) => {
+    return string.charAt(0).toUpperCase() + string.slice(1);
   };
 
   render() {
@@ -232,32 +263,27 @@ class MakePost extends React.Component {
               </FormControl>
             </Grid>
             <Grid item xs={8}>
-              <FormControl style={{ minWidth: 200 }}>
-                <InputLabel id="media">Media</InputLabel>
-                <Select
+              <FormControl style={{ minWidth: 300 }}>
+                {/* <InputLabel id="media">Media</InputLabel> */}
+                {/* <Select
                   // native
                   value={this.state.media}
                   onChange={this.handleMediaSelect}
                 >
-                  {/* {this.state.mediaOptions.map((mo) => {
-                    console.log(mo);
-                    return (
-                      <MenuItem key={mo.id} value={mo.id}>
-                        {mo.name}
-                      </MenuItem>
-                    );
-                  })} */}
                   {this.state.mediaOptions}
-                  {/* <MenuItem value="my awesome playlist">
-                    my awesome playlist
-                  </MenuItem>
-                  <MenuItem value="my firday night playlist">
-                    my friday night playlist
-                  </MenuItem>
-                  <MenuItem value="my workout playlist">
-                    my workout playlist
-                  </MenuItem> */}
-                </Select>
+                </Select> */}
+                <Autocomplete
+                  options={this.state.mediaOptions}
+                  getOptionLabel={(option) => option.name}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label={this.capitalizeFirstLetter(this.state.type)}
+                    />
+                  )}
+                  onChange={this.handleMediaSelect}
+                  value={this.state.media}
+                />
               </FormControl>
             </Grid>
             <Grid item xs={2}>

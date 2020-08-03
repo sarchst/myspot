@@ -96,7 +96,6 @@ class App extends React.Component {
 
     if (params.access_token) {
       spotifyWebApi.setAccessToken(params.access_token);
-      console.log("LOGGING IN: SENDING SPOTIFYWEBAPI TO REDUX STORE");
       let userObject = {};
       // Pass refresh token as well for further use if a new access token is needed
       this.props.registerSpotifyApi(params);
@@ -126,7 +125,6 @@ class App extends React.Component {
         // TODO: replace redux action with db call instead?
         this.props.submitSpotifyApiUserMe(userObject);
         // set URIs for MySpot and MySpot-Tinderify playlists
-        console.log("calling setPlayListIDs in app.js");
         this.props.setPlayListIDs(spotifyMe.id, params.access_token);
         // set current user in redux
         this.props.setCurrentUser(userObject.id, userObject.display_name);

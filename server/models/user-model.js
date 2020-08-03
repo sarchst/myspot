@@ -14,6 +14,13 @@ const CommentSchema = new Schema(
   { timestamps: true }
 );
 
+const MediaSchema = new Schema({
+  _id: { type: String, required: true }, // Spotify Playlist, Album, or Song id
+  name: { type: String, required: true },
+  // mediaArt: { type: String, default: "" }, // Sportify URI to media art TODO add default
+  // maybe more?
+});
+
 const SettingSchema = new Schema(
   {
     notification: { type: Boolean, default: true, required: true },
@@ -31,9 +38,9 @@ const SettingSchema = new Schema(
 
 const PostSchema = new Schema(
   {
-    type: { type: String, required: true }, // TODO: May have to reference this back to media?
+    type: { type: String, required: true },
     content: { type: String },
-    media: { type: String, required: true }, // TODO: may need to be object for spotify?
+    media: { type: MediaSchema, required: true },
     usersLiked: [{ type: String, ref: "User", required: true }],
     repost: { type: Boolean, default: false, required: true },
     authorId: { type: String, ref: "User", required: true },
@@ -63,10 +70,12 @@ const User = mongoose.model("User", UserSchema);
 const Post = mongoose.model("Post", PostSchema);
 const Setting = mongoose.model("Setting", SettingSchema);
 const Comment = mongoose.model("Comment", CommentSchema);
+const Media = mongoose.model("Media", MediaSchema);
 
 module.exports = {
   Post: Post,
   User: User,
   Setting: Setting,
   Comment: Comment,
+  Media: Media,
 };
