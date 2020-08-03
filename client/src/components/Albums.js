@@ -74,7 +74,6 @@ class Albums extends React.Component {
   componentDidMount() {
     spotifyWebApi.getMySavedAlbums().then(
       (data) => {
-        console.log("User albums", data);
         this.setState({
           usersAlbums: data.items,
         });

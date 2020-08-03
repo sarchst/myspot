@@ -81,7 +81,6 @@ class Favourites extends React.Component {
   componentDidMount() {
     spotifyWebApi.getMySavedTracks().then(
       (data) => {
-        console.log("Saved Tracks (aka favourites)", data);
         this.setState({
           tracks: data.items,
         });
@@ -93,7 +92,6 @@ class Favourites extends React.Component {
   }
 
   addSongToMySpotPlayList = (id) => {
-    console.log(id);
     spotifyWebApi
       .removeTracksFromPlaylist(this.props.mySpotPlaylists.MySpotPlaylistID, [
         "spotify:track:" + id,
@@ -108,14 +106,12 @@ class Favourites extends React.Component {
         this.setState({
           successSnackOpen: true,
         });
-        console.log(res);
       })
       .catch((err) => {
-        console.log("error adding song to MySpot playlist");
         this.setState({
           errorSnackOpen: true,
         });
-        console.log(err);
+        console.log("error adding song to MySpot playlist: ", err);
       });
   };
 

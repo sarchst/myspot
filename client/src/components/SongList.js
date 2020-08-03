@@ -88,7 +88,6 @@ class SongList extends React.Component {
       // get playlist songs
       spotifyWebApi.getPlaylistTracks(this.props.match.params.playlistid).then(
         (data) => {
-          console.log("Songs in playlist", data);
           this.setState({
             songlistType: "playlist",
           });
@@ -104,7 +103,6 @@ class SongList extends React.Component {
 
       spotifyWebApi.getPlaylist(this.props.match.params.playlistid).then(
         (data) => {
-          console.log("Playlist data", data);
           this.setState({
             name: data.name,
             description: data.description,
@@ -118,7 +116,6 @@ class SongList extends React.Component {
       // get album songs
       spotifyWebApi.getAlbumTracks(this.props.match.params.albumid).then(
         (data) => {
-          console.log("Songs in album", data);
           this.setState({
             songlistType: "album",
           });
@@ -133,7 +130,6 @@ class SongList extends React.Component {
       );
       spotifyWebApi.getAlbum(this.props.match.params.albumid).then(
         (data) => {
-          console.log("Album data", data);
           this.setState({
             name: data.name,
             description: data.artists.map(
@@ -185,7 +181,6 @@ class SongList extends React.Component {
   };
 
   addSongToMySpotPlayList = (id) => {
-    console.log(id);
     spotifyWebApi
       .removeTracksFromPlaylist(this.props.mySpotPlaylists.MySpotPlaylistID, [
         "spotify:track:" + id,
@@ -200,14 +195,12 @@ class SongList extends React.Component {
         this.setState({
           successSnackOpen: true,
         });
-        console.log(res);
       })
       .catch((err) => {
-        console.log("error adding song to MySpot playlist");
         this.setState({
           errorSnackOpen: true,
         });
-        console.log(err);
+        console.log("error adding song to MySpot playlist: ", err);
       });
   };
 

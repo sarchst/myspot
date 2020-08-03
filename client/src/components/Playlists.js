@@ -79,7 +79,6 @@ class Playlists extends React.Component {
     }
     spotifyWebApi.getUserPlaylists(user_ID).then(
       (data) => {
-        console.log("User playlists", data);
         this.setState({
           usersPlaylists: data.items,
         });
