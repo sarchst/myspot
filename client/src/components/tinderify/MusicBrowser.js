@@ -66,7 +66,8 @@ class MusicBrowser extends React.Component {
     spotifyWebApi.setAccessToken(this.props.spotifyApi.accessToken);
   }
   componentDidMount() {
-    let user_ID = this.props.user_ID ? this.props.user_ID : this.props.user.id;
+    let user_ID = this.props.otherUser;
+
     spotifyWebApi.getUserPlaylists(user_ID).then(
       (data) => {
         let playlist = data.items.find((o) => o.name === "Discover Weekly");

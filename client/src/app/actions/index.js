@@ -7,6 +7,8 @@ export const SUBMIT_DEL_POST_DIALOG = "SUBMIT_DEL_POST_DIALOG";
 export const CLOSE_DEL_POST_DIALOG = "CLOSE_DEL_POST_DIALOG";
 export const SUBMIT_EDIT_POST_DIALOG = "SUBMIT_EDIT_POST_DIALOG";
 export const CLOSE_EDIT_POST_DIALOG = "CLOSE_EDIT_POST_DIALOG";
+export const CONFIRM_UNFOLLOW_DIALOG = "CONFIRM_UNFOLLOW_DIALOG";
+export const CLOSE_UNFOLLOW_DIALOG = "CLOSE_UNFOLLOW_DIALOG";
 
 export const toggleSidebar = () => ({
   type: TOGGLE_SIDEBAR,
@@ -43,4 +45,13 @@ export const submitEditPostDialog = (payload) => ({
 
 export const closeEditPostDialog = () => ({
   type: CLOSE_EDIT_POST_DIALOG,
+});
+
+export const confirmUnfollowDialog = (payload) => ({
+  type: CONFIRM_UNFOLLOW_DIALOG,
+  payload: payload,
+});
+
+export const closeUnfollowDialog = () => ({
+  type: CLOSE_UNFOLLOW_DIALOG,
 });

@@ -32,7 +32,7 @@ import contentType from "../data/ContentTypeEnum";
 
 import { Link, Route, Switch, Redirect } from "react-router-dom";
 
-import FollowTable from "./FollowTable";
+import FollowTable from "./follow/FollowTable";
 import NowPlaying from "./NowPlaying";
 import Profile from "./profile/Profile";
 import Feed from "./feed/Feed";
@@ -228,11 +228,6 @@ class Sidebar extends React.Component {
             <Route path="/:user/albums" exact component={Albums} />
             <Route path="/:user/tinderify" exact component={Tinderify} />
             <Route path="/:user/favourites" exact component={Favourites} />
-            <Route
-              path="/myspotter/:user/tinderify"
-              exact
-              component={(props) => <Tinderify {...props} />}
-            />
             <Route
               path="/:user/playlists"
               exact
