@@ -8,7 +8,7 @@ export const fetchSelectedUser = (userID) => {
         if (res.error) {
           throw res.error;
         }
-        dispatch(fetchSelectedUserThunk(res.data));
+        dispatch(setSelectedUser(res.data));
       })
       .catch((error) => {
         console.log("error fetching db user", error);
@@ -16,7 +16,7 @@ export const fetchSelectedUser = (userID) => {
   };
 };
 
-export const fetchSelectedUserThunk = (userObject) => ({
+export const setSelectedUser = (userObject) => ({
   type: SELECT_USER,
   payload: userObject,
 });
