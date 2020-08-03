@@ -9,13 +9,13 @@ import { connect } from "react-redux";
 import {
   submitDeletePostDialog,
   closeDeletePostDialog,
-} from "../app/actions/index";
-import { deletePost } from "../app/actions/postActions";
+} from "../../app/actions/index";
+import { deletePost } from "../../app/actions/postActions";
 
 class DeletePostDialog extends React.Component {
   handleConfirm = () => {
     const body = { postId: this.props.delPostDialog.postId };
-    this.props.deletePost(this.props.user.id, body);
+    this.props.deletePost(this.props.user.id, body, this.props.profileFeedFilter, this.props.feedFilter);
     this.props.closeDeletePostDialog();
   };
   handleCancel = () => {
@@ -29,7 +29,7 @@ class DeletePostDialog extends React.Component {
         <div>
           <Dialog
             open={this.props.delPostDialog.open}
-            onClose={this.handleClose}
+            // onClose={this.handleClose}
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
           >
@@ -64,7 +64,10 @@ class DeletePostDialog extends React.Component {
 const mapStateToProps = (state) => ({
   delPostDialog: state.delPostDialog,
   user: state.user,
+  feedFilter: state.feed.filter,
+  profileFeedFilter: state.profileFeed.filter,
 });
+
 export default connect(mapStateToProps, {
   submitDeletePostDialog,
   closeDeletePostDialog,

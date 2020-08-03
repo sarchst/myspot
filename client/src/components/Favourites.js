@@ -5,9 +5,30 @@ import { CssBaseline } from "@material-ui/core";
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import { withStyles } from "@material-ui/core/styles";
-const spotifyWebApi = new Spotify();
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemAvatar from "@material-ui/core/ListItemAvatar";
+import Avatar from "@material-ui/core/Avatar";
+import ListItemText from "@material-ui/core/ListItemText";
+import IconButton from "@material-ui/core/IconButton";
+import Tooltip from "@material-ui/core/Tooltip";
+import FavoriteIcon from "@material-ui/icons/Favorite";
+import Snackbar from "@material-ui/core/Snackbar";
+import MuiAlert from "@material-ui/lab/Alert";
+
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
 const styles = (theme) => ({
+  listItemText: {
+    fontSize: "1.5em",
+  },
+  avatar: {
+    width: 200,
+    height: 100,
+    margin: "auto",
+  },
   icon: {
     marginRight: theme.spacing(2),
   },
@@ -36,21 +57,30 @@ const styles = (theme) => ({
     backgroundColor: theme.palette.background.paper,
     padding: theme.spacing(0),
   },
+  root: {
+    width: "100%",
+    "& > * + *": {
+      marginTop: theme.spacing(2),
+    },
+  },
 });
+
+const spotifyWebApi = new Spotify();
 
 class Favourites extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       tracks: [],
+      successSnackOpen: false,
+      errorSnackOpen: false,
     };
-    spotifyWebApi.setAccessToken(this.props.spotifyWebApi);
+    spotifyWebApi.setAccessToken(this.props.spotifyApi.accessToken);
   }
 
   componentDidMount() {
     spotifyWebApi.getMySavedTracks().then(
       (data) => {
-        console.log("Saved Tracks (aka favourites)", data);
         this.setState({
           tracks: data.items,
         });
@@ -60,14 +90,49 @@ class Favourites extends React.Component {
       }
     );
   }
-  // this component is just a stand in to display info, will replace with prettier version
+
+  addSongToMySpotPlayList = (id) => {
+    spotifyWebApi
+      .removeTracksFromPlaylist(this.props.mySpotPlaylists.MySpotPlaylistID, [
+        "spotify:track:" + id,
+      ])
+      .then(() => {
+        return spotifyWebApi.addTracksToPlaylist(
+          this.props.mySpotPlaylists.MySpotPlaylistID,
+          ["spotify:track:" + id]
+        );
+      })
+      .then((res) => {
+        this.setState({
+          successSnackOpen: true,
+        });
+      })
+      .catch((err) => {
+        this.setState({
+          errorSnackOpen: true,
+        });
+        console.log("error adding song to MySpot playlist: ", err);
+      });
+  };
+
+  handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    this.setState({
+      successSnackOpen: false,
+      errorSnackOpen: false,
+    });
+  };
+
   render() {
     const { classes } = this.props;
     return (
       <div>
         <CssBaseline>
           <div className={classes.heroContent}>
-            <Container maxWidth="sm">
+            <Container maxWidth="md">
               <Typography
                 component="h1"
                 variant="h2"
@@ -88,21 +153,69 @@ class Favourites extends React.Component {
             </Container>
           </div>
         </CssBaseline>
-
-        <h1>{this.state.name}</h1>
-        <h4>{this.state.description}</h4>
-        <ul style={{ listStyleType: "none" }}>
-          {this.state.tracks.map((track, index) => (
-            <li key={index}>
-              <img
-                src={track.track.album.images[0].url}
-                style={{ width: 50, height: 50 }}
-                alt="Album Art"
-              />
-              {track.track.name + " - " + track.track.artists[0].name}
-            </li>
-          ))}
-        </ul>
+        <Container maxWidth="lg">
+          <List className={classes.listRoot} dense={true}>
+            {this.state.tracks.map((track, index) => {
+              return (
+                <ListItem key={index}>
+                  <Tooltip title="Add to MySpot playlist">
+                    <IconButton
+                      aria-label="delete"
+                      onClick={() =>
+                        this.addSongToMySpotPlayList(track.track.id)
+                      }
+                    >
+                      <FavoriteIcon className="favorite" />
+                    </IconButton>
+                  </Tooltip>
+                  <ListItemAvatar>
+                    <Avatar
+                      variant="square"
+                      src={
+                        track.track.album.images.length
+                          ? track.track.album.images[
+                              track.track.album.images.length - 1
+                            ].url
+                          : null
+                      }
+                    ></Avatar>
+                  </ListItemAvatar>
+                  <ListItemText
+                    classes={{ primary: classes.listItemText }}
+                    primary={track.track.name}
+                    secondary={track.track.album.artists.map(
+                      (artist, index) =>
+                        artist.name +
+                        (index < track.track.album.artists.length - 1
+                          ? " | "
+                          : "")
+                    )}
+                  />
+                </ListItem>
+              );
+            })}
+          </List>
+        </Container>
+        <div className={classes.root}>
+          <Snackbar
+            open={this.state.successSnackOpen}
+            autoHideDuration={6000}
+            onClose={() => this.handleClose()}
+          >
+            <Alert onClose={() => this.handleClose()} severity="success">
+              Song added to MySpot playlist!
+            </Alert>
+          </Snackbar>
+          <Snackbar
+            open={this.state.errorSnackOpen}
+            autoHideDuration={6000}
+            onClose={() => this.handleClose()}
+          >
+            <Alert onClose={() => this.handleClose()} severity="error">
+              Error adding song to MySpot playlist.
+            </Alert>
+          </Snackbar>
+        </div>
       </div>
     );
   }
@@ -110,7 +223,8 @@ class Favourites extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    spotifyWebApi: state.spotifyWebApi,
+    mySpotPlaylists: state.mySpotPlaylists,
+    spotifyApi: state.spotifyApi,
     user: state.user,
   };
 };

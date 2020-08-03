@@ -3,9 +3,8 @@ import clsx from "clsx";
 // import Post from "./Post";
 import Playlists from "./Playlists";
 import Albums from "./Albums";
-import Tinderify from "./Tinderify";
+import Tinderify from "./tinderify/Tinderify";
 import Favourites from "./Favourites";
-import SearchResults from "./SearchResults";
 import Drawer from "@material-ui/core/Drawer";
 import List from "@material-ui/core/List";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -18,7 +17,6 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
-// import AudiotrackIcon from "@material-ui/icons/Audiotrack";
 import HeadsetIcon from "@material-ui/icons/Headset";
 import MicIcon from "@material-ui/icons/Mic";
 import FavoriteIcon from "@material-ui/icons/Favorite";
@@ -35,13 +33,13 @@ import contentType from "../data/ContentTypeEnum";
 
 import { Link, Route, Switch, Redirect } from "react-router-dom";
 
-import FollowTable from "./FollowTable";
+import FollowTable from "./follow/FollowTable";
 import NowPlaying from "./NowPlaying";
-import Profile from "./Profile";
+import Profile from "./profile/Profile";
 import Feed from "./feed/Feed";
 import Settings from "./Settings";
 import SongList from "./SongList";
-import ProfileCard from "./profile/ProfileCard";
+import { fetchSelectedUser } from "../app/actions/selectedUserActions";
 
 const drawerWidth = 240;
 
@@ -179,7 +177,10 @@ class Sidebar extends React.Component {
             >
               <Link
                 className={classes.sidebarItem}
-                to={"/" + this.props.user.username}
+                to={"/" + this.props.user.id}
+                onClick={() => {
+                  this.props.fetchSelectedUser(this.props.user.id);
+                }}
               >
                 <ListItemIcon>{<AccountCircleIcon />}</ListItemIcon>
                 <ListItemText
@@ -207,7 +208,7 @@ class Sidebar extends React.Component {
                   className={classes.sidebarItem}
                   to={
                     "/" +
-                    this.props.user.username +
+                    this.props.user.id +
                     "/" +
                     this.processTextForURL(text)
                   }
@@ -223,57 +224,45 @@ class Sidebar extends React.Component {
         <main className={classes.content}>
           <div className={classes.toolbar} />
           <Switch>
-            <Route path="/search">
-              <SearchResults />
-            </Route>
-            <Route path={"/:user"} exact>
-              <Profile />
-            </Route>
-            <Route path="/:user/posts">
-              <Feed />
-            </Route>
-            <Route path="/:user/albums" exact>
-              <Albums />
-            </Route>
-            <Route path="/:user/tinderify" exact>
-              <Tinderify />
-            </Route>
-            <Route path="/:user/favourites" exact>
-              <Favourites />
-            </Route>
-            <Route path="/:user/playlists" exact>
-              <Playlists />
-            </Route>
-            <Route key="followers" exact path="/:user/followers">
-              <FollowTable type={"followers"} />
-            </Route>
-            <Route key="following" exact path="/:user/following">
-              <FollowTable type={"following"} />
-            </Route>
-            <Route path="/:user/whatimlisteningto">
-              <NowPlaying />
-            </Route>
+            <Route path="/search" component={SearchResults} />
+            <Route path={"/:user"} exact component={Profile} />
+            <Route path="/:user/posts" component={Feed} />
+            <Route path="/:user/albums" exact component={Albums} />
+            <Route path="/:user/tinderify" exact component={Tinderify} />
+            <Route path="/:user/favourites" exact component={Favourites} />
+            <Route path="/:user/playlists" exact component={Playlists} />
             <Route
-              path="/myspotter/:user"
+              path="/myspotter/:user/playlists"
+              exact
               render={(props) => {
-                console.log("props in profilecard is");
-                console.log(props);
-                return <ProfileCard {...props} />;
+                return <Playlists {...props} />;
               }}
             />
-            <Route path="/:user/feed">
-              <Feed />
-            </Route>
-            <Route path="/:user/settings">
-              <Settings />
-            </Route>
+            <Route
+              key="followers"
+              exact
+              path="/:user/followers"
+              component={(props) => <FollowTable type={"followers"} />}
+            />
+            <Route
+              key="following"
+              exact
+              path="/:user/following"
+              component={(props) => <FollowTable type={"following"} />}
+            />
+            <Route path="/:user/whatimlisteningto" component={NowPlaying} />
+            <Route path="/:user/feed" component={Feed} />
+            <Route path="/:user/settings" component={Settings} />
             <Route
               path="/:user/playlists/:playlistid"
               render={(props) => <SongList {...props} />}
             />
             <Route
-              render={() => <Redirect to={"/" + this.props.user.username} />}
+              exact
+              path="/:user/albums/:albumid"
+              render={(props) => <SongList {...props} />}
             />
+            <Route render={() => <Redirect to={"/" + this.props.user.id} />} />
           </Switch>
         </main>
       </div>
@@ -285,13 +274,13 @@ const mapStateToProps = (state) => {
   return {
     open: state.isSidebarOpen,
     user: state.user,
-    // selectedContentPage: state.selectedContentPage,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
     toggleSideBar: () => dispatch(toggleSidebar()),
+    fetchSelectedUser: (userID) => dispatch(fetchSelectedUser(userID)),
   };
 };
 

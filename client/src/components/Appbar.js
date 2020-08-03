@@ -1,5 +1,6 @@
 import React from "react";
 import clsx from "clsx";
+
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
@@ -9,12 +10,11 @@ import Button from "@material-ui/core/Button";
 import SearchBar from "./SearchBar";
 import SettingsIcon from "@material-ui/icons/Settings";
 import { withStyles } from "@material-ui/core";
-import { toggleSidebar } from "../app/actions";
-import { logOut } from "../app/actions/userActions";
+import { logOut, toggleSidebar } from "../app/actions";
 import contentType from "../data/ContentTypeEnum";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-
+import { fetchSelectedUser } from "../app/actions/selectedUserActions";
 const drawerWidth = 240;
 
 const styles = (theme) => ({
@@ -41,9 +41,8 @@ const styles = (theme) => ({
   },
 
   appbarButton: {
-    marginLeft: 25,
-    marginRight: 25,
-    fontSize: 16,
+    marginLeft: 50,
+    fontSize: 15,
     textDecoration: "none",
     color: "white",
   },
@@ -104,37 +103,32 @@ class Appbar extends React.Component {
             MySpot
           </Typography>
           <Link
-            to={"/" + this.props.user.username}
-            style={{ textDecoration: "none" }}
+            to={"/" + this.props.user.id}
+            className={classes.appbarButton}
+            onClick={() => this.props.fetchSelectedUser(this.props.user.id)}
           >
-            <Button color="inherit" className={classes.appbarButton}>
-              {contentType.PROFILE}
-            </Button>
+            <Button color="inherit">{contentType.PROFILE}</Button>
           </Link>
           <Link
-            to={"/" + this.props.user.username + "/feed"}
-            style={{ textDecoration: "none" }}
+            to={"/" + this.props.user.id + "/feed"}
+            className={classes.appbarButton}
           >
-            <Button color="inherit" className={classes.appbarButton}>
-              {contentType.FEED}
+            <Button color="inherit">{contentType.FEED}</Button>
+          </Link>
+          <Link to={"/"} className={classes.appbarButton}>
+            <Button color="inherit" onClick={this.logOut}>
+              Log Out
             </Button>
           </Link>
 
-          <Button
-            className={classes.appbarButton}
-            color="inherit"
-            onClick={this.logOut}
-          >
-            Logout
-          </Button>
-          <SearchBar />
           <Link
             to={"/" + this.props.user.username + "/settings"}
             className={classes.appbarButton}
           >
-            <Button color="inherit">
+            <SearchBar />
+            <IconButton color="inherit">
               <SettingsIcon />
-            </Button>
+            </IconButton>
           </Link>
         </Toolbar>
       </AppBar>
@@ -149,11 +143,10 @@ const mapStateToProps = (state) => {
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    toggleSidebar: () => dispatch(toggleSidebar()),
-    logOut: () => dispatch(logOut()),
-  };
+const mapDispatchToProps = {
+  toggleSidebar,
+  logOut,
+  fetchSelectedUser,
 };
 
 export default connect(

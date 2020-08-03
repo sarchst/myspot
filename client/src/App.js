@@ -1,16 +1,21 @@
 import React from "react";
-import "./App.css";
+import Spotify from "spotify-web-api-js";
 import { connect } from "react-redux";
+import { BrowserRouter as Router } from "react-router-dom";
+
 import Sidebar from "./components/Sidebar";
 import Appbar from "./components/Appbar";
 import Login from "./components/Login";
-import { BrowserRouter as Router } from "react-router-dom";
+import ScrollToTop from "./components/ScrollToTop";
+import { registerSpotifyApi } from "./app/actions/spotifyApiActions";
+import {
+  setCurrentUser,
+  submitSpotifyApiUserMe,
+} from "./app/actions/userActions";
+import { setPlayListIDs } from "./app/actions/playlistActions";
+
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
-import Spotify from "spotify-web-api-js";
-import { registerSpotifyWebApi } from "./app/actions";
-import { setCurrentUser } from "./app/actions/userActions";
-import { submitSpotifyApiUserMe } from "./app/actions/spotifyApiActions";
-import { fetchUserSettings } from "./app/actions/settingsActions";
+import "./App.css";
 
 const spotifyWebApi = new Spotify();
 
@@ -87,42 +92,38 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     const params = this.getHashParams();
-    // console.log("params is: ");
-    // console.log(params);
-    // console.log("access token is " + params.access_token);
 
     if (params.access_token) {
       spotifyWebApi.setAccessToken(params.access_token);
-      console.log("LOGGING IN: SENDING SPOTIFYWEBAPI TO REDUX STORE");
       let userObject = {};
-      this.props.registerSpotifyWebApi(params.access_token);
-      spotifyWebApi
-        .getMe()
-        .then((response) => {
-          Object.assign(userObject, response);
-          return spotifyWebApi.getMyTopTracks();
-        })
-        .then((topTracksResponse) => {
-          if (topTracksResponse) {
-            userObject.topTracks = topTracksResponse.items.slice(
-              0,
-              Math.min(topTracksResponse.items.length, 3)
-            );
-          }
-          return spotifyWebApi.getMyRecentlyPlayedTracks();
-        })
-        .then((recentTracksResponse) => {
-          if (recentTracksResponse) {
-            userObject.recentTracks = recentTracksResponse.items.slice(
-              0,
-              Math.min(recentTracksResponse.items.length, 3)
-            );
-          }
-          console.log("submitSpotifyApiUserMe from App.js");
-          // console.log(userObject);
-          this.props.submitSpotifyApiUserMe(userObject);
-          this.props.setCurrentUser(userObject.id, userObject.display_name);
-        });
+      // Pass refresh token as well for further use if a new access token is needed
+      this.props.registerSpotifyApi(params);
+      Promise.all([
+        spotifyWebApi.getMe(),
+        spotifyWebApi.getMyTopTracks(),
+        spotifyWebApi.getMyRecentlyPlayedTracks(),
+      ]).then((values) => {
+        const spotifyMe = values[0];
+        const topTracks = values[1];
+        const recentTracks = values[2];
+        // create db object using spotify user object
+        Object.assign(userObject, spotifyMe);
+        // add top tracks to db object
+        userObject.topTracks = topTracks.items.slice(
+          0,
+          Math.min(topTracks.items.length, 3)
+        );
+        // add recent tracks to db object
+        userObject.recentTracks = recentTracks.items.slice(
+          0,
+          Math.min(recentTracks.items.length, 3)
+        );
+        // dispatch updated spotify info to db
+        // then store db response as current user and as initial selectedUser in redux
+        this.props.submitSpotifyApiUserMe(userObject);
+        // fetch and store URIs for MySpot and MySpot-Tinderify playlists in redux
+        this.props.setPlayListIDs(spotifyMe.id, params.access_token);
+      });
     }
   }
 
@@ -139,15 +140,15 @@ class App extends React.Component {
   }
 
   selectTheme = () =>
-    // TODO swith this too user from database?
     this.props.accountSettings.darkMode ? darkTheme : lightTheme;
 
   render() {
-    if (this.props.spotifyWebApi && this.props.user.id) {
+    if (this.props.spotifyApi.accessToken && this.props.user.id) {
       return (
         <ThemeProvider theme={this.selectTheme()}>
           <Router>
             <div className="App">
+              <ScrollToTop />
               <Appbar />
               <Sidebar />
             </div>
@@ -164,18 +165,19 @@ const mapStateToProps = (state) => {
   return {
     user: state.user,
     accountSettings: state.accountSettings,
-    spotifyWebApi: state.spotifyWebApi,
+    spotifyApi: state.spotifyApi,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
     setCurrentUser: (id, username) => dispatch(setCurrentUser(id, username)),
-    registerSpotifyWebApi: (spotifyWebApi) =>
-      dispatch(registerSpotifyWebApi(spotifyWebApi)),
+    registerSpotifyApi: (spotifyApi) =>
+      dispatch(registerSpotifyApi(spotifyApi)),
     submitSpotifyApiUserMe: (spotifyUserMe) =>
       dispatch(submitSpotifyApiUserMe(spotifyUserMe)),
-    fetchUserSettings: fetchUserSettings,
+    setPlayListIDs: (UserMeID, spotifyToken) =>
+      dispatch(setPlayListIDs(UserMeID, spotifyToken)),
   };
 };
 

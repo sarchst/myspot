@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import MaterialTable from "material-table";
 import { Paper } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
+import { fetchSelectedUser } from "../../app/actions/selectedUserActions";
 
 const styles = (theme) => ({
   link: {
@@ -21,8 +22,12 @@ class FollowTable extends React.Component {
     followList: [],
   };
   componentDidMount = () => {
+    this.fetchFollowPeople();
+  };
+
+  fetchFollowPeople = () => {
     const type = this.props.type;
-    fetch(`http://localhost:9000/user/${type}/${this.props.user.id}`)
+    fetch(`http://localhost:9000/user/${type}/${this.props.selectedUser._id}`)
       .then((res) => res.json())
       .then((res) => {
         if (res.error) {
@@ -64,11 +69,9 @@ class FollowTable extends React.Component {
             field: "pic",
             render: (rowData) => (
               <Link
-                to={{
-                  pathname: "/myspotter/" + rowData.username,
-                  state: {
-                    user_ID: rowData.userId,
-                  },
+                to={`/${rowData.userId}`}
+                onClick={() => {
+                  this.props.fetchSelectedUser(rowData.userId);
                 }}
                 style={{ textDecoration: "none" }}
               >
@@ -89,11 +92,9 @@ class FollowTable extends React.Component {
             render: (rowData) => (
               <Link
                 className={this.props.classes.link}
-                to={{
-                  pathname: "/myspotter/" + rowData.username,
-                  state: {
-                    user_ID: rowData.userId,
-                  },
+                to={`/${rowData.userId}`}
+                onClick={() => {
+                  this.props.fetchSelectedUser(rowData.userId);
                 }}
               >
                 {rowData.username}
@@ -119,6 +120,16 @@ class FollowTable extends React.Component {
 
 const mapStateToProps = (state) => ({
   user: state.user,
+  selectedUser: state.selectedUser,
 });
 
-export default connect(mapStateToProps)(withStyles(styles)(FollowTable));
+const mapDispatchToProps = (dispatch) => {
+  return {
+    fetchSelectedUser: (userID) => dispatch(fetchSelectedUser(userID)),
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withStyles(styles)(FollowTable));

@@ -1,16 +1,15 @@
 export const LOG_IN = "LOG_IN";
-export const SPOTIFY_WEB_API = "SPOTIFY_WEB_API";
 export const TOGGLE_SIDEBAR = "TOGGLE_SIDEBAR";
 export const TOGGLE_NOTIFICATIONS = "TOGGLE_NOTIFICATIONS";
 export const TOGGLE_DARKMODE = "TOGGLE_DARKMODE";
 export const CHANGE_LANG = "CHANGE_LANG";
 export const SUBMIT_DEL_POST_DIALOG = "SUBMIT_DEL_POST_DIALOG";
 export const CLOSE_DEL_POST_DIALOG = "CLOSE_DEL_POST_DIALOG";
-
-export const registerSpotifyWebApi = (spotifyWebApi) => ({
-  type: SPOTIFY_WEB_API,
-  payload: spotifyWebApi,
-});
+export const SUBMIT_EDIT_POST_DIALOG = "SUBMIT_EDIT_POST_DIALOG";
+export const CLOSE_EDIT_POST_DIALOG = "CLOSE_EDIT_POST_DIALOG";
+export const CONFIRM_UNFOLLOW_DIALOG = "CONFIRM_UNFOLLOW_DIALOG";
+export const CLOSE_UNFOLLOW_DIALOG = "CLOSE_UNFOLLOW_DIALOG";
+export const LOG_OUT = "LOG_OUT";
 
 export const toggleSidebar = () => ({
   type: TOGGLE_SIDEBAR,
@@ -37,5 +36,27 @@ export const submitDeletePostDialog = (payload) => ({
 });
 
 export const closeDeletePostDialog = () => ({
-  type: CLOSE_DEL_POST_DIALOG
-})
+  type: CLOSE_DEL_POST_DIALOG,
+});
+
+export const submitEditPostDialog = (payload) => ({
+  type: SUBMIT_EDIT_POST_DIALOG,
+  payload: payload,
+});
+
+export const closeEditPostDialog = () => ({
+  type: CLOSE_EDIT_POST_DIALOG,
+});
+
+export const confirmUnfollowDialog = (payload) => ({
+  type: CONFIRM_UNFOLLOW_DIALOG,
+  payload: payload,
+});
+
+export const closeUnfollowDialog = () => ({
+  type: CLOSE_UNFOLLOW_DIALOG,
+});
+
+export const logOut = () => ({
+  type: LOG_OUT,
+});

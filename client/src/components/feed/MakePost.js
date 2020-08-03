@@ -43,7 +43,6 @@ const styles = (theme) => ({
   },
 });
 
-
 class MakePost extends React.Component {
   state = {
     authorId: this.props.user.id, // user id, ref to user schema
@@ -82,94 +81,114 @@ class MakePost extends React.Component {
   };
 
   handleSubmitPost = () => {
-    this.props.makePost(this.state);
+    this.props.makePost(
+      this.state,
+      this.props.profileFeedFilter,
+      this.props.feedFilter
+    );
     // TODO media options will have to change after spotify integration
     this.setState({ content: "", media: "", type: "playlist" });
     console.log(this.state);
   };
 
+  isRenderedFromOtherUserProfile = () =>
+    this.props.parentComponentType === "Profile" &&
+    this.props.selectedUser._id !== this.props.user.id;
+
   render() {
-    const { classes } = this.props;
-    return (
-      <div className={classes.root}>
-        <Paper className={classes.paper}>
-          <Grid container spacing={2} alignItems="center" justify="flex-end">
-            <Grid item xs={12}>
-              <FormControl fullWidth>
-                <InputLabel htmlFor="standard-basic">
-                  Tell us about your Jams
-                </InputLabel>
-                <Input
-                  id="standard-basic"
-                  value={this.state.content}
-                  onChange={this.handleChange}
-                />
-              </FormControl>
-            </Grid>
-            <Grid item xs={2}>
-              <FormControl>
-                <ToggleButtonGroup
-                  value={this.state.type}
-                  exclusive
-                  onChange={this.handleTypeSelect}
-                  size="small"
-                >
-                  <ToggleButton value="playlist" aria-label="playlist">
-                    <PlaylistAddIcon />
-                  </ToggleButton>
-                  <ToggleButton value="album" aria-label="album">
-                    <AlbumIcon />
-                  </ToggleButton>
-                  <ToggleButton value="song" aria-label="song">
-                    <MusicNoteIcon />
-                  </ToggleButton>
-                </ToggleButtonGroup>
-              </FormControl>
-            </Grid>
-            <Grid item xs={8}>
-              <FormControl style={{ minWidth: 200 }}>
-                <InputLabel id="media">Media</InputLabel>
-                <Select
-                  // native
-                  value={this.state.media}
-                  onChange={this.handleMediaSelect}
-                >
-                  {/* TODO REPLACE temporary option with this mapping once api has connect with spotify
+    if (!this.isRenderedFromOtherUserProfile()) {
+      const { classes } = this.props;
+      return (
+        <div className={classes.root}>
+          <Paper className={classes.paper}>
+            <Grid container spacing={2} alignItems="center" justify="flex-end">
+              <Grid item xs={12}>
+                <FormControl fullWidth>
+                  <InputLabel htmlFor="standard-basic">
+                    Tell us about your Jams
+                  </InputLabel>
+                  <Input
+                    id="standard-basic"
+                    value={this.state.content}
+                    onChange={this.handleChange}
+                    onKeyPress={(e) => {
+                      if (e.key === "Enter") {
+                        this.handleSubmitPost();
+                      }
+                    }}
+                  />
+                </FormControl>
+              </Grid>
+              <Grid item xs={2}>
+                <FormControl>
+                  <ToggleButtonGroup
+                    value={this.state.type}
+                    exclusive
+                    onChange={this.handleTypeSelect}
+                    size="small"
+                  >
+                    <ToggleButton value="playlist" aria-label="playlist">
+                      <PlaylistAddIcon />
+                    </ToggleButton>
+                    <ToggleButton value="album" aria-label="album">
+                      <AlbumIcon />
+                    </ToggleButton>
+                    <ToggleButton value="song" aria-label="song">
+                      <MusicNoteIcon />
+                    </ToggleButton>
+                  </ToggleButtonGroup>
+                </FormControl>
+              </Grid>
+              <Grid item xs={8}>
+                <FormControl style={{ minWidth: 200 }}>
+                  <InputLabel id="media">Media</InputLabel>
+                  <Select
+                    // native
+                    value={this.state.media}
+                    onChange={this.handleMediaSelect}
+                  >
+                    {/* TODO REPLACE temporary option with this mapping once api has connect with spotify
                   {this.state.mediaOptions.map((mc) => {
                     return <option value={mc}>{mc}</option>;
                   })} */}
-                  <MenuItem value="my awesome playlist">
-                    my awesome playlist
-                  </MenuItem>
-                  <MenuItem value="my firday night playlist">
-                    my friday night playlist
-                  </MenuItem>
-                  <MenuItem value="my workout playlist">
-                    my workout playlist
-                  </MenuItem>
-                </Select>
-              </FormControl>
+                    <MenuItem value="my awesome playlist">
+                      my awesome playlist
+                    </MenuItem>
+                    <MenuItem value="my firday night playlist">
+                      my friday night playlist
+                    </MenuItem>
+                    <MenuItem value="my workout playlist">
+                      my workout playlist
+                    </MenuItem>
+                  </Select>
+                </FormControl>
+              </Grid>
+              <Grid item xs={2}>
+                <Button
+                  className={classes.submit}
+                  variant="contained"
+                  onClick={this.handleSubmitPost}
+                  color="primary"
+                >
+                  Post
+                </Button>
+              </Grid>
             </Grid>
-            <Grid item xs={2}>
-              <Button
-                className={classes.submit}
-                variant="contained"
-                onClick={this.handleSubmitPost}
-                color="primary"
-              >
-                Post
-              </Button>
-            </Grid>
-          </Grid>
-        </Paper>
-      </div>
-    );
+          </Paper>
+        </div>
+      );
+    } else {
+      return null;
+    }
   }
 }
 
 const mapStateToProps = (state) => ({
   user: state.user,
-  posts: state.posts,
+  posts: state.profileFeed.posts,
+  profileFeedFilter: state.profileFeed.filter,
+  feedFilter: state.feed.filter,
+  selectedUser: state.selectedUser,
 });
 
 const mapDispatchToProps = {

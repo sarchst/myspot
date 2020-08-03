@@ -1,5 +1,6 @@
-import { SET_CURRENT_USER, LOG_OUT } from "../actions/userActions";
+import { SET_CURRENT_USER } from "../actions/userActions";
 import { FETCH_PROFILEPIC_SUCCESS } from "../actions/imageUploadActions";
+import { LOG_OUT } from "../actions";
 
 const initialState = {
   id: "",
@@ -12,15 +13,12 @@ export const user = (state = initialState, action) => {
     case SET_CURRENT_USER:
       return {
         ...state,
-        id: action.id,
-        username: action.username,
+        ...action.payload,
+        id: action.payload._id,
+        username: action.payload.username,
       };
     case LOG_OUT:
-      return {
-        ...state,
-        id: "",
-        username: "",
-      };
+      return initialState;
     case FETCH_PROFILEPIC_SUCCESS:
       return {
         ...state,
