@@ -13,7 +13,7 @@ import {
 
 class UnfollowDialog extends React.Component {
   handleConfirm = () => {
-    this.props.handleUnfollow();
+    this.props.handleUnfollow(this.props.unfollowDialog.userId);
     this.props.closeUnfollowDialog();
   };
   handleCancel = () => {

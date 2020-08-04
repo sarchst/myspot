@@ -82,17 +82,32 @@ class Favourites extends React.Component {
   }
 
   componentDidMount() {
-    spotifyWebApi.getMySavedTracks().then(
-      (data) => {
-        this.setState({
-          tracks: data.items,
-        });
-      },
-      function (err) {
+    this.getAllTracks()
+      .then((allSavedTracks) => {
+        this.setState({ tracks: allSavedTracks });
+      })
+      .catch((err) => {
         console.error(err);
-      }
-    );
+      });
   }
+
+  getAllTracks = async () => {
+    let allTracks = [];
+    let offset = 0;
+    let tracks = await spotifyWebApi.getMySavedTracks({
+      limit: 50,
+      offset: offset,
+    });
+    while (tracks.items.length !== 0) {
+      allTracks.push(...tracks.items);
+      offset += 50;
+      tracks = await spotifyWebApi.getMySavedTracks({
+        limit: 50,
+        offset: offset,
+      });
+    }
+    return allTracks;
+  };
 
   addSongToMySpotPlayList = (id) => {
     spotifyWebApi

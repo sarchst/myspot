@@ -5,6 +5,7 @@ import Spotify from "spotify-web-api-js";
 
 import {
   Avatar,
+  Button,
   Container,
   CssBaseline,
   IconButton,
@@ -61,6 +62,19 @@ const styles = (theme) => ({
     backgroundColor: theme.palette.background.paper,
     padding: theme.spacing(0),
   },
+  link: {
+    color: theme.palette.secondary.main,
+    textDecoration: "none",
+    "&:hover": {
+      textDecoration: "underline",
+    },
+    button: {
+      textTransform: "none",
+    },
+    submit: {
+      float: "right",
+    },
+  },
   root: {
     width: "100%",
     "& > * + *": {
@@ -76,10 +90,14 @@ class SongList extends React.Component {
     super(props);
     this.state = {
       tracks: [],
-      name: this.props.location ? this.props.location.state.playlistName : "",
-      description: this.props.location
-        ? this.props.location.state.playlistDescription
-        : "",
+      name:
+        this.props.location && this.props.location.state
+          ? this.props.location.state.collectionName
+          : "",
+      description:
+        this.props.location && this.props.location.state
+          ? this.props.location.state.collectionDescription
+          : "",
       songlistType: "",
       albumImage: "",
       successSnackOpen: false,
@@ -224,12 +242,31 @@ class SongList extends React.Component {
     return (
       <div>
         {this.state.songlistType === "playlist" ? (
-          <Link to={"/" + this.props.match.params.user + "/playlists"}>
-            Go Back
+          <Link
+            to={"/" + this.props.match.params.user + "/playlists"}
+            style={{ textDecoration: "none" }}
+          >
+            <Button
+              className={classes.submit}
+              variant="outlined"
+              color="secondary"
+              style={{ textDecoration: "none" }}
+            >
+              Go Back
+            </Button>
           </Link>
         ) : (
-          <Link to={"/" + this.props.match.params.user + "/albums"}>
-            Go Back
+          <Link
+            to={"/" + this.props.match.params.user + "/albums"}
+            style={{ textDecoration: "none" }}
+          >
+            <Button
+              className={classes.submit}
+              variant="outlined"
+              color="secondary"
+            >
+              Go Back
+            </Button>
           </Link>
         )}
         <CssBaseline>

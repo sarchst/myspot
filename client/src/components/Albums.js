@@ -72,7 +72,7 @@ class Albums extends React.Component {
   }
 
   render() {
-    const { classes, user } = this.props;
+    const { classes, selectedUser } = this.props;
     return (
       <React.Fragment>
         <CssBaseline />
@@ -108,7 +108,14 @@ class Albums extends React.Component {
                     </CardContent>
                     <CardActions>
                       <Link
-                        to={"/" + user.username + "/albums/" + album.album.id}
+                          style={{ textDecoration: "none" }}
+                        to={{
+                          pathname: `/${selectedUser._id}/albums/${album.album.id}`,
+                          state: {
+                            collectionName: album.album.name,
+                            collectionDescription: album.album.description,
+                          },
+                        }}
                       >
                         <Button size="small" color="secondary">
                           View Songs
@@ -129,7 +136,7 @@ class Albums extends React.Component {
 const mapStateToProps = (state) => {
   return {
     spotifyApi: state.spotifyApi,
-    user: state.user,
+    selectedUser: state.selectedUser,
   };
 };
 

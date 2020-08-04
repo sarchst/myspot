@@ -77,7 +77,11 @@ class FriendsDiscoverWeekly extends React.Component {
           <MaterialTable
             components={{
               Container: (props) => (
-                <Paper {...props} elevation={0} style={{ boxShadow: 0 }} />
+                <Paper
+                  {...props}
+                  elevation={0}
+                  style={{ boxShadow: 0, borderRadius: 16, padding: 10 }}
+                />
               ),
             }}
             columns={[
@@ -121,9 +125,9 @@ class FriendsDiscoverWeekly extends React.Component {
             <Box ml={5}>
               <Button
                 className={classes.submit}
-                variant="contained"
+                variant="outlined"
+                color="secondary"
                 onClick={() => this.goBackToFriendsList()}
-                color="primary"
               >
                 Go Back
               </Button>

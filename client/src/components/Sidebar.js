@@ -25,6 +25,7 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
+  Typography,
 } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
@@ -112,14 +113,10 @@ class Sidebar extends React.Component {
       case contentType.FAVOURITES:
         return <FavoriteIcon />;
       case contentType.TINDERIFY:
-        return <WhatshotIcon />;
+        return <WhatshotIcon style={{ color: "#e56b9e" }} />;
       default:
         return <AccountCircleIcon />;
     }
-  };
-
-  processTextForURL = (text) => {
-    return text.toLowerCase();
   };
 
   render() {
@@ -169,22 +166,17 @@ class Sidebar extends React.Component {
             </ListItem>
 
             {[
-              contentType.ALBUMS,
+              contentType.FAVOURITES,
               contentType.PLAYLISTS,
+              contentType.ALBUMS,
               contentType.FOLLOWERS,
               contentType.FOLLOWING,
-              contentType.FAVOURITES,
               contentType.TINDERIFY,
             ].map((text, index) => (
               <ListItem button key={text}>
                 <Link
                   className={classes.sidebarItem}
-                  to={
-                    "/" +
-                    this.props.user.id +
-                    "/" +
-                    this.processTextForURL(text)
-                  }
+                  to={"/" + this.props.user.id + "/" + text.toLowerCase()}
                 >
                   <ListItemIcon>{this.getSidebarIcon(text)}</ListItemIcon>
                   <ListItemText primary={text} />
@@ -213,13 +205,39 @@ class Sidebar extends React.Component {
               key="followers"
               exact
               path="/:user/followers"
-              component={(props) => <FollowTable type={"followers"} />}
+              component={(props) => (
+                <div>
+                  <Typography
+                    component="h1"
+                    variant="h2"
+                    align="center"
+                    color="textPrimary"
+                    gutterBottom
+                  >
+                    Followers
+                  </Typography>
+                  <FollowTable type={"followers"} inProfileTable={false} />
+                </div>
+              )}
             />
             <Route
               key="following"
               exact
               path="/:user/following"
-              component={(props) => <FollowTable type={"following"} />}
+              component={(props) => (
+                <div>
+                  <Typography
+                    component="h1"
+                    variant="h2"
+                    align="center"
+                    color="textPrimary"
+                    gutterBottom
+                  >
+                    Following
+                  </Typography>
+                  <FollowTable type={"following"} inProfileTable={false} />
+                </div>
+              )}
             />
             <Route path="/:user/feed" component={Feed} />
             <Route path="/:user/settings" component={Settings} />

@@ -168,6 +168,7 @@ class ProfileTable extends React.Component {
             paging: false,
             toolbar: false,
             sorting: false,
+            draggable: false,
           }}
         />
       );
@@ -176,9 +177,15 @@ class ProfileTable extends React.Component {
         <FollowTable
           key={this.state.tabIndex}
           type={this.state.tabIndex === 1 ? "followers" : "following"}
+          profileTableCallback={() => this.setTabIndex(false)}
+          inProfileTable={true}
         />
       );
     }
+  };
+
+  setTabIndex = (index) => {
+    this.setState({ tabIndex: index });
   };
 
   render() {

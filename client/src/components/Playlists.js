@@ -122,10 +122,11 @@ class Playlists extends React.Component {
                         to={{
                           pathname: `/${this.state.userID}/playlists/${playlist.id}`,
                           state: {
-                            playlistName: playlist.name,
-                            playlistDescription: playlist.description,
+                            collectionName: playlist.name,
+                            collectionDescription: playlist.description,
                           },
                         }}
+                        style={{ textDecoration: "none" }}
                       >
                         <Button size="small" color="secondary">
                           View Songs

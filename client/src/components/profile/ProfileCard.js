@@ -17,6 +17,7 @@ import ListSubheader from "@material-ui/core/ListSubheader";
 import PlayCircleOutlineIcon from "@material-ui/icons/PlayCircleOutline";
 import MusicOffOutlinedIcon from "@material-ui/icons/MusicOffOutlined";
 import Emoji from "react-emoji-render";
+import { getName } from "country-list";
 import Typography from "@material-ui/core/Typography";
 import FollowButton from "../follow/FollowButton";
 
@@ -91,6 +92,10 @@ class ProfileCard extends React.Component {
     });
   };
 
+  updateCard = () => {
+    this.setState({});
+  };
+
   render() {
     const { classes, selectedUser } = this.props;
 
@@ -105,10 +110,22 @@ class ProfileCard extends React.Component {
           <span className={classes.subheader}>
             <Emoji text=":globe_showing_americas:" />
             {/* unfortunately it seems like emoji flags aren't supported for windows10 so can only see it on mac */}
-            <Emoji text=":flag_canada:" />
+            <Emoji
+              text={
+                ":flag_" +
+                getName(selectedUser.country).toLocaleLowerCase() +
+                ":"
+              }
+            />
             <Emoji text=":globe_showing_americas:" />
           </span>
-          <FollowButton />
+          <FollowButton
+            selectedUserId={selectedUser._id}
+            selectedUserFollowers={selectedUser.followers}
+            selectedUsername={selectedUser.username}
+            isFollowing={selectedUser.followers.includes(this.props.user.id)}
+            isProfileCall={true}
+          />
         </CardContent>
         <Divider light />
         <Box display={"flex"}>
@@ -271,6 +288,7 @@ class ProfileCard extends React.Component {
 
 const mapStateToProps = (state) => ({
   spotifyApi: state.spotifyApi,
+  user: state.user,
   selectedUser: state.selectedUser,
 });
 

@@ -10,6 +10,9 @@ import { withStyles } from "@material-ui/core/styles";
 import "pure-react-carousel/dist/react-carousel.es.css";
 
 const styles = (theme) => ({
+  root: {
+    borderRadius: 16,
+  },
   audioPlayer: {
     width: "50%",
   },
@@ -56,14 +59,14 @@ class Tinderify extends React.Component {
               paragraph
             >
               Swipe through your Discover Weekly playlist and like songs to add
-              to your MySpot-Tinderify playlist!
+              to your MySpot - Tinderify playlist!
             </Typography>
             <Paper className={classes.root}>
               <Tabs
                 value={this.state.tabIndex}
                 onChange={this.handleChange}
-                indicatorColor="primary"
-                textColor="primary"
+                indicatorColor="secondary"
+                textColor="secondary"
                 centered
               >
                 <Tab label="My Discover Weekly" />
