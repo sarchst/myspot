@@ -87,7 +87,10 @@ getUserById = async (req, res) => {
 
 getUserByUsername = async (req, res) => {
   User.findOne(
-    { username: { $regex: new RegExp(req.params.id, "i") } },
+    // { username: { $regex: new RegExp(req.params.id, "i") } },
+    {
+      username: { $regex: new RegExp(["^", req.params.id, "$"].join(""), "i") },
+    },
     (err, User) => {
       if (err) {
         return res.status(400).json({ success: false, error: err });

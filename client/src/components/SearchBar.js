@@ -8,6 +8,9 @@ import { connect } from "react-redux";
 import { compose } from "redux";
 import { Redirect } from "react-router-dom";
 import { setSelectedUser } from "../app/actions/selectedUserActions";
+import Snackbar from "@material-ui/core/Snackbar";
+import Alert from "@material-ui/lab/Alert";
+import Button from "@material-ui/core/Button";
 // import { Redirect } from "react-router-dom";
 
 const styles = (theme) => ({
@@ -55,35 +58,49 @@ class SearchBar extends React.Component {
   state = {
     query: "",
     user: {},
-    redirectToSearchPage: false,
+    errorSnackOpen: false,
   };
 
   handleChange = (e) => {
     this.setState({ query: e.target.value });
-    //   console.log(this.state.query);
+  };
+
+  handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    this.setState({
+      errorSnackOpen: false,
+    });
   };
 
   handleSearch = () => {
-    // console.log("in handle search", this.state.query);
-    // this.props.searchUserByUsername(this.state.query);
-
     fetch(`http://localhost:9000/user/username/${this.state.query}`)
       .then((res) => res.json())
       .then((res) => {
         if (res.error) {
           throw res.error;
         }
-        if (res.data) this.props.setSelectedUser(res.data);
-        this.setState({ user: res.data });
+        if (res.data) {
+          this.props.setSelectedUser(res.data);
+          this.setState({ user: res.data });
+        } else {
+          this.setState({
+            errorSnackOpen: true,
+          });
+        }
         this.setState({ user: {} });
       })
       .catch((err) => {
         console.error(err);
+        this.setState({
+          errorSnackOpen: true,
+        });
+      })
+      .finally(() => {
+        this.setState({ query: "" });
       });
-
-    this.setState({ query: "" });
-    // this.setState({ redirectToSearchPage: true });
-    console.log("search bar props", this.props);
   };
 
   render() {
@@ -101,15 +118,29 @@ class SearchBar extends React.Component {
             root: classes.inputRoot,
             input: classes.inputInput,
           }}
+          // uncomment to clear text input on search
+          // value={this.state.query}
           inputProps={{ "aria-label": "search" }}
           onChange={this.handleChange}
           onKeyDown={(e) => {
             if (e.key === "Enter") {
-              console.log("Enter pressed");
               this.handleSearch();
             }
           }}
         />
+        <Snackbar
+          anchorOrigin={{
+            vertical: "top",
+            horizontal: "right",
+          }}
+          open={this.state.errorSnackOpen}
+          autoHideDuration={6000}
+          onClose={() => this.handleClose()}
+        >
+          <Alert onClose={() => this.handleClose()} severity="error">
+            Hmm...That user doesn't seem to exist!
+          </Alert>
+        </Snackbar>
       </div>
     );
   }
