@@ -2,7 +2,11 @@ import React from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 
+import FollowButton from "./FollowButton";
+
 import MaterialTable from "material-table";
+import Emoji from "react-emoji-render";
+import { getName } from "country-list";
 import { Paper } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 import { fetchSelectedUser } from "../../app/actions/selectedUserActions";
@@ -49,6 +53,7 @@ class FollowTable extends React.Component {
         numPosts: f.posts.length,
         numFollowers: f.followers.length,
         userId: f._id,
+        country: getName(f.country).toLocaleLowerCase(),
       };
       return foll;
     });
@@ -101,8 +106,20 @@ class FollowTable extends React.Component {
               </Link>
             ),
           },
+          {
+            title: "Country",
+            field: "country",
+            render: (rowData) => (
+              <Emoji text={":flag_" + rowData.country + ":"} />
+            ),
+          },
           { title: "# of Posts", field: "numPosts" },
           { title: "# of Followers", field: "numFollowers" },
+          // {
+          //   title: "",
+          //   field: "followButton",
+          //   render: (rowData) => <FollowButton />,
+          // },
         ]}
         data={this.state.followList}
         options={{
@@ -111,6 +128,7 @@ class FollowTable extends React.Component {
           paging: false,
           toolbar: false,
           sorting: false,
+          draggable: false,
           rowStyle: { borderBottom: 0 },
         }}
       />

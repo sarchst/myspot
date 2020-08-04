@@ -171,6 +171,7 @@ class ProfileTable extends React.Component {
             paging: false,
             toolbar: false,
             sorting: false,
+            draggable: false,
             // headerStyle: { color: "#03DAC6" },
           }}
         />

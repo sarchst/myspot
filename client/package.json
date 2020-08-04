@@ -15,6 +15,7 @@
     "@testing-library/user-event": "^7.1.2",
     "axios": "^0.19.2",
     "cloudinary": "^1.22.0",
+    "country-list": "^2.2.0",
     "css-loader": "^3.6.0",
     "dotenv": "^8.2.0",
     "emoji-mart": "^3.0.0",
