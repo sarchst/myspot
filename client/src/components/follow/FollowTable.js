@@ -11,6 +11,8 @@ const styles = (theme) => ({
   root: {
     borderRadius: 16,
     borderTopRadius: 16,
+    marginTop: theme.spacing(2),
+    marginBottom: theme.spacing(2),
   },
   link: {
     color: theme.palette.secondary.main,
@@ -62,7 +64,7 @@ class FollowTable extends React.Component {
   render() {
     const { classes, type } = this.props;
     return (
-      <div>
+      <div className={classes.root}>
         <Typography
           component="h1"
           variant="h2"
@@ -70,16 +72,20 @@ class FollowTable extends React.Component {
           color="textPrimary"
           gutterBottom
         >
-          {type === "following"? "Following": "Followers"}
+          {type === "following" ? "Following" : "Followers"}
         </Typography>
         <MaterialTable
-          className={classes.root}
+          // className={classes.root}
           components={{
             Container: (props) => (
               <Paper
                 {...props}
                 elevation={0}
-                style={{ boxShadow: 0, borderRadius: 16 }}
+                style={{
+                  boxShadow: 0,
+                  borderRadius: 16,
+                  padding: 10,
+                }}
               />
             ),
           }}

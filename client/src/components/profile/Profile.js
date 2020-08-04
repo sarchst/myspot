@@ -3,7 +3,6 @@ import { connect } from "react-redux";
 import { withStyles } from "@material-ui/core/styles";
 import { toggleLike } from "../../app/actions/postActions";
 import {
-  // fetchPosts,
   fetchPostsWithFilter,
 } from "../../app/actions/postActions";
 import Post from "../feed/Post";
@@ -32,7 +31,6 @@ const styles = (theme) => ({
   },
   header: {
     fontSize: 20,
-    // margin: theme.spacing(2, 0),
     color: theme.palette.primary,
   },
   paper: {
@@ -78,7 +76,6 @@ class Profile extends React.Component {
       });
     }
     // check if filter has been changed or selectedUser has changed
-    const { match } = this.props;
     if (
       this.props.filter !== prevProps.filter ||
       prevProps.selectedUser.username !== this.props.selectedUser.username

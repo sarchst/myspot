@@ -80,7 +80,7 @@ class FriendsDiscoverWeekly extends React.Component {
                 <Paper
                   {...props}
                   elevation={0}
-                  style={{ boxShadow: 0, borderRadius: 16}}
+                  style={{ boxShadow: 0, borderRadius: 16, padding: 10 }}
                 />
               ),
             }}

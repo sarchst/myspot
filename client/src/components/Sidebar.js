@@ -20,7 +20,6 @@ import HeadsetIcon from "@material-ui/icons/Headset";
 import MicIcon from "@material-ui/icons/Mic";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import QueueMusicIcon from "@material-ui/icons/QueueMusic";
-import PlayCircleFilledIcon from "@material-ui/icons/PlayCircleFilled";
 import AlbumIcon from "@material-ui/icons/Album";
 import WhatshotIcon from "@material-ui/icons/Whatshot";
 
@@ -32,7 +31,6 @@ import contentType from "../data/ContentTypeEnum";
 import { Link, Route, Switch, Redirect } from "react-router-dom";
 
 import FollowTable from "./follow/FollowTable";
-import NowPlaying from "./NowPlaying";
 import Profile from "./profile/Profile";
 import Feed from "./feed/Feed";
 import Settings from "./Settings";
