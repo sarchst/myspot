@@ -239,7 +239,6 @@ class SongList extends React.Component {
 
   render() {
     const { classes } = this.props;
-    console.log("Name: ", this.state.name === "MySpot");
     return (
       <div>
         {this.state.songlistType === "playlist" ? (

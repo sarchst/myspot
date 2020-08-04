@@ -37,6 +37,8 @@ import HeadsetIcon from "@material-ui/icons/Headset";
 import MicIcon from "@material-ui/icons/Mic";
 import QueueMusicIcon from "@material-ui/icons/QueueMusic";
 import WhatshotIcon from "@material-ui/icons/Whatshot";
+import { fetchUserSettings } from "../app/actions/settingsActions";
+import { fetchProfilePic } from "../app/actions/imageUploadActions";
 
 const drawerWidth = 240;
 
@@ -98,6 +100,11 @@ const styles = (theme) => ({
 class Sidebar extends React.Component {
   handleDrawerClose = () => {
     this.props.toggleSideBar();
+  };
+
+  componentDidMount = () => {
+    this.props.fetchProfilePic(this.props.user.id);
+    this.props.fetchUserSettings(this.props.user.id);
   };
 
   getSidebarIcon = (text) => {
@@ -265,11 +272,11 @@ const mapStateToProps = (state) => {
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    toggleSideBar: () => dispatch(toggleSidebar()),
-    fetchSelectedUser: (userID) => dispatch(fetchSelectedUser(userID)),
-  };
+const mapDispatchToProps = {
+  toggleSidebar,
+  fetchSelectedUser,
+  fetchUserSettings,
+  fetchProfilePic,
 };
 
 export default connect(
