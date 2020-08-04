@@ -113,7 +113,7 @@ class Sidebar extends React.Component {
       case contentType.FAVOURITES:
         return <FavoriteIcon />;
       case contentType.TINDERIFY:
-        return <WhatshotIcon />;
+        return <WhatshotIcon style={{ color:"#e56b9e" }}/>;
       default:
         return <AccountCircleIcon />;
     }
@@ -174,12 +174,11 @@ class Sidebar extends React.Component {
             </ListItem>
 
             {[
-              // contentType.LISTENINGTO,
-              contentType.ALBUMS,
+              contentType.FAVOURITES,
               contentType.PLAYLISTS,
+              contentType.ALBUMS,
               contentType.FOLLOWERS,
               contentType.FOLLOWING,
-              contentType.FAVOURITES,
               contentType.TINDERIFY,
             ].map((text, index) => (
               <ListItem
@@ -189,11 +188,7 @@ class Sidebar extends React.Component {
               >
                 <Link
                   className={classes.sidebarItem}
-                  to={
-                    "/" +
-                    this.props.user.id +
-                    "/" + text.toLowerCase()
-                  }
+                  to={"/" + this.props.user.id + "/" + text.toLowerCase()}
                 >
                   <ListItemIcon>{this.getSidebarIcon(text)}</ListItemIcon>
                   <ListItemText primary={text} />

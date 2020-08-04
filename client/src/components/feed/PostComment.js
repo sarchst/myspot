@@ -61,6 +61,7 @@ class PostComment extends React.Component {
         <IconButton
           className={classes.button}
           onClick={() => this.handleDeleteComment(commentdata)}
+          color="secondary"
         >
           <HighlightOffOutlinedIcon fontSize="small" />
         </IconButton>
@@ -69,67 +70,31 @@ class PostComment extends React.Component {
 
     return (
       // <Grid container direction="row" justify="space-between">
-      <Grid
-        item
-        container
-        direction="row"
-        spacing={1}
-        alignItems="center"
-        // className="commentContainer"
-      >
-        <Grid item>
-          <Typography
-            color="primary"
-            // className="commentItem"
-          >
-            {commentdata.time}
-          </Typography>
+      // <Grid
+      //   item
+      //   container
+      //   direction="row"
+      //   spacing={1}
+      //   // alignItems="center"
+      //   alignContent="space-between"
+      // >
+      <Grid container direction="row">
+        <Grid container item direction="row" spacing={1} xs={11} alignItems="center">
+          <Grid item>
+            <Typography color="primary">{commentdata.time}</Typography>
+          </Grid>
+          <Grid item>
+            <Typography color="secondary">
+              {commentdata.authorUsername}:
+            </Typography>
+          </Grid>
+          <Grid item>
+            <Typography fontFamily="Monospace">
+              {commentdata.content}
+            </Typography>
+          </Grid>
         </Grid>
-        <Grid item>
-          <Typography
-            color="secondary"
-            // fontWeight="bold"
-            // className="commentItem"
-          >
-            {commentdata.authorUsername}:
-          </Typography>
-        </Grid>
-        <Grid item>
-          <Typography
-            // className="commentItem"
-            fontFamily="Monospace"
-          >
-            {commentdata.content}
-          </Typography>
-        </Grid>
-
-        {/* TODO: reinstate comment likes if we have time */}
-        {/* <Grid item>
-          <IconButton
-            className={classes.button}
-            size="small"
-            aria-label="like"
-            aria-controls="like-post"
-            onClick={() => this.like()}
-            color={
-              commentdata.usersLiked.includes(this.props.user.id)
-                ? "red"
-                : "default"
-            }
-          >
-            {commentdata.usersLiked.length}
-            <FavoriteOutlinedIcon />
-          </IconButton>
-        </Grid> */}
-        <Grid>
-          {/* <IconButton
-                className={classes.button}
-                onClick={() => this.handleDeleteComment(commentdata)}
-              >
-                <HighlightOffOutlinedIcon fontSize="small" />
-              </IconButton> */}
-          {commentDeleteButton}
-        </Grid>
+        <Grid item>{commentDeleteButton}</Grid>
       </Grid>
     );
   }
