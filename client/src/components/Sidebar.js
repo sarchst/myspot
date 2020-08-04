@@ -228,7 +228,7 @@ class Sidebar extends React.Component {
                   >
                     Followers
                   </Typography>
-                  <FollowTable type={"followers"} />
+                  <FollowTable type={"followers"} inProfileTable={false} />
                 </div>
               )}
             />
@@ -247,7 +247,7 @@ class Sidebar extends React.Component {
                   >
                     Following
                   </Typography>
-                  <FollowTable type={"following"} />
+                  <FollowTable type={"following"} inProfileTable={false} />
                 </div>
               )}
             />

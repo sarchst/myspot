@@ -85,7 +85,7 @@ class Albums extends React.Component {
   }
 
   render() {
-    const { classes, user, selectedUser } = this.props;
+    const { classes, selectedUser } = this.props;
     return (
       <React.Fragment>
         <CssBaseline />
@@ -161,7 +161,6 @@ class Albums extends React.Component {
 const mapStateToProps = (state) => {
   return {
     spotifyApi: state.spotifyApi,
-    user: state.user,
     selectedUser: state.selectedUser,
   };
 };
