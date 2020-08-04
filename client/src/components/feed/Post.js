@@ -434,8 +434,9 @@ class Post extends Component {
                     {postdata.media.artist
                       ? postdata.media.name + " - " + postdata.media.artist
                       : postdata.media.name +
-                        " - " +
-                        postdata.media.ownerUsername}
+                        (postdata.media.ownerUsername
+                          ? " - " + postdata.media.ownerUsername
+                          : "")}
                   </Typography>
                 </Link>
               </Grid>
