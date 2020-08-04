@@ -41,8 +41,10 @@ const styles = (theme) => ({
   },
 
   appbarButton: {
-    marginLeft: 50,
-    fontSize: 15,
+    marginLeft: 25,
+    marginRight: 25,
+    // marginLeft: 50,
+    fontSize: 16,
     textDecoration: "none",
     color: "white",
   },
@@ -99,24 +101,38 @@ class Appbar extends React.Component {
           >
             <MenuIcon />
           </IconButton>
-          <Typography noWrap={false} className={classes.appTitle}>
+          <Typography
+            noWrap={false}
+            className={classes.appTitle}
+            variant="h1"
+            style={{ fontWeight: 400 }}
+          >
             MySpot
           </Typography>
           <Link
             to={"/" + this.props.user.id}
-            className={classes.appbarButton}
+            style={{ textDecoration: "none" }}
+            // className={classes.appbarButton}
             onClick={() => this.props.fetchSelectedUser(this.props.user.id)}
           >
-            <Button color="inherit">{contentType.PROFILE}</Button>
+            <Button className={classes.appbarButton} color="inherit">
+              {contentType.PROFILE}
+            </Button>
           </Link>
           <Link
             to={"/" + this.props.user.id + "/feed"}
-            className={classes.appbarButton}
+            style={{ textDecoration: "none" }}
           >
-            <Button color="inherit">{contentType.FEED}</Button>
+            <Button className={classes.appbarButton} color="inherit">
+              {contentType.FEED}
+            </Button>
           </Link>
-          <Link to={"/"} className={classes.appbarButton}>
-            <Button color="inherit" onClick={this.logOut}>
+          <Link to={"/"} style={{ textDecoration: "none" }}>
+            <Button
+              className={classes.appbarButton}
+              color="inherit"
+              onClick={this.logOut}
+            >
               Log Out
             </Button>
           </Link>
