@@ -73,10 +73,14 @@ class SongList extends React.Component {
     super(props);
     this.state = {
       tracks: [],
-      name: this.props.location ? this.props.location.state.playlistName : "",
-      description: this.props.location
-        ? this.props.location.state.playlistDescription
-        : "",
+      name:
+        this.props.location && this.props.location.state
+          ? this.props.location.state.collectionName
+          : "",
+      description:
+        this.props.location && this.props.location.state
+          ? this.props.location.state.collectionDescription
+          : "",
       songlistType: "",
       albumImage: "",
       successSnackOpen: false,
@@ -105,15 +109,15 @@ class SongList extends React.Component {
       // get playlist name and desc from Spotify API if can't retrieve from Link props
       if (!this.state.name) {
         spotifyWebApi.getPlaylist(this.props.match.params.playlistid).then(
-            (data) => {
-              this.setState({
-                name: data.name,
-                description: data.description,
-              });
-            },
-            function (err) {
-              console.error(err);
-            }
+          (data) => {
+            this.setState({
+              name: data.name,
+              description: data.description,
+            });
+          },
+          function (err) {
+            console.error(err);
+          }
         );
       }
     } else if ("albumid" in this.props.match.params) {
@@ -228,7 +232,9 @@ class SongList extends React.Component {
             Go Back
           </Link>
         ) : (
-          <Link to={"/" + this.props.match.params.user + "/albums"}>Go Back</Link>
+          <Link to={"/" + this.props.match.params.user + "/albums"}>
+            Go Back
+          </Link>
         )}
         <CssBaseline>
           <div className={classes.heroContent}>
