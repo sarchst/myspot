@@ -114,7 +114,6 @@ class Feed extends React.Component {
 
 const mapStateToProps = (state) => ({
   feed: state.feed,
-  posts: state.profileFeed.posts,
   user: state.user,
   profileFeedFilter: state.profileFeed.filter,
   feedFilter: state.feed.filter,
@@ -122,8 +121,6 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = {
   toggleLike,
-  // fetchFeed,
-  // fetchPosts,
   fetchFeedWithFilter,
 };
 

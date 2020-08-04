@@ -82,7 +82,6 @@ class Tinderify extends React.Component {
 const mapStateToProps = (state) => {
   return {
     spotifyWebApi: state.spotifyWebApi,
-    user: state.user,
   };
 };
 

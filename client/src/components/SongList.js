@@ -317,7 +317,6 @@ const mapStateToProps = (state) => {
   return {
     mySpotPlaylists: state.mySpotPlaylists,
     spotifyApi: state.spotifyApi,
-    user: state.user,
   };
 };
 

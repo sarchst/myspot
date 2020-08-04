@@ -89,7 +89,6 @@ class TinderifyPlaylist extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-  user: state.user,
   mySpotPlaylists: state.mySpotPlaylists,
   spotifyApi: state.spotifyApi,
 });

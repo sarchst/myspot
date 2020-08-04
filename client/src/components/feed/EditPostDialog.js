@@ -1,10 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 
-import {
-  submitEditPostDialog,
-  closeEditPostDialog,
-} from "../../app/actions/index";
+import { closeEditPostDialog } from "../../app/actions/index";
 import { editPost } from "../../app/actions/postActions";
 
 import {
@@ -92,7 +89,6 @@ const mapStateToProps = (state) => ({
   profileFeedFilter: state.profileFeed.filter,
 });
 export default connect(mapStateToProps, {
-  submitEditPostDialog,
   closeEditPostDialog,
   editPost,
 })(EditPostDialog);

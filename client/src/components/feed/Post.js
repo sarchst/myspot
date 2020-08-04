@@ -8,7 +8,7 @@ import { Link as RouterLink } from "react-router-dom";
 import PostComment from "./PostComment";
 import EditPostDialog from "./EditPostDialog";
 import DeletePostDialog from "./DeletePostDialog";
-import { deletePost, addComment } from "../../app/actions/postActions";
+import { addComment } from "../../app/actions/postActions";
 import { fetchSelectedUser } from "../../app/actions/selectedUserActions";
 import {
   submitDeletePostDialog,
@@ -686,7 +686,6 @@ Post.propTypes = {
 export default compose(
   withStyles(styles),
   connect(mapStateToProps, {
-    deletePost,
     submitDeletePostDialog,
     addComment,
     submitEditPostDialog,

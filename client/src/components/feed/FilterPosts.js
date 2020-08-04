@@ -93,7 +93,6 @@ class FilterPosts extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-  user: state.user,
   feedFilter: state.feed.filter,
   profileFeedFilter: state.profileFeed.filter,
 });

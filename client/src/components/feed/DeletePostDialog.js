@@ -1,10 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 
-import {
-  submitDeletePostDialog,
-  closeDeletePostDialog,
-} from "../../app/actions/index";
+import { closeDeletePostDialog } from "../../app/actions/index";
 import { deletePost } from "../../app/actions/postActions";
 
 import {
@@ -77,7 +74,6 @@ const mapStateToProps = (state) => ({
 });
 
 export default connect(mapStateToProps, {
-  submitDeletePostDialog,
   closeDeletePostDialog,
   deletePost,
 })(DeletePostDialog);

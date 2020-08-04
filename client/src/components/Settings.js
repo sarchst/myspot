@@ -2,7 +2,6 @@ import React from "react";
 import { connect } from "react-redux";
 
 import ImageUpload from "./ImageUpload";
-import { toggleNotifications, changeLang } from "../app/actions";
 import { updateSettings } from "../app/actions/settingsActions";
 
 import { Divider, Grid, Paper, Switch, Typography } from "@material-ui/core";
@@ -105,7 +104,5 @@ const mapStateToProps = (state) => ({
 });
 
 export default connect(mapStateToProps, {
-  toggleNotifications,
-  changeLang,
   updateSettings,
 })(withStyles(styles, { withTheme: true })(Settings));
