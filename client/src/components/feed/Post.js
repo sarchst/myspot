@@ -20,6 +20,7 @@ import {
   MenuItem,
   Paper,
   InputLabel,
+  Tooltip,
   Typography,
 } from "@material-ui/core";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
@@ -140,8 +141,8 @@ class Post extends Component {
     commentContent: "",
   };
 
-  chooseIcon = (media) => {
-    switch (media) {
+  chooseIcon = (type) => {
+    switch (type) {
       case "playlist":
         return <PlaylistAddIcon color={"primary"} />;
       case "album":
@@ -178,9 +179,10 @@ class Post extends Component {
     this.closeOptions();
   };
 
-  addPostMedia = (type) => {
+  addPostMedia = (type, media) => {
     // TODO: add song, album, or playlist
     console.log(type);
+    console.log(media);
   };
 
   openMoreOptions = (e) => {
@@ -310,7 +312,11 @@ class Post extends Component {
               alignItems="flex-start"
             >
               <Grid item>
-                {postdata.repost ? <Typography variant="button" color="secondary">Repost</Typography> : null}
+                {postdata.repost ? (
+                  <Typography variant="button" color="secondary">
+                    Repost
+                  </Typography>
+                ) : null}
               </Grid>
               <Grid item>
                 <Typography>{postdata.content}</Typography>
@@ -322,7 +328,7 @@ class Post extends Component {
                   variant="body2"
                   onClick={() => this.goToMedia()}
                 >
-                  <Typography>{postdata.media}</Typography>
+                  <Typography>{postdata.media.name}</Typography>
                 </Link>
               </Grid>
               {/* TODO add media art component? */}
@@ -394,52 +400,66 @@ class Post extends Component {
               alignItems="flex-end"
             >
               <Grid item>
-                <IconButton
-                  className={classes.button}
-                  size="small"
-                  aria-label="like"
-                  aria-controls="like-post"
-                  onClick={() => this.like()}
-                  color={
-                    postdata.usersLiked.includes(userId) ? "primary" : "default"
-                  }
-                >
-                  {postdata.usersLiked.length}
-                  <EmojiEmotionsIcon />
-                </IconButton>
+                <Tooltip title="Like Post">
+                  <IconButton
+                    className={classes.button}
+                    size="small"
+                    aria-label="like"
+                    aria-controls="like-post"
+                    onClick={() => this.like()}
+                    color={
+                      postdata.usersLiked.includes(userId)
+                        ? "primary"
+                        : "default"
+                    }
+                  >
+                    {postdata.usersLiked.length}
+                    <EmojiEmotionsIcon />
+                  </IconButton>
+                </Tooltip>
               </Grid>
               <Grid item>
-                <IconButton
-                  className={classes.button}
-                  size="small"
-                  aria-label="repost"
-                  aria-controls="repost-post"
-                  onClick={() => this.repost(postdata)}
-                >
-                  <ReplyIcon />
-                </IconButton>
+                <Tooltip title="Repost">
+                  <IconButton
+                    className={classes.button}
+                    size="small"
+                    aria-label="repost"
+                    aria-controls="repost-post"
+                    onClick={() => this.repost(postdata)}
+                  >
+                    <ReplyIcon />
+                  </IconButton>
+                </Tooltip>
               </Grid>
               <Grid item>
-                <IconButton
-                  className={classes.button}
-                  size="small"
-                  aria-label="share"
-                  aria-controls="share-post"
-                  onClick={() => this.share(postdata)}
-                >
-                  <ShareIcon />
-                </IconButton>
+                <Tooltip title="Share Post">
+                  <IconButton
+                    className={classes.button}
+                    size="small"
+                    aria-label="share"
+                    aria-controls="share-post"
+                    onClick={() => this.share(postdata)}
+                  >
+                    <ShareIcon />
+                  </IconButton>
+                </Tooltip>
               </Grid>
               <Grid item>
-                <IconButton
-                  className={classes.button}
-                  size="small"
-                  aria-label="add"
-                  aria-controls="add-media"
-                  onClick={() => this.addPostMedia(postdata)}
+                <Tooltip
+                  title={"Add " + postdata.type + " to you Spotify Library"}
                 >
-                  <LibraryAddIcon />
-                </IconButton>
+                  <IconButton
+                    className={classes.button}
+                    size="small"
+                    aria-label="add"
+                    aria-controls="add-media"
+                    onClick={() =>
+                      this.addPostMedia(postdata.type, postdata.media)
+                    }
+                  >
+                    <LibraryAddIcon />
+                  </IconButton>
+                </Tooltip>
               </Grid>
             </Grid>
           </Grid>

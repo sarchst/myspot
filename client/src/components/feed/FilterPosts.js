@@ -27,17 +27,16 @@ class FilterPosts extends React.Component {
   handleClose = (e) => {
     this.setState({ anchorE1: null, open: false });
     const { myFilter } = e.currentTarget.dataset;
-    console.log(myFilter);
     this.props.changeFilter(myFilter);
   };
 
-//   getButtonLabel = (page) => {
-//     if (page === "FEED") {
-//       return "Filter: " + this.props.feedFilter;
-//     } else {
-//       return "Filter: " + this.props.profileFeedFilter;
-//     }
-//   };
+  //   getButtonLabel = (page) => {
+  //     if (page === "FEED") {
+  //       return "Filter: " + this.props.feedFilter;
+  //     } else {
+  //       return "Filter: " + this.props.profileFeedFilter;
+  //     }
+  //   };
 
   render() {
     const { page } = this.props;

@@ -59,7 +59,6 @@ export function addPostsToPosts(data) {
 // };
 
 export const makePost = (post, profileFeedFilter, feedFilter) => {
-  console.log("Post from actions: ", post);
   const id = post.authorId;
   return (dispatch) => {
     return axios
@@ -78,8 +77,6 @@ export const makePost = (post, profileFeedFilter, feedFilter) => {
 };
 
 export const deletePost = (id, postId, profileFeedFilter, feedFilter) => {
-  console.log("Delete post in actions user ID", id);
-  console.log("Delete post in postBody", postId);
   return (dispatch) => {
     return axios
       .put(`http://localhost:9000/user/posts/delete/${id}`, postId)
@@ -153,8 +150,7 @@ export function fetchPostsWithFilter(id, profileFeedFilter) {
         return res;
       })
       .catch((error) => {
-        console.log("Fetch Posts Error");
-        dispatch(fetchPostsError(error));
+        console.log("Fetch Posts Error: ", error);
       });
   };
 }
@@ -199,7 +195,6 @@ export const deleteComment = (id, body, profileFeedFilter, feedFilter) => {
 };
 
 export const editPost = (id, commentInfo, profileFeedFilter, feedFilter) => {
-  console.log("edit post action");
   return (dispatch) => {
     return axios
       .put(`http://localhost:9000/user/posts/edit/${id}`, commentInfo)
