@@ -242,21 +242,28 @@ class SongList extends React.Component {
     return (
       <div>
         {this.state.songlistType === "playlist" ? (
-          <Link to={"/" + this.props.match.params.user + "/playlists"}>
+          <Link
+            to={"/" + this.props.match.params.user + "/playlists"}
+            style={{ textDecoration: "none" }}
+          >
             <Button
               className={classes.submit}
-              variant="contained"
-              color="primary"
+              variant="outlined"
+              color="secondary"
+              style={{ textDecoration: "none" }}
             >
               Go Back
             </Button>
           </Link>
         ) : (
-          <Link to={"/" + this.props.match.params.user + "/albums"}>
+          <Link
+            to={"/" + this.props.match.params.user + "/albums"}
+            style={{ textDecoration: "none" }}
+          >
             <Button
               className={classes.submit}
-              variant="contained"
-              color="primary"
+              variant="outlined"
+              color="secondary"
             >
               Go Back
             </Button>
