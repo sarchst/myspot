@@ -94,7 +94,6 @@ class PostComment extends React.Component {
         <Grid item xs={1}>
           {commentDeleteButton}
         </Grid>
-        <Grid>{commentDeleteButton}</Grid>
       </Grid>
     );
   }

@@ -252,7 +252,7 @@ class SongList extends React.Component {
               color="secondary"
               style={{ textDecoration: "none" }}
             >
-              Go Back
+              Go Back to Playlists
             </Button>
           </Link>
         ) : (
@@ -265,7 +265,7 @@ class SongList extends React.Component {
               variant="outlined"
               color="secondary"
             >
-              Go Back
+              Go Back to Albums
             </Button>
           </Link>
         )}
