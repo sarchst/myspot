@@ -14,7 +14,7 @@ import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-
+import { Typography } from "@material-ui/core";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import HeadsetIcon from "@material-ui/icons/Headset";
 import MicIcon from "@material-ui/icons/Mic";
@@ -113,12 +113,11 @@ class Sidebar extends React.Component {
       case contentType.FAVOURITES:
         return <FavoriteIcon />;
       case contentType.TINDERIFY:
-        return <WhatshotIcon style={{ color:"#e56b9e" }}/>;
+        return <WhatshotIcon style={{ color: "#e56b9e" }} />;
       default:
         return <AccountCircleIcon />;
     }
   };
-
 
   render() {
     const { classes, theme } = this.props;
@@ -218,13 +217,39 @@ class Sidebar extends React.Component {
               key="followers"
               exact
               path="/:user/followers"
-              component={(props) => <FollowTable type={"followers"} />}
+              component={(props) => (
+                <div>
+                  <Typography
+                    component="h1"
+                    variant="h2"
+                    align="center"
+                    color="textPrimary"
+                    gutterBottom
+                  >
+                    Followers
+                  </Typography>
+                  <FollowTable type={"followers"} />
+                </div>
+              )}
             />
             <Route
               key="following"
               exact
               path="/:user/following"
-              component={(props) => <FollowTable type={"following"} />}
+              component={(props) => (
+                <div>
+                  <Typography
+                    component="h1"
+                    variant="h2"
+                    align="center"
+                    color="textPrimary"
+                    gutterBottom
+                  >
+                    Following
+                  </Typography>
+                  <FollowTable type={"following"} />
+                </div>
+              )}
             />
             <Route path="/:user/feed" component={Feed} />
             <Route path="/:user/settings" component={Settings} />

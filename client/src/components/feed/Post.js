@@ -35,8 +35,6 @@ import {
   Snackbar,
   Tooltip,
   Typography,
-  ListItem, 
-  List, 
   Container
 } from "@material-ui/core";
 import MuiAlert from "@material-ui/lab/Alert";

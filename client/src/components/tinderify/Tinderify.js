@@ -58,7 +58,7 @@ class Tinderify extends React.Component {
               paragraph
             >
               Swipe through your Discover Weekly playlist and like songs to add
-              to your MySpot Tinderify playlist!
+              to your MySpot - Tinderify playlist!
             </Typography>
             <Paper className={classes.root}>
               {/* <TabContext value={this.state.tabIndex}> */}

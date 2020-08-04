@@ -102,7 +102,7 @@ class Appbar extends React.Component {
             >
               <MenuIcon />
             </IconButton>
-            <Typography noWrap={false} className={classes.appTitle}>
+            <Typography noWrap={false} className={classes.appTitle} variant="h1">
               MySpot
             </Typography>
             <Link

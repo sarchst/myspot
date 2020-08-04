@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 
 import MaterialTable from "material-table";
-import { Paper, Typography } from "@material-ui/core";
+import { Paper} from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 import { fetchSelectedUser } from "../../app/actions/selectedUserActions";
 
@@ -62,10 +62,10 @@ class FollowTable extends React.Component {
   };
 
   render() {
-    const { classes, type } = this.props;
+    const { classes} = this.props;
     return (
       <div className={classes.root}>
-        <Typography
+        {/* <Typography
           component="h1"
           variant="h2"
           align="center"
@@ -73,7 +73,7 @@ class FollowTable extends React.Component {
           gutterBottom
         >
           {type === "following" ? "Following" : "Followers"}
-        </Typography>
+        </Typography> */}
         <MaterialTable
           // className={classes.root}
           components={{
