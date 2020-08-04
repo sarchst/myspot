@@ -228,9 +228,9 @@ class SongList extends React.Component {
       });
   };
 
-  removeSongFromMySpotPlayList = (id) => {
+  removeSongFromMySpotPlayList = (id, playlist) => {
     spotifyWebApi
-      .removeTracksFromPlaylist(this.props.mySpotPlaylists.MySpotPlaylistID, [
+      .removeTracksFromPlaylist(this.props.mySpotPlaylists[playlist], [
         "spotify:track:" + id,
       ])
       .then((res) => {
@@ -274,8 +274,61 @@ class SongList extends React.Component {
     });
   };
 
+  getPlaylistEditButtons = (id) => {
+    console.log("id: ", id);
+    if (this.state.name === "MySpot-Tinderify") {
+      return (
+        <div>
+          <Tooltip title="Add to MySpot playlist">
+            <IconButton
+              aria-label="add"
+              onClick={() => this.addSongToMySpotPlayList(id)}
+            >
+              <FavoriteIcon className="favorite" />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Delete from MySpot-Tinderify playlist">
+            <IconButton
+              aria-label="delete"
+              onClick={() =>
+                this.removeSongFromMySpotPlayList(id, "TinderifyPlaylistID")
+              }
+            >
+              <NotInterestedIcon className="unfavorite" />
+            </IconButton>
+          </Tooltip>
+        </div>
+      );
+    } else if (this.state.name === "MySpot") {
+      return (
+        <Tooltip title="Delete from MySpot playlist">
+          <IconButton
+            aria-label="delete"
+            onClick={() =>
+              this.removeSongFromMySpotPlayList(id, "MySpotPlaylistID")
+            }
+          >
+            <NotInterestedIcon className="unfavorite" />
+          </IconButton>
+        </Tooltip>
+      );
+    } else {
+      return (
+        <Tooltip title="Add to MySpot playlist">
+          <IconButton
+            aria-label="add"
+            onClick={() => this.addSongToMySpotPlayList(id, "MySpotPlaylistID")}
+          >
+            <FavoriteIcon className="favorite" />
+          </IconButton>
+        </Tooltip>
+      );
+    }
+  };
+
   render() {
     const { classes } = this.props;
+
     return (
       <div>
         {this.state.songlistType === "playlist" ? (
@@ -334,7 +387,7 @@ class SongList extends React.Component {
             {this.state.tracks.map((track, index) => {
               return (
                 <ListItem key={index}>
-                  {this.state.name !== "MySpot" ? (
+                  {/* {this.state.name !== "MySpot" ? (
                     <Tooltip title="Add to MySpot playlist">
                       <IconButton
                         aria-label="add"
@@ -354,7 +407,8 @@ class SongList extends React.Component {
                         <NotInterestedIcon className="unfavorite" />
                       </IconButton>
                     </Tooltip>
-                  )}
+                  )} */}
+                  {this.getPlaylistEditButtons(track.id)}
                   <ListItemAvatar>
                     <Avatar
                       variant="square"
@@ -391,7 +445,7 @@ class SongList extends React.Component {
             onClose={() => this.handleClose()}
           >
             <Alert onClose={() => this.handleClose()} severity="success">
-              Song deleted from MySpot playlist!
+              Song deleted from {this.state.name} playlist!
             </Alert>
           </Snackbar>
           <Snackbar
@@ -400,7 +454,7 @@ class SongList extends React.Component {
             onClose={() => this.handleClose()}
           >
             <Alert onClose={() => this.handleClose()} severity="error">
-              Error adding or deleting song to MySpot playlist.
+              Error adding or deleting song in {this.state.name} playlist.
             </Alert>
           </Snackbar>
         </div>
