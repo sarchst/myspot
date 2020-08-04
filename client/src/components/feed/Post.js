@@ -1,8 +1,20 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
+import Spotify from "spotify-web-api-js";
 import { compose } from "redux";
 import { connect } from "react-redux";
-import { withStyles } from "@material-ui/core/styles";
+import { Link as RouterLink } from "react-router-dom";
+
+import PostComment from "./PostComment";
+import EditPostDialog from "./EditPostDialog";
+import DeletePostDialog from "./DeletePostDialog";
+import { deletePost, addComment } from "../../app/actions/postActions";
+import { fetchSelectedUser } from "../../app/actions/selectedUserActions";
+import {
+  submitDeletePostDialog,
+  submitEditPostDialog,
+} from "../../app/actions";
+
 import {
   Accordion,
   AccordionActions,
@@ -15,13 +27,16 @@ import {
   IconButton,
   FormControl,
   Input,
+  InputLabel,
   Link,
   Menu,
   MenuItem,
   Paper,
-  InputLabel,
+  Snackbar,
+  Tooltip,
   Typography,
 } from "@material-ui/core";
+import MuiAlert from "@material-ui/lab/Alert";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import EmojiEmotionsIcon from "@material-ui/icons/EmojiEmotions";
 import LibraryAddIcon from "@material-ui/icons/LibraryAdd";
@@ -31,18 +46,12 @@ import AlbumIcon from "@material-ui/icons/Album";
 import MusicNoteIcon from "@material-ui/icons/MusicNote";
 import PlaylistAddIcon from "@material-ui/icons/PlaylistAdd";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import { Link as RouterLink } from "react-router-dom";
-import { deletePost, addComment } from "../../app/actions/postActions";
-import DeletePostDialog from "./DeletePostDialog";
-import {
-  submitDeletePostDialog,
-  submitEditPostDialog,
-} from "../../app/actions";
-import PostComment from "./PostComment";
-// import EmojiEmotionsOutlinedIcon from "@material-ui/icons/EmojiEmotionsOutlined";
+import { withStyles } from "@material-ui/core/styles";
 import "emoji-mart/css/emoji-mart.css";
-import EditPostDialog from "./EditPostDialog";
-import { fetchSelectedUser } from "../../app/actions/selectedUserActions";
+
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
 const styles = (theme) => ({
   root: {
@@ -133,15 +142,24 @@ const styles = (theme) => ({
   },
 });
 
-class Post extends Component {
-  state = {
-    moreOptions: false,
-    anchorEl: null,
-    commentContent: "",
-  };
+const spotifyWebApi = new Spotify();
 
-  chooseIcon = (media) => {
-    switch (media) {
+class Post extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      moreOptions: false,
+      anchorEl: null,
+      commentContent: "",
+      successSnackOpen: false,
+      errorSnackOpen: false,
+      containsSnackOpen: false,
+    };
+    spotifyWebApi.setAccessToken(this.props.spotifyApi.accessToken);
+  }
+
+  chooseIcon = (type) => {
+    switch (type) {
       case "playlist":
         return <PlaylistAddIcon color={"primary"} />;
       case "album":
@@ -151,8 +169,8 @@ class Post extends Component {
     }
   };
 
-  goToMedia = () => {
-    // TODO GOTO media
+  goToMedia = (url) => {
+    window.open(url);
   };
 
   like = () => {
@@ -160,27 +178,103 @@ class Post extends Component {
   };
 
   repost = (post) => {
-    // create new post
+    // TODO create new post with repost field set to TRUE
     console.log(post);
   };
 
   share = (type) => {
     // TODO share spotify media
+    // Copy URL to clipboard? maybe add filter that just shows one post?
     console.log(type);
   };
+
   handleDelete = (postId) => {
     const payload = {
       open: this.props.delPostDialog.open,
       postId: postId,
     };
-    console.log(payload);
     this.props.submitDeletePostDialog(payload);
     this.closeOptions();
   };
 
-  addPostMedia = (type) => {
-    // TODO: add song, album, or playlist
-    console.log(type);
+  addPostMedia = (type, media) => {
+    if (type === "playlist") {
+      spotifyWebApi
+        .areFollowingPlaylist([media._id], [this.props.user.id])
+        .then((res) => {
+          if (res[0]) {
+            return false;
+          } else {
+            return spotifyWebApi.followPlaylist(media._id);
+          }
+        })
+        .then((res) => {
+          if (res === "") {
+            this.setState({
+              successSnackOpen: true,
+            });
+          } else {
+            this.setState({
+              containsSnackOpen: true,
+            });
+          }
+        })
+        .catch((err) => {
+          this.setState({
+            errorSnackOpen: true,
+          });
+          console.log("error adding playlist to library: ", err);
+        });
+    } else if (type === "album") {
+      spotifyWebApi
+        .containsMySavedAlbums([media._id])
+        .then((res) => {
+          if (res[0]) {
+            return false;
+          } else {
+            return spotifyWebApi.addToMySavedAlbums([media._id]);
+          }
+        })
+        .then((res) => {
+          if (res === "") {
+            this.setState({
+              successSnackOpen: true,
+            });
+          } else {
+            this.setState({
+              containsSnackOpen: true,
+            });
+          }
+        })
+        .catch((err) => {
+          this.setState({
+            errorSnackOpen: true,
+          });
+          console.log("error adding album to library: ", err);
+        });
+    } else {
+      spotifyWebApi
+        .removeTracksFromPlaylist(this.props.mySpotPlaylists.MySpotPlaylistID, [
+          "spotify:track:" + media._id,
+        ])
+        .then(() => {
+          return spotifyWebApi.addTracksToPlaylist(
+            this.props.mySpotPlaylists.MySpotPlaylistID,
+            ["spotify:track:" + media._id]
+          );
+        })
+        .then((res) => {
+          this.setState({
+            successSnackOpen: true,
+          });
+        })
+        .catch((err) => {
+          this.setState({
+            errorSnackOpen: true,
+          });
+          console.log("error adding song to MySpot playlist: ", err);
+        });
+    }
   };
 
   openMoreOptions = (e) => {
@@ -229,6 +323,47 @@ class Post extends Component {
     };
     this.props.submitEditPostDialog(payload);
     this.closeOptions();
+  };
+
+  handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    this.setState({
+      successSnackOpen: false,
+      containsSnackOpen: false,
+      errorSnackOpen: false,
+    });
+  };
+
+  getAlertMessage = (postdata, submessage) => {
+    if (postdata.type === "playlist") {
+      return (
+        postdata.media.ownerUsername +
+        "'s playlist " +
+        postdata.media.name +
+        " " +
+        submessage +
+        " your Spotify"
+      );
+    } else if (postdata.type === "track") {
+      return (
+        postdata.media.name +
+        " by " +
+        postdata.media.artist +
+        " your MySpot playlist!"
+      );
+    } else if (postdata.type === "album") {
+      return (
+        postdata.media.name +
+        " by " +
+        postdata.media.artist +
+        " " +
+        submessage +
+        " your Spotify"
+      );
+    }
   };
 
   render() {
@@ -310,7 +445,11 @@ class Post extends Component {
               alignItems="flex-start"
             >
               <Grid item>
-                {postdata.repost ? <Typography variant="button" color="secondary">Repost</Typography> : null}
+                {postdata.repost ? (
+                  <Typography variant="button" color="secondary">
+                    Repost
+                  </Typography>
+                ) : null}
               </Grid>
               <Grid item>
                 <Typography>{postdata.content}</Typography>
@@ -320,9 +459,15 @@ class Post extends Component {
                 <Link
                   component="button"
                   variant="body2"
-                  onClick={() => this.goToMedia()}
+                  onClick={() => this.goToMedia(postdata.media.spotifyLink)}
                 >
-                  <Typography>{postdata.media}</Typography>
+                  <Typography>
+                    {postdata.media.artist
+                      ? postdata.media.name + " - " + postdata.media.artist
+                      : postdata.media.name +
+                        " - " +
+                        postdata.media.ownerUsername}
+                  </Typography>
                 </Link>
               </Grid>
               {/* TODO add media art component? */}
@@ -394,52 +539,70 @@ class Post extends Component {
               alignItems="flex-end"
             >
               <Grid item>
-                <IconButton
-                  className={classes.button}
-                  size="small"
-                  aria-label="like"
-                  aria-controls="like-post"
-                  onClick={() => this.like()}
-                  color={
-                    postdata.usersLiked.includes(userId) ? "primary" : "default"
+                <Tooltip title="Like Post">
+                  <IconButton
+                    className={classes.button}
+                    size="small"
+                    aria-label="like"
+                    aria-controls="like-post"
+                    onClick={() => this.like()}
+                    color={
+                      postdata.usersLiked.includes(userId)
+                        ? "primary"
+                        : "default"
+                    }
+                  >
+                    {postdata.usersLiked.length}
+                    <EmojiEmotionsIcon />
+                  </IconButton>
+                </Tooltip>
+              </Grid>
+              <Grid item>
+                <Tooltip title="Repost">
+                  <IconButton
+                    className={classes.button}
+                    size="small"
+                    aria-label="repost"
+                    aria-controls="repost-post"
+                    onClick={() => this.repost(postdata)}
+                  >
+                    <ReplyIcon />
+                  </IconButton>
+                </Tooltip>
+              </Grid>
+              <Grid item>
+                <Tooltip title="Share Post">
+                  <IconButton
+                    className={classes.button}
+                    size="small"
+                    aria-label="share"
+                    aria-controls="share-post"
+                    onClick={() => this.share(postdata)}
+                  >
+                    <ShareIcon />
+                  </IconButton>
+                </Tooltip>
+              </Grid>
+              <Grid item>
+                <Tooltip
+                  title={
+                    postdata.type === "track"
+                      ? "Add " + postdata.type + " to your MySpot Playlist"
+                      : "Add " + postdata.type + " to your Spotify"
                   }
                 >
-                  {postdata.usersLiked.length}
-                  <EmojiEmotionsIcon />
-                </IconButton>
-              </Grid>
-              <Grid item>
-                <IconButton
-                  className={classes.button}
-                  size="small"
-                  aria-label="repost"
-                  aria-controls="repost-post"
-                  onClick={() => this.repost(postdata)}
-                >
-                  <ReplyIcon />
-                </IconButton>
-              </Grid>
-              <Grid item>
-                <IconButton
-                  className={classes.button}
-                  size="small"
-                  aria-label="share"
-                  aria-controls="share-post"
-                  onClick={() => this.share(postdata)}
-                >
-                  <ShareIcon />
-                </IconButton>
-              </Grid>
-              <Grid item>
-                <IconButton
-                  className={classes.button}
-                  size="small"
-                  aria-label="add"
-                  aria-controls="add-media"
-                  onClick={() => this.addPostMedia(postdata)}
-                >
-                  <LibraryAddIcon />
-                </IconButton>
+                  <IconButton
+                    className={classes.button}
+                    size="small"
+                    aria-label="add"
+                    aria-controls="add-media"
+                    onClick={() =>
+                      this.addPostMedia(postdata.type, postdata.media)
+                    }
+                  >
+                    <LibraryAddIcon />
+                  </IconButton>
+                </Tooltip>
               </Grid>
             </Grid>
           </Grid>
@@ -514,12 +677,45 @@ class Post extends Component {
             </AccordionActions>
           </Accordion>
         </Grid>
+        <div className={classes.root}>
+          <Snackbar
+            open={this.state.successSnackOpen}
+            autoHideDuration={6000}
+            onClose={() => this.handleClose()}
+          >
+            <Alert onClose={() => this.handleClose()} severity="success">
+              {this.getAlertMessage(postdata, " was added to")}
+            </Alert>
+          </Snackbar>
+          <Snackbar
+            open={this.state.containsSnackOpen}
+            autoHideDuration={6000}
+            onClose={() => this.handleClose()}
+          >
+            <Alert onClose={() => this.handleClose()} severity="info">
+              {/* This media is already in your library. */}
+              {this.getAlertMessage(postdata, "is already in")}
+            </Alert>
+          </Snackbar>
+          <Snackbar
+            open={this.state.errorSnackOpen}
+            autoHideDuration={6000}
+            onClose={() => this.handleClose()}
+          >
+            <Alert onClose={() => this.handleClose()} severity="error">
+              {/* Error adding selected Media. */}
+              {this.getAlertMessage(postdata, " was not added to")}
+            </Alert>
+          </Snackbar>
+        </div>
       </div>
     );
   }
 }
 const mapStateToProps = (state) => ({
   user: state.user,
+  mySpotPlaylists: state.mySpotPlaylists,
+  spotifyApi: state.spotifyApi,
   delPostDialog: state.delPostDialog,
   editPostDialog: state.editPostDialog,
   feedFilter: state.feed.filter,

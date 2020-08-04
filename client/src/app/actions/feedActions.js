@@ -111,8 +111,6 @@ export function addPostsToFeed(data) {
 // }
 
 export function fetchFeedWithFilter(id, filter) {
-  console.log("top of fetch feed with filter");
-  console.log(filter);
   return (dispatch) => {
     dispatch(fetchFeedStarted());
     fetch(`http://localhost:9000/user/feed/${id}`)
@@ -143,7 +141,6 @@ export function fetchFeedWithFilter(id, filter) {
 
         let sortedFeed = applyFilter(feed, filter);
 
-        console.log("sortedFeed", sortedFeed);
         dispatch(addPostsToFeed(sortedFeed));
         return res;
       })

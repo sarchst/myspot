@@ -74,8 +74,7 @@ updateUser = async (req, res) => {
 
 // No deleteUser because we don't want user to be able to remove themselves from our db entirely
 
-// don't think we need to await keyword because we're using callbacks
-// Returns a single user from the database
+// Returns a single user from the database based on username
 getUserById = async (req, res) => {
   User.findOne({ _id: req.params.id }, (err, User) => {
     if (err) {
@@ -86,6 +85,21 @@ getUserById = async (req, res) => {
   }).catch((err) => console.log(err));
 };
 
+getUserByUsername = async (req, res) => {
+  User.findOne(
+    // { username: { $regex: new RegExp(req.params.id, "i") } },
+    {
+      username: { $regex: new RegExp(["^", req.params.id, "$"].join(""), "i") },
+    },
+    (err, User) => {
+      if (err) {
+        return res.status(400).json({ success: false, error: err });
+      }
+
+      return res.status(200).json({ success: true, data: User });
+    }
+  ).catch((err) => console.log(err));
+};
 // Returns a list of all users in the database
 getUsers = async (req, res) => {
   User.find({}, (err, Users) => {
@@ -509,6 +523,7 @@ module.exports = {
   // addFollowingFollowerRelationship,
   // removeFollowingFollowerRelationship,
   deletePost,
+  getUserByUsername,
   addComment,
   deleteComment,
   likePost,

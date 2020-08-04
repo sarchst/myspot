@@ -7,6 +7,7 @@ import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
 import Button from "@material-ui/core/Button";
+import SearchBar from "./SearchBar";
 import SettingsIcon from "@material-ui/icons/Settings";
 import { withStyles } from "@material-ui/core";
 import { logOut, toggleSidebar } from "../app/actions";
@@ -128,6 +129,7 @@ class Appbar extends React.Component {
               <SettingsIcon />
             </IconButton>
           </Link>
+          <SearchBar />
         </Toolbar>
       </AppBar>
     );
