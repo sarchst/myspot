@@ -78,8 +78,15 @@ class PostComment extends React.Component {
       //   // alignItems="center"
       //   alignContent="space-between"
       // >
-      <Grid container direction="row">
-        <Grid container item direction="row" spacing={1} xs={11} alignItems="center">
+      <Grid container item direction="row" xs={10}>
+        <Grid
+          container
+          item
+          direction="row"
+          xs={10}
+          spacing={1}
+          alignItems="center"
+        >
           <Grid item>
             <Typography color="primary">{commentdata.time}</Typography>
           </Grid>
