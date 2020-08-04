@@ -78,30 +78,27 @@ class PostComment extends React.Component {
       //   // alignItems="center"
       //   alignContent="space-between"
       // >
-      <Grid container item direction="row" xs={10}>
-        <Grid
-          container
-          item
-          direction="row"
-          xs={10}
-          spacing={1}
-          alignItems="center"
-        >
-          <Grid item>
-            <Typography color="primary">{commentdata.time}</Typography>
-          </Grid>
-          <Grid item>
-            <Typography color="secondary">
-              {commentdata.authorUsername}:
-            </Typography>
-          </Grid>
-          <Grid item>
-            <Typography fontFamily="Monospace">
-              {commentdata.content}
-            </Typography>
-          </Grid>
+      <Grid
+        container
+        item
+        direction="row"
+        spacing={1}
+        alignItems="center"
+      >
+        {/* <Grid item container xs={5} direction="row"> */}
+          <Typography color="primary">{commentdata.time}</Typography>
+          <Typography color="secondary">
+            {commentdata.authorUsername}:
+          </Typography>
+        {/* </Grid> */}
+        <Grid item xs={7}>
+          {" "}
+          <Typography fontFamily="Monospace">{commentdata.content}</Typography>
         </Grid>
-        <Grid item>{commentDeleteButton}</Grid>
+
+        <Grid item xs={1}>
+          {commentDeleteButton}
+        </Grid>
       </Grid>
     );
   }
