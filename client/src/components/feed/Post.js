@@ -35,6 +35,7 @@ import {
   Snackbar,
   Tooltip,
   Typography,
+  Container
 } from "@material-ui/core";
 import MuiAlert from "@material-ui/lab/Alert";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
@@ -127,7 +128,7 @@ const styles = (theme) => ({
     padding: theme.spacing(2),
   },
   column: {
-    flexBasis: "33.33%",
+    flexBasis: "100%",
   },
   helper: {
     borderLeft: `2px solid ${theme.palette.divider}`,
@@ -369,25 +370,7 @@ class Post extends Component {
   render() {
     const { classes, postdata, userId } = this.props;
     const date = new Date(postdata.createdAt).toLocaleString("en-US");
-    let deleteOption,
-      repostOption,
-      editOption = null;
-    if (this.props.user.id === postdata.authorId) {
-      deleteOption = (
-        <MenuItem onClick={() => this.handleDelete(postdata._id)}>
-          Delete
-        </MenuItem>
-      );
-      editOption = (
-        <MenuItem
-          onClick={() => this.handleEdit(postdata._id, postdata.content)}
-        >
-          Edit
-        </MenuItem>
-      );
-    } else {
-      repostOption = <MenuItem>Repost</MenuItem>;
-    }
+
 
     return (
       <div className={classes.postContainer}>
@@ -477,8 +460,9 @@ class Post extends Component {
               container
               xs
               className={classes.moreGrid}
-              justify="flex-end"
-              alignItems="flex-start"
+              justify="flex-start"
+              alignItems="flex-end"
+              direction="column"
             >
               <Grid item color="primary">
                 <Grid
@@ -488,47 +472,62 @@ class Post extends Component {
                   justify="flex-end"
                 >
                   <Typography color="primary">{date}</Typography>
-                  {postdata.createdAt !== postdata.updatedAt && (
-                    <Typography variant="caption">Edited</Typography>
-                  )}
                 </Grid>
               </Grid>
-              <Grid item>
-                <IconButton
-                  aria-label="more"
-                  aria-controls="long-menu"
-                  aria-haspopup="true"
-                  onClick={(e) => this.openMoreOptions(e)}
-                  className={classes.button}
-                >
-                  <MoreVertIcon />
-                </IconButton>
+              <Grid container item direction="row" justify="flex-end">
+                {postdata.createdAt !== postdata.updatedAt && (
+                  <Typography variant="caption">Edited</Typography>
+                )}
+                {this.props.user.id === postdata.authorId ? (
+                  <div>
+                    <Grid item>
+                      <IconButton
+                        aria-label="more"
+                        aria-controls="long-menu"
+                        aria-haspopup="true"
+                        onClick={(e) => this.openMoreOptions(e)}
+                        className={classes.button}
+                      >
+                        <MoreVertIcon />
+                      </IconButton>
+                    </Grid>
+                    <Menu
+                      id="options-menu"
+                      anchorEl={this.state.anchorEl}
+                      anchorOrigin={{
+                        vertical: "top",
+                        horizontal: "right",
+                      }}
+                      transformOrigin={{
+                        vertical: "top",
+                        horizontal: "right",
+                      }}
+                      keepMounted
+                      open={this.state.moreOptions}
+                      onClose={this.closeOptions}
+                      PaperProps={{
+                        style: {
+                          maxHeight: 300,
+                          width: "20ch",
+                        },
+                      }}
+                    >
+                      <MenuItem onClick={() => this.handleDelete(postdata._id)}>
+                        Delete
+                      </MenuItem>
+                      <MenuItem
+                        onClick={() =>
+                          this.handleEdit(postdata._id, postdata.content)
+                        }
+                      >
+                        Edit
+                      </MenuItem>
+                    </Menu>
+                  </div>
+                ) : (
+                  " "
+                )}
               </Grid>
-              <Menu
-                id="options-menu"
-                anchorEl={this.state.anchorEl}
-                anchorOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
-                transformOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
-                keepMounted
-                open={this.state.moreOptions}
-                onClose={this.closeOptions}
-                PaperProps={{
-                  style: {
-                    maxHeight: 300,
-                    width: "20ch",
-                  },
-                }}
-              >
-                {editOption}
-                {deleteOption}
-                {repostOption}
-              </Menu>
             </Grid>
             <Grid
               item
@@ -629,38 +628,51 @@ class Post extends Component {
                 </Typography>
               </div>
             </AccordionSummary>
-            <AccordionDetails className={classes.details}>
-              <ul className={classes.column}>
+            <Container>
+              <AccordionDetails className={classes.details}>
                 {postdata.comments && postdata.comments.length
                   ? postdata.comments.map((comment, index) => {
-                      return <PostComment key={index} commentdata={comment} />;
+                      return (
+                        <PostComment
+                          style={{ width: 200 }}
+                          key={index}
+                          commentdata={comment}
+                        />
+                      );
                     })
                   : null}
-              </ul>
-              <Grid item container direction="row" alignItems="center">
-                <Grid item xs={11}>
-                  <FormControl fullWidth>
-                    <InputLabel htmlFor="standard-basic" color={"secondary"}>
-                      Leave a comment below
-                    </InputLabel>
-                    <Input
-                      value={this.state.commentContent}
-                      onChange={this.handleChangeComment}
-                      color={"secondary"}
-                      onKeyPress={(e) => {
-                        if (e.key === "Enter") {
-                          this.handleSubmitComment(
-                            postdata._id,
-                            postdata.authorId
-                          );
-                        }
-                      }}
-                    />
-                  </FormControl>
+                <Grid
+                  item
+                  container
+                  direction="row"
+                  alignItems="center"
+                  spacing={2}
+                >
+                  <Grid item xs={11}>
+                    <FormControl fullWidth>
+                      <InputLabel htmlFor="standard-basic" color={"secondary"}>
+                        Leave a comment below
+                      </InputLabel>
+                      <Input
+                        value={this.state.commentContent}
+                        onChange={this.handleChangeComment}
+                        color={"secondary"}
+                        onKeyPress={(e) => {
+                          if (e.key === "Enter") {
+                            this.handleSubmitComment(
+                              postdata._id,
+                              postdata.authorId
+                            );
+                          }
+                        }}
+                      />
+                    </FormControl>
+                  </Grid>
                 </Grid>
-              </Grid>
-              <div className={classes.column} />
-            </AccordionDetails>
+                <div className={classes.column} />
+              </AccordionDetails>
+            </Container>
+
             <Divider />
             <AccordionActions>
               <Button size="small">Cancel</Button>

@@ -144,6 +144,7 @@ class Playlists extends React.Component {
                     </CardContent>
                     <CardActions>
                       <Link
+                        style={{ textDecoration: "none" }}
                         // TODO: change user to selectedUser._id
                         // to={
                         //   "/" + this.state.userID + "/playlists/" + playlist.id

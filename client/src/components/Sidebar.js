@@ -14,13 +14,12 @@ import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-
+import { Typography } from "@material-ui/core";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import HeadsetIcon from "@material-ui/icons/Headset";
 import MicIcon from "@material-ui/icons/Mic";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import QueueMusicIcon from "@material-ui/icons/QueueMusic";
-import PlayCircleFilledIcon from "@material-ui/icons/PlayCircleFilled";
 import AlbumIcon from "@material-ui/icons/Album";
 import WhatshotIcon from "@material-ui/icons/Whatshot";
 
@@ -32,7 +31,6 @@ import contentType from "../data/ContentTypeEnum";
 import { Link, Route, Switch, Redirect } from "react-router-dom";
 
 import FollowTable from "./follow/FollowTable";
-import NowPlaying from "./NowPlaying";
 import Profile from "./profile/Profile";
 import Feed from "./feed/Feed";
 import Settings from "./Settings";
@@ -102,15 +100,8 @@ class Sidebar extends React.Component {
     this.props.toggleSideBar();
   };
 
-  // This is only temporary and will need to be switched over to redux global state
-  // selectView = (text) => {
-  //   this.setState({ viewPage: text });
-  // };
-
   getSidebarIcon = (text) => {
     switch (text) {
-      case contentType.LISTENINGTO:
-        return <PlayCircleFilledIcon />;
       case contentType.PLAYLISTS:
         return <QueueMusicIcon />;
       case contentType.ALBUMS:
@@ -122,17 +113,10 @@ class Sidebar extends React.Component {
       case contentType.FAVOURITES:
         return <FavoriteIcon />;
       case contentType.TINDERIFY:
-        return <WhatshotIcon />;
+        return <WhatshotIcon style={{ color: "#e56b9e" }} />;
       default:
         return <AccountCircleIcon />;
     }
-  };
-
-  processTextForURL = (text) => {
-    if (text === contentType.LISTENINGTO) {
-      return "whatimlisteningto";
-    }
-    return text.toLowerCase();
   };
 
   render() {
@@ -189,12 +173,11 @@ class Sidebar extends React.Component {
             </ListItem>
 
             {[
-              contentType.LISTENINGTO,
-              contentType.ALBUMS,
+              contentType.FAVOURITES,
               contentType.PLAYLISTS,
+              contentType.ALBUMS,
               contentType.FOLLOWERS,
               contentType.FOLLOWING,
-              contentType.FAVOURITES,
               contentType.TINDERIFY,
             ].map((text, index) => (
               <ListItem
@@ -204,12 +187,7 @@ class Sidebar extends React.Component {
               >
                 <Link
                   className={classes.sidebarItem}
-                  to={
-                    "/" +
-                    this.props.user.id +
-                    "/" +
-                    this.processTextForURL(text)
-                  }
+                  to={"/" + this.props.user.id + "/" + text.toLowerCase()}
                 >
                   <ListItemIcon>{this.getSidebarIcon(text)}</ListItemIcon>
                   <ListItemText primary={text} />
@@ -240,7 +218,18 @@ class Sidebar extends React.Component {
               exact
               path="/:user/followers"
               component={(props) => (
-                <FollowTable type={"followers"} inProfileTable={false} />
+                <div>
+                  <Typography
+                    component="h1"
+                    variant="h2"
+                    align="center"
+                    color="textPrimary"
+                    gutterBottom
+                  >
+                    Followers
+                  </Typography>
+                  <FollowTable type={"followers"} inProfileTable={false} />
+                </div>
               )}
             />
             <Route
@@ -248,10 +237,20 @@ class Sidebar extends React.Component {
               exact
               path="/:user/following"
               component={(props) => (
-                <FollowTable type={"following"} inProfileTable={false} />
+                <div>
+                  <Typography
+                    component="h1"
+                    variant="h2"
+                    align="center"
+                    color="textPrimary"
+                    gutterBottom
+                  >
+                    Following
+                  </Typography>
+                  <FollowTable type={"following"} inProfileTable={false} />
+                </div>
               )}
             />
-            <Route path="/:user/whatimlisteningto" component={NowPlaying} />
             <Route path="/:user/feed" component={Feed} />
             <Route path="/:user/settings" component={Settings} />
             <Route
