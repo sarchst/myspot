@@ -181,9 +181,14 @@ class ProfileTable extends React.Component {
         <FollowTable
           key={this.state.tabIndex}
           type={this.state.tabIndex === 1 ? "followers" : "following"}
+          profileTableCallback={() => this.setTabIndex(false)}
         />
       );
     }
+  };
+
+  setTabIndex = (index) => {
+    this.setState({ tabIndex: index });
   };
 
   render() {

@@ -52,12 +52,17 @@ class FollowTable extends React.Component {
         username: f.username,
         numPosts: f.posts.length,
         numFollowers: f.followers.length,
+        followers: f.followers,
         userId: f._id,
         country: getName(f.country).toLocaleLowerCase(),
       };
       return foll;
     });
     return follData;
+  };
+
+  updateTable = () => {
+    this.forceUpdate();
   };
 
   render() {
@@ -115,11 +120,19 @@ class FollowTable extends React.Component {
           },
           { title: "# of Posts", field: "numPosts" },
           { title: "# of Followers", field: "numFollowers" },
-          // {
-          //   title: "",
-          //   field: "followButton",
-          //   render: (rowData) => <FollowButton />,
-          // },
+          {
+            title: "",
+            field: "follows",
+            render: (rowData) => (
+              <FollowButton
+                selectedUserId={rowData.userId}
+                selectedUserFollowers={rowData.followers}
+                selectedUsername={rowData.username}
+                isProfileCall={false}
+                followTableCallback={() => this.props.profileTableCallback()}
+              />
+            ),
+          },
         ]}
         data={this.state.followList}
         options={{
