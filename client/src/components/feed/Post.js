@@ -632,7 +632,6 @@ class Post extends Component {
                 <div className={classes.column} />
               </AccordionDetails>
             </Container>
-
             <Divider />
             <AccordionActions>
               <Button
