@@ -1,21 +1,30 @@
 import React from "react";
-import Button from "@material-ui/core/Button";
-import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
-import DialogTitle from "@material-ui/core/DialogTitle";
 import { connect } from "react-redux";
+
 import {
   submitDeletePostDialog,
   closeDeletePostDialog,
 } from "../../app/actions/index";
 import { deletePost } from "../../app/actions/postActions";
 
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+} from "@material-ui/core";
+
 class DeletePostDialog extends React.Component {
   handleConfirm = () => {
     const body = { postId: this.props.delPostDialog.postId };
-    this.props.deletePost(this.props.user.id, body, this.props.profileFeedFilter, this.props.feedFilter);
+    this.props.deletePost(
+      this.props.user.id,
+      body,
+      this.props.profileFeedFilter,
+      this.props.feedFilter
+    );
     this.props.closeDeletePostDialog();
   };
   handleCancel = () => {
@@ -29,7 +38,6 @@ class DeletePostDialog extends React.Component {
         <div>
           <Dialog
             open={this.props.delPostDialog.open}
-            // onClose={this.handleClose}
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
           >

@@ -2,20 +2,23 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import Spotify from "spotify-web-api-js";
-import { CssBaseline } from "@material-ui/core";
-import Container from "@material-ui/core/Container";
-import Typography from "@material-ui/core/Typography";
-import { withStyles } from "@material-ui/core/styles";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemAvatar from "@material-ui/core/ListItemAvatar";
-import Avatar from "@material-ui/core/Avatar";
-import ListItemText from "@material-ui/core/ListItemText";
-import IconButton from "@material-ui/core/IconButton";
-import Tooltip from "@material-ui/core/Tooltip";
-import FavoriteIcon from "@material-ui/icons/Favorite";
-import Snackbar from "@material-ui/core/Snackbar";
+
+import {
+  Avatar,
+  Container,
+  CssBaseline,
+  IconButton,
+  List,
+  ListItem,
+  ListItemAvatar,
+  ListItemText,
+  Snackbar,
+  Tooltip,
+  Typography,
+} from "@material-ui/core";
 import MuiAlert from "@material-ui/lab/Alert";
+import FavoriteIcon from "@material-ui/icons/Favorite";
+import { withStyles } from "@material-ui/core/styles";
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -87,7 +90,6 @@ class SongList extends React.Component {
 
   componentDidMount() {
     if ("playlistid" in this.props.match.params) {
-      // get playlist songs
       spotifyWebApi.getPlaylistTracks(this.props.match.params.playlistid).then(
         (data) => {
           this.setState({
@@ -102,22 +104,20 @@ class SongList extends React.Component {
           console.error(err);
         }
       );
-      // get playlist name and desc from Spotify API if can't retrieve from Link props
       if (!this.state.name) {
         spotifyWebApi.getPlaylist(this.props.match.params.playlistid).then(
-            (data) => {
-              this.setState({
-                name: data.name,
-                description: data.description,
-              });
-            },
-            function (err) {
-              console.error(err);
-            }
+          (data) => {
+            this.setState({
+              name: data.name,
+              description: data.description,
+            });
+          },
+          function (err) {
+            console.error(err);
+          }
         );
       }
     } else if ("albumid" in this.props.match.params) {
-      // get album songs
       spotifyWebApi.getAlbumTracks(this.props.match.params.albumid).then(
         (data) => {
           this.setState({
@@ -228,7 +228,9 @@ class SongList extends React.Component {
             Go Back
           </Link>
         ) : (
-          <Link to={"/" + this.props.match.params.user + "/albums"}>Go Back</Link>
+          <Link to={"/" + this.props.match.params.user + "/albums"}>
+            Go Back
+          </Link>
         )}
         <CssBaseline>
           <div className={classes.heroContent}>

@@ -40,8 +40,6 @@ import MuiAlert from "@material-ui/lab/Alert";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import EmojiEmotionsIcon from "@material-ui/icons/EmojiEmotions";
 import LibraryAddIcon from "@material-ui/icons/LibraryAdd";
-import ReplyIcon from "@material-ui/icons/Reply";
-import ShareIcon from "@material-ui/icons/Share";
 import AlbumIcon from "@material-ui/icons/Album";
 import MusicNoteIcon from "@material-ui/icons/MusicNote";
 import PlaylistAddIcon from "@material-ui/icons/PlaylistAdd";
@@ -175,17 +173,6 @@ class Post extends Component {
 
   like = () => {
     this.props.toggleLike();
-  };
-
-  repost = (post) => {
-    // TODO create new post with repost field set to TRUE
-    console.log(post);
-  };
-
-  share = (type) => {
-    // TODO share spotify media
-    // Copy URL to clipboard? maybe add filter that just shows one post?
-    console.log(type);
   };
 
   handleDelete = (postId) => {
@@ -370,7 +357,6 @@ class Post extends Component {
     const { classes, postdata, userId } = this.props;
     const date = new Date(postdata.createdAt).toLocaleString("en-US");
     let deleteOption,
-      repostOption,
       editOption = null;
     if (this.props.user.id === postdata.authorId) {
       deleteOption = (
@@ -385,8 +371,6 @@ class Post extends Component {
           Edit
         </MenuItem>
       );
-    } else {
-      repostOption = <MenuItem>Repost</MenuItem>;
     }
 
     return (
@@ -470,7 +454,6 @@ class Post extends Component {
                   </Typography>
                 </Link>
               </Grid>
-              {/* TODO add media art component? */}
             </Grid>
             <Grid
               item
@@ -527,7 +510,6 @@ class Post extends Component {
               >
                 {editOption}
                 {deleteOption}
-                {repostOption}
               </Menu>
             </Grid>
             <Grid
@@ -554,32 +536,6 @@ class Post extends Component {
                   >
                     {postdata.usersLiked.length}
                     <EmojiEmotionsIcon />
-                  </IconButton>
-                </Tooltip>
-              </Grid>
-              <Grid item>
-                <Tooltip title="Repost">
-                  <IconButton
-                    className={classes.button}
-                    size="small"
-                    aria-label="repost"
-                    aria-controls="repost-post"
-                    onClick={() => this.repost(postdata)}
-                  >
-                    <ReplyIcon />
-                  </IconButton>
-                </Tooltip>
-              </Grid>
-              <Grid item>
-                <Tooltip title="Share Post">
-                  <IconButton
-                    className={classes.button}
-                    size="small"
-                    aria-label="share"
-                    aria-controls="share-post"
-                    onClick={() => this.share(postdata)}
-                  >
-                    <ShareIcon />
                   </IconButton>
                 </Tooltip>
               </Grid>

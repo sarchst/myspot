@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
 const User = require("../models/user-model");
 
-// allows you to import environmental variables
 require("dotenv").config();
 
 var dbname = "myspot";

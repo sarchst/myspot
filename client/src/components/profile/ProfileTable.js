@@ -1,19 +1,19 @@
 import React from "react";
 import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 import Spotify from "spotify-web-api-js";
+import MaterialTable from "material-table";
+
 import FollowTable from "../follow/FollowTable";
 
-import MaterialTable from "material-table";
 import { Paper, Tab, Tabs } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
-import { Link } from "react-router-dom";
 
 const styles = (theme) => ({
   root: {
     flexGrow: 1,
     padding: 10,
     borderRadius: 16,
-    // margin: 5,
     marginTop: theme.spacing(2),
     marginBottom: theme.spacing(2),
   },
@@ -41,15 +41,12 @@ class ProfileTable extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
-    // update state playlists when tab is clicked for the first time for selectedUser
     if (
       this.isTabIndexUpdatedToZero(prevState) &&
       (!this.state.playlists.length || this.isSelectedUserUpdated(prevProps))
     ) {
       this.fetchSpotifyPlaylists();
     }
-
-    // collapse profile table and wipe state playlists when selectedUser updates
     if (this.isSelectedUserUpdated(prevProps)) {
       this.setState({
         tabIndex: false,
@@ -171,7 +168,6 @@ class ProfileTable extends React.Component {
             paging: false,
             toolbar: false,
             sorting: false,
-            // headerStyle: { color: "#03DAC6" },
           }}
         />
       );
@@ -190,7 +186,6 @@ class ProfileTable extends React.Component {
 
     return (
       <Paper className={classes.root}>
-        {/* <TabContext value={this.state.tabIndex}> */}
         <Tabs
           value={this.state.tabIndex}
           onChange={this.handleChange}

@@ -1,13 +1,16 @@
 import React from "react";
 import { connect } from "react-redux";
 import Spotify from "spotify-web-api-js";
+
+import {
+  Avatar,
+  Container,
+  List,
+  ListItem,
+  ListItemAvatar,
+  ListItemText,
+} from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
-import Container from "@material-ui/core/Container";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemAvatar from "@material-ui/core/ListItemAvatar";
-import Avatar from "@material-ui/core/Avatar";
-import ListItemText from "@material-ui/core/ListItemText";
 
 const styles = (theme) => ({
   link: {
@@ -31,7 +34,6 @@ class TinderifyPlaylist extends React.Component {
       .getPlaylistTracks(this.props.mySpotPlaylists.TinderifyPlaylistID)
       .then(
         (data) => {
-          console.log("Songs in playlist", data);
           this.setState({
             tracks: data.items,
           });

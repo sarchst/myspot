@@ -1,9 +1,11 @@
 import React from "react";
-import { Button, Menu, MenuItem, Typography } from "@material-ui/core";
 import { compose } from "redux";
 import { connect } from "react-redux";
-import { withStyles } from "@material-ui/core/styles";
+
 import { changeFilter } from "../../app/actions/filterActions";
+
+import { Button, Menu, MenuItem, Typography } from "@material-ui/core";
+import { withStyles } from "@material-ui/core/styles";
 
 const styles = (theme) => ({
   root: {
@@ -29,14 +31,6 @@ class FilterPosts extends React.Component {
     const { myFilter } = e.currentTarget.dataset;
     this.props.changeFilter(myFilter);
   };
-
-  //   getButtonLabel = (page) => {
-  //     if (page === "FEED") {
-  //       return "Filter: " + this.props.feedFilter;
-  //     } else {
-  //       return "Filter: " + this.props.profileFeedFilter;
-  //     }
-  //   };
 
   render() {
     const { page } = this.props;

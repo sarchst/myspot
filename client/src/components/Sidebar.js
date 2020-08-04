@@ -1,43 +1,41 @@
 import React from "react";
 import clsx from "clsx";
-import Playlists from "./Playlists";
-import Albums from "./Albums";
-import Tinderify from "./tinderify/Tinderify";
-import Favourites from "./Favourites";
-import Drawer from "@material-ui/core/Drawer";
-import List from "@material-ui/core/List";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import Divider from "@material-ui/core/Divider";
-import IconButton from "@material-ui/core/IconButton";
-import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
-import ChevronRightIcon from "@material-ui/icons/ChevronRight";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
-
-import AccountCircleIcon from "@material-ui/icons/AccountCircle";
-import HeadsetIcon from "@material-ui/icons/Headset";
-import MicIcon from "@material-ui/icons/Mic";
-import FavoriteIcon from "@material-ui/icons/Favorite";
-import QueueMusicIcon from "@material-ui/icons/QueueMusic";
-import PlayCircleFilledIcon from "@material-ui/icons/PlayCircleFilled";
-import AlbumIcon from "@material-ui/icons/Album";
-import WhatshotIcon from "@material-ui/icons/Whatshot";
-
 import { connect } from "react-redux";
-import { withStyles } from "@material-ui/core/styles";
-import { toggleSidebar } from "../app/actions";
-import contentType from "../data/ContentTypeEnum";
-
 import { Link, Route, Switch, Redirect } from "react-router-dom";
 
-import FollowTable from "./follow/FollowTable";
-import NowPlaying from "./NowPlaying";
-import Profile from "./profile/Profile";
+import Albums from "./Albums";
+import Favourites from "./Favourites";
 import Feed from "./feed/Feed";
+import FollowTable from "./follow/FollowTable";
+import Playlists from "./Playlists";
+import Profile from "./profile/Profile";
 import Settings from "./Settings";
 import SongList from "./SongList";
+import Tinderify from "./tinderify/Tinderify";
+import contentType from "../data/ContentTypeEnum";
+import { toggleSidebar } from "../app/actions";
 import { fetchSelectedUser } from "../app/actions/selectedUserActions";
+
+import {
+  CssBaseline,
+  Divider,
+  Drawer,
+  IconButton,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+} from "@material-ui/core";
+import { withStyles } from "@material-ui/core/styles";
+import AccountCircleIcon from "@material-ui/icons/AccountCircle";
+import AlbumIcon from "@material-ui/icons/Album";
+import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
+import ChevronRightIcon from "@material-ui/icons/ChevronRight";
+import FavoriteIcon from "@material-ui/icons/Favorite";
+import HeadsetIcon from "@material-ui/icons/Headset";
+import MicIcon from "@material-ui/icons/Mic";
+import QueueMusicIcon from "@material-ui/icons/QueueMusic";
+import WhatshotIcon from "@material-ui/icons/Whatshot";
 
 const drawerWidth = 240;
 
@@ -80,7 +78,6 @@ const styles = (theme) => ({
     justifyContent: "flex-end",
     padding: theme.spacing(0, 1),
     textDecoration: "none",
-    // necessary for content to be below app bar
     ...theme.mixins.toolbar,
   },
   content: {
@@ -102,15 +99,8 @@ class Sidebar extends React.Component {
     this.props.toggleSideBar();
   };
 
-  // This is only temporary and will need to be switched over to redux global state
-  // selectView = (text) => {
-  //   this.setState({ viewPage: text });
-  // };
-
   getSidebarIcon = (text) => {
     switch (text) {
-      case contentType.LISTENINGTO:
-        return <PlayCircleFilledIcon />;
       case contentType.PLAYLISTS:
         return <QueueMusicIcon />;
       case contentType.ALBUMS:
@@ -129,9 +119,6 @@ class Sidebar extends React.Component {
   };
 
   processTextForURL = (text) => {
-    if (text === contentType.LISTENINGTO) {
-      return "whatimlisteningto";
-    }
     return text.toLowerCase();
   };
 
@@ -164,15 +151,8 @@ class Sidebar extends React.Component {
             </IconButton>
           </div>
           <Divider />
-
-          {/*TODO: EITHER map username separately so it doesn't collide with other keywords OR block keywords from being used as username
-          LEFT THIS cause Im not sure if its better now?*/}
           <List>
-            <ListItem
-              button
-              key={this.props.user.username}
-              // onClick={() => this.selectView(this.props.username)}
-            >
+            <ListItem button key={this.props.user.username}>
               <Link
                 className={classes.sidebarItem}
                 to={"/" + this.props.user.id}
@@ -189,7 +169,6 @@ class Sidebar extends React.Component {
             </ListItem>
 
             {[
-              contentType.LISTENINGTO,
               contentType.ALBUMS,
               contentType.PLAYLISTS,
               contentType.FOLLOWERS,
@@ -197,11 +176,7 @@ class Sidebar extends React.Component {
               contentType.FAVOURITES,
               contentType.TINDERIFY,
             ].map((text, index) => (
-              <ListItem
-                button
-                key={text}
-                // onClick={() => this.selectView(text)}
-              >
+              <ListItem button key={text}>
                 <Link
                   className={classes.sidebarItem}
                   to={
@@ -218,7 +193,6 @@ class Sidebar extends React.Component {
             ))}
           </List>
         </Drawer>
-
         <main className={classes.content}>
           <div className={classes.toolbar} />
           <Switch>
@@ -247,7 +221,6 @@ class Sidebar extends React.Component {
               path="/:user/following"
               component={(props) => <FollowTable type={"following"} />}
             />
-            <Route path="/:user/whatimlisteningto" component={NowPlaying} />
             <Route path="/:user/feed" component={Feed} />
             <Route path="/:user/settings" component={Settings} />
             <Route

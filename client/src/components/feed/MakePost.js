@@ -3,6 +3,8 @@ import Button from "@material-ui/core/Button";
 import { connect } from "react-redux";
 import Spotify from "spotify-web-api-js";
 
+import { makePost } from "../../app/actions/postActions";
+
 import {
   FormControl,
   Paper,
@@ -20,7 +22,6 @@ import AlbumIcon from "@material-ui/icons/Album";
 import MusicNoteIcon from "@material-ui/icons/MusicNote";
 import PlaylistAddIcon from "@material-ui/icons/PlaylistAdd";
 import { withStyles } from "@material-ui/core/styles";
-import { makePost } from "../../app/actions/postActions";
 
 const spotifyWebApi = new Spotify();
 

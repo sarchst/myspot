@@ -2,18 +2,20 @@
 
 import React from "react";
 import { connect } from "react-redux";
-import { withStyles } from "@material-ui/core/styles";
 
-import Avatar from "@material-ui/core/Avatar";
-import Button from "@material-ui/core/Button";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import Link from "@material-ui/core/Link";
-import Paper from "@material-ui/core/Paper";
-import Box from "@material-ui/core/Box";
-import Grid from "@material-ui/core/Grid";
+import {
+  Avatar,
+  Box,
+  Button,
+  CssBaseline,
+  Grid,
+  Link,
+  Paper,
+  Typography,
+} from "@material-ui/core";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
-import Typography from "@material-ui/core/Typography";
 import MusicNoteRoundedIcon from "@material-ui/icons/MusicNoteRounded";
+import { withStyles } from "@material-ui/core/styles";
 
 function Copyright() {
   return (
@@ -51,14 +53,13 @@ const styles = (theme) => ({
     alignItems: "center",
     justifyContent: "center",
     height: "85vh",
-    // backgroundColor: "#424242",
   },
   avatar: {
     margin: theme.spacing(1),
     backgroundColor: "#03DAC6",
   },
   form: {
-    width: "100%", // Fix IE 11 issue.
+    width: "100%",
     marginTop: theme.spacing(1),
   },
   submit: {
@@ -106,7 +107,6 @@ class Login extends React.Component {
                 href={loginURL}
                 fullWidth
                 variant="contained"
-                // color="primary"
               >
                 Sign In With Spotify
               </Button>
@@ -123,13 +123,4 @@ class Login extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    // examples
-    // messages: state.messages.messages
-  };
-};
-
-export default connect(mapStateToProps)(
-  withStyles(styles, { withTheme: true })(Login)
-);
+export default connect()(withStyles(styles, { withTheme: true })(Login));

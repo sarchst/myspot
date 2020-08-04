@@ -1,7 +1,9 @@
 import Spotify from "spotify-web-api-js";
+
 const spotifyWebApi = new Spotify();
 const MySpot = "MySpot";
 const MySpotTinderify = "MySpot-Tinderify";
+
 export const SET_PLAYLIST_IDS = "SET_PLAYLIST_IDS";
 
 export const setPlayListIDs = (UserMeID, spotifyToken) => {
@@ -46,13 +48,11 @@ export const setPlayListIDs = (UserMeID, spotifyToken) => {
             dispatch(setPlayListIDsThunk(playlistIDs));
           })
           .catch((err) => {
-            console.log("error creating playlists at login");
-            console.log(err);
+            console.log("error creating playlists at login: ", err);
           });
       })
       .catch((err) => {
-        console.log("error querying getting user's spotify playlists");
-        console.log(err);
+        console.log("error querying getting user's spotify playlists: ", err);
       });
   };
 };

@@ -1,34 +1,22 @@
 import React from "react";
-import Button from "@material-ui/core/Button";
-import Card from "@material-ui/core/Card";
-import CardActions from "@material-ui/core/CardActions";
-import CardContent from "@material-ui/core/CardContent";
-import CardMedia from "@material-ui/core/CardMedia";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import Grid from "@material-ui/core/Grid";
-import Typography from "@material-ui/core/Typography";
-import { withStyles } from "@material-ui/core/styles";
-import Container from "@material-ui/core/Container";
-// import Link from "@material-ui/core/Link";
 import { connect } from "react-redux";
-import Spotify from "spotify-web-api-js";
 import { Link } from "react-router-dom";
+import Spotify from "spotify-web-api-js";
+
+import {
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  CardMedia,
+  Container,
+  CssBaseline,
+  Grid,
+  Typography,
+} from "@material-ui/core";
+import { withStyles } from "@material-ui/core/styles";
 
 const spotifyWebApi = new Spotify();
-
-// will probs use this later but with probs be it's own seperate component!
-// function Copyright() {
-//   return (
-//     <Typography variant="body2" color="textSecondary" align="center">
-//       {"Copyright © "}
-//       <Link color="inherit" href="https://material-ui.com/">
-//         MySpot
-//       </Link>{" "}
-//       {new Date().getFullYear()}
-//       {"."}
-//     </Typography>
-//   );
-// }
 
 const styles = (theme) => ({
   icon: {
@@ -73,7 +61,6 @@ class Playlists extends React.Component {
 
   componentDidMount() {
     const userID = this.props.match.params.user;
-    // identify user with React Router match.params instead because of race conditions with Redux store updating
     spotifyWebApi.getUserPlaylists(userID).then(
       (data) => {
         this.setState({
@@ -93,7 +80,6 @@ class Playlists extends React.Component {
       <React.Fragment>
         <CssBaseline />
         <main>
-          {/* Hero unit */}
           <div className={classes.heroContent}>
             <Container maxWidth="sm">
               <Typography
@@ -108,16 +94,6 @@ class Playlists extends React.Component {
                   : `${this.props.selectedUser.username}'s`}{" "}
                 Playlists
               </Typography>
-              {/* <Typography
-                variant="h5"
-                align="center"
-                color="textSecondary"
-                paragraph
-              >
-                Something short and leading about the collection below—its
-                contents, the creator, etc. Make it short and sweet, but not too
-                short so folks don&apos;t simply skip over it entirely.
-              </Typography> */}
             </Container>
           </div>
           <Container className={classes.cardGrid} maxWidth="md">
@@ -139,15 +115,10 @@ class Playlists extends React.Component {
                       <Typography gutterBottom variant="h5" component="h2">
                         {playlist.name}
                       </Typography>
-                      {/* todo: (Sarchen) fix element tags in description */}
                       <Typography>{playlist.description}</Typography>
                     </CardContent>
                     <CardActions>
                       <Link
-                        // TODO: change user to selectedUser._id
-                        // to={
-                        //   "/" + this.state.userID + "/playlists/" + playlist.id
-                        // }
                         to={{
                           pathname: `/${this.state.userID}/playlists/${playlist.id}`,
                           state: {

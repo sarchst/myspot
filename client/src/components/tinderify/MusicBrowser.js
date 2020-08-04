@@ -1,21 +1,24 @@
 import React, { Fragment } from "react";
-import Spotify from "spotify-web-api-js";
 import { connect } from "react-redux";
-import { withStyles } from "@material-ui/core/styles";
+import Spotify from "spotify-web-api-js";
 import { CarouselProvider, Slider, Slide } from "pure-react-carousel";
-import Box from "@material-ui/core/Box";
+
+import {
+  Avatar,
+  Box,
+  IconButton,
+  List,
+  ListItem,
+  ListItemAvatar,
+  ListItemText,
+  Snackbar,
+  Tooltip,
+} from "@material-ui/core";
+import MuiAlert from "@material-ui/lab/Alert";
 import PlayCircleOutlineIcon from "@material-ui/icons/PlayCircleOutline";
 import MusicOffOutlinedIcon from "@material-ui/icons/MusicOffOutlined";
 import FavoriteIcon from "@material-ui/icons/Favorite";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemAvatar from "@material-ui/core/ListItemAvatar";
-import Avatar from "@material-ui/core/Avatar";
-import ListItemText from "@material-ui/core/ListItemText";
-import List from "@material-ui/core/List";
-import Snackbar from "@material-ui/core/Snackbar";
-import MuiAlert from "@material-ui/lab/Alert";
-import IconButton from "@material-ui/core/IconButton";
-import Tooltip from "@material-ui/core/Tooltip";
+import { withStyles } from "@material-ui/core/styles";
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -80,10 +83,8 @@ class MusicBrowser extends React.Component {
             playlistId: data.items[0].id,
           });
         }
-        // get the songs
         spotifyWebApi.getPlaylist(this.state.playlistId).then(
           (data) => {
-            console.log("Songs in Playlist", data);
             this.setState({
               tracks: data.tracks.items,
               playlistImageUrl: data.images[0].url,
@@ -116,14 +117,12 @@ class MusicBrowser extends React.Component {
         this.setState({
           successSnackOpen: true,
         });
-        console.log(res);
       })
       .catch((err) => {
-        console.log("error adding song to tinderify playlist");
+        console.log("error adding song to tinderify playlist: ", err);
         this.setState({
           errorSnackOpen: true,
         });
-        console.log(err);
       });
   };
 

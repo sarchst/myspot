@@ -9,7 +9,7 @@ const CommentSchema = new Schema(
     authorUsername: { type: String, required: true },
     postId: { type: String, ref: "Post" },
     postOwnerId: { type: String, ref: "User" },
-    time: { type: String, required: true }, // some reason timestamp doesn't seem to be working
+    time: { type: String, required: true },
   },
   { timestamps: true }
 );
@@ -17,12 +17,10 @@ const CommentSchema = new Schema(
 const MediaSchema = new Schema({
   _id: { type: String, required: true }, // Spotify Playlist, Album, or Song id
   name: { type: String, required: true },
-  // mediaArt: { type: String, default: "" }, // Sportify URI to media art TODO add default
   spotifyLink: { type: String, required: true }, // Link to media on Spotify webpage
   artist: { type: String, default: "" }, // Artist name for tracks and albums
   ownerId: { type: String, default: "" }, // the Id of the playlists's owner
   ownerUsername: { type: String, default: "" }, // the username of the playlists's owner
-  // maybe more?
 });
 
 const SettingSchema = new Schema(

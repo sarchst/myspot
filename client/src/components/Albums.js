@@ -1,33 +1,22 @@
 import React from "react";
-import Card from "@material-ui/core/Card";
-import CardActions from "@material-ui/core/CardActions";
-import CardContent from "@material-ui/core/CardContent";
-import CardMedia from "@material-ui/core/CardMedia";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import Grid from "@material-ui/core/Grid";
-import Typography from "@material-ui/core/Typography";
-import { withStyles } from "@material-ui/core/styles";
-import Container from "@material-ui/core/Container";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import Spotify from "spotify-web-api-js";
-import Button from "@material-ui/core/Button";
+
+import {
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  CardMedia,
+  Container,
+  CssBaseline,
+  Grid,
+  Typography,
+} from "@material-ui/core";
+import { withStyles } from "@material-ui/core/styles";
 
 const spotifyWebApi = new Spotify();
-
-// will probs use this later but with probs be it's own seperate component!
-// function Copyright() {
-//   return (
-//     <Typography variant="body2" color="textSecondary" align="center">
-//       {"Copyright © "}
-//       <Link color="inherit" href="https://material-ui.com/">
-//         MySpot
-//       </Link>{" "}
-//       {new Date().getFullYear()}
-//       {"."}
-//     </Typography>
-//   );
-// }
 
 const styles = (theme) => ({
   icon: {
@@ -60,8 +49,6 @@ const styles = (theme) => ({
   },
 });
 
-// todo: (Sarchen) reuse Playlist component
-
 class Albums extends React.Component {
   constructor(props) {
     super(props);
@@ -90,7 +77,6 @@ class Albums extends React.Component {
       <React.Fragment>
         <CssBaseline />
         <main>
-          {/* Hero unit */}
           <div className={classes.heroContent}>
             <Container maxWidth="sm">
               <Typography
@@ -102,20 +88,9 @@ class Albums extends React.Component {
               >
                 Albums
               </Typography>
-              {/* <Typography
-                variant="h5"
-                align="center"
-                color="textSecondary"
-                paragraph
-              >
-                Something short and leading about the collection below—its
-                contents, the creator, etc. Make it short and sweet, but not too
-                short so folks don&apos;t simply skip over it entirely.
-              </Typography> */}
             </Container>
           </div>
           <Container className={classes.cardGrid} maxWidth="md">
-            {/* End hero unit */}
             <Grid container spacing={4}>
               {this.state.usersAlbums.map((album, index) => (
                 <Grid item key={index} xs={12} sm={6} md={4}>

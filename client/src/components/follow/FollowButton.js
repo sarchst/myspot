@@ -2,13 +2,13 @@ import React from "react";
 import { connect } from "react-redux";
 import axios from "axios";
 
+import UnfollowDialog from "./UnfollowDialog";
 import { confirmUnfollowDialog } from "../../app/actions";
 import { setSelectedUser } from "../../app/actions/selectedUserActions";
 
 import { Button } from "@material-ui/core";
 import PersonAddIcon from "@material-ui/icons/PersonAdd";
 import GroupIcon from "@material-ui/icons/Group";
-import UnfollowDialog from "./UnfollowDialog";
 
 class FollowButton extends React.Component {
   performAction = (followeeId) => {
@@ -28,7 +28,7 @@ class FollowButton extends React.Component {
           this.props.setSelectedUser(res.data.data);
         })
         .catch((error) => {
-          throw error;
+          console.error(error);
         });
     } else if (buttonText === "Following") {
       const payload = {
@@ -49,7 +49,7 @@ class FollowButton extends React.Component {
         this.props.setSelectedUser(res.data.data);
       })
       .catch((error) => {
-        throw error;
+        console.error(error);
       });
   };
 

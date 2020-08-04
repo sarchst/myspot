@@ -1,17 +1,15 @@
 import React from "react";
-
-import SearchIcon from "@material-ui/icons/Search";
-import InputBase from "@material-ui/core/InputBase";
-import { fade } from "@material-ui/core/styles";
-import { withStyles } from "@material-ui/core";
 import { connect } from "react-redux";
 import { compose } from "redux";
 import { Redirect } from "react-router-dom";
+
 import { setSelectedUser } from "../app/actions/selectedUserActions";
-import Snackbar from "@material-ui/core/Snackbar";
+
+import { InputBase, Snackbar } from "@material-ui/core";
 import Alert from "@material-ui/lab/Alert";
-import Button from "@material-ui/core/Button";
-// import { Redirect } from "react-router-dom";
+import { fade } from "@material-ui/core/styles";
+import SearchIcon from "@material-ui/icons/Search";
+import { withStyles } from "@material-ui/core";
 
 const styles = (theme) => ({
   search: {
@@ -44,7 +42,6 @@ const styles = (theme) => ({
   },
   inputInput: {
     padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
     paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
     transition: theme.transitions.create("width"),
     width: "100%",
@@ -118,8 +115,6 @@ class SearchBar extends React.Component {
             root: classes.inputRoot,
             input: classes.inputInput,
           }}
-          // uncomment to clear text input on search
-          // value={this.state.query}
           inputProps={{ "aria-label": "search" }}
           onChange={this.handleChange}
           onKeyDown={(e) => {

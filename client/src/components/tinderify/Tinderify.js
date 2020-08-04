@@ -1,12 +1,13 @@
 import React, { Fragment } from "react";
 import { connect } from "react-redux";
+
 import FriendsDiscoverWeekly from "./FriendsDiscoverWeekly";
-import "pure-react-carousel/dist/react-carousel.es.css";
-import Typography from "@material-ui/core/Typography";
-import { withStyles } from "@material-ui/core/styles";
-import { Paper, Tab, Tabs } from "@material-ui/core";
 import MusicBrowser from "./MusicBrowser";
 import TinderifyPlaylist from "./TinderifyPlaylist";
+
+import { Paper, Tab, Tabs, Typography } from "@material-ui/core";
+import { withStyles } from "@material-ui/core/styles";
+import "pure-react-carousel/dist/react-carousel.es.css";
 
 const styles = (theme) => ({
   audioPlayer: {
@@ -58,7 +59,6 @@ class Tinderify extends React.Component {
               to your MySpot-Tinderify playlist!
             </Typography>
             <Paper className={classes.root}>
-              {/* <TabContext value={this.state.tabIndex}> */}
               <Tabs
                 value={this.state.tabIndex}
                 onChange={this.handleChange}

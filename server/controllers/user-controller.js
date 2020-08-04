@@ -34,10 +34,6 @@ createUser = (req, res) => {
 // updateUser updates user if they exist in the db
 // else create new user with req.body
 updateUser = async (req, res) => {
-  // console.log("calling updateUser in user-controller");
-  //
-  // console.log(req.body.recentTracks.length);
-  // console.log(req.body.topTracks.length);
   const body = req.body;
   if (!body) {
     return res.status(400).json({
@@ -45,7 +41,6 @@ updateUser = async (req, res) => {
       error: "You must provide a body to update",
     });
   }
-  // console.log("inside user-controller");
   User.findByIdAndUpdate(
     req.body._id,
     req.body,
@@ -63,7 +58,6 @@ updateUser = async (req, res) => {
           message: "user PUT error",
         });
       }
-      console.log(User);
       return res.status(200).json({
         User,
         message: "user PUT success",
@@ -87,7 +81,6 @@ getUserById = async (req, res) => {
 
 getUserByUsername = async (req, res) => {
   User.findOne(
-    // { username: { $regex: new RegExp(req.params.id, "i") } },
     {
       username: { $regex: new RegExp(["^", req.params.id, "$"].join(""), "i") },
     },
@@ -100,6 +93,7 @@ getUserByUsername = async (req, res) => {
     }
   ).catch((err) => console.log(err));
 };
+
 // Returns a list of all users in the database
 getUsers = async (req, res) => {
   User.find({}, (err, Users) => {
@@ -131,11 +125,8 @@ getUserFollowingFeed = async (req, res) => {
       select: "posts profilePic",
     })
     .exec(function (err, result) {
-      // console.log(result.data.following.posts);
-      // console.log(result.following.posts);
       return res.status(200).json({ success: true, data: result });
     });
-  // .catch((err) => console.log(err));
 };
 
 // Returns a list of posts created by the user
@@ -151,11 +142,8 @@ getUserPosts = async (req, res) => {
       return res.status(404).json({ success: false, error: "User not found" });
     }
   }).exec(function (err, user) {
-    console.log("user posts");
-    console.log(user);
     return res.status(200).json({ success: true, data: user });
   });
-  // .catch((err) => console.log(err));
 };
 
 addPost = (req, res) => {
@@ -283,12 +271,12 @@ unlikePost = (req, res) => {
     }
   );
 };
+
 getUserSettings = async (req, res) => {
   User.findOne({ _id: req.params.id }, "settings", (err, User) => {
     if (err) {
       return res.status(400).json({ success: false, error: err });
     }
-    console.log("user contrl method:" + User);
     return res.status(200).json({ success: true, data: User });
   }).catch((err) => console.log(err));
 };
@@ -302,10 +290,8 @@ updateSettings = async (req, res) => {
     });
   }
 
-  console.log("Req body is " + body);
   const settings = new Setting(body);
-  console.log("settings is " + settings);
-  console.log(req.params.id);
+
   User.findOneAndUpdate(
     { _id: req.params.id },
     { settings: settings },
@@ -335,11 +321,7 @@ addComment = async (req, res) => {
       error: "You must provide a body to update",
     });
   }
-  // console.log("Req body is " + body);
   const comment = new Comment(body);
-  // console.log("comment is " + comment);
-  // console.log("postid", body.postId);
-  // console.log(req.params.id);
   User.findOneAndUpdate(
     { _id: req.params.id, "posts._id": body.postId },
     { $push: { "posts.$[outer].comments": comment } },
@@ -386,7 +368,6 @@ getProfilePic = async (req, res) => {
     if (err) {
       return res.status(400).json({ success: false, error: err });
     }
-    console.log("user contrl method img link:" + Img);
     return res.status(200).json({ success: true, data: Img });
   }).catch((err) => console.log(err));
 };
@@ -400,8 +381,6 @@ updateProfilePic = async (req, res) => {
     });
   }
 
-  console.log("Req body is " + body);
-  console.log(req.params.id);
   User.findOneAndUpdate(
     { _id: req.params.id },
     {
@@ -520,8 +499,6 @@ module.exports = {
   getFollowers,
   getFollowing,
   updateFollowRelationship,
-  // addFollowingFollowerRelationship,
-  // removeFollowingFollowerRelationship,
   deletePost,
   getUserByUsername,
   addComment,

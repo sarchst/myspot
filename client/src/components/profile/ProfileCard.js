@@ -45,12 +45,7 @@ const styles = (theme) => ({
     fontWeight: "bold",
   },
   statLabel: {
-    // fontSize: "medium",
-    // color: palette.grey[500],
     color: theme.palette.primary.main,
-    // fontWeight: "bold",
-    // fontFamily:
-    // '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
     margin: 0,
   },
   statValue: {
@@ -100,10 +95,7 @@ class ProfileCard extends React.Component {
     const { classes, selectedUser } = this.props;
 
     return (
-      <Card
-        // className={cx(styles.card, shadowStyles.root)}
-        className={classes.card}
-      >
+      <Card className={classes.card}>
         <CardContent className={classes.profileCardBox}>
           <Avatar
             className={classes.avatar}
@@ -120,24 +112,14 @@ class ProfileCard extends React.Component {
         </CardContent>
         <Divider light />
         <Box display={"flex"}>
-          <Box
-            className={classes.profileCardBox}
-            p={2}
-            flex={"auto"}
-            // className={borderedGridStyles.item}
-          >
+          <Box className={classes.profileCardBox} p={2} flex={"auto"}>
             <Typography className={classes.statLabel}>Followers</Typography>
             <p className={classes.statValue}>
               {selectedUser.followers ? selectedUser.followers.length : 0}
             </p>
           </Box>
           <Divider orientation="vertical" flexItem />
-          <Box
-            className={classes.profileCardBox}
-            p={2}
-            flex={"auto"}
-            // className={borderedGridStyles.item}
-          >
+          <Box className={classes.profileCardBox} p={2} flex={"auto"}>
             <Typography className={classes.statLabel}>Following</Typography>
             <p className={classes.statValue}>
               {selectedUser.following ? selectedUser.following.length : 0}
@@ -146,12 +128,7 @@ class ProfileCard extends React.Component {
         </Box>
         <Divider light />
         <Box display={"flex"}>
-          <Box
-            className={classes.profileCardBox}
-            p={2}
-            flex={"auto"}
-            // className={borderedGridStyles.item}
-          >
+          <Box className={classes.profileCardBox} p={2} flex={"auto"}>
             <List
               className={classes.listRoot}
               dense={true}
@@ -216,12 +193,7 @@ class ProfileCard extends React.Component {
                 : null}
             </List>
           </Box>
-          <Box
-            className={classes.profileCardBox}
-            p={2}
-            flex={"auto"}
-            // className={borderedGridStyles.item}
-          >
+          <Box className={classes.profileCardBox} p={2} flex={"auto"}>
             <List
               className={classes.listRoot}
               dense={true}
@@ -299,8 +271,6 @@ class ProfileCard extends React.Component {
 
 const mapStateToProps = (state) => ({
   spotifyApi: state.spotifyApi,
-  // posts: state.posts,
-  // user: state.user,
   posts: state.profileFeed.posts,
   selectedUser: state.selectedUser,
 });

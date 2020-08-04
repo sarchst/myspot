@@ -32,7 +32,6 @@ const lightTheme = createMuiTheme({
     },
   },
   overrides: {
-    // Style sheet name ⚛️
     MuiToggleButton: {
       root: {
         "&$selected": {
@@ -83,7 +82,6 @@ const darkTheme = createMuiTheme({
       head: {
         color: "#03DAC6",
         fontSize: "medium",
-        // fontWeight: "bold",
       },
     },
   },
@@ -96,7 +94,6 @@ class App extends React.Component {
     if (params.access_token) {
       spotifyWebApi.setAccessToken(params.access_token);
       let userObject = {};
-      // Pass refresh token as well for further use if a new access token is needed
       this.props.registerSpotifyApi(params);
       Promise.all([
         spotifyWebApi.getMe(),
@@ -106,22 +103,16 @@ class App extends React.Component {
         const spotifyMe = values[0];
         const topTracks = values[1];
         const recentTracks = values[2];
-        // create db object using spotify user object
         Object.assign(userObject, spotifyMe);
-        // add top tracks to db object
         userObject.topTracks = topTracks.items.slice(
           0,
           Math.min(topTracks.items.length, 3)
         );
-        // add recent tracks to db object
         userObject.recentTracks = recentTracks.items.slice(
           0,
           Math.min(recentTracks.items.length, 3)
         );
-        // dispatch updated spotify info to db
-        // then store db response as current user and as initial selectedUser in redux
         this.props.submitSpotifyApiUserMe(userObject);
-        // fetch and store URIs for MySpot and MySpot-Tinderify playlists in redux
         this.props.setPlayListIDs(spotifyMe.id, params.access_token);
       });
     }

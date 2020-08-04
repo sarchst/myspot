@@ -1,16 +1,15 @@
 import React from "react";
 import { connect } from "react-redux";
+import InfiniteScroll from "react-infinite-scroll-component";
+import Emoji from "react-emoji-render";
 
 import Post from "./Post";
 import MakePost from "./MakePost";
 import FilterPosts from "./FilterPosts";
 import { fetchFeedWithFilter } from "../../app/actions/feedActions";
 import { toggleLike } from "../../app/actions/postActions";
-// import { fetchPosts } from "../../app/actions/postActions";
-import InfiniteScroll from "react-infinite-scroll-component";
-import { Typography } from "@material-ui/core";
-import Emoji from "react-emoji-render";
-import { Grid } from "@material-ui/core";
+
+import { Grid, Typography } from "@material-ui/core";
 
 class Feed extends React.Component {
   state = {
@@ -20,7 +19,6 @@ class Feed extends React.Component {
   };
 
   componentDidMount() {
-    // change fetchFeed to take second filter param
     this.props.fetchFeedWithFilter(this.props.user.id, this.props.feed.filter);
     window.scrollTo(0, 0);
   }

@@ -1,6 +1,7 @@
 import axios from "axios";
-import { fetchFeedWithFilter } from "./feedActions";
+
 import { applyFilter } from "./filterActions";
+import { fetchFeedWithFilter } from "./feedActions";
 
 export const FETCH_POSTS_SUCCESS = "FETCH_POSTS_SUCCESS";
 export const FETCH_POSTS_ERROR = "FETCH_POSTS_ERROR";
@@ -39,25 +40,6 @@ export function addPostsToPosts(data) {
   };
 }
 
-// export const makePost = (post) => {
-//   console.log("Post from actions: ", post);
-//   const id = post.authorId;
-//   return (dispatch) => {
-//     return axios
-//       .put(`http://localhost:9000/user/posts/${id}`, post)
-
-//       .then(() => {
-//         dispatch(fetchPosts(id));
-//       })
-//       .then(() => {
-//         dispatch(fetchFeed(id));
-//       })
-//       .catch((error) => {
-//         throw error;
-//       });
-//   };
-// };
-
 export const makePost = (post, profileFeedFilter, feedFilter) => {
   const id = post.authorId;
   return (dispatch) => {
@@ -71,7 +53,7 @@ export const makePost = (post, profileFeedFilter, feedFilter) => {
         dispatch(fetchFeedWithFilter(id, feedFilter));
       })
       .catch((error) => {
-        throw error;
+        console.error(error);
       });
   };
 };
@@ -87,41 +69,10 @@ export const deletePost = (id, postId, profileFeedFilter, feedFilter) => {
         dispatch(fetchFeedWithFilter(id, feedFilter));
       })
       .catch((error) => {
-        throw error;
+        console.error(error);
       });
   };
 };
-// export function fetchPosts(id) {
-//   return (dispatch) => {
-//     dispatch(fetchPostsStarted());
-//     fetch(`http://localhost:9000/user/posts/${id}`)
-//       .then((res) => res.json())
-//       .then((res) => {
-//         if (res.error) {
-//           throw res.error;
-//         }
-//         // console.log("fetchPosts method:");
-//         dispatch(fetchPostsSuccess());
-//         return res.data;
-//       })
-//       .then((res) => {
-//         for (let i = 0; i < res.posts.length; i++) {
-//           res.posts[i].profilePic = res.profilePic;
-//         }
-
-//         const sortedPosts = res.posts.sort(
-//           (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
-//         );
-
-//         dispatch(addPostsToPosts(sortedPosts));
-//         return res;
-//       })
-//       .catch((error) => {
-//         console.log("Fetch Posts Error");
-//         dispatch(fetchPostsError(error));
-//       });
-//   };
-// }
 
 export function fetchPostsWithFilter(id, profileFeedFilter) {
   return (dispatch) => {
@@ -132,7 +83,6 @@ export function fetchPostsWithFilter(id, profileFeedFilter) {
         if (res.error) {
           throw res.error;
         }
-        // console.log("fetchPosts method:");
         dispatch(fetchPostsSuccess());
         return res.data;
       })
@@ -141,9 +91,6 @@ export function fetchPostsWithFilter(id, profileFeedFilter) {
           res.posts[i].profilePic = res.profilePic;
         }
 
-        // const sortedPosts = res.posts.sort(
-        //   (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
-        // );
         let sortedPosts = applyFilter(res.posts, profileFeedFilter);
 
         dispatch(addPostsToPosts(sortedPosts));
@@ -168,7 +115,7 @@ export const addComment = (comment, profileFeedFilter, feedFilter) => {
         dispatch(fetchFeedWithFilter(authorId, feedFilter));
       })
       .catch((error) => {
-        throw error;
+        console.error(error);
       });
   };
 };
@@ -189,7 +136,7 @@ export const deleteComment = (id, body, profileFeedFilter, feedFilter) => {
         dispatch(fetchFeedWithFilter(authorId, feedFilter));
       })
       .catch((error) => {
-        throw error;
+        console.error(error);
       });
   };
 };
@@ -205,7 +152,7 @@ export const editPost = (id, commentInfo, profileFeedFilter, feedFilter) => {
         dispatch(fetchFeedWithFilter(id, feedFilter));
       })
       .catch((error) => {
-        throw error;
+        console.error(error);
       });
   };
 };
@@ -229,7 +176,7 @@ export const toggleLike = (post, id, profileFeedFilter, feedFilter) => {
         dispatch(fetchFeedWithFilter(id, feedFilter));
       })
       .catch((error) => {
-        throw error;
+        console.error(error);
       });
   };
 };
