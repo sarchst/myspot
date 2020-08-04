@@ -85,7 +85,6 @@ getUserById = async (req, res) => {
   }).catch((err) => console.log(err));
 };
 
-
 getUserByUsername = async (req, res) => {
   User.findOne(
     { username: { $regex: new RegExp(req.params.id, "i") } },
@@ -521,7 +520,7 @@ module.exports = {
   // addFollowingFollowerRelationship,
   // removeFollowingFollowerRelationship,
   deletePost,
-  getUserByUsername
+  getUserByUsername,
   addComment,
   deleteComment,
   likePost,

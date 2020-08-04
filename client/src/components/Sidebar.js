@@ -30,7 +30,6 @@ import { withStyles } from "@material-ui/core/styles";
 import { toggleSidebar } from "../app/actions";
 import contentType from "../data/ContentTypeEnum";
 
-
 import { Link, Route, Switch, Redirect } from "react-router-dom";
 
 import FollowTable from "./follow/FollowTable";
@@ -40,6 +39,7 @@ import Feed from "./feed/Feed";
 import Settings from "./Settings";
 import SongList from "./SongList";
 import { fetchSelectedUser } from "../app/actions/selectedUserActions";
+import SearchResults from "./SearchResults";
 
 const drawerWidth = 240;
 

@@ -125,11 +125,11 @@ class Appbar extends React.Component {
             to={"/" + this.props.user.username + "/settings"}
             className={classes.appbarButton}
           >
-            <SearchBar />
             <IconButton color="inherit">
               <SettingsIcon />
             </IconButton>
           </Link>
+          <SearchBar />
         </Toolbar>
       </AppBar>
     );
