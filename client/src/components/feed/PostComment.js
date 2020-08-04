@@ -78,7 +78,12 @@ class PostComment extends React.Component {
     }
 
     return (
-      <Grid container direction="row" justify="center" alignItems="center">
+      <Grid
+        container
+        direction="row"
+        justify="center"
+        alignItems="center"
+      >
         <Grid item xs={1}>
           <RouterLink
             className={classes.routerLink}
@@ -87,9 +92,9 @@ class PostComment extends React.Component {
               this.props.fetchSelectedUser(commentdata.authorId);
             }}
           >
-            <Typography color="secondary" variant="subtitle2">
-              {commentdata.authorUsername}:
-            </Typography>
+              <Typography color="secondary" variant="subtitle2">
+                {commentdata.authorUsername}:
+              </Typography>
           </RouterLink>
         </Grid>
         <Grid item xs={8}>
