@@ -7,30 +7,36 @@ MySpot is a social media platform for music lovers who want to connect with othe
 ### Project Task Requirements:
 
 **3-5 minimal requirements (will definitely complete):**
-1. Public profile page
-2. Follow people
-3. Log in to your profile to see the playlists of the people you follow
-   * See who’s currently online
-4. Edit/View your own playlist
-5. Search for songs/albums
+ 1. Public profile page :heavy_check_mark:
+ 2. Follow people :heavy_check_mark:
+ 3. Log in to your profile to see the playlists of the people you follow :heavy_check_mark:
+4.  Edit/View your own playlist :heavy_check_mark:
+5.  Search for other users :heavy_check_mark:
     
 **3-7 "standard" requirements (will most likely complete)** 
-1. Show followers what you’re listening 
-   * See what your followees are listening 
-2. Dashboard/ Feed
-   * Different types of posts (ie. playlists, songs, artists..)
-   * Share playlists/song/album with others (default post is playlist) onto the Feed
-3. Follower/ Followee Actions
-4. Playlists on web app directly edit your Spotify playlists
-5. Get recommendations based on you like
-6. Chat/  Message ability with other User’s
+1. Show followers what you’re listening :heavy_check_mark:
+   * See what your followees are listening  :heavy_check_mark:
+2. Dashboard/ Feed :heavy_check_mark:
+   * Different types of posts (ie. playlists, songs, artists..) :heavy_check_mark:
+   * Share playlists/song/album with others (default post is playlist) onto the Feed :heavy_check_mark:
+3. Follower/ Followee Actions :heavy_check_mark:
+4. Playlists on web app directly edit your Spotify playlists :heavy_check_mark:
+5. Get recommendations based on you like :heavy_check_mark:
+6. Chat/  Message ability with other User’s :x: 
 
 **2-3 stretch requirements (plan to complete 1!)**
-1. Tinderify (swipe left or right on randomly generated playlists to add them to your playlists)
-2. Priority feed of followee’s activities
-3. Explore page (like IG)
-4. Make playlists on the application from scratch rather than on Spotify
+1. Tinderify (swipe left or right on randomly generated playlists to add them to your playlists) :heavy_check_mark:
+2. Priority feed of followee’s activities  :grey_exclamation:
+3. Explore page (like IG) :x: 
+4. Make playlists on the application from scratch rather than on Spotify :heavy_check_mark:
 
+### Tech Stack:
+### Above and Beyond Functionality:
+### Next Steps:
+### List of Contributions:
+
+
+### Previous Notes:
 ### 2 Minimal Requirement Breakdowns:
 
 **Add People I’m Following:**
