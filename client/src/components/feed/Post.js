@@ -178,7 +178,7 @@ class Post extends Component {
   };
 
   repost = (post) => {
-    // create new post
+    // TODO create new post with repost field set to TRUE
     console.log(post);
   };
 
@@ -193,7 +193,6 @@ class Post extends Component {
       open: this.props.delPostDialog.open,
       postId: postId,
     };
-    console.log(payload);
     this.props.submitDeletePostDialog(payload);
     this.closeOptions();
   };
@@ -224,7 +223,7 @@ class Post extends Component {
           this.setState({
             errorSnackOpen: true,
           });
-          console.log("error adding song to MySpot playlist: ", err);
+          console.log("error adding playlist to library: ", err);
         });
     } else if (type === "album") {
       spotifyWebApi
@@ -251,7 +250,7 @@ class Post extends Component {
           this.setState({
             errorSnackOpen: true,
           });
-          console.log("error adding song to MySpot playlist: ", err);
+          console.log("error adding album to library: ", err);
         });
     } else {
       spotifyWebApi
@@ -333,32 +332,36 @@ class Post extends Component {
 
     this.setState({
       successSnackOpen: false,
-      containssSnackOpen: false,
+      containsSnackOpen: false,
       errorSnackOpen: false,
     });
   };
 
-  getAlertMessage = (postdata) => {
+  getAlertMessage = (postdata, submessage) => {
     if (postdata.type === "playlist") {
       return (
-        postdata.media.name +
-        " - " +
         postdata.media.ownerUsername +
-        " playlist added to your Spotify"
+        "'s playlist " +
+        postdata.media.name +
+        " " +
+        submessage +
+        " your Spotify"
       );
     } else if (postdata.type === "track") {
       return (
         postdata.media.name +
-        " - " +
+        " by " +
         postdata.media.artist +
-        " added to your MySpot playlist!"
+        " your MySpot playlist!"
       );
     } else if (postdata.type === "album") {
       return (
         postdata.media.name +
-        " - " +
+        " by " +
         postdata.media.artist +
-        " added to your Spotify"
+        " " +
+        submessage +
+        " your Spotify"
       );
     }
   };
@@ -681,7 +684,7 @@ class Post extends Component {
             onClose={() => this.handleClose()}
           >
             <Alert onClose={() => this.handleClose()} severity="success">
-              {this.getAlertMessage(postdata)}
+              {this.getAlertMessage(postdata, " was added to")}
             </Alert>
           </Snackbar>
           <Snackbar
@@ -690,7 +693,8 @@ class Post extends Component {
             onClose={() => this.handleClose()}
           >
             <Alert onClose={() => this.handleClose()} severity="info">
-              This media is already in your library.
+              {/* This media is already in your library. */}
+              {this.getAlertMessage(postdata, "is already in")}
             </Alert>
           </Snackbar>
           <Snackbar
@@ -699,7 +703,8 @@ class Post extends Component {
             onClose={() => this.handleClose()}
           >
             <Alert onClose={() => this.handleClose()} severity="error">
-              Error adding selected Media.
+              {/* Error adding selected Media. */}
+              {this.getAlertMessage(postdata, " was not added to")}
             </Alert>
           </Snackbar>
         </div>
