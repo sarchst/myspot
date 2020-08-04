@@ -41,8 +41,10 @@ const styles = (theme) => ({
   },
 
   appbarButton: {
-    marginLeft: 50,
-    fontSize: 15,
+    marginLeft: 25,
+    marginRight: 25,
+    // marginLeft: 50,
+    fontSize: 16,
     textDecoration: "none",
     color: "white",
   },
@@ -87,50 +89,60 @@ class Appbar extends React.Component {
           [classes.appBarShift]: this.props.open,
         })}
       >
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            onClick={this.handleDrawerOpen}
-            edge="start"
-            className={clsx(classes.menuButton, {
-              [classes.hide]: this.props.open,
-            })}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography noWrap={false} className={classes.appTitle}>
-            MySpot
-          </Typography>
-          <Link
-            to={"/" + this.props.user.id}
-            className={classes.appbarButton}
-            onClick={() => this.props.fetchSelectedUser(this.props.user.id)}
-          >
-            <Button color="inherit">{contentType.PROFILE}</Button>
-          </Link>
-          <Link
-            to={"/" + this.props.user.id + "/feed"}
-            className={classes.appbarButton}
-          >
-            <Button color="inherit">{contentType.FEED}</Button>
-          </Link>
-          <Link to={"/"} className={classes.appbarButton}>
-            <Button color="inherit" onClick={this.logOut}>
-              Log Out
-            </Button>
-          </Link>
-
-          <Link
-            to={"/" + this.props.user.username + "/settings"}
-            className={classes.appbarButton}
-          >
-            <IconButton color="inherit">
-              <SettingsIcon />
+        
+          <Toolbar>
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              onClick={this.handleDrawerOpen}
+              edge="start"
+              className={clsx(classes.menuButton, {
+                [classes.hide]: this.props.open,
+              })}
+            >
+              <MenuIcon />
             </IconButton>
-          </Link>
-          <SearchBar />
-        </Toolbar>
+            <Typography noWrap={false} className={classes.appTitle}>
+              MySpot
+            </Typography>
+            <Link
+              to={"/" + this.props.user.id}
+              style={{ textDecoration: "none" }}
+              // className={classes.appbarButton}
+              onClick={() => this.props.fetchSelectedUser(this.props.user.id)}
+            >
+              <Button className={classes.appbarButton} color="inherit">
+                {contentType.PROFILE}
+              </Button>
+            </Link>
+            <Link
+              to={"/" + this.props.user.id + "/feed"}
+              style={{ textDecoration: "none" }}
+            >
+              <Button className={classes.appbarButton} color="inherit">
+                {contentType.FEED}
+              </Button>
+            </Link>
+            <Link to={"/"} style={{ textDecoration: "none" }}>
+              <Button
+                className={classes.appbarButton}
+                color="inherit"
+                onClick={this.logOut}
+              >
+                Log Out
+              </Button>
+            </Link>
+
+            <Link
+              to={"/" + this.props.user.username + "/settings"}
+              className={classes.appbarButton}
+            >
+              <IconButton color="inherit">
+                <SettingsIcon />
+              </IconButton>
+            </Link>
+            <SearchBar />
+          </Toolbar>
       </AppBar>
     );
   }
