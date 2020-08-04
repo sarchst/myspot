@@ -1,6 +1,5 @@
 import React from "react";
 import clsx from "clsx";
-// import Post from "./Post";
 import Playlists from "./Playlists";
 import Albums from "./Albums";
 import Tinderify from "./tinderify/Tinderify";
@@ -223,7 +222,7 @@ class Sidebar extends React.Component {
         <main className={classes.content}>
           <div className={classes.toolbar} />
           <Switch>
-            <Route path={"/:user"} exact component={Profile} />
+            <Route path="/:user" exact component={Profile} />
             <Route path="/:user/posts" component={Feed} />
             <Route path="/:user/albums" exact component={Albums} />
             <Route path="/:user/tinderify" exact component={Tinderify} />

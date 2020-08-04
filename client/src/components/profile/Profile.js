@@ -84,7 +84,10 @@ class Profile extends React.Component {
       prevProps.selectedUser.username !== this.props.selectedUser.username
     ) {
       // get posts from selectedUser if possible, else get from db
-      this.props.fetchPostsWithFilter(match.params.user, this.props.filter);
+      this.props.fetchPostsWithFilter(
+        this.props.selectedUser._id,
+        this.props.filter
+      );
     }
   }
 
