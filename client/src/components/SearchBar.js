@@ -59,7 +59,7 @@ class SearchBar extends React.Component {
   };
 
   handleChange = (e) => {
-    this.setState({ query: e.target.value });
+    this.setState({ query: e.target.value, errorSnackOpen: false });
   };
 
   handleClose = (event, reason) => {
