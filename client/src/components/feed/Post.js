@@ -634,7 +634,6 @@ class Post extends Component {
 
             <Divider />
             <AccordionActions>
-              <Button size="small">Cancel</Button>
               <Button
                 size="small"
                 color="secondary"
