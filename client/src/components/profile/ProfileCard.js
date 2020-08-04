@@ -97,6 +97,10 @@ class ProfileCard extends React.Component {
     });
   };
 
+  updateCard = () => {
+    this.setState({});
+  };
+
   render() {
     const { classes, selectedUser } = this.props;
 
@@ -127,6 +131,7 @@ class ProfileCard extends React.Component {
             selectedUserId={selectedUser._id}
             selectedUserFollowers={selectedUser.followers}
             selectedUsername={selectedUser.username}
+            isFollowing={selectedUser.followers.includes(this.props.user.id)}
             isProfileCall={true}
           />
         </CardContent>
@@ -312,7 +317,7 @@ class ProfileCard extends React.Component {
 const mapStateToProps = (state) => ({
   spotifyApi: state.spotifyApi,
   // posts: state.posts,
-  // user: state.user,
+  user: state.user,
   posts: state.profileFeed.posts,
   selectedUser: state.selectedUser,
 });

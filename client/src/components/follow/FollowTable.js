@@ -31,7 +31,10 @@ class FollowTable extends React.Component {
 
   fetchFollowPeople = () => {
     const type = this.props.type;
-    fetch(`http://localhost:9000/user/${type}/${this.props.selectedUser._id}`)
+    const id = this.props.inProfileTable
+      ? this.props.selectedUser._id
+      : this.props.user.id;
+    fetch(`http://localhost:9000/user/${type}/${id}`)
       .then((res) => res.json())
       .then((res) => {
         if (res.error) {
@@ -39,6 +42,7 @@ class FollowTable extends React.Component {
         }
         const following = this.transformFollowData(res.data[0][type]);
         this.setState({ followList: following });
+        this.setState({ followList: following }); // double state call because Follow Button was not rerendering properly
       })
       .catch((error) => {
         console.log("Fetch Follow Error: ", error);
@@ -129,7 +133,7 @@ class FollowTable extends React.Component {
                 selectedUserFollowers={rowData.followers}
                 selectedUsername={rowData.username}
                 isProfileCall={false}
-                isFollowingTable={this.props.type === "following"}
+                isFollowing={rowData.followers.includes(this.props.user.id)}
                 followTableCallback={() => this.updateTable()}
               />
             ),

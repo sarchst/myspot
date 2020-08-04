@@ -239,13 +239,17 @@ class Sidebar extends React.Component {
               key="followers"
               exact
               path="/:user/followers"
-              component={(props) => <FollowTable type={"followers"} />}
+              component={(props) => (
+                <FollowTable type={"followers"} inProfileTable={false} />
+              )}
             />
             <Route
               key="following"
               exact
               path="/:user/following"
-              component={(props) => <FollowTable type={"following"} />}
+              component={(props) => (
+                <FollowTable type={"following"} inProfileTable={false} />
+              )}
             />
             <Route path="/:user/whatimlisteningto" component={NowPlaying} />
             <Route path="/:user/feed" component={Feed} />

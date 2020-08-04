@@ -12,9 +12,7 @@ import UnfollowDialog from "./UnfollowDialog";
 
 class FollowButton extends React.Component {
   state = {
-    buttonText: this.props.selectedUserFollowers.includes(this.props.user.id)
-      ? "Following"
-      : "Follow",
+    buttonText: this.props.isFollowing ? "Following" : "Follow",
   };
 
   performAction = (followeeId) => {
@@ -27,10 +25,9 @@ class FollowButton extends React.Component {
         .then((res) => {
           if (this.props.isProfileCall) {
             this.props.setSelectedUser(res.data.data);
-          } else if (this.props.isFollowingTable) {
-            this.followTableCallback();
-          } else {
             this.setState({ buttonText: "Following" });
+          } else {
+            this.props.followTableCallback();
           }
         })
         .catch((error) => {
@@ -55,10 +52,9 @@ class FollowButton extends React.Component {
       .then((res) => {
         if (this.props.isProfileCall) {
           this.props.setSelectedUser(res.data.data);
-        } else if (this.props.isFollowingTable) {
-          this.props.followTableCallback();
-        } else {
           this.setState({ buttonText: "Follow" });
+        } else {
+          this.props.followTableCallback();
         }
       })
       .catch((error) => {
@@ -82,10 +78,7 @@ class FollowButton extends React.Component {
     if (selectedUserId !== user.id) {
       return (
         <div>
-          <UnfollowDialog
-            selectedUserId={selectedUserId}
-            handleUnfollow={(id) => this.unfollow(id)}
-          />
+          <UnfollowDialog handleUnfollow={(id) => this.unfollow(id)} />
           <Button
             variant="outlined"
             color="secondary"
