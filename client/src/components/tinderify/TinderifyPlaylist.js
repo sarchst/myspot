@@ -3,11 +3,13 @@ import { connect } from "react-redux";
 import Spotify from "spotify-web-api-js";
 import { withStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
-import List from "@material-ui/core/List";
+import { List, Tooltip, IconButton, Snackbar } from "@material-ui/core";
+import NotInterestedIcon from "@material-ui/icons/NotInterested";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import Avatar from "@material-ui/core/Avatar";
 import ListItemText from "@material-ui/core/ListItemText";
+import MuiAlert from "@material-ui/lab/Alert";
 
 const styles = (theme) => ({
   link: {
@@ -19,12 +21,18 @@ const styles = (theme) => ({
   },
 });
 
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
+
 const spotifyWebApi = new Spotify();
 
 class TinderifyPlaylist extends React.Component {
   state = {
     followList: [],
     tracks: [],
+    errorSnackOpen: false,
+    deleteSnackOpen: false,
   };
   componentDidMount = () => {
     spotifyWebApi
@@ -42,6 +50,49 @@ class TinderifyPlaylist extends React.Component {
       );
   };
 
+  removeSongFromMySpotPlayList = (id) => {
+    spotifyWebApi
+      .removeTracksFromPlaylist(
+        this.props.mySpotPlaylists.TinderifyPlaylistID,
+        ["spotify:track:" + id]
+      )
+      .then((res) => {
+        this.setState({
+          deleteSnackOpen: true,
+        });
+        spotifyWebApi
+          .getPlaylistTracks(this.props.mySpotPlaylists.TinderifyPlaylistID)
+          .then(
+            (data) => {
+              console.log("Songs in playlist", data);
+              this.setState({
+                tracks: data.items,
+              });
+            },
+            function (err) {
+              console.error(err);
+            }
+          );
+      })
+      .catch((err) => {
+        this.setState({
+          errorSnackOpen: true,
+        });
+        console.log("error adding song to Tinderify playlist: ", err);
+      });
+  };
+
+  handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    this.setState({
+      errorSnackOpen: false,
+      deleteSnackOpen: false,
+    });
+  };
+
   render() {
     const { classes } = this.props;
     return (
@@ -53,6 +104,16 @@ class TinderifyPlaylist extends React.Component {
             {this.state.tracks.map((track, index) => {
               return (
                 <ListItem key={index}>
+                  <Tooltip title="Delete from Tinderify playlist">
+                    <IconButton
+                      aria-label="delete"
+                      onClick={() =>
+                        this.removeSongFromMySpotPlayList(track.track.id)
+                      }
+                    >
+                      <NotInterestedIcon className="unfavorite" />
+                    </IconButton>
+                  </Tooltip>
                   <ListItemAvatar>
                     <Avatar
                       variant="square"
@@ -81,6 +142,24 @@ class TinderifyPlaylist extends React.Component {
             })}
           </List>
         </Container>
+        <Snackbar
+          open={this.state.deleteSnackOpen}
+          autoHideDuration={6000}
+          onClose={() => this.handleClose()}
+        >
+          <Alert onClose={() => this.handleClose()} severity="success">
+            Song deleted from Tinderify playlist!
+          </Alert>
+        </Snackbar>
+        <Snackbar
+          open={this.state.errorSnackOpen}
+          autoHideDuration={6000}
+          onClose={() => this.handleClose()}
+        >
+          <Alert onClose={() => this.handleClose()} severity="error">
+            Error adding or deleting song to Tinderify playlist.
+          </Alert>
+        </Snackbar>
       </div>
     );
   }
