@@ -40,6 +40,7 @@ class FollowButton extends React.Component {
       const payload = {
         open: this.props.unfollowDialog.open,
         username: this.props.selectedUsername,
+        userId: this.props.selectedUserId,
       };
       this.props.confirmUnfollowDialog(payload);
     }
@@ -78,12 +79,12 @@ class FollowButton extends React.Component {
 
   render() {
     const { user, selectedUserId } = this.props;
-
     if (selectedUserId !== user.id) {
       return (
         <div>
           <UnfollowDialog
-            handleUnfollow={() => this.unfollow(selectedUserId)}
+            selectedUserId={selectedUserId}
+            handleUnfollow={(id) => this.unfollow(id)}
           />
           <Button
             variant="outlined"
