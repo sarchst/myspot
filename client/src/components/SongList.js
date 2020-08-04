@@ -19,6 +19,7 @@ import {
 } from "@material-ui/core";
 import MuiAlert from "@material-ui/lab/Alert";
 import FavoriteIcon from "@material-ui/icons/Favorite";
+import NotInterestedIcon from "@material-ui/icons/NotInterested";
 import { withStyles } from "@material-ui/core/styles";
 
 function Alert(props) {
@@ -101,6 +102,7 @@ class SongList extends React.Component {
       songlistType: "",
       albumImage: "",
       successSnackOpen: false,
+      deleteSnackOpen: false,
       errorSnackOpen: false,
     };
     spotifyWebApi.setAccessToken(this.props.spotifyApi.accessToken);
@@ -226,6 +228,40 @@ class SongList extends React.Component {
       });
   };
 
+  removeSongFromMySpotPlayList = (id, playlist) => {
+    spotifyWebApi
+      .removeTracksFromPlaylist(this.props.mySpotPlaylists[playlist], [
+        "spotify:track:" + id,
+      ])
+      .then((res) => {
+        this.setState({
+          deleteSnackOpen: true,
+        });
+        spotifyWebApi
+          .getPlaylistTracks(this.props.match.params.playlistid)
+          .then(
+            (data) => {
+              this.setState({
+                songlistType: "playlist",
+              });
+              const tracks = this.organizeTrackData(data.items);
+              this.setState({
+                tracks: tracks,
+              });
+            },
+            function (err) {
+              console.error(err);
+            }
+          );
+      })
+      .catch((err) => {
+        this.setState({
+          errorSnackOpen: true,
+        });
+        console.log("error adding song to MySpot playlist: ", err);
+      });
+  };
+
   handleClose = (event, reason) => {
     if (reason === "clickaway") {
       return;
@@ -235,6 +271,58 @@ class SongList extends React.Component {
       successSnackOpen: false,
       errorSnackOpen: false,
     });
+  };
+
+  getPlaylistEditButtons = (id) => {
+    console.log("id: ", id);
+    if (this.state.name === "MySpot-Tinderify") {
+      return (
+        <div>
+          <Tooltip title="Add to MySpot playlist">
+            <IconButton
+              aria-label="add"
+              onClick={() => this.addSongToMySpotPlayList(id)}
+            >
+              <FavoriteIcon className="favorite" />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Delete from MySpot-Tinderify playlist">
+            <IconButton
+              aria-label="delete"
+              onClick={() =>
+                this.removeSongFromMySpotPlayList(id, "TinderifyPlaylistID")
+              }
+            >
+              <NotInterestedIcon className="unfavorite" />
+            </IconButton>
+          </Tooltip>
+        </div>
+      );
+    } else if (this.state.name === "MySpot") {
+      return (
+        <Tooltip title="Delete from MySpot playlist">
+          <IconButton
+            aria-label="delete"
+            onClick={() =>
+              this.removeSongFromMySpotPlayList(id, "MySpotPlaylistID")
+            }
+          >
+            <NotInterestedIcon className="unfavorite" />
+          </IconButton>
+        </Tooltip>
+      );
+    } else {
+      return (
+        <Tooltip title="Add to MySpot playlist">
+          <IconButton
+            aria-label="add"
+            onClick={() => this.addSongToMySpotPlayList(id, "MySpotPlaylistID")}
+          >
+            <FavoriteIcon className="favorite" />
+          </IconButton>
+        </Tooltip>
+      );
+    }
   };
 
   render() {
@@ -297,16 +385,7 @@ class SongList extends React.Component {
             {this.state.tracks.map((track, index) => {
               return (
                 <ListItem key={index}>
-                  {this.state.name !== "MySpot" ? (
-                    <Tooltip title="Add to MySpot playlist">
-                      <IconButton
-                        aria-label="delete"
-                        onClick={() => this.addSongToMySpotPlayList(track.id)}
-                      >
-                        <FavoriteIcon className="favorite" />
-                      </IconButton>
-                    </Tooltip>
-                  ) : null}
+                  {this.getPlaylistEditButtons(track.id)}
                   <ListItemAvatar>
                     <Avatar
                       variant="square"
@@ -338,12 +417,21 @@ class SongList extends React.Component {
             </Alert>
           </Snackbar>
           <Snackbar
+            open={this.state.deleteSnackOpen}
+            autoHideDuration={6000}
+            onClose={() => this.handleClose()}
+          >
+            <Alert onClose={() => this.handleClose()} severity="success">
+              Song deleted from {this.state.name} playlist!
+            </Alert>
+          </Snackbar>
+          <Snackbar
             open={this.state.errorSnackOpen}
             autoHideDuration={6000}
             onClose={() => this.handleClose()}
           >
             <Alert onClose={() => this.handleClose()} severity="error">
-              Error adding song to MySpot playlist.
+              Error adding or deleting song in {this.state.name} playlist.
             </Alert>
           </Snackbar>
         </div>
