@@ -628,7 +628,7 @@ class Post extends Component {
                 </Typography>
               </div>
             </AccordionSummary>
-            <Container>
+            <Container maxWidth="xl">
               <AccordionDetails className={classes.details}>
                 {postdata.comments && postdata.comments.length
                   ? postdata.comments.map((comment, index) => {
