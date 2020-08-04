@@ -10,14 +10,6 @@ import ProfileCard from "./ProfileCard";
 import ProfileTable from "./ProfileTable";
 import Post from "../feed/Post";
 import {
-  fetchUserSettings,
-  fetchUserSettingsSuccess,
-} from "../../app/actions/settingsActions";
-import {
-  fetchProfilePic,
-  fetchProfilePicSuccess,
-} from "../../app/actions/imageUploadActions";
-import {
   toggleLike,
   fetchPostsWithFilter,
 } from "../../app/actions/postActions";
@@ -52,16 +44,16 @@ class Profile extends React.Component {
     const { match } = this.props;
     this.props.fetchSelectedUser(match.params.user);
     this.props.fetchPostsWithFilter(match.params.user, this.props.filter);
-    if (this.props.user && this.props.user.profilePic) {
-      this.props.fetchProfilePicSuccess(this.props.user.profilePic);
-    } else {
-      this.props.fetchProfilePic(match.params.user);
-    }
-    if (this.props.user && this.props.user.settings) {
-      this.props.fetchUserSettingsSuccess(this.props.user.settings);
-    } else {
-      this.props.fetchUserSettings(this.props.user.id);
-    }
+    // if (this.props.user && this.props.user.profilePic) {
+    //   this.props.fetchProfilePicSuccess(this.props.user.profilePic);
+    // } else {
+    //   this.props.fetchProfilePic(match.params.user);
+    // }
+    // if (this.props.user && this.props.user.settings) {
+    //   this.props.fetchUserSettingsSuccess(this.props.user.settings);
+    // } else {
+    //   this.props.fetchUserSettings(this.props.user.id);
+    // }
     window.scrollTo(0, 0);
   };
 
@@ -153,11 +145,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = {
   toggleLike,
   fetchPostsWithFilter,
-  fetchUserSettings,
-  fetchProfilePic,
   fetchSelectedUser,
-  fetchUserSettingsSuccess,
-  fetchProfilePicSuccess,
 };
 
 export default connect(
