@@ -149,6 +149,8 @@ class MakePost extends React.Component {
           _id: mo.id,
           name: mo.name,
           spotifyLink: mo.external_urls.spotify,
+          ownerId: mo.owner.id,
+          ownerUsername: mo.owner.display_name,
         };
       });
     } else {
