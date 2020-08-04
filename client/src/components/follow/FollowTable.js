@@ -8,6 +8,10 @@ import { withStyles } from "@material-ui/core/styles";
 import { fetchSelectedUser } from "../../app/actions/selectedUserActions";
 
 const styles = (theme) => ({
+  root: {
+    borderRadius: 16,
+    borderTopRadius: 16,
+  },
   link: {
     color: theme.palette.secondary.main,
     textDecoration: "none",
@@ -56,11 +60,17 @@ class FollowTable extends React.Component {
   };
 
   render() {
+    const { classes } = this.props;
     return (
       <MaterialTable
+        className={classes.root}
         components={{
           Container: (props) => (
-            <Paper {...props} elevation={0} style={{ boxShadow: 0 }} />
+            <Paper
+              {...props}
+              elevation={0}
+              style={{ boxShadow: 0, borderRadius: 16 }}
+            />
           ),
         }}
         columns={[
@@ -78,11 +88,11 @@ class FollowTable extends React.Component {
                 <img
                   src={rowData.pic}
                   alt={"ProfilePic"}
-                  style={{ width: 40, height: 40, borderRadius: 16 }}
+                  style={{ width: 40, height: 40 }}
                 />
               </Link>
             ),
-            headerStyle: { width: "50px" },
+            headerStyle: { width: "50px", borderRadius: 16 },
             cellStyle: { width: "50px" },
             width: null,
           },

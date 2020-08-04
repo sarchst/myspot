@@ -9,6 +9,9 @@ import MusicBrowser from "./MusicBrowser";
 import TinderifyPlaylist from "./TinderifyPlaylist";
 
 const styles = (theme) => ({
+  root: {
+    borderRadius: 16,
+  },
   audioPlayer: {
     width: "50%",
   },

@@ -102,15 +102,8 @@ class Sidebar extends React.Component {
     this.props.toggleSideBar();
   };
 
-  // This is only temporary and will need to be switched over to redux global state
-  // selectView = (text) => {
-  //   this.setState({ viewPage: text });
-  // };
-
   getSidebarIcon = (text) => {
     switch (text) {
-      case contentType.LISTENINGTO:
-        return <PlayCircleFilledIcon />;
       case contentType.PLAYLISTS:
         return <QueueMusicIcon />;
       case contentType.ALBUMS:
@@ -128,12 +121,6 @@ class Sidebar extends React.Component {
     }
   };
 
-  processTextForURL = (text) => {
-    if (text === contentType.LISTENINGTO) {
-      return "whatimlisteningto";
-    }
-    return text.toLowerCase();
-  };
 
   render() {
     const { classes, theme } = this.props;
@@ -189,7 +176,7 @@ class Sidebar extends React.Component {
             </ListItem>
 
             {[
-              contentType.LISTENINGTO,
+              // contentType.LISTENINGTO,
               contentType.ALBUMS,
               contentType.PLAYLISTS,
               contentType.FOLLOWERS,
@@ -207,8 +194,7 @@ class Sidebar extends React.Component {
                   to={
                     "/" +
                     this.props.user.id +
-                    "/" +
-                    this.processTextForURL(text)
+                    "/" + text.toLowerCase()
                   }
                 >
                   <ListItemIcon>{this.getSidebarIcon(text)}</ListItemIcon>
@@ -247,7 +233,6 @@ class Sidebar extends React.Component {
               path="/:user/following"
               component={(props) => <FollowTable type={"following"} />}
             />
-            <Route path="/:user/whatimlisteningto" component={NowPlaying} />
             <Route path="/:user/feed" component={Feed} />
             <Route path="/:user/settings" component={Settings} />
             <Route

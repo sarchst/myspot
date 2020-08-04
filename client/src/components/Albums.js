@@ -133,6 +133,7 @@ class Albums extends React.Component {
                     </CardContent>
                     <CardActions>
                       <Link
+                        style={{ textDecoration: "none" }}
                         to={"/" + user.username + "/albums/" + album.album.id}
                       >
                         <Button size="small" color="secondary">
