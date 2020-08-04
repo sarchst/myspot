@@ -1,6 +1,5 @@
 import React from "react";
 import clsx from "clsx";
-// import Post from "./Post";
 import Playlists from "./Playlists";
 import Albums from "./Albums";
 import Tinderify from "./tinderify/Tinderify";
@@ -39,7 +38,6 @@ import Feed from "./feed/Feed";
 import Settings from "./Settings";
 import SongList from "./SongList";
 import { fetchSelectedUser } from "../app/actions/selectedUserActions";
-import SearchResults from "./SearchResults";
 
 const drawerWidth = 240;
 
@@ -224,8 +222,7 @@ class Sidebar extends React.Component {
         <main className={classes.content}>
           <div className={classes.toolbar} />
           <Switch>
-            <Route path="/search" component={SearchResults} />
-            <Route path={"/:user"} exact component={Profile} />
+            <Route path="/:user" exact component={Profile} />
             <Route path="/:user/posts" component={Feed} />
             <Route path="/:user/albums" exact component={Albums} />
             <Route path="/:user/tinderify" exact component={Tinderify} />

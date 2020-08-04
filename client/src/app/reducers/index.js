@@ -14,7 +14,6 @@ import editPostDialog from "./editPostDialog";
 import unfollowDialog from "./unfollowDialog";
 import selectedUser from "./selectedUser";
 import mySpotPlaylists from "./mySpotPlaylists";
-import searchResults from "./searchResults";
 
 const allReducers = combineReducers({
   isSidebarOpen: toggleSidebar,
@@ -31,7 +30,6 @@ const allReducers = combineReducers({
   unfollowDialog: unfollowDialog,
   accountSettings: settings,
   updateSettings: updateSettings,
-  searchResults: searchResults,
 });
 
 export default allReducers;

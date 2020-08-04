@@ -5,11 +5,6 @@ import InputBase from "@material-ui/core/InputBase";
 import { fade } from "@material-ui/core/styles";
 import { withStyles } from "@material-ui/core";
 import { connect } from "react-redux";
-import {
-  searchUserByUsername,
-  searchUserError,
-  searchUserSuccess,
-} from "../app/actions/searchActions";
 import { compose } from "redux";
 import { Redirect } from "react-router-dom";
 import { setSelectedUser } from "../app/actions/selectedUserActions";
@@ -78,7 +73,6 @@ class SearchBar extends React.Component {
         if (res.error) {
           throw res.error;
         }
-        console.log("search bar res", res);
         if (res.data) this.props.setSelectedUser(res.data);
         this.setState({ user: res.data });
         this.setState({ user: {} });
@@ -94,8 +88,6 @@ class SearchBar extends React.Component {
 
   render() {
     const { classes } = this.props;
-    // if (this.state.redirectToSearchPage === false) {
-    console.log(this.state.user);
     return this.state.user && this.state.user.username ? (
       <Redirect to={`/${this.state.user._id}`} />
     ) : (
@@ -123,16 +115,11 @@ class SearchBar extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => ({
-  search: state.searchResults,
-});
-
 const mapDispatchToProps = {
-  searchUserByUsername,
   setSelectedUser,
 };
 
 export default compose(
   withStyles(styles),
-  connect(mapStateToProps, mapDispatchToProps)
+  connect(null, mapDispatchToProps)
 )(SearchBar);
