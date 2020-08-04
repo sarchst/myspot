@@ -9,10 +9,19 @@ const CommentSchema = new Schema(
     authorUsername: { type: String, required: true },
     postId: { type: String, ref: "Post" },
     postOwnerId: { type: String, ref: "User" },
-    time: { type: String, required: true }, // some reason timestamp doesn't seem to be working
+    time: { type: String, required: true },
   },
   { timestamps: true }
 );
+
+const MediaSchema = new Schema({
+  _id: { type: String, required: true }, // Spotify Playlist, Album, or Song id
+  name: { type: String, required: true },
+  spotifyLink: { type: String, required: true }, // Link to media on Spotify webpage
+  artist: { type: String, default: "" }, // Artist name for tracks and albums
+  ownerId: { type: String, default: "" }, // the Id of the playlists's owner
+  ownerUsername: { type: String, default: "" }, // the username of the playlists's owner
+});
 
 const SettingSchema = new Schema(
   {
@@ -31,9 +40,9 @@ const SettingSchema = new Schema(
 
 const PostSchema = new Schema(
   {
-    type: { type: String, required: true }, // TODO: May have to reference this back to media?
+    type: { type: String, required: true },
     content: { type: String },
-    media: { type: String, required: true }, // TODO: may need to be object for spotify?
+    media: { type: MediaSchema, required: true },
     usersLiked: [{ type: String, ref: "User", required: true }],
     repost: { type: Boolean, default: false, required: true },
     authorId: { type: String, ref: "User", required: true },
@@ -63,10 +72,12 @@ const User = mongoose.model("User", UserSchema);
 const Post = mongoose.model("Post", PostSchema);
 const Setting = mongoose.model("Setting", SettingSchema);
 const Comment = mongoose.model("Comment", CommentSchema);
+const Media = mongoose.model("Media", MediaSchema);
 
 module.exports = {
   Post: Post,
   User: User,
   Setting: Setting,
   Comment: Comment,
+  Media: Media,
 };

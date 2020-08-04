@@ -1,16 +1,17 @@
 import React from "react";
-import Button from "@material-ui/core/Button";
-import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogTitle from "@material-ui/core/DialogTitle";
 import { connect } from "react-redux";
-import {
-  submitEditPostDialog,
-  closeEditPostDialog,
-} from "../../app/actions/index";
+
+import { closeEditPostDialog } from "../../app/actions/index";
 import { editPost } from "../../app/actions/postActions";
-import {TextField } from "@material-ui/core";
+
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  TextField,
+} from "@material-ui/core";
 
 class EditPostDialog extends React.Component {
   state = {
@@ -18,13 +19,16 @@ class EditPostDialog extends React.Component {
   };
 
   handleConfirm = () => {
-    console.log("new msg is", this.state.editedContent);
     const body = {
       postId: this.props.editPostDialog.postId,
       content: this.state.editedContent,
     };
-    console.log(body);
-    this.props.editPost(this.props.user.id, body);
+    this.props.editPost(
+      this.props.user.id,
+      body,
+      this.props.profileFeedFilter,
+      this.props.feedFilter
+    );
     this.props.closeEditPostDialog();
   };
   handleCancel = () => {
@@ -81,9 +85,10 @@ class EditPostDialog extends React.Component {
 const mapStateToProps = (state) => ({
   editPostDialog: state.editPostDialog,
   user: state.user,
+  feedFilter: state.feed.filter,
+  profileFeedFilter: state.profileFeed.filter,
 });
 export default connect(mapStateToProps, {
-  submitEditPostDialog,
   closeEditPostDialog,
   editPost,
 })(EditPostDialog);

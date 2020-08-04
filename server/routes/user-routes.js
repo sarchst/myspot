@@ -6,6 +6,7 @@ const UserContrl = require("../controllers/user-controller");
 router.post("/user", UserContrl.createUser);
 router.put("/user/:id", UserContrl.updateUser);
 router.get("/user/:id", UserContrl.getUserById);
+router.get("/user/username/:id", UserContrl.getUserByUsername);
 router.get("/users", UserContrl.getUsers);
 
 router.get("/user/feed/:id", UserContrl.getUserFollowingFeed);
@@ -29,11 +30,7 @@ router.get("/user/profilepic/:id", UserContrl.getProfilePic);
 router.get("/user/followers/:id", UserContrl.getFollowers);
 router.get("/user/following/:id", UserContrl.getFollowing);
 
-//router.put("/user/following/:id", UserContrl.addFollowFollowingRelationship);
-// router.delete(
-//   "/user/following/:id",
-//   UserContrl.removeFollowingFollowerRelationship
-// );
+router.put("/user/following/:id", UserContrl.updateFollowRelationship);
 
 /* GET users listing. */
 router.get("/", function (req, res, next) {

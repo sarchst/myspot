@@ -1,45 +1,44 @@
 import React from "react";
 import clsx from "clsx";
-// import Post from "./Post";
-import Playlists from "./Playlists";
-import Albums from "./Albums";
-import Tinderify from "./Tinderify";
-import Favourites from "./Favourites";
-import Drawer from "@material-ui/core/Drawer";
-import List from "@material-ui/core/List";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import Divider from "@material-ui/core/Divider";
-import IconButton from "@material-ui/core/IconButton";
-import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
-import ChevronRightIcon from "@material-ui/icons/ChevronRight";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
-
-import AccountCircleIcon from "@material-ui/icons/AccountCircle";
-import HeadsetIcon from "@material-ui/icons/Headset";
-import MicIcon from "@material-ui/icons/Mic";
-import FavoriteIcon from "@material-ui/icons/Favorite";
-import QueueMusicIcon from "@material-ui/icons/QueueMusic";
-import PlayCircleFilledIcon from "@material-ui/icons/PlayCircleFilled";
-import AlbumIcon from "@material-ui/icons/Album";
-import WhatshotIcon from "@material-ui/icons/Whatshot";
-
 import { connect } from "react-redux";
-import { withStyles } from "@material-ui/core/styles";
-import { toggleSidebar } from "../app/actions";
-import contentType from "../data/ContentTypeEnum";
-
-
 import { Link, Route, Switch, Redirect } from "react-router-dom";
 
-import FollowTable from "./FollowTable";
-import NowPlaying from "./NowPlaying";
-import Profile from "./profile/Profile";
+import Albums from "./Albums";
+import Favourites from "./Favourites";
 import Feed from "./feed/Feed";
+import FollowTable from "./follow/FollowTable";
+import Playlists from "./Playlists";
+import Profile from "./profile/Profile";
 import Settings from "./Settings";
 import SongList from "./SongList";
-import ProfileCard from "./profile/ProfileCard";
+import Tinderify from "./tinderify/Tinderify";
+import contentType from "../data/ContentTypeEnum";
+import { toggleSidebar } from "../app/actions";
+import { fetchSelectedUser } from "../app/actions/selectedUserActions";
+
+import {
+  CssBaseline,
+  Divider,
+  Drawer,
+  IconButton,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Typography,
+} from "@material-ui/core";
+import { withStyles } from "@material-ui/core/styles";
+import AccountCircleIcon from "@material-ui/icons/AccountCircle";
+import AlbumIcon from "@material-ui/icons/Album";
+import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
+import ChevronRightIcon from "@material-ui/icons/ChevronRight";
+import FavoriteIcon from "@material-ui/icons/Favorite";
+import HeadsetIcon from "@material-ui/icons/Headset";
+import MicIcon from "@material-ui/icons/Mic";
+import QueueMusicIcon from "@material-ui/icons/QueueMusic";
+import WhatshotIcon from "@material-ui/icons/Whatshot";
+import { fetchUserSettings } from "../app/actions/settingsActions";
+import { fetchProfilePic } from "../app/actions/imageUploadActions";
 
 const drawerWidth = 240;
 
@@ -82,7 +81,6 @@ const styles = (theme) => ({
     justifyContent: "flex-end",
     padding: theme.spacing(0, 1),
     textDecoration: "none",
-    // necessary for content to be below app bar
     ...theme.mixins.toolbar,
   },
   content: {
@@ -104,15 +102,13 @@ class Sidebar extends React.Component {
     this.props.toggleSideBar();
   };
 
-  // This is only temporary and will need to be switched over to redux global state
-  // selectView = (text) => {
-  //   this.setState({ viewPage: text });
-  // };
+  componentDidMount = () => {
+    this.props.fetchProfilePic(this.props.user.id);
+    this.props.fetchUserSettings(this.props.user.id);
+  };
 
   getSidebarIcon = (text) => {
     switch (text) {
-      case contentType.LISTENINGTO:
-        return <PlayCircleFilledIcon />;
       case contentType.PLAYLISTS:
         return <QueueMusicIcon />;
       case contentType.ALBUMS:
@@ -124,17 +120,10 @@ class Sidebar extends React.Component {
       case contentType.FAVOURITES:
         return <FavoriteIcon />;
       case contentType.TINDERIFY:
-        return <WhatshotIcon />;
+        return <WhatshotIcon style={{ color: "#e56b9e" }} />;
       default:
         return <AccountCircleIcon />;
     }
-  };
-
-  processTextForURL = (text) => {
-    if (text === contentType.LISTENINGTO) {
-      return "whatimlisteningto";
-    }
-    return text.toLowerCase();
   };
 
   render() {
@@ -166,18 +155,14 @@ class Sidebar extends React.Component {
             </IconButton>
           </div>
           <Divider />
-
-          {/*TODO: EITHER map username separately so it doesn't collide with other keywords OR block keywords from being used as username
-          LEFT THIS cause Im not sure if its better now?*/}
           <List>
-            <ListItem
-              button
-              key={this.props.user.username}
-              // onClick={() => this.selectView(this.props.username)}
-            >
+            <ListItem button key={this.props.user.username}>
               <Link
                 className={classes.sidebarItem}
-                to={"/" + this.props.user.username}
+                to={"/" + this.props.user.id}
+                onClick={() => {
+                  this.props.fetchSelectedUser(this.props.user.id);
+                }}
               >
                 <ListItemIcon>{<AccountCircleIcon />}</ListItemIcon>
                 <ListItemText
@@ -188,27 +173,17 @@ class Sidebar extends React.Component {
             </ListItem>
 
             {[
-              contentType.LISTENINGTO,
-              contentType.ALBUMS,
+              contentType.FAVOURITES,
               contentType.PLAYLISTS,
+              contentType.ALBUMS,
               contentType.FOLLOWERS,
               contentType.FOLLOWING,
-              contentType.FAVOURITES,
               contentType.TINDERIFY,
             ].map((text, index) => (
-              <ListItem
-                button
-                key={text}
-                // onClick={() => this.selectView(text)}
-              >
+              <ListItem button key={text}>
                 <Link
                   className={classes.sidebarItem}
-                  to={
-                    "/" +
-                    this.props.user.username +
-                    "/" +
-                    this.processTextForURL(text)
-                  }
+                  to={"/" + this.props.user.id + "/" + text.toLowerCase()}
                 >
                   <ListItemIcon>{this.getSidebarIcon(text)}</ListItemIcon>
                   <ListItemText primary={text} />
@@ -217,32 +192,15 @@ class Sidebar extends React.Component {
             ))}
           </List>
         </Drawer>
-
         <main className={classes.content}>
           <div className={classes.toolbar} />
           <Switch>
-            <Route path={"/:user"} exact>
-              <Profile />
-            </Route>
-            <Route path="/:user/posts">
-              <Feed />
-            </Route>
-            <Route path="/:user/albums" exact>
-              <Albums />
-            </Route>
-            <Route path="/:user/tinderify" exact>
-              <Tinderify />
-            </Route>
-            <Route path="/:user/favourites" exact>
-              <Favourites />
-            </Route>
-            <Route
-              path="/:user/playlists"
-              exact
-              component={(props) => (
-                <Playlists {...props} loggedInUserId={this.props.user.id} />
-              )}
-            />
+            <Route path="/:user" exact component={Profile} />
+            <Route path="/:user/posts" component={Feed} />
+            <Route path="/:user/albums" exact component={Albums} />
+            <Route path="/:user/tinderify" exact component={Tinderify} />
+            <Route path="/:user/favourites" exact component={Favourites} />
+            <Route path="/:user/playlists" exact component={Playlists} />
             <Route
               path="/myspotter/:user/playlists"
               exact
@@ -250,36 +208,56 @@ class Sidebar extends React.Component {
                 return <Playlists {...props} />;
               }}
             />
-            <Route key="followers" exact path="/:user/followers">
-              <FollowTable type={"followers"} />
-            </Route>
-            <Route key="following" exact path="/:user/following">
-              <FollowTable type={"following"} />
-            </Route>
-            <Route path="/:user/whatimlisteningto">
-              <NowPlaying />
-            </Route>
             <Route
-              path="/myspotter/:user"
-              render={(props) => {
-                console.log("props in profilecard is");
-                console.log(props);
-                return <ProfileCard {...props} />;
-              }}
+              key="followers"
+              exact
+              path="/:user/followers"
+              component={(props) => (
+                <div>
+                  <Typography
+                    component="h1"
+                    variant="h2"
+                    align="center"
+                    color="textPrimary"
+                    gutterBottom
+                  >
+                    Followers
+                  </Typography>
+                  <FollowTable type={"followers"} inProfileTable={false} />
+                </div>
+              )}
             />
-            <Route path="/:user/feed">
-              <Feed />
-            </Route>
-            <Route path="/:user/settings">
-              <Settings />
-            </Route>
+            <Route
+              key="following"
+              exact
+              path="/:user/following"
+              component={(props) => (
+                <div>
+                  <Typography
+                    component="h1"
+                    variant="h2"
+                    align="center"
+                    color="textPrimary"
+                    gutterBottom
+                  >
+                    Following
+                  </Typography>
+                  <FollowTable type={"following"} inProfileTable={false} />
+                </div>
+              )}
+            />
+            <Route path="/:user/feed" component={Feed} />
+            <Route path="/:user/settings" component={Settings} />
             <Route
               path="/:user/playlists/:playlistid"
               render={(props) => <SongList {...props} />}
             />
             <Route
-              render={() => <Redirect to={"/" + this.props.user.username} />}
+              exact
+              path="/:user/albums/:albumid"
+              render={(props) => <SongList {...props} />}
             />
+            <Route render={() => <Redirect to={"/" + this.props.user.id} />} />
           </Switch>
         </main>
       </div>
@@ -294,10 +272,11 @@ const mapStateToProps = (state) => {
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    toggleSideBar: () => dispatch(toggleSidebar()),
-  };
+const mapDispatchToProps = {
+  toggleSidebar,
+  fetchSelectedUser,
+  fetchUserSettings,
+  fetchProfilePic,
 };
 
 export default connect(

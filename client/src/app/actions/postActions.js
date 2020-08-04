@@ -1,5 +1,7 @@
 import axios from "axios";
-import { fetchFeed } from "./feedActions";
+
+import { applyFilter } from "./filterActions";
+import { fetchFeedWithFilter } from "./feedActions";
 
 export const FETCH_POSTS_SUCCESS = "FETCH_POSTS_SUCCESS";
 export const FETCH_POSTS_ERROR = "FETCH_POSTS_ERROR";
@@ -38,43 +40,41 @@ export function addPostsToPosts(data) {
   };
 }
 
-export const makePost = (post) => {
-  console.log("Post from actions: ", post);
+export const makePost = (post, profileFeedFilter, feedFilter) => {
   const id = post.authorId;
   return (dispatch) => {
     return axios
       .put(`http://localhost:9000/user/posts/${id}`, post)
 
       .then(() => {
-        dispatch(fetchPosts(id));
+        dispatch(fetchPostsWithFilter(id, profileFeedFilter));
       })
       .then(() => {
-        dispatch(fetchFeed(id));
+        dispatch(fetchFeedWithFilter(id, feedFilter));
       })
       .catch((error) => {
-        throw error;
+        console.error(error);
       });
   };
 };
 
-export const deletePost = (id, postId) => {
-  console.log("Delete post in actions user ID", id);
-  console.log("Delete post in postBody", postId);
+export const deletePost = (id, postId, profileFeedFilter, feedFilter) => {
   return (dispatch) => {
     return axios
       .put(`http://localhost:9000/user/posts/delete/${id}`, postId)
       .then(() => {
-        dispatch(fetchPosts(id));
+        dispatch(fetchPostsWithFilter(id, profileFeedFilter));
       })
       .then(() => {
-        dispatch(fetchFeed(id));
+        dispatch(fetchFeedWithFilter(id, feedFilter));
       })
       .catch((error) => {
-        throw error;
+        console.error(error);
       });
   };
 };
-export function fetchPosts(id) {
+
+export function fetchPostsWithFilter(id, profileFeedFilter) {
   return (dispatch) => {
     dispatch(fetchPostsStarted());
     fetch(`http://localhost:9000/user/posts/${id}`)
@@ -83,7 +83,6 @@ export function fetchPosts(id) {
         if (res.error) {
           throw res.error;
         }
-        // console.log("fetchPosts method:");
         dispatch(fetchPostsSuccess());
         return res.data;
       })
@@ -92,39 +91,38 @@ export function fetchPosts(id) {
           res.posts[i].profilePic = res.profilePic;
         }
 
-        const sortedPosts = res.posts.sort(
-          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
-        );
+        let sortedPosts = applyFilter(res.posts, profileFeedFilter);
 
         dispatch(addPostsToPosts(sortedPosts));
         return res;
       })
       .catch((error) => {
-        console.log("Fetch Posts Error");
-        dispatch(fetchPostsError(error));
+        console.log("Fetch Posts Error: ", error);
       });
   };
 }
 
-export const addComment = (comment) => {
+export const addComment = (comment, profileFeedFilter, feedFilter) => {
   let id = comment.postOwnerId;
   let authorId = comment.authorId;
   return (dispatch) => {
     return axios
       .put(`http://localhost:9000/user/posts/comments/${id}`, comment)
       .then(() => {
-        dispatch(fetchPosts(authorId));
+        dispatch(fetchPostsWithFilter(authorId, profileFeedFilter));
       })
       .then(() => {
-        dispatch(fetchFeed(authorId));
+        dispatch(fetchFeedWithFilter(authorId, feedFilter));
       })
       .catch((error) => {
-        throw error;
+        console.error(error);
       });
   };
 };
 
-export const deleteComment = (id, authorId, commentInfo) => {
+export const deleteComment = (id, body, profileFeedFilter, feedFilter) => {
+  let authorId = body.authorId;
+  let commentInfo = body.commentInfo;
   return (dispatch) => {
     return axios
       .put(
@@ -132,30 +130,53 @@ export const deleteComment = (id, authorId, commentInfo) => {
         commentInfo
       )
       .then(() => {
-        dispatch(fetchPosts(authorId));
+        dispatch(fetchPostsWithFilter(authorId, profileFeedFilter));
       })
       .then(() => {
-        dispatch(fetchFeed(authorId));
+        dispatch(fetchFeedWithFilter(authorId, feedFilter));
       })
       .catch((error) => {
-        throw error;
+        console.error(error);
       });
   };
 };
 
-export const editPost = (id, commentInfo) => {
-  console.log("edit post action");
+export const editPost = (id, commentInfo, profileFeedFilter, feedFilter) => {
   return (dispatch) => {
     return axios
       .put(`http://localhost:9000/user/posts/edit/${id}`, commentInfo)
       .then(() => {
-        dispatch(fetchPosts(id));
+        dispatch(fetchPostsWithFilter(id, profileFeedFilter));
       })
       .then(() => {
-        dispatch(fetchFeed(id));
+        dispatch(fetchFeedWithFilter(id, feedFilter));
       })
       .catch((error) => {
-        throw error;
+        console.error(error);
+      });
+  };
+};
+
+export const toggleLike = (post, id, profileFeedFilter, feedFilter) => {
+  let postInfo = { postId: post._id, userId: id };
+  let toggle = "like";
+  if (post.usersLiked.includes(id)) {
+    toggle = "unlike";
+  }
+  return (dispatch) => {
+    return axios
+      .put(
+        `http://localhost:9000/user/posts/${toggle}/${post.authorId}`,
+        postInfo
+      )
+      .then(() => {
+        dispatch(fetchPostsWithFilter(id, profileFeedFilter));
+      })
+      .then(() => {
+        dispatch(fetchFeedWithFilter(id, feedFilter));
+      })
+      .catch((error) => {
+        console.error(error);
       });
   };
 };

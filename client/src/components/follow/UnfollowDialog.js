@@ -1,8 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-
-import { closeDeletePostDialog } from "../../app/actions/index";
-import { deletePost } from "../../app/actions/postActions";
+import { confirmUnfollowDialog, closeUnfollowDialog } from "../../app/actions";
 
 import {
   Button,
@@ -13,38 +11,32 @@ import {
   DialogTitle,
 } from "@material-ui/core";
 
-class DeletePostDialog extends React.Component {
+class UnfollowDialog extends React.Component {
   handleConfirm = () => {
-    const body = { postId: this.props.delPostDialog.postId };
-    this.props.deletePost(
-      this.props.user.id,
-      body,
-      this.props.profileFeedFilter,
-      this.props.feedFilter
-    );
-    this.props.closeDeletePostDialog();
+    this.props.handleUnfollow(this.props.unfollowDialog.userId);
+    this.props.closeUnfollowDialog();
   };
   handleCancel = () => {
-    this.props.closeDeletePostDialog();
+    this.props.closeUnfollowDialog();
   };
   render() {
-    if (!this.props.delPostDialog.open) {
+    if (!this.props.unfollowDialog.open) {
       return null;
     } else {
       return (
         <div>
           <Dialog
-            open={this.props.delPostDialog.open}
+            open={this.props.unfollowDialog.open}
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
           >
             <DialogTitle id="alert-dialog-title">
-              {"Delete Post Confirmation"}
+              {"Unfollow Confirmation"}
             </DialogTitle>
             <DialogContent>
               <DialogContentText id="alert-dialog-description">
-                Are you sure you want to delete your post? This cannot be
-                undone.
+                Are you sure you want to unfollow{" "}
+                {this.props.unfollowDialog.username}?
               </DialogContentText>
             </DialogContent>
             <DialogActions>
@@ -56,7 +48,7 @@ class DeletePostDialog extends React.Component {
                 Cancel
               </Button>
               <Button onClick={this.handleConfirm} color="primary" autoFocus>
-                Confirm
+                Unfollow
               </Button>
             </DialogActions>
           </Dialog>
@@ -67,13 +59,10 @@ class DeletePostDialog extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-  delPostDialog: state.delPostDialog,
-  user: state.user,
-  feedFilter: state.feed.filter,
-  profileFeedFilter: state.profileFeed.filter,
+  unfollowDialog: state.unfollowDialog,
 });
 
 export default connect(mapStateToProps, {
-  closeDeletePostDialog,
-  deletePost,
-})(DeletePostDialog);
+  confirmUnfollowDialog,
+  closeUnfollowDialog,
+})(UnfollowDialog);
