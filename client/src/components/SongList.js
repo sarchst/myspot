@@ -250,7 +250,13 @@ class SongList extends React.Component {
           </Link>
         ) : (
           <Link to={"/" + this.props.match.params.user + "/albums"}>
-            Go Back
+            <Button
+              className={classes.submit}
+              variant="contained"
+              color="primary"
+            >
+              Go Back
+            </Button>
           </Link>
         )}
         <CssBaseline>
