@@ -109,7 +109,7 @@ class TinderifyPlaylist extends React.Component {
             {this.state.tracks.map((track, index) => {
               return (
                 <ListItem key={index}>
-                  <Tooltip title="Delete from MySpot playlist">
+                  <Tooltip title="Delete from MySpot-Tinderify playlist">
                     <IconButton
                       aria-label="delete"
                       onClick={() =>
