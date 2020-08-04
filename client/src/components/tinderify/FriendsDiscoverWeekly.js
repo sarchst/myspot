@@ -77,7 +77,11 @@ class FriendsDiscoverWeekly extends React.Component {
           <MaterialTable
             components={{
               Container: (props) => (
-                <Paper {...props} elevation={0} style={{ boxShadow: 0 }} />
+                <Paper
+                  {...props}
+                  elevation={0}
+                  style={{ boxShadow: 0, borderRadius: 16}}
+                />
               ),
             }}
             columns={[
