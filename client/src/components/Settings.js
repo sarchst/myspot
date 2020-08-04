@@ -58,6 +58,7 @@ class Settings extends React.Component {
       language: "English",
       disableAcc: false,
     };
+    console.log("update settings Settings.js: ", newSettings);
     this.props.updateSettings(newSettings, this.props.user.id);
   };
 

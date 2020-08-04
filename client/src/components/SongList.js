@@ -239,6 +239,7 @@ class SongList extends React.Component {
 
   render() {
     const { classes } = this.props;
+    console.log("Name: ", this.state.name === "MySpot");
     return (
       <div>
         {this.state.songlistType === "playlist" ? (
@@ -297,14 +298,16 @@ class SongList extends React.Component {
             {this.state.tracks.map((track, index) => {
               return (
                 <ListItem key={index}>
-                  <Tooltip title="Add to MySpot playlist">
-                    <IconButton
-                      aria-label="delete"
-                      onClick={() => this.addSongToMySpotPlayList(track.id)}
-                    >
-                      <FavoriteIcon className="favorite" />
-                    </IconButton>
-                  </Tooltip>
+                  {this.state.name !== "MySpot" ? (
+                    <Tooltip title="Add to MySpot playlist">
+                      <IconButton
+                        aria-label="delete"
+                        onClick={() => this.addSongToMySpotPlayList(track.id)}
+                      >
+                        <FavoriteIcon className="favorite" />
+                      </IconButton>
+                    </Tooltip>
+                  ) : null}
                   <ListItemAvatar>
                     <Avatar
                       variant="square"
