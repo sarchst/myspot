@@ -152,8 +152,8 @@ class Playlists extends React.Component {
                         to={{
                           pathname: `/${this.state.userID}/playlists/${playlist.id}`,
                           state: {
-                            playlistName: playlist.name,
-                            playlistDescription: playlist.description,
+                            collectionName: playlist.name,
+                            collectionDescription: playlist.description,
                           },
                         }}
                       >

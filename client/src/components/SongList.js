@@ -17,7 +17,6 @@ import FavoriteIcon from "@material-ui/icons/Favorite";
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
 import Button from "@material-ui/core/Button";
-import Box from "@material-ui/core/Box";
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -88,10 +87,14 @@ class SongList extends React.Component {
     super(props);
     this.state = {
       tracks: [],
-      name: this.props.location ? this.props.location.state.playlistName : "",
-      description: this.props.location
-        ? this.props.location.state.playlistDescription
-        : "",
+      name:
+        this.props.location && this.props.location.state
+          ? this.props.location.state.collectionName
+          : "",
+      description:
+        this.props.location && this.props.location.state
+          ? this.props.location.state.collectionDescription
+          : "",
       songlistType: "",
       albumImage: "",
       successSnackOpen: false,
