@@ -78,7 +78,7 @@ class TinderifyPlaylist extends React.Component {
         this.setState({
           errorSnackOpen: true,
         });
-        console.log("error adding song to MySpot playlist: ", err);
+        console.log("error adding song to Tinderify playlist: ", err);
       });
   };
 
@@ -104,7 +104,7 @@ class TinderifyPlaylist extends React.Component {
             {this.state.tracks.map((track, index) => {
               return (
                 <ListItem key={index}>
-                  <Tooltip title="Delete from MySpot playlist">
+                  <Tooltip title="Delete from Tinderify playlist">
                     <IconButton
                       aria-label="delete"
                       onClick={() =>
@@ -148,7 +148,7 @@ class TinderifyPlaylist extends React.Component {
           onClose={() => this.handleClose()}
         >
           <Alert onClose={() => this.handleClose()} severity="success">
-            Song deleted from MySpot playlist!
+            Song deleted from Tinderify playlist!
           </Alert>
         </Snackbar>
         <Snackbar
@@ -157,7 +157,7 @@ class TinderifyPlaylist extends React.Component {
           onClose={() => this.handleClose()}
         >
           <Alert onClose={() => this.handleClose()} severity="error">
-            Error adding or deleting song to MySpot playlist.
+            Error adding or deleting song to Tinderify playlist.
           </Alert>
         </Snackbar>
       </div>
