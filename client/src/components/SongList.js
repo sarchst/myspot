@@ -16,6 +16,7 @@ import Tooltip from "@material-ui/core/Tooltip";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
+import Button from "@material-ui/core/Button";
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -57,6 +58,19 @@ const styles = (theme) => ({
   footer: {
     backgroundColor: theme.palette.background.paper,
     padding: theme.spacing(0),
+  },
+  link: {
+    color: theme.palette.secondary.main,
+    textDecoration: "none",
+    "&:hover": {
+      textDecoration: "underline",
+    },
+    button: {
+      textTransform: "none",
+    },
+    submit: {
+      float: "right",
+    },
   },
   root: {
     width: "100%",
@@ -229,11 +243,23 @@ class SongList extends React.Component {
       <div>
         {this.state.songlistType === "playlist" ? (
           <Link to={"/" + this.props.match.params.user + "/playlists"}>
-            Go Back
+            <Button
+              className={classes.submit}
+              variant="contained"
+              color="primary"
+            >
+              Go Back
+            </Button>
           </Link>
         ) : (
           <Link to={"/" + this.props.match.params.user + "/albums"}>
-            Go Back
+            <Button
+              className={classes.submit}
+              variant="contained"
+              color="primary"
+            >
+              Go Back
+            </Button>
           </Link>
         )}
         <CssBaseline>

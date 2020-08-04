@@ -132,10 +132,8 @@ class Albums extends React.Component {
                       <Typography>{album.album.artists[0].name}</Typography>
                     </CardContent>
                     <CardActions>
-                      {/*<Link*/}
-                      {/*  to={"/" + selectedUser._id + "/albums/" + album.album.id}*/}
-                      {/*>*/}
                       <Link
+                          style={{ textDecoration: "none" }}
                         to={{
                           pathname: `/${selectedUser._id}/albums/${album.album.id}`,
                           state: {
