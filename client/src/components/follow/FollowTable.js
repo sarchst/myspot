@@ -62,7 +62,7 @@ class FollowTable extends React.Component {
   };
 
   updateTable = () => {
-    this.forceUpdate();
+    this.fetchFollowPeople();
   };
 
   render() {
@@ -129,7 +129,8 @@ class FollowTable extends React.Component {
                 selectedUserFollowers={rowData.followers}
                 selectedUsername={rowData.username}
                 isProfileCall={false}
-                followTableCallback={() => this.props.profileTableCallback()}
+                isFollowingTable={this.props.type === "following"}
+                followTableCallback={() => this.updateTable()}
               />
             ),
           },

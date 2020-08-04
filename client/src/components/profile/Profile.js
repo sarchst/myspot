@@ -78,7 +78,6 @@ class Profile extends React.Component {
       });
     }
     // check if filter has been changed or selectedUser has changed
-    const { match } = this.props;
     if (
       this.props.filter !== prevProps.filter ||
       prevProps.selectedUser.username !== this.props.selectedUser.username

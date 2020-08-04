@@ -10,8 +10,6 @@ import { Redirect } from "react-router-dom";
 import { setSelectedUser } from "../app/actions/selectedUserActions";
 import Snackbar from "@material-ui/core/Snackbar";
 import Alert from "@material-ui/lab/Alert";
-import Button from "@material-ui/core/Button";
-// import { Redirect } from "react-router-dom";
 
 const styles = (theme) => ({
   search: {

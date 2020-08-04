@@ -11,14 +11,14 @@ import GroupIcon from "@material-ui/icons/Group";
 import UnfollowDialog from "./UnfollowDialog";
 
 class FollowButton extends React.Component {
-  performAction = (followeeId) => {
-    const buttonText = this.props.selectedUserFollowers.includes(
-      this.props.user.id
-    )
+  state = {
+    buttonText: this.props.selectedUserFollowers.includes(this.props.user.id)
       ? "Following"
-      : "Follow";
+      : "Follow",
+  };
 
-    if (buttonText === "Follow") {
+  performAction = (followeeId) => {
+    if (this.state.buttonText === "Follow") {
       axios
         .put(`http://localhost:9000/user/following/${this.props.user.id}`, {
           id: followeeId,
@@ -27,14 +27,16 @@ class FollowButton extends React.Component {
         .then((res) => {
           if (this.props.isProfileCall) {
             this.props.setSelectedUser(res.data.data);
+          } else if (this.props.isFollowingTable) {
+            this.followTableCallback();
           } else {
-            this.props.followTableCallback();
+            this.setState({ buttonText: "Following" });
           }
         })
         .catch((error) => {
           throw error;
         });
-    } else if (buttonText === "Following") {
+    } else if (this.state.buttonText === "Following") {
       const payload = {
         open: this.props.unfollowDialog.open,
         username: this.props.selectedUsername,
@@ -52,8 +54,10 @@ class FollowButton extends React.Component {
       .then((res) => {
         if (this.props.isProfileCall) {
           this.props.setSelectedUser(res.data.data);
-        } else {
+        } else if (this.props.isFollowingTable) {
           this.props.followTableCallback();
+        } else {
+          this.setState({ buttonText: "Follow" });
         }
       })
       .catch((error) => {
@@ -62,12 +66,7 @@ class FollowButton extends React.Component {
   };
 
   getButtonIcon = () => {
-    const buttonText = this.props.selectedUserFollowers.includes(
-      this.props.user.id
-    )
-      ? "Following"
-      : "Follow";
-    switch (buttonText) {
+    switch (this.state.buttonText) {
       case "Follow":
         return <PersonAddIcon />;
       case "Following":
@@ -78,7 +77,7 @@ class FollowButton extends React.Component {
   };
 
   render() {
-    const { user, selectedUserFollowers, selectedUserId } = this.props;
+    const { user, selectedUserId } = this.props;
 
     if (selectedUserId !== user.id) {
       return (
@@ -93,7 +92,7 @@ class FollowButton extends React.Component {
             endIcon={this.getButtonIcon()}
             onClick={() => this.performAction(selectedUserId)}
           >
-            {selectedUserFollowers.includes(user.id) ? "Following" : "Follow"}
+            {this.state.buttonText}
           </Button>
         </div>
       );
