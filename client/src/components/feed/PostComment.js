@@ -2,11 +2,13 @@ import React from "react";
 import { Typography } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 import { Grid, IconButton } from "@material-ui/core";
-// import FavoriteOutlinedIcon from "@material-ui/icons/FavoriteOutlined";
+import { fetchSelectedUser } from "../../app/actions/selectedUserActions";
 import { connect } from "react-redux";
 import { compose } from "redux";
 import { deleteComment } from "../../app/actions/postActions";
 import HighlightOffOutlinedIcon from "@material-ui/icons/HighlightOffOutlined";
+import { Link as RouterLink } from "react-router-dom";
+
 const styles = (theme) => ({
   root: {
     flexGrow: 1,
@@ -18,6 +20,13 @@ const styles = (theme) => ({
     fontSize: "0.6rem",
     "&:hover": {
       backgroundColor: "transparent",
+    },
+  },
+  routerLink: {
+    textDecoration: "none",
+    color: theme.palette.secondary.main,
+    "&:hover": {
+      textDecoration: "underline",
     },
   },
 });
@@ -69,33 +78,30 @@ class PostComment extends React.Component {
     }
 
     return (
-      // <Grid container direction="row" justify="space-between">
-      // <Grid
-      //   item
-      //   container
-      //   direction="row"
-      //   spacing={1}
-      //   // alignItems="center"
-      //   alignContent="space-between"
-      // >
-      <Grid
-        container
-        item
-        direction="row"
-        spacing={1}
-        alignItems="center"
-      >
-        {/* <Grid item container xs={5} direction="row"> */}
-          <Typography color="primary">{commentdata.time}</Typography>
-          <Typography color="secondary">
-            {commentdata.authorUsername}:
-          </Typography>
-        {/* </Grid> */}
-        <Grid item xs={7}>
-          {" "}
-          <Typography fontFamily="Monospace">{commentdata.content}</Typography>
+      <Grid container direction="row" justify="center" alignItems="center">
+        <Grid item xs={1}>
+          <RouterLink
+            className={classes.routerLink}
+            to={`/${commentdata.authorId}`}
+            onClick={() => {
+              this.props.fetchSelectedUser(commentdata.authorId);
+            }}
+          >
+            <Typography color="secondary" variant="subtitle2">
+              {commentdata.authorUsername}:
+            </Typography>
+          </RouterLink>
         </Grid>
-
+        <Grid item xs={8}>
+          <Typography fontFamily="Monospace" variant="subtitle2">
+            {commentdata.content}
+          </Typography>
+        </Grid>
+        <Grid item xs={2}>
+          <Typography color="primary" variant="caption">
+            {commentdata.time}
+          </Typography>
+        </Grid>
         <Grid item xs={1}>
           {commentDeleteButton}
         </Grid>
@@ -109,5 +115,5 @@ const mapStateToProps = (state) => ({
 });
 export default compose(
   withStyles(styles),
-  connect(mapStateToProps, { deleteComment })
+  connect(mapStateToProps, { deleteComment, fetchSelectedUser })
 )(PostComment);

@@ -35,6 +35,9 @@ import {
   Snackbar,
   Tooltip,
   Typography,
+  ListItem, 
+  List, 
+  Container
 } from "@material-ui/core";
 import MuiAlert from "@material-ui/lab/Alert";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
@@ -127,7 +130,7 @@ const styles = (theme) => ({
     padding: theme.spacing(2),
   },
   column: {
-    flexBasis: "33.33%",
+    flexBasis: "100%",
   },
   helper: {
     borderLeft: `2px solid ${theme.palette.divider}`,
@@ -627,38 +630,51 @@ class Post extends Component {
                 </Typography>
               </div>
             </AccordionSummary>
-            <AccordionDetails className={classes.details}>
-              <ul className={classes.column}>
+            <Container>
+              <AccordionDetails className={classes.details}>
                 {postdata.comments && postdata.comments.length
                   ? postdata.comments.map((comment, index) => {
-                      return <PostComment key={index} commentdata={comment} />;
+                      return (
+                        <PostComment
+                          style={{ width: 200 }}
+                          key={index}
+                          commentdata={comment}
+                        />
+                      );
                     })
                   : null}
-              </ul>
-              <Grid item container direction="row" alignItems="center">
-                <Grid item xs={11}>
-                  <FormControl fullWidth>
-                    <InputLabel htmlFor="standard-basic" color={"secondary"}>
-                      Leave a comment below
-                    </InputLabel>
-                    <Input
-                      value={this.state.commentContent}
-                      onChange={this.handleChangeComment}
-                      color={"secondary"}
-                      onKeyPress={(e) => {
-                        if (e.key === "Enter") {
-                          this.handleSubmitComment(
-                            postdata._id,
-                            postdata.authorId
-                          );
-                        }
-                      }}
-                    />
-                  </FormControl>
+                <Grid
+                  item
+                  container
+                  direction="row"
+                  alignItems="center"
+                  spacing={2}
+                >
+                  <Grid item xs={11}>
+                    <FormControl fullWidth>
+                      <InputLabel htmlFor="standard-basic" color={"secondary"}>
+                        Leave a comment below
+                      </InputLabel>
+                      <Input
+                        value={this.state.commentContent}
+                        onChange={this.handleChangeComment}
+                        color={"secondary"}
+                        onKeyPress={(e) => {
+                          if (e.key === "Enter") {
+                            this.handleSubmitComment(
+                              postdata._id,
+                              postdata.authorId
+                            );
+                          }
+                        }}
+                      />
+                    </FormControl>
+                  </Grid>
                 </Grid>
-              </Grid>
-              <div className={classes.column} />
-            </AccordionDetails>
+                <div className={classes.column} />
+              </AccordionDetails>
+            </Container>
+
             <Divider />
             <AccordionActions>
               <Button size="small">Cancel</Button>
