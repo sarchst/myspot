@@ -108,7 +108,7 @@ class FollowTable extends React.Component {
                   <img
                     src={rowData.pic}
                     alt={"ProfilePic"}
-                    style={{ width: 40, height: 40 }}
+                    style={{ width: 40, height: 40, borderRadius: 16 }}
                   />
                 </Link>
               ),
