@@ -75,7 +75,7 @@ class MusicBrowser extends React.Component {
           this.setState({
             playlistId: playlist.id,
           });
-        } else {
+        } else if (user_ID) {
           this.setState({
             playlistId: data.items[0].id,
           });
