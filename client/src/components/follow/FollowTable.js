@@ -64,11 +64,16 @@ class FollowTable extends React.Component {
         numFollowers: f.followers.length,
         followers: f.followers,
         userId: f._id,
-        country: getName(f.country).toLocaleLowerCase(),
+        country: this.getCountry(f.country),
       };
       return foll;
     });
     return follData;
+  };
+
+  getCountry = (country) => {
+    if (country === "US") return country.toLocaleLowerCase();
+    else return getName(country).toLocaleLowerCase();
   };
 
   updateTable = () => {
@@ -134,9 +139,7 @@ class FollowTable extends React.Component {
             {
               title: "Country",
               field: "country",
-              render: (rowData) => (
-                <Emoji text={":flag_" + rowData.country + ":"} />
-              ),
+              render: (rowData) => <Emoji text={":" + rowData.country + ":"} />,
             },
             { title: "# of Posts", field: "numPosts" },
             { title: "# of Followers", field: "numFollowers" },
