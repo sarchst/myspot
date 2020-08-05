@@ -94,7 +94,7 @@ class MusicBrowser extends React.Component {
             this.setState({
               tracks: data.tracks.items,
               playlistImageUrl:
-                data.images.length > 0 ? playlist.images[0].url : null,
+                data.images.length > 0 ? data.images[0].url : null,
             });
           },
           function (err) {
@@ -210,10 +210,8 @@ class MusicBrowser extends React.Component {
               </Fragment>
             ) : null}
             {!this.state.tracksAvailable ? (
-              <h1>No tracks available.</h1>
-            ) : (
-              <h1></h1>
-            )}
+              <h1 style={{ margin: 10 }}>No tracks available.</h1>
+            ) : null}
             <CarouselProvider
               naturalSlideWidth={5}
               naturalSlideHeight={5}
