@@ -96,9 +96,6 @@ const styles = (theme) => ({
   moreGid: {
     maxWidth: 50,
   },
-  media: {
-    // media style
-  },
   routerLink: {
     textDecoration: "none",
     color: "inherit",

@@ -61,7 +61,6 @@ class Playlists extends React.Component {
 
   componentDidMount() {
     const userID = this.props.match.params.user;
-    // identify user with React Router match.params instead because of race conditions with Redux store updating
     this.getAllPlaylists(userID)
       .then((allPlaylists) => {
         this.setState({

@@ -30,7 +30,6 @@ class Feed extends React.Component {
         hasMore: true,
       });
     }
-    // check if filter has been changed
     if (this.props.feed.filter !== prevProps.feed.filter) {
       this.props.fetchFeedWithFilter(
         this.props.user.id,
@@ -45,8 +44,6 @@ class Feed extends React.Component {
       return;
     }
     let n = this.state.items.length;
-    // a fake async api call like which sends
-    // 5 more records in 0.5 secs
     setTimeout(() => {
       this.setState({
         items: this.state.items.concat(this.props.feed.posts.slice(n, n + 3)),

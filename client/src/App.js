@@ -65,7 +65,6 @@ const darkTheme = createMuiTheme({
     },
   },
   overrides: {
-    // Style sheet name ⚛️
     MuiToggleButton: {
       root: {
         "&$selected": {

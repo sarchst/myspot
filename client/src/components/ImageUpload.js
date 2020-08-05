@@ -44,7 +44,6 @@ const ImageUpload = ({ saveAndUpdateProfilePic, user, fetchProfilePic }) => {
 
   const getProfilePic = () => {
     if (!user.profilePic) {
-      // can set default pic link here
       return "";
     } else {
       return user.profilePic;

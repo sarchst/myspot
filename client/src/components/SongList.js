@@ -104,7 +104,6 @@ class SongList extends React.Component {
       successSnackOpen: false,
       deleteSnackOpen: false,
       errorSnackOpen: false,
-      deleteSnackOpen: false,
     };
     spotifyWebApi.setAccessToken(this.props.spotifyApi.accessToken);
   }
