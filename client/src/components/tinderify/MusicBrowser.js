@@ -65,6 +65,7 @@ class MusicBrowser extends React.Component {
       trackID: "",
       successSnackOpen: false,
       errorSnackOpen: false,
+      tracksAvailable: true,
     };
     spotifyWebApi.setAccessToken(this.props.spotifyApi.accessToken);
   }
@@ -78,16 +79,22 @@ class MusicBrowser extends React.Component {
           this.setState({
             playlistId: playlist.id,
           });
-        } else {
+        } else if (user_ID) {
           this.setState({
             playlistId: data.items[0].id,
           });
+          if (data.items[0].tracks.total === 0) {
+            this.setState({
+              tracksAvailable: false,
+            });
+          }
         }
         spotifyWebApi.getPlaylist(this.state.playlistId).then(
           (data) => {
             this.setState({
               tracks: data.tracks.items,
-              playlistImageUrl: data.images[0].url,
+              playlistImageUrl:
+                data.images.length > 0 ? data.images[0].url : null,
             });
           },
           function (err) {
@@ -119,7 +126,7 @@ class MusicBrowser extends React.Component {
         });
       })
       .catch((err) => {
-        console.log("error adding song to tinderify playlist: ", err);
+        console.error("error adding song to tinderify playlist: ", err);
         this.setState({
           errorSnackOpen: true,
         });
@@ -201,6 +208,9 @@ class MusicBrowser extends React.Component {
                   ></audio>
                 </Box>
               </Fragment>
+            ) : null}
+            {!this.state.tracksAvailable ? (
+              <h1 style={{ margin: 10 }}>No tracks available.</h1>
             ) : null}
             <CarouselProvider
               naturalSlideWidth={5}

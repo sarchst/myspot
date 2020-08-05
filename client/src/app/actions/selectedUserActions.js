@@ -1,3 +1,5 @@
+import { logOut } from "./index";
+
 export const SELECT_USER = "SELECT_USER";
 
 export const fetchSelectedUser = (userID) => {
@@ -8,10 +10,14 @@ export const fetchSelectedUser = (userID) => {
         if (res.error) {
           throw res.error;
         }
-        dispatch(setSelectedUser(res.data));
+        if (res.data) {
+          dispatch(setSelectedUser(res.data));
+        } else {
+          dispatch(logOut());
+        }
       })
       .catch((error) => {
-        console.error("Failed to fetch db user", error);
+        dispatch(logOut());
       });
   };
 };
