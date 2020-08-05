@@ -44,16 +44,6 @@ class Profile extends React.Component {
     const { match } = this.props;
     this.props.fetchSelectedUser(match.params.user);
     this.props.fetchPostsWithFilter(match.params.user, this.props.filter);
-    // if (this.props.user && this.props.user.profilePic) {
-    //   this.props.fetchProfilePicSuccess(this.props.user.profilePic);
-    // } else {
-    //   this.props.fetchProfilePic(match.params.user);
-    // }
-    // if (this.props.user && this.props.user.settings) {
-    //   this.props.fetchUserSettingsSuccess(this.props.user.settings);
-    // } else {
-    //   this.props.fetchUserSettings(this.props.user.id);
-    // }
     window.scrollTo(0, 0);
   };
 
