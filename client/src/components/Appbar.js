@@ -47,7 +47,6 @@ const styles = (theme) => ({
   appbarButton: {
     marginLeft: 25,
     marginRight: 25,
-    // marginLeft: 50,
     fontSize: 16,
     textDecoration: "none",
     color: "white",
@@ -115,7 +114,6 @@ class Appbar extends React.Component {
           <Link
             to={"/" + this.props.user.id}
             style={{ textDecoration: "none" }}
-            // className={classes.appbarButton}
             onClick={() => this.props.fetchSelectedUser(this.props.user.id)}
           >
             <Button className={classes.appbarButton} color="inherit">

@@ -104,15 +104,15 @@ export function fetchPostsWithFilter(id, profileFeedFilter) {
 
 export const addComment = (comment, profileFeedFilter, feedFilter) => {
   let id = comment.postOwnerId;
-  let authorId = comment.authorId;
+  let userId = comment.authorId;
   return (dispatch) => {
     return axios
       .put(`/user/posts/comments/${id}`, comment)
       .then(() => {
-        dispatch(fetchPostsWithFilter(authorId, profileFeedFilter));
+        dispatch(fetchPostsWithFilter(id, profileFeedFilter));
       })
       .then(() => {
-        dispatch(fetchFeedWithFilter(authorId, feedFilter));
+        dispatch(fetchFeedWithFilter(userId, feedFilter));
       })
       .catch((error) => {
         console.error(error);
@@ -121,16 +121,16 @@ export const addComment = (comment, profileFeedFilter, feedFilter) => {
 };
 
 export const deleteComment = (id, body, profileFeedFilter, feedFilter) => {
-  let authorId = body.authorId;
+  let userId = body.authorId;
   let commentInfo = body.commentInfo;
   return (dispatch) => {
     return axios
       .put(`/user/posts/comments/delete/${id}`, commentInfo)
       .then(() => {
-        dispatch(fetchPostsWithFilter(authorId, profileFeedFilter));
+        dispatch(fetchPostsWithFilter(id, profileFeedFilter));
       })
       .then(() => {
-        dispatch(fetchFeedWithFilter(authorId, feedFilter));
+        dispatch(fetchFeedWithFilter(userId, feedFilter));
       })
       .catch((error) => {
         console.error(error);
@@ -164,7 +164,7 @@ export const toggleLike = (post, id, profileFeedFilter, feedFilter) => {
     return axios
       .put(`/user/posts/${toggle}/${post.authorId}`, postInfo)
       .then(() => {
-        dispatch(fetchPostsWithFilter(id, profileFeedFilter));
+        dispatch(fetchPostsWithFilter(post.authorId, profileFeedFilter));
       })
       .then(() => {
         dispatch(fetchFeedWithFilter(id, feedFilter));

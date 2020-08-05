@@ -6,9 +6,9 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import DeletePostDialog from "../feed/DeletePostDialog";
 import FilterPosts from "../feed/FilterPosts";
 import MakePost from "../feed/MakePost";
+import Post from "../feed/Post";
 import ProfileCard from "./ProfileCard";
 import ProfileTable from "./ProfileTable";
-import Post from "../feed/Post";
 import {
   toggleLike,
   fetchPostsWithFilter,
@@ -43,7 +43,10 @@ class Profile extends React.Component {
   componentDidMount = () => {
     const { match } = this.props;
     this.props.fetchSelectedUser(match.params.user);
-    this.props.fetchPostsWithFilter(match.params.user, this.props.filter);
+    this.props.fetchPostsWithFilter(
+      match.params.user,
+      this.props.profileFilter
+    );
     window.scrollTo(0, 0);
   };
 
@@ -55,12 +58,12 @@ class Profile extends React.Component {
       });
     }
     if (
-      this.props.filter !== prevProps.filter ||
+      this.props.profileFilter !== prevProps.profileFilter ||
       prevProps.selectedUser.username !== this.props.selectedUser.username
     ) {
       this.props.fetchPostsWithFilter(
         this.props.selectedUser._id,
-        this.props.filter
+        this.props.profileFilter
       );
     }
   }
@@ -79,7 +82,7 @@ class Profile extends React.Component {
   };
 
   render() {
-    const { classes, user, toggleLike } = this.props;
+    const { classes, user, toggleLike, profileFilter, feedFilter } = this.props;
     return (
       <div className={classes.root}>
         <DeletePostDialog />
@@ -111,12 +114,16 @@ class Profile extends React.Component {
                 <Post
                   key={p._id}
                   postdata={p}
-                  toggleLike={() => toggleLike(p, user.id)}
+                  toggleLike={() =>
+                    toggleLike(p, user.id, profileFilter, feedFilter)
+                  }
                   userId={user.id}
                 />
               ))
             ) : (
-              <h3 color="primary">Hmm...no posts yet. You should make one!</h3>
+              <h3 color="primary" style={{ textAlign: "center" }}>
+                Hmm...no posts yet. You should make one!
+              </h3>
             )}
           </div>
         </InfiniteScroll>
@@ -128,7 +135,8 @@ class Profile extends React.Component {
 const mapStateToProps = (state) => ({
   user: state.user,
   posts: state.profileFeed.posts,
-  filter: state.profileFeed.filter,
+  profileFilter: state.profileFeed.filter,
+  feedFilter: state.feed.filter,
   selectedUser: state.selectedUser,
 });
 

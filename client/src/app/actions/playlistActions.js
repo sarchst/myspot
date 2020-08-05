@@ -1,5 +1,7 @@
 import Spotify from "spotify-web-api-js";
 
+import { myspotCoverArt, tinderifyCoverArt } from "../../data/PlaylistCoverArt";
+
 const spotifyWebApi = new Spotify();
 const MySpot = "MySpot";
 const MySpotTinderify = "MySpot-Tinderify";
@@ -35,24 +37,48 @@ export const setPlayListIDs = (UserMeID, spotifyToken) => {
         );
         Promise.all(createdPlaylistURIs)
           .then((playlists) => {
-            MySpotPlaylistID = playlists[0]
-              ? playlists[0].id
-              : MySpotPlaylistID.id;
-            TinderifyPlaylistID = playlists[1]
-              ? playlists[1].id
-              : TinderifyPlaylistID.id;
-            const playlistIDs = {
-              MySpotPlaylistID: MySpotPlaylistID,
-              TinderifyPlaylistID: TinderifyPlaylistID,
-            };
-            dispatch(setPlayListIDsThunk(playlistIDs));
+            const playlistImagePromises = [];
+            playlistImagePromises.push(
+              playlists[0]
+                ? spotifyWebApi.uploadCustomPlaylistCoverImage(
+                    playlists[0].id,
+                    myspotCoverArt
+                  )
+                : Promise.resolve()
+            );
+            playlistImagePromises.push(
+              playlists[1]
+                ? spotifyWebApi.uploadCustomPlaylistCoverImage(
+                    playlists[1].id,
+                    tinderifyCoverArt
+                  )
+                : Promise.resolve()
+            );
+            Promise.all(playlistImagePromises)
+              .then((res) => {
+                MySpotPlaylistID = playlists[0]
+                  ? playlists[0].id
+                  : MySpotPlaylistID.id;
+
+                TinderifyPlaylistID = playlists[1]
+                  ? playlists[1].id
+                  : TinderifyPlaylistID.id;
+                const playlistIDs = {
+                  MySpotPlaylistID: MySpotPlaylistID,
+                  TinderifyPlaylistID: TinderifyPlaylistID,
+                };
+                dispatch(setPlayListIDsThunk(playlistIDs));
+              })
+              .catch((err) => {
+                console.error("failed to upload playlist iamges", err);
+              });
           })
           .catch((err) => {
-            console.log("error creating playlists at login: ", err);
+            console.error("error creating playlists at login", err);
           });
       })
       .catch((err) => {
-        console.log("error querying getting user's spotify playlists: ", err);
+        console.error("error querying getting user's spotify playlists", err);
       });
   };
 };
