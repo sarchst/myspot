@@ -16,7 +16,6 @@ export const saveAndUpdateProfilePic = (files, id) => {
       formData.append("api_key", "548279656671333"); // Replace API key with your own Cloudinary key
       formData.append("timestamp", (Date.now() / 1000) | 0);
 
-
       // Make an AJAX upload request using Axios (replace Cloudinary URL below with your own)
       return axios
         .post(
@@ -29,13 +28,12 @@ export const saveAndUpdateProfilePic = (files, id) => {
           return fileURL;
         })
         .then((url) => {
-
           return axios
             .put(`http://localhost:9000/user/profilepic/${id}`, {
               profilePic: url,
             })
             .catch((error) => {
-              throw error;
+              console.error(error);
             });
         });
     });
@@ -67,8 +65,7 @@ export const fetchProfilePic = (id) => {
         dispatch(fetchProfilePicSuccess(res.data.profilePic));
       })
       .catch((err) => {
-        console.log("fetch profile pic err: " + err);
-        throw err;
+        console.error(err);
       });
   };
 };
@@ -83,7 +80,6 @@ export async function fetchProfilePicById(id) {
       return res.data.profilePic;
     })
     .catch((err) => {
-      console.log("fetch profile pic err: " + err);
-      throw err;
+      console.error(err);
     });
 }

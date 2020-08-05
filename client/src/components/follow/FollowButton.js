@@ -31,7 +31,7 @@ class FollowButton extends React.Component {
           }
         })
         .catch((error) => {
-          throw error;
+          console.error(error);
         });
     } else if (this.state.buttonText === "Following") {
       const payload = {
@@ -58,7 +58,7 @@ class FollowButton extends React.Component {
         }
       })
       .catch((error) => {
-        throw error;
+        console.error(error);
       });
   };
 
