@@ -1,5 +1,5 @@
 import { SPOTIFY_WEB_API } from "../actions/spotifyApiActions";
-import { SPOTIFY_USER_ME } from "../actions/spotifyApiActions";
+import { LOG_OUT } from "../actions";
 
 const initialState = {
   accessToken: "",
@@ -15,11 +15,8 @@ export const spotifyWebApi = (state = initialState, action) => {
         accessToken: action.payload.access_token,
         refreshToken: action.payload.refresh_token,
       };
-    case SPOTIFY_USER_ME:
-      return {
-        ...state,
-        user: action.payload,
-      };
+    case LOG_OUT:
+      return initialState;
     default:
       return state;
   }

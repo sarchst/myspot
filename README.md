@@ -2,7 +2,7 @@
 
 ### Description:
 
-MySpot is a social media platform for music lovers who want to connect with other music lovers. MySpot allows users to share music posts (playlists, albums, songs), see what their fellow MySpotters are listening to, build playlists, and discover new music. 
+MySpot is a social media platform for music lovers who want to connect with other Spotify users. MySpot allows users to share music posts (Spotify playlists, albums, songs), see what their fellow MySpotters are listening to, build playlists, and discover new music. 
 
 ### Project Task Requirements:
 

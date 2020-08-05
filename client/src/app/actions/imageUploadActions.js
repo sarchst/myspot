@@ -1,4 +1,5 @@
 import axios from "axios";
+
 export const FETCH_PROFILEPIC_SUCCESS = "FETCH_PROFILE_PIC_SUCESS";
 
 export const saveAndUpdateProfilePic = (files, id) => {
@@ -33,15 +34,12 @@ export const saveAndUpdateProfilePic = (files, id) => {
               profilePic: url,
             })
             .catch((error) => {
-              throw error;
+              console.error(error);
             });
         });
     });
 
-    // Once all the files are uploaded
     axios.all(uploaders).then(() => {
-      // ... perform after upload is successful operation
-      console.log("profile pic successfully changed");
       dispatch(fetchProfilePic(id));
     });
   };
@@ -66,7 +64,6 @@ export const fetchProfilePic = (id) => {
       })
       .catch((err) => {
         console.log("fetch profile pic err: " + err);
-        throw err;
       });
   };
 };
@@ -83,6 +80,5 @@ export async function fetchProfilePicById(id) {
     })
     .catch((err) => {
       console.log("fetch profile pic err: " + err);
-      throw err;
     });
 }

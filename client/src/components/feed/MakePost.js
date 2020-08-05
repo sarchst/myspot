@@ -1,6 +1,9 @@
 import React from "react";
 import Button from "@material-ui/core/Button";
 import { connect } from "react-redux";
+import Spotify from "spotify-web-api-js";
+
+import { makePost } from "../../app/actions/postActions";
 
 import {
   FormControl,
@@ -8,15 +11,19 @@ import {
   Grid,
   Input,
   InputLabel,
-  MenuItem,
-  Select,
+  TextField,
 } from "@material-ui/core";
-import { ToggleButton, ToggleButtonGroup } from "@material-ui/lab";
+import {
+  ToggleButton,
+  ToggleButtonGroup,
+  Autocomplete,
+} from "@material-ui/lab";
 import AlbumIcon from "@material-ui/icons/Album";
 import MusicNoteIcon from "@material-ui/icons/MusicNote";
 import PlaylistAddIcon from "@material-ui/icons/PlaylistAdd";
 import { withStyles } from "@material-ui/core/styles";
-import { makePost } from "../../app/actions/postActions";
+
+const spotifyWebApi = new Spotify();
 
 const styles = (theme) => ({
   root: {
@@ -44,32 +51,129 @@ const styles = (theme) => ({
 });
 
 class MakePost extends React.Component {
-  state = {
-    authorId: this.props.user.id, // user id, ref to user schema
-    content: "",
-    media: "",
-    type: "playlist",
-    usersLiked: [this.props.user.id], // automatically liking your own post
-    // mediaOptions: [],
-    username: this.props.user.username,
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      content: "",
+      media: null,
+      type: "playlist",
+      mediaOptions: [],
+    };
+    spotifyWebApi.setAccessToken(this.props.spotifyApi.accessToken);
+  }
 
   componentDidMount = () => {
-    // // TODO STILL NEED componentDidMount to get playlists and set state mediaOptions
+    spotifyWebApi.getUserPlaylists(this.props.user.id).then(
+      (data) => {
+        const playlistOptions = this.getOptions(this.state.type, data.items);
+        this.setState({
+          mediaOptions: playlistOptions,
+        });
+      },
+      function (err) {
+        console.error(err);
+      }
+    );
   };
 
   handleChange = (e) => {
     this.setState({ content: e.target.value });
   };
 
-  handleTypeSelect = (event, type) => {
+  handleTypeSelect = async (event, type) => {
     if (type !== null) {
       this.setState({ type: type });
     }
+    switch (type) {
+      case "playlist": {
+        spotifyWebApi.getUserPlaylists(this.props.user.id).then(
+          (data) => {
+            const playlistOptions = this.getOptions(type, data.items);
+            this.setState({
+              mediaOptions: playlistOptions,
+              media: null,
+            });
+          },
+          function (err) {
+            console.error(err);
+          }
+        );
+        break;
+      }
+      case "album": {
+        spotifyWebApi.getMySavedAlbums().then(
+          (data) => {
+            const albumOptions = this.getOptions(type, data.items);
+            this.setState({
+              mediaOptions: albumOptions,
+              media: null,
+            });
+          },
+          function (err) {
+            console.error(err);
+          }
+        );
+        break;
+      }
+      case "track": {
+        let allTracks = [];
+        let offset = 0;
+        let tracks = await spotifyWebApi.getMySavedTracks({
+          limit: 50,
+          offset: offset,
+        });
+        while (tracks.items.length !== 0) {
+          allTracks.push(...tracks.items);
+          offset += 50;
+          tracks = await spotifyWebApi.getMySavedTracks({
+            limit: 50,
+            offset: offset,
+          });
+        }
+        const trackOptions = this.getOptions(type, allTracks);
+        this.setState({
+          mediaOptions: trackOptions,
+          media: null,
+        });
+        break;
+      }
+      default: {
+        break;
+      }
+    }
   };
 
-  handleMediaSelect = (e) => {
-    this.setState({ media: e.target.value });
+  getOptions = (type, mediaOptions) => {
+    if (type === "playlist") {
+      return mediaOptions.map((mo) => {
+        return {
+          _id: mo.id,
+          name: mo.name,
+          spotifyLink: mo.external_urls.spotify,
+          ownerId: mo.owner.id,
+          ownerUsername: mo.owner.display_name,
+        };
+      });
+    } else {
+      return mediaOptions.map((mo) => {
+        return {
+          _id: mo[type].id,
+          name: mo[type].name,
+          spotifyLink: mo[type].external_urls.spotify,
+          artist: mo[type].artists[0].name,
+        };
+      });
+    }
+  };
+
+  handleMediaSelect = (e, value) => {
+    if (value) {
+      this.setState({ media: value });
+    } else {
+      this.setState({
+        media: null,
+      });
+    }
   };
 
   updateTitle = (title) => {
@@ -81,10 +185,29 @@ class MakePost extends React.Component {
   };
 
   handleSubmitPost = () => {
-    this.props.makePost(this.state);
-    // TODO media options will have to change after spotify integration
-    this.setState({ content: "", media: "", type: "playlist" });
-    console.log(this.state);
+    if (this.state.medsi === null || this.state.content === "") return;
+    const postObj = {
+      username: this.props.user.username,
+      authorId: this.props.user.id, // user id, ref to user schema
+      usersLiked: [this.props.user.id], // automatically liking your own post
+      repost: false,
+      content: this.state.content,
+      media: this.state.media,
+      type: this.state.type,
+    };
+    this.props.makePost(
+      postObj,
+      this.props.profileFeedFilter,
+      this.props.feedFilter
+    );
+    this.setState({
+      content: "",
+    });
+    this.handleTypeSelect("", "playlist"); // dummy event as first param
+  };
+
+  capitalizeFirstLetter = (string) => {
+    return string.charAt(0).toUpperCase() + string.slice(1);
   };
 
   render() {
@@ -124,34 +247,26 @@ class MakePost extends React.Component {
                   <ToggleButton value="album" aria-label="album">
                     <AlbumIcon />
                   </ToggleButton>
-                  <ToggleButton value="song" aria-label="song">
+                  <ToggleButton value="track" aria-label="track">
                     <MusicNoteIcon />
                   </ToggleButton>
                 </ToggleButtonGroup>
               </FormControl>
             </Grid>
             <Grid item xs={8}>
-              <FormControl style={{ minWidth: 200 }}>
-                <InputLabel id="media">Media</InputLabel>
-                <Select
-                  // native
-                  value={this.state.media}
+              <FormControl style={{ minWidth: 300 }}>
+                <Autocomplete
+                  options={this.state.mediaOptions}
+                  getOptionLabel={(option) => option.name}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label={this.capitalizeFirstLetter(this.state.type)}
+                    />
+                  )}
                   onChange={this.handleMediaSelect}
-                >
-                  {/* TODO REPLACE temporary option with this mapping once api has connect with spotify
-                  {this.state.mediaOptions.map((mc) => {
-                    return <option value={mc}>{mc}</option>;
-                  })} */}
-                  <MenuItem value="my awesome playlist">
-                    my awesome playlist
-                  </MenuItem>
-                  <MenuItem value="my firday night playlist">
-                    my friday night playlist
-                  </MenuItem>
-                  <MenuItem value="my workout playlist">
-                    my workout playlist
-                  </MenuItem>
-                </Select>
+                  value={this.state.media}
+                />
               </FormControl>
             </Grid>
             <Grid item xs={2}>
@@ -173,7 +288,9 @@ class MakePost extends React.Component {
 
 const mapStateToProps = (state) => ({
   user: state.user,
-  posts: state.posts,
+  spotifyApi: state.spotifyApi,
+  profileFeedFilter: state.profileFeed.filter,
+  feedFilter: state.feed.filter,
 });
 
 const mapDispatchToProps = {

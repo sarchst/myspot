@@ -17,7 +17,9 @@ import ListSubheader from "@material-ui/core/ListSubheader";
 import PlayCircleOutlineIcon from "@material-ui/icons/PlayCircleOutline";
 import MusicOffOutlinedIcon from "@material-ui/icons/MusicOffOutlined";
 import Emoji from "react-emoji-render";
+import { getName } from "country-list";
 import Typography from "@material-ui/core/Typography";
+import FollowButton from "../follow/FollowButton";
 
 const styles = (theme) => ({
   card: {
@@ -44,12 +46,7 @@ const styles = (theme) => ({
     fontWeight: "bold",
   },
   statLabel: {
-    // fontSize: "medium",
-    // color: palette.grey[500],
     color: theme.palette.primary.main,
-    // fontWeight: "bold",
-    // fontFamily:
-    // '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
     margin: 0,
   },
   statValue: {
@@ -85,60 +82,9 @@ class ProfileCard extends React.Component {
       topTracks: [],
       recentTracks: [],
       songUri: "",
-      userData: {},
     };
     spotifyWebApi.setAccessToken(this.props.spotifyApi.accessToken);
   }
-  componentDidMount = () => {
-    // TODO: replace user_ID with this.props.user_ID once working
-    console.log("this props is");
-    console.log(this.props);
-    console.log("this userid is");
-    console.log(this.user_ID);
-    let user_ID;
-    if (
-      this.props.location &&
-      this.props.location.state &&
-      this.props.location.state.user_ID
-    ) {
-      user_ID = this.props.location.state.user_ID;
-    } else {
-      user_ID = this.props.user.id;
-    }
-    // get top tracks for arbitrary user
-    fetch(`/user/${user_ID}`)
-      .then((response) => response.json())
-      .then((response) => {
-        this.setState({
-          topTracks: response.data.topTracks,
-          recentTracks: response.data.recentTracks,
-          userData: response.data,
-        });
-      });
-    // spotifyWebApi
-    //   .getMyTopTracks()
-    //   .then((result) => {
-    //     // console.log(result);
-    //     this.setState({
-    //       topTracks: result.items.slice(0, Math.min(result.items.length, 3)),
-    //     });
-    //   })
-    //   .catch((err) => {
-    //     console.log("error getting top tracks");
-    //     console.log(err);
-    //   });
-    // spotifyWebApi
-    //   .getMyRecentlyPlayedTracks()
-    //   .then((result) => {
-    //     this.setState({
-    //       recentTracks: result.items.slice(0, Math.min(result.items.length, 3)),
-    //     });
-    //   })
-    //   .catch((err) => {
-    //     console.log("error getting recent tracks");
-    //     console.log(err);
-    //   });
-  };
 
   setPlayerSong = (songUri) => {
     this.setState({
@@ -146,69 +92,60 @@ class ProfileCard extends React.Component {
     });
   };
 
+  updateCard = () => {
+    this.setState({});
+  };
+
   render() {
-    const { classes } = this.props;
+    const { classes, selectedUser } = this.props;
 
     return (
-      <Card
-        // className={cx(styles.card, shadowStyles.root)}
-        className={classes.card}
-      >
+      <Card className={classes.card}>
         <CardContent className={classes.profileCardBox}>
           <Avatar
             className={classes.avatar}
-            src={
-              this.state.userData.profilePic
-                ? this.state.userData.profilePic
-                : ""
-            }
+            src={selectedUser.profilePic || ""}
           />
-          <h3 className={classes.heading}>{this.state.userData.username}</h3>
+          <h3 className={classes.heading}>{selectedUser.username || ""}</h3>
           <span className={classes.subheader}>
             <Emoji text=":globe_showing_americas:" />
             {/* unfortunately it seems like emoji flags aren't supported for windows10 so can only see it on mac */}
-            <Emoji text=":flag_canada:" />
+            <Emoji
+              text={
+                ":flag_" +
+                getName(selectedUser.country).toLocaleLowerCase() +
+                ":"
+              }
+            />
             <Emoji text=":globe_showing_americas:" />
           </span>
+          <FollowButton
+            selectedUserId={selectedUser._id}
+            selectedUserFollowers={selectedUser.followers}
+            selectedUsername={selectedUser.username}
+            isFollowing={selectedUser.followers.includes(this.props.user.id)}
+            isProfileCall={true}
+          />
         </CardContent>
         <Divider light />
         <Box display={"flex"}>
-          <Box
-            className={classes.profileCardBox}
-            p={2}
-            flex={"auto"}
-            // className={borderedGridStyles.item}
-          >
+          <Box className={classes.profileCardBox} p={2} flex={"auto"}>
             <Typography className={classes.statLabel}>Followers</Typography>
             <p className={classes.statValue}>
-              {this.state.userData.followers
-                ? this.state.userData.followers.length
-                : 0}
+              {selectedUser.followers ? selectedUser.followers.length : 0}
             </p>
           </Box>
           <Divider orientation="vertical" flexItem />
-          <Box
-            className={classes.profileCardBox}
-            p={2}
-            flex={"auto"}
-            // className={borderedGridStyles.item}
-          >
+          <Box className={classes.profileCardBox} p={2} flex={"auto"}>
             <Typography className={classes.statLabel}>Following</Typography>
             <p className={classes.statValue}>
-              {this.state.userData.following
-                ? this.state.userData.following.length
-                : 0}
+              {selectedUser.following ? selectedUser.following.length : 0}
             </p>
           </Box>
         </Box>
         <Divider light />
         <Box display={"flex"}>
-          <Box
-            className={classes.profileCardBox}
-            p={2}
-            flex={"auto"}
-            // className={borderedGridStyles.item}
-          >
+          <Box className={classes.profileCardBox} p={2} flex={"auto"}>
             <List
               className={classes.listRoot}
               dense={true}
@@ -223,55 +160,57 @@ class ProfileCard extends React.Component {
                 </ListSubheader>
               }
             >
-              {this.state.topTracks.map((track, idx) => {
-                const isPlaybackAvailable = track.preview_url ? true : false;
-                return (
-                  <ListItem
-                    key={idx}
-                    button={isPlaybackAvailable}
-                    onClick={
-                      isPlaybackAvailable
-                        ? () => this.setPlayerSong(track.preview_url)
-                        : null
-                    }
-                  >
-                    <Box pr={1} pt={1}>
-                      {isPlaybackAvailable ? (
-                        <PlayCircleOutlineIcon color={"secondary"} />
-                      ) : (
-                        <MusicOffOutlinedIcon color={"secondary"} />
-                      )}
-                    </Box>
-                    <ListItemAvatar>
-                      <Avatar
-                        variant="square"
-                        src={
-                          track.album.images.length
-                            ? track.album.images[track.album.images.length - 1]
-                                .url
+              {selectedUser.topTracks
+                ? selectedUser.topTracks.map((track, idx) => {
+                    const isPlaybackAvailable = track.preview_url
+                      ? true
+                      : false;
+                    return (
+                      <ListItem
+                        key={idx}
+                        button={isPlaybackAvailable}
+                        onClick={
+                          isPlaybackAvailable
+                            ? () => this.setPlayerSong(track.preview_url)
                             : null
                         }
-                      ></Avatar>
-                    </ListItemAvatar>
-                    <ListItemText
-                      primary={track.name}
-                      secondary={track.album.artists.map(
-                        (artist, idx) =>
-                          artist.name +
-                          (idx < track.album.artists.length - 1 ? " | " : "")
-                      )}
-                    />
-                  </ListItem>
-                );
-              })}
+                      >
+                        <Box pr={1} pt={1}>
+                          {isPlaybackAvailable ? (
+                            <PlayCircleOutlineIcon color={"secondary"} />
+                          ) : (
+                            <MusicOffOutlinedIcon color={"secondary"} />
+                          )}
+                        </Box>
+                        <ListItemAvatar>
+                          <Avatar
+                            variant="square"
+                            src={
+                              track.album.images.length
+                                ? track.album.images[
+                                    track.album.images.length - 1
+                                  ].url
+                                : null
+                            }
+                          ></Avatar>
+                        </ListItemAvatar>
+                        <ListItemText
+                          primary={track.name}
+                          secondary={track.album.artists.map(
+                            (artist, idx) =>
+                              artist.name +
+                              (idx < track.album.artists.length - 1
+                                ? " | "
+                                : "")
+                          )}
+                        />
+                      </ListItem>
+                    );
+                  })
+                : null}
             </List>
           </Box>
-          <Box
-            className={classes.profileCardBox}
-            p={2}
-            flex={"auto"}
-            // className={borderedGridStyles.item}
-          >
+          <Box className={classes.profileCardBox} p={2} flex={"auto"}>
             <List
               className={classes.listRoot}
               dense={true}
@@ -286,46 +225,49 @@ class ProfileCard extends React.Component {
                 </ListSubheader>
               }
             >
-              {this.state.recentTracks.map((item, idx) => {
-                const isPlaybackAvailable = item.track.preview_url
-                  ? true
-                  : false;
-                return (
-                  <ListItem
-                    key={idx}
-                    button={isPlaybackAvailable}
-                    onClick={
-                      isPlaybackAvailable
-                        ? () => this.setPlayerSong(item.track.preview_url)
-                        : null
-                    }
-                  >
-                    <Box pr={1} pt={1}>
-                      {isPlaybackAvailable ? (
-                        <PlayCircleOutlineIcon color={"secondary"} />
-                      ) : (
-                        <MusicOffOutlinedIcon color={"secondary"} />
-                      )}
-                    </Box>
-                    <ListItemAvatar>
-                      <Avatar
-                        variant="square"
-                        src={
-                          item.track.album.images.length
-                            ? item.track.album.images[0].url
+              {selectedUser.recentTracks
+                ? selectedUser.recentTracks.map((item, idx) => {
+                    const isPlaybackAvailable = item.track.preview_url
+                      ? true
+                      : false;
+                    return (
+                      <ListItem
+                        key={idx}
+                        button={isPlaybackAvailable}
+                        onClick={
+                          isPlaybackAvailable
+                            ? () => this.setPlayerSong(item.track.preview_url)
                             : null
                         }
-                      ></Avatar>
-                    </ListItemAvatar>
-                    <ListItemText
-                      primary={item.track.name}
-                      secondary={
-                        "Played: " + new Date(item.played_at).toLocaleString()
-                      }
-                    />
-                  </ListItem>
-                );
-              })}
+                      >
+                        <Box pr={1} pt={1}>
+                          {isPlaybackAvailable ? (
+                            <PlayCircleOutlineIcon color={"secondary"} />
+                          ) : (
+                            <MusicOffOutlinedIcon color={"secondary"} />
+                          )}
+                        </Box>
+                        <ListItemAvatar>
+                          <Avatar
+                            variant="square"
+                            src={
+                              item.track.album.images.length
+                                ? item.track.album.images[0].url
+                                : null
+                            }
+                          ></Avatar>
+                        </ListItemAvatar>
+                        <ListItemText
+                          primary={item.track.name}
+                          secondary={
+                            "Played: " +
+                            new Date(item.played_at).toLocaleString()
+                          }
+                        />
+                      </ListItem>
+                    );
+                  })
+                : null}
             </List>
           </Box>
         </Box>
@@ -346,8 +288,8 @@ class ProfileCard extends React.Component {
 
 const mapStateToProps = (state) => ({
   spotifyApi: state.spotifyApi,
-  posts: state.posts,
   user: state.user,
+  selectedUser: state.selectedUser,
 });
 
 export default connect(mapStateToProps)(withStyles(styles)(ProfileCard));
