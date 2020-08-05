@@ -51,11 +51,8 @@ export const setPlayListIDs = (UserMeID, spotifyToken) => {
                   )
                 : Promise.resolve()
             );
-
-            console.log("playlistImagePromises", playlistImagePromises);
             Promise.all(playlistImagePromises)
               .then((res) => {
-                console.log("cover art submit res", res);
                 MySpotPlaylistID = playlists[0]
                   ? playlists[0].id
                   : MySpotPlaylistID.id;
@@ -78,8 +75,7 @@ export const setPlayListIDs = (UserMeID, spotifyToken) => {
           });
       })
       .catch((err) => {
-        console.log("error querying getting user's spotify playlists");
-        console.log(err);
+        console.error("error querying getting user's spotify playlists", err);
       });
   };
 };
