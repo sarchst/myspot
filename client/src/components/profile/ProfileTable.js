@@ -79,7 +79,7 @@ class ProfileTable extends React.Component {
 
   transformPlaylistData = async (data) => {
     return Promise.all(
-      data.items.map(async (pl) => {
+      data.map(async (pl) => {
         const playlist = await spotifyWebApi.getPlaylist(pl.id);
         const playlistObj = {
           title: pl.name,
@@ -99,19 +99,32 @@ class ProfileTable extends React.Component {
     });
   };
 
-  fetchSpotifyPlaylists = () => {
-    spotifyWebApi
-      .getUserPlaylists(this.props.selectedUser._id)
-      .then((result) => {
-        this.transformPlaylistData(result).then((playlists) => {
-          this.setState({
-            playlists: playlists,
-          });
-        });
-      })
-      .catch((err) => {
-        console.error("Error getting selected user's playlists: ", err);
+  fetchSpotifyPlaylists = async () => {
+    let allPlaylists = [];
+    let offset = 0;
+    let playlists = await spotifyWebApi.getUserPlaylists(
+      this.props.selectedUser._id,
+      {
+        limit: 50,
+        offset: offset,
+      }
+    );
+    while (playlists.items.length !== 0) {
+      allPlaylists.push(...playlists.items);
+      offset += 50;
+      playlists = await spotifyWebApi.getUserPlaylists(
+        this.props.selectedUser._id,
+        {
+          limit: 50,
+          offset: offset,
+        }
+      );
+    }
+    this.transformPlaylistData(allPlaylists).then((playlists) => {
+      this.setState({
+        playlists: playlists,
       });
+    });
   };
 
   addPlaylistToLibrary = (id) => {
