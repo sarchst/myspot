@@ -188,7 +188,7 @@ class MakePost extends React.Component {
     const postObj = {
       username: this.props.user.username,
       authorId: this.props.user.id, // user id, ref to user schema
-      usersLiked: [this.props.user.id], // automatically liking your own post
+      usersLiked: [],
       repost: false,
       content: this.state.content,
       media: this.state.media,
