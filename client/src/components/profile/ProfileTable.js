@@ -66,7 +66,7 @@ class ProfileTable extends React.Component {
     );
 
   transformPlaylistData = (data) => {
-    const playlists = data.items.map((pl) => {
+    const playlists = data.map((pl) => {
       const playlist = {
         title: pl.name,
         playlistArt: pl.images.length ? pl.images[0].url : "",
@@ -80,21 +80,31 @@ class ProfileTable extends React.Component {
     return playlists;
   };
 
-  fetchSpotifyPlaylists = () => {
-    spotifyWebApi
-      .getUserPlaylists(this.props.selectedUser._id)
-      .then((result) => {
-        const playlists = this.transformPlaylistData(result);
-        this.setState({
-          playlists: playlists,
-        });
-      })
-      .catch((err) => {
-        console.log(
-          "Error getting selected user's playlists from Spotify API: ",
-          err
-        );
-      });
+  fetchSpotifyPlaylists = async () => {
+    let allPlaylists = [];
+    let offset = 0;
+    let playlists = await spotifyWebApi.getUserPlaylists(
+      this.props.selectedUser._id,
+      {
+        limit: 50,
+        offset: offset,
+      }
+    );
+    while (playlists.items.length !== 0) {
+      allPlaylists.push(...playlists.items);
+      offset += 50;
+      playlists = await spotifyWebApi.getUserPlaylists(
+        this.props.selectedUser._id,
+        {
+          limit: 50,
+          offset: offset,
+        }
+      );
+    }
+    const transFormedPlaylists = this.transformPlaylistData(allPlaylists);
+    this.setState({
+      playlists: transFormedPlaylists,
+    });
   };
 
   handleChange = (event, index) => {
