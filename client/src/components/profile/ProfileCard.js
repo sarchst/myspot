@@ -111,6 +111,8 @@ class ProfileCard extends React.Component {
       >
         <CardContent className={classes.profileCardBox}>
           <Avatar
+            variant="rounded"
+            alt={selectedUser.username}
             className={classes.avatar}
             src={selectedUser.profilePic || ""}
           />
