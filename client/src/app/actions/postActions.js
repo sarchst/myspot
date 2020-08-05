@@ -157,15 +157,15 @@ export function fetchPostsWithFilter(id, profileFeedFilter) {
 
 export const addComment = (comment, profileFeedFilter, feedFilter) => {
   let id = comment.postOwnerId;
-  let authorId = comment.authorId;
+  let userId = comment.authorId;
   return (dispatch) => {
     return axios
       .put(`http://localhost:9000/user/posts/comments/${id}`, comment)
       .then(() => {
-        dispatch(fetchPostsWithFilter(authorId, profileFeedFilter));
+        dispatch(fetchPostsWithFilter(id, profileFeedFilter));
       })
       .then(() => {
-        dispatch(fetchFeedWithFilter(authorId, feedFilter));
+        dispatch(fetchFeedWithFilter(userId, feedFilter));
       })
       .catch((error) => {
         throw error;
