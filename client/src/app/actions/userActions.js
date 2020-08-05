@@ -13,10 +13,10 @@ export const submitSpotifyApiUserMe = (SpotifyApiUserInfoMe) => {
     let mongoUserObject = {
       _id: SpotifyApiUserInfoMe.id,
       username: SpotifyApiUserInfoMe.display_name,
-      profilePic:
-        SpotifyApiUserInfoMe.images.length !== 0
-          ? SpotifyApiUserInfoMe.images[0].url
-          : undefined,
+      // profilePic:
+      //   SpotifyApiUserInfoMe.images.length !== 0
+      //     ? SpotifyApiUserInfoMe.images[0].url
+      //     : undefined,
       country: SpotifyApiUserInfoMe.country,
       topTracks: SpotifyApiUserInfoMe.topTracks || null,
       recentTracks: SpotifyApiUserInfoMe.recentTracks || null,

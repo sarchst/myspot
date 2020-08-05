@@ -8,11 +8,11 @@ import {
 } from "../app/actions/imageUploadActions";
 
 import {
+  Avatar,
   Button,
   Card,
   CardActions,
   CardContent,
-  CardMedia,
   Snackbar,
   Typography,
 } from "@material-ui/core";
@@ -43,9 +43,9 @@ const ImageUpload = ({ saveAndUpdateProfilePic, user, fetchProfilePic }) => {
   const handleSnackClose = () => setSnackOpen(false);
 
   const getProfilePic = () => {
-    if (user.profilePic === "") {
+    if (!user.profilePic) {
       // can set default pic link here
-      return "https://res.cloudinary.com/dafyfaoby/image/upload/v1595033507/samples/sheep.jpg";
+      return "";
     } else {
       return user.profilePic;
     }
@@ -54,10 +54,11 @@ const ImageUpload = ({ saveAndUpdateProfilePic, user, fetchProfilePic }) => {
   return (
     <div>
       <Card className={classes.root}>
-        <CardMedia
+        <Avatar
           className={classes.media}
-          image={getProfilePic()}
-          title="User's profile pic"
+          src={getProfilePic()}
+          style={{ width: "100%", height: "100%", borderRadius: 0 }}
+          alt="profile-pic"
         />
         <CardContent>
           <Typography gutterBottom variant="h5" component="h2">

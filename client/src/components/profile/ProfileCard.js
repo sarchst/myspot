@@ -105,6 +105,7 @@ class ProfileCard extends React.Component {
           <Avatar
             className={classes.avatar}
             src={selectedUser.profilePic || ""}
+            style={{ borderRadius: 16 }}
           />
           <h3 className={classes.heading}>{selectedUser.username || ""}</h3>
           <span className={classes.subheader}>
