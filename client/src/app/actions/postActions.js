@@ -71,7 +71,7 @@ export const makePost = (post, profileFeedFilter, feedFilter) => {
         dispatch(fetchFeedWithFilter(id, feedFilter));
       })
       .catch((error) => {
-        throw error;
+        console.error(error);
       });
   };
 };
@@ -87,7 +87,7 @@ export const deletePost = (id, postId, profileFeedFilter, feedFilter) => {
         dispatch(fetchFeedWithFilter(id, feedFilter));
       })
       .catch((error) => {
-        throw error;
+        console.error(error);
       });
   };
 };
@@ -168,7 +168,7 @@ export const addComment = (comment, profileFeedFilter, feedFilter) => {
         dispatch(fetchFeedWithFilter(userId, feedFilter));
       })
       .catch((error) => {
-        throw error;
+        console.error(error);
       });
   };
 };
@@ -189,7 +189,7 @@ export const deleteComment = (id, body, profileFeedFilter, feedFilter) => {
         dispatch(fetchFeedWithFilter(userId, feedFilter));
       })
       .catch((error) => {
-        throw error;
+        console.error(error);
       });
   };
 };
@@ -205,7 +205,7 @@ export const editPost = (id, commentInfo, profileFeedFilter, feedFilter) => {
         dispatch(fetchFeedWithFilter(id, feedFilter));
       })
       .catch((error) => {
-        throw error;
+        console.error(error);
       });
   };
 };
@@ -229,7 +229,7 @@ export const toggleLike = (post, id, profileFeedFilter, feedFilter) => {
         dispatch(fetchFeedWithFilter(id, feedFilter));
       })
       .catch((error) => {
-        throw error;
+        console.error(error);
       });
   };
 };
