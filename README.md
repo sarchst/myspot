@@ -14,21 +14,21 @@ MySpot is a social media platform for music lovers who want to connect with othe
 5.  Search for other users :heavy_check_mark:
     
 **3-7 "standard" requirements (will most likely complete)** 
-1. Show followers what you’re listening :heavy_check_mark:
-   * See what your followees are listening  :heavy_check_mark:
+1. Show followers what you’re listening to :heavy_check_mark:
+   * See what your followees are listening to  :heavy_check_mark:
 2. Dashboard/ Feed :heavy_check_mark:
    * Different types of posts (ie. playlists, songs, artists..) :heavy_check_mark:
    * Share playlists/song/album with others (default post is playlist) onto the Feed :heavy_check_mark:
 3. Follower/ Followee Actions :heavy_check_mark:
 4. Playlists on web app directly edit your Spotify playlists :heavy_check_mark:
 5. Get recommendations based on you like :heavy_check_mark:
-6. Chat/  Message ability with other User’s :x: 
+6. User-user interaction through comments/chat  :x: 
 
 **2-3 stretch requirements (plan to complete 1!)**
-1. Tinderify (swipe left or right on randomly generated playlists to add them to your playlists) :heavy_check_mark:
+1. Tinderify (swipe left or right on randomly generated songs to add them to your playlist) :heavy_check_mark:
 2. Priority feed of followee’s activities  :grey_exclamation:
 3. Explore page (like IG) :x: 
-4. Make playlists on the application from scratch rather than on Spotify :heavy_check_mark:
+4. Make playlist on the application from scratch rather than on Spotify :heavy_check_mark:
 
 ### Tech Stack:
 ### Above and Beyond Functionality:
