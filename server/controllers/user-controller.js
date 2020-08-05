@@ -63,7 +63,6 @@ updateUser = async (req, res) => {
           message: "user PUT error",
         });
       }
-      console.log(User);
       return res.status(200).json({
         User,
         message: "user PUT success",
@@ -82,7 +81,7 @@ getUserById = async (req, res) => {
     }
 
     return res.status(200).json({ success: true, data: User });
-  }).catch((err) => console.log(err));
+  });
 };
 
 getUserByUsername = async (req, res) => {
@@ -98,7 +97,7 @@ getUserByUsername = async (req, res) => {
 
       return res.status(200).json({ success: true, data: User });
     }
-  ).catch((err) => console.log(err));
+  );
 };
 // Returns a list of all users in the database
 getUsers = async (req, res) => {
@@ -110,7 +109,7 @@ getUsers = async (req, res) => {
       return res.status(404).json({ success: false, error: `User not found` });
     }
     return res.status(200).json({ success: true, data: Users });
-  }).catch((err) => console.log(err));
+  });
 };
 
 // Returns a list of posts created by users the current user follows
@@ -134,7 +133,8 @@ getUserFollowingFeed = async (req, res) => {
       // console.log(result.data.following.posts);
       // console.log(result.following.posts);
       return res.status(200).json({ success: true, data: result });
-    });
+    })
+    .catch((err) => res.status(400).json({ success: false, error: err }));
   // .catch((err) => console.log(err));
 };
 
@@ -150,11 +150,11 @@ getUserPosts = async (req, res) => {
     if (!result) {
       return res.status(404).json({ success: false, error: "User not found" });
     }
-  }).exec(function (err, user) {
-    console.log("user posts");
-    console.log(user);
-    return res.status(200).json({ success: true, data: user });
-  });
+  })
+    .exec(function (err, user) {
+      return res.status(200).json({ success: true, data: user });
+    })
+    .catch((err) => res.status(400).json({ success: false, error: err }));
   // .catch((err) => console.log(err));
 };
 
@@ -445,7 +445,8 @@ getFollowers = (req, res) => {
         return res.status(400).json({ success: false, error: err });
       }
       return res.status(200).json({ success: true, data: followers });
-    });
+    })
+    .catch((err) => res.status(400).json({ success: false, error: err }));
 };
 
 getFollowing = (req, res) => {
@@ -465,7 +466,8 @@ getFollowing = (req, res) => {
         return res.status(400).json({ success: false, error: err });
       }
       return res.status(200).json({ success: true, data: following });
-    });
+    })
+    .catch((err) => res.status(400).json({ success: false, error: err }));
 };
 
 updateFollowRelationship = async (req, res) => {
