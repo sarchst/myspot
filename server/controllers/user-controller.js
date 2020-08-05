@@ -63,7 +63,6 @@ updateUser = async (req, res) => {
           message: "user PUT error",
         });
       }
-      console.log(User);
       return res.status(200).json({
         User,
         message: "user PUT success",
@@ -82,7 +81,7 @@ getUserById = async (req, res) => {
     }
 
     return res.status(200).json({ success: true, data: User });
-  }).catch((err) => console.log(err));
+  });
 };
 
 getUserByUsername = async (req, res) => {
@@ -98,7 +97,7 @@ getUserByUsername = async (req, res) => {
 
       return res.status(200).json({ success: true, data: User });
     }
-  ).catch((err) => console.log(err));
+  );
 };
 // Returns a list of all users in the database
 getUsers = async (req, res) => {
@@ -110,32 +109,25 @@ getUsers = async (req, res) => {
       return res.status(404).json({ success: false, error: `User not found` });
     }
     return res.status(200).json({ success: true, data: Users });
-  }).catch((err) => console.log(err));
+  });
 };
 
 // Returns a list of posts created by users the current user follows
 getUserFollowingFeed = async (req, res) => {
-  User.find({ _id: req.params.id }, "posts following profilePic", function (
-    err,
-    result
-  ) {
-    if (err) {
-      return res.status(400).json({ success: false, error: err });
-    }
-    if (!result) {
-      return res.status(404).json({ sucess: false, error: "User not found" });
-    }
-  })
+  User.find({ _id: req.params.id })
     .populate({
       path: "following",
       select: "posts profilePic",
     })
     .exec(function (err, result) {
-      // console.log(result.data.following.posts);
-      // console.log(result.following.posts);
+      if (err) {
+        return res.status(400).json({ success: false, error: err });
+      }
+      if (!result) {
+        return res.status(404).json({ sucess: false, error: "User not found" });
+      }
       return res.status(200).json({ success: true, data: result });
     });
-  // .catch((err) => console.log(err));
 };
 
 // Returns a list of posts created by the user
@@ -146,16 +138,12 @@ getUserPosts = async (req, res) => {
   ) {
     if (err) {
       return res.status(400).json({ success: false, error: err });
-    }
-    if (!result) {
+    } else if (!result) {
       return res.status(404).json({ success: false, error: "User not found" });
+    } else {
+      return res.status(200).json({ success: true, data: result });
     }
-  }).exec(function (err, user) {
-    console.log("user posts");
-    console.log(user);
-    return res.status(200).json({ success: true, data: user });
   });
-  // .catch((err) => console.log(err));
 };
 
 addPost = (req, res) => {
@@ -429,14 +417,7 @@ updateProfilePic = async (req, res) => {
 };
 
 getFollowers = (req, res) => {
-  User.find({ _id: req.params.id }, "followers", (err, followers) => {
-    if (err) {
-      return res.status(400).json({ success: false, error: err });
-    }
-    if (followers === null) {
-      return res.status(404).json({ sucess: false, error: "User not found" });
-    }
-  })
+  User.find({ _id: req.params.id })
     .populate({
       path: "followers",
     })
@@ -444,25 +425,24 @@ getFollowers = (req, res) => {
       if (err) {
         return res.status(400).json({ success: false, error: err });
       }
+      if (followers === null) {
+        return res.status(404).json({ sucess: false, error: "User not found" });
+      }
       return res.status(200).json({ success: true, data: followers });
     });
 };
 
 getFollowing = (req, res) => {
-  User.find({ _id: req.params.id }, "following", (err, following) => {
-    if (err) {
-      return res.status(400).json({ success: false, error: err });
-    }
-    if (following === null) {
-      return res.status(404).json({ sucess: false, error: "User not found" });
-    }
-  })
+  User.find({ _id: req.params.id })
     .populate({
       path: "following",
     })
     .exec((err, following) => {
       if (err) {
         return res.status(400).json({ success: false, error: err });
+      }
+      if (following === null) {
+        return res.status(404).json({ sucess: false, error: "User not found" });
       }
       return res.status(200).json({ success: true, data: following });
     });
