@@ -332,6 +332,7 @@ class ProfileTable extends React.Component {
 const mapStateToProps = (state) => ({
   spotifyApi: state.spotifyApi,
   selectedUser: state.selectedUser,
+  user: state.user,
 });
 
 export default connect(mapStateToProps)(withStyles(styles)(ProfileTable));
