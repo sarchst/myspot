@@ -7,7 +7,7 @@ import FollowButton from "./FollowButton";
 import MaterialTable from "material-table";
 import Emoji from "react-emoji-render";
 import { getName } from "country-list";
-import { Paper } from "@material-ui/core";
+import { Avatar, Paper } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 import { fetchSelectedUser } from "../../app/actions/selectedUserActions";
 
@@ -76,93 +76,97 @@ class FollowTable extends React.Component {
   };
 
   render() {
-    const { classes} = this.props;
+    const { classes } = this.props;
     return (
-        <div className={classes.root}>
-      <MaterialTable
-        components={{
-          Container: (props) => (
-            <Paper {...props} elevation={0} style={{
-              boxShadow: 0,
-              borderRadius: 16,
-              padding: 10,
-            }} />
-          ),
-        }}
-        columns={[
-          {
-            title: "MySpotter",
-            field: "pic",
-            render: (rowData) => (
-              <Link
-                to={`/${rowData.userId}`}
-                onClick={() => {
-                  this.props.fetchSelectedUser(rowData.userId);
+      <div className={classes.root}>
+        <MaterialTable
+          components={{
+            Container: (props) => (
+              <Paper
+                {...props}
+                elevation={0}
+                style={{
+                  boxShadow: 0,
+                  borderRadius: 16,
+                  padding: 10,
                 }}
-                style={{ textDecoration: "none" }}
-              >
-                <img
-                  src={rowData.pic}
-                  alt={"ProfilePic"}
-                  style={{ width: 40, height: 40, borderRadius: 16 }}
-                />
-              </Link>
-            ),
-            headerStyle: { width: "50px", borderRadius: 16 },
-            cellStyle: { width: "50px" },
-            width: null,
-          },
-          {
-            title: "",
-            field: "username",
-            render: (rowData) => (
-              <Link
-                className={this.props.classes.link}
-                to={`/${rowData.userId}`}
-                onClick={() => {
-                  this.props.fetchSelectedUser(rowData.userId);
-                }}
-              >
-                {rowData.username}
-              </Link>
-            ),
-          },
-          {
-            title: "Country",
-            field: "country",
-            render: (rowData) => (
-              <Emoji text={":flag_" + rowData.country + ":"} />
-            ),
-          },
-          { title: "# of Posts", field: "numPosts" },
-          { title: "# of Followers", field: "numFollowers" },
-          {
-            title: "",
-            field: "follows",
-            render: (rowData) => (
-              <FollowButton
-                selectedUserId={rowData.userId}
-                selectedUserFollowers={rowData.followers}
-                selectedUsername={rowData.username}
-                isProfileCall={false}
-                isFollowing={rowData.followers.includes(this.props.user.id)}
-                followTableCallback={() => this.updateTable()}
               />
             ),
-          },
-        ]}
-        data={this.state.followList}
-        options={{
-          showTitle: false,
-          search: false,
-          paging: false,
-          toolbar: false,
-          sorting: false,
-          draggable: false,
-          rowStyle: { borderBottom: 0 },
-        }}
-      />
-        </div>
+          }}
+          columns={[
+            {
+              title: "MySpotter",
+              field: "pic",
+              render: (rowData) => (
+                <Link
+                  to={`/${rowData.userId}`}
+                  onClick={() => {
+                    this.props.fetchSelectedUser(rowData.userId);
+                  }}
+                  style={{ textDecoration: "none" }}
+                >
+                  <Avatar
+                    src={rowData.pic}
+                    alt="profile-pic"
+                    style={{ width: 40, height: 40, borderRadius: 16 }}
+                  />
+                </Link>
+              ),
+              headerStyle: { width: "50px", borderRadius: 16 },
+              cellStyle: { width: "50px" },
+              width: null,
+            },
+            {
+              title: "",
+              field: "username",
+              render: (rowData) => (
+                <Link
+                  className={this.props.classes.link}
+                  to={`/${rowData.userId}`}
+                  onClick={() => {
+                    this.props.fetchSelectedUser(rowData.userId);
+                  }}
+                >
+                  {rowData.username}
+                </Link>
+              ),
+            },
+            {
+              title: "Country",
+              field: "country",
+              render: (rowData) => (
+                <Emoji text={":flag_" + rowData.country + ":"} />
+              ),
+            },
+            { title: "# of Posts", field: "numPosts" },
+            { title: "# of Followers", field: "numFollowers" },
+            {
+              title: "",
+              field: "follows",
+              render: (rowData) => (
+                <FollowButton
+                  selectedUserId={rowData.userId}
+                  selectedUserFollowers={rowData.followers}
+                  selectedUsername={rowData.username}
+                  isProfileCall={false}
+                  isFollowing={rowData.followers.includes(this.props.user.id)}
+                  followTableCallback={() => this.updateTable()}
+                />
+              ),
+            },
+          ]}
+          data={this.state.followList}
+          options={{
+            showTitle: false,
+            search: false,
+            paging: false,
+            toolbar: false,
+            sorting: false,
+            draggable: false,
+            rowStyle: { borderBottom: 0 },
+          }}
+        />
+      </div>
     );
   }
 }
