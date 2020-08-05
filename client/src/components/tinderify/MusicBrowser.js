@@ -93,7 +93,8 @@ class MusicBrowser extends React.Component {
           (data) => {
             this.setState({
               tracks: data.tracks.items,
-              playlistImageUrl: data.images[0].url,
+              playlistImageUrl:
+                data.images.length > 0 ? playlist.images[0].url : null,
             });
           },
           function (err) {
