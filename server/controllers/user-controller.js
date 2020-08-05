@@ -140,22 +140,30 @@ getUserFollowingFeed = async (req, res) => {
 
 // Returns a list of posts created by the user
 getUserPosts = async (req, res) => {
-  User.findOne({ _id: req.params.id }, "posts profilePic", function (
-    err,
-    result
-  ) {
-    if (err) {
-      return res.status(400).json({ success: false, error: err });
-    }
-    if (!result) {
-      return res.status(404).json({ success: false, error: "User not found" });
-    }
-  })
-    .exec(function (err, user) {
-      return res.status(200).json({ success: true, data: user });
-    })
-    .catch((err) => res.status(400).json({ success: false, error: err }));
-  // .catch((err) => console.log(err));
+  try {
+    User.findOne({ _id: req.params.id }, "posts profilePic", function (
+      err,
+      result
+    ) {
+      if (err) {
+        return res.status(400).json({ success: false, error: err });
+      } else if (!result) {
+        return res
+          .status(404)
+          .json({ success: false, error: "User not found" });
+      } else {
+        return res.status(200).json({ success: true, data: result });
+      }
+    });
+    // .exec(function (err, user) {
+    //   return res.status(200).json({ success: true, data: user });
+    // })
+    // .catch((err) => {
+    //   return res.status(400).json({ success: false, error: err });
+    // });
+  } catch (err) {
+    return res.status(400).json({ success: false, error: err });
+  }
 };
 
 addPost = (req, res) => {
