@@ -129,7 +129,7 @@ class Favourites extends React.Component {
         this.setState({
           errorSnackOpen: true,
         });
-        console.log("error adding song to MySpot playlist: ", err);
+        console.error("error adding song to MySpot playlist: ", err);
       });
   };
 

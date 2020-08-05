@@ -96,8 +96,9 @@ class ProfileCard extends React.Component {
     });
   };
 
-  updateCard = () => {
-    this.setState({});
+  getCountry = (country) => {
+    if (country === "US") return country.toLocaleLowerCase();
+    else return getName(country).toLocaleLowerCase();
   };
 
   render() {
@@ -115,13 +116,7 @@ class ProfileCard extends React.Component {
           <span className={classes.subheader}>
             <Emoji text=":globe_showing_americas:" />
             {/* unfortunately it seems like emoji flags aren't supported for windows10 so can only see it on mac */}
-            <Emoji
-              text={
-                ":flag_" +
-                getName(selectedUser.country).toLocaleLowerCase() +
-                ":"
-              }
-            />
+            <Emoji text={":" + this.getCountry(selectedUser.country) + ":"} />
             <Emoji text=":globe_showing_americas:" />
           </span>
           <FollowButton

@@ -15,6 +15,14 @@ class FollowButton extends React.Component {
     buttonText: this.props.isFollowing ? "Following" : "Follow",
   };
 
+  componentDidUpdate = (prevProps) => {
+    if (this.props.selectedUserId !== prevProps.selectedUserId) {
+      this.setState({
+        buttonText: this.props.isFollowing ? "Following" : "Follow",
+      });
+    }
+  };
+
   performAction = (followeeId) => {
     if (this.state.buttonText === "Follow") {
       axios

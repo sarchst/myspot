@@ -1,7 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
 import MaterialTable from "material-table";
-
 import MusicBrowser from "./MusicBrowser";
 
 import { Avatar, Box, Button, Paper } from "@material-ui/core";
@@ -40,7 +39,7 @@ class FriendsDiscoverWeekly extends React.Component {
         this.setState({ followList: following });
       })
       .catch((error) => {
-        console.log("Fetch Follow Error: ", error);
+        console.error("Fetch Follow Error: ", error);
       });
   };
 
