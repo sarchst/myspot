@@ -275,7 +275,6 @@ class SongList extends React.Component {
   };
 
   getPlaylistEditButtons = (id) => {
-    console.log("id: ", id);
     if (this.state.name === "MySpot-Tinderify") {
       return (
         <div>
