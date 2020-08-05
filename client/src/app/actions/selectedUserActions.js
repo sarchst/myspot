@@ -2,7 +2,7 @@ export const SELECT_USER = "SELECT_USER";
 
 export const fetchSelectedUser = (userID) => {
   return (dispatch) => {
-    fetch(`http://localhost:9000/user/${userID}`)
+    fetch(`/user/${userID}`)
       .then((res) => res.json())
       .then((res) => {
         if (res.error) {

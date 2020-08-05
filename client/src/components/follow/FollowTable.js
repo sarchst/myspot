@@ -40,7 +40,7 @@ class FollowTable extends React.Component {
     const id = this.props.inProfileTable
       ? this.props.selectedUser._id
       : this.props.user.id;
-    fetch(`http://localhost:9000/user/${type}/${id}`)
+    fetch(`/user/${type}/${id}`)
       .then((res) => res.json())
       .then((res) => {
         if (res.error) {

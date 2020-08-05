@@ -73,7 +73,7 @@ class SearchBar extends React.Component {
   };
 
   handleSearch = () => {
-    fetch(`http://localhost:9000/user/username/${this.state.query}`)
+    fetch(`/user/username/${this.state.query}`)
       .then((res) => res.json())
       .then((res) => {
         if (res.error) {

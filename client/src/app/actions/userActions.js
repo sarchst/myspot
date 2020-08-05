@@ -21,7 +21,7 @@ export const submitSpotifyApiUserMe = (SpotifyApiUserInfoMe) => {
       topTracks: SpotifyApiUserInfoMe.topTracks || null,
       recentTracks: SpotifyApiUserInfoMe.recentTracks || null,
     };
-    fetch(`http://localhost:9000/user/${SpotifyApiUserInfoMe.display_name}`, {
+    fetch(`/user/${SpotifyApiUserInfoMe.display_name}`, {
       method: "PUT", // changed from POST
       headers: {
         "Content-Type": "application/json",

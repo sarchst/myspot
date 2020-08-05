@@ -107,7 +107,7 @@ export const addComment = (comment, profileFeedFilter, feedFilter) => {
   let authorId = comment.authorId;
   return (dispatch) => {
     return axios
-      .put(`http://localhost:9000/user/posts/comments/${id}`, comment)
+      .put(`/user/posts/comments/${id}`, comment)
       .then(() => {
         dispatch(fetchPostsWithFilter(authorId, profileFeedFilter));
       })
@@ -125,10 +125,7 @@ export const deleteComment = (id, body, profileFeedFilter, feedFilter) => {
   let commentInfo = body.commentInfo;
   return (dispatch) => {
     return axios
-      .put(
-        `http://localhost:9000/user/posts/comments/delete/${id}`,
-        commentInfo
-      )
+      .put(`/user/posts/comments/delete/${id}`, commentInfo)
       .then(() => {
         dispatch(fetchPostsWithFilter(authorId, profileFeedFilter));
       })
@@ -144,7 +141,7 @@ export const deleteComment = (id, body, profileFeedFilter, feedFilter) => {
 export const editPost = (id, commentInfo, profileFeedFilter, feedFilter) => {
   return (dispatch) => {
     return axios
-      .put(`http://localhost:9000/user/posts/edit/${id}`, commentInfo)
+      .put(`/user/posts/edit/${id}`, commentInfo)
       .then(() => {
         dispatch(fetchPostsWithFilter(id, profileFeedFilter));
       })
@@ -165,10 +162,7 @@ export const toggleLike = (post, id, profileFeedFilter, feedFilter) => {
   }
   return (dispatch) => {
     return axios
-      .put(
-        `http://localhost:9000/user/posts/${toggle}/${post.authorId}`,
-        postInfo
-      )
+      .put(`/user/posts/${toggle}/${post.authorId}`, postInfo)
       .then(() => {
         dispatch(fetchPostsWithFilter(id, profileFeedFilter));
       })

@@ -30,7 +30,7 @@ class FriendsDiscoverWeekly extends React.Component {
   };
   componentDidMount = () => {
     const type = "following";
-    fetch(`http://localhost:9000/user/${type}/${this.props.user.id}`)
+    fetch(`/user/${type}/${this.props.user.id}`)
       .then((res) => res.json())
       .then((res) => {
         if (res.error) {

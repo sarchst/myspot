@@ -18,7 +18,7 @@ class FollowButton extends React.Component {
   performAction = (followeeId) => {
     if (this.state.buttonText === "Follow") {
       axios
-        .put(`http://localhost:9000/user/following/${this.props.user.id}`, {
+        .put(`/user/following/${this.props.user.id}`, {
           id: followeeId,
           remove: false,
         })
@@ -45,7 +45,7 @@ class FollowButton extends React.Component {
 
   unfollow = (followeeId) => {
     axios
-      .put(`http://localhost:9000/user/following/${this.props.user.id}`, {
+      .put(`/user/following/${this.props.user.id}`, {
         id: followeeId,
         remove: true,
       })
