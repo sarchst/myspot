@@ -1,4 +1,10 @@
 import { setSelectedUser } from "./selectedUserActions";
+import dummyPhotos from "../../data/DummyPhotos";
+
+const getDummyPhoto = () => {
+  const randomNum = Math.floor(Math.random() * 3);
+  return dummyPhotos[randomNum];
+};
 
 export const SET_CURRENT_USER = "SET_CURRENT_USER";
 
@@ -16,7 +22,7 @@ export const submitSpotifyApiUserMe = (SpotifyApiUserInfoMe) => {
       profilePic:
         SpotifyApiUserInfoMe.images.length !== 0
           ? SpotifyApiUserInfoMe.images[0].url
-          : undefined,
+          : getDummyPhoto(),
       country: SpotifyApiUserInfoMe.country,
       topTracks: SpotifyApiUserInfoMe.topTracks || null,
       recentTracks: SpotifyApiUserInfoMe.recentTracks || null,
