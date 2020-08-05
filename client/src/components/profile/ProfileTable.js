@@ -235,7 +235,8 @@ class ProfileTable extends React.Component {
               render: (rowData) =>
                 this.props.user.id === this.props.selectedUser._id ||
                 rowData.title === "MySpot" ||
-                rowData.title === "MySpot-Tinderify" ? null : (
+                rowData.title === "MySpot-Tinderify" ||
+                rowData.title === "Discover Weekly" ? null : (
                   <Button
                     variant="outlined"
                     color="secondary"
