@@ -84,7 +84,7 @@ class PostComment extends React.Component {
         justify="center"
         alignItems="center"
       >
-        <Grid item xs={10}>
+        <Grid item xs={9}>
           <RouterLink
             className={classes.routerLink}
             to={`/${commentdata.authorId}`}
@@ -100,7 +100,7 @@ class PostComment extends React.Component {
             {commentdata.content}
           </Typography>
         </Grid>
-        <Grid item xs={1}>
+        <Grid item xs={2}>
           <Typography color="primary" variant="caption">
             {commentdata.time}
           </Typography>
