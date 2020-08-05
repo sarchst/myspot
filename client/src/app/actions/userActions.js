@@ -30,7 +30,7 @@ export const submitSpotifyApiUserMe = (SpotifyApiUserInfoMe) => {
         })
       )
       .catch((err) => {
-        console.log("user update error from spotifyAPIActions", err);
+        console.error("user update error from spotifyAPIActions", err);
       });
   };
 };

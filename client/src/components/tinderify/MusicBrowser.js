@@ -78,7 +78,7 @@ class MusicBrowser extends React.Component {
           this.setState({
             playlistId: playlist.id,
           });
-        } else {
+        } else if (user_ID) {
           this.setState({
             playlistId: data.items[0].id,
           });
@@ -119,7 +119,7 @@ class MusicBrowser extends React.Component {
         });
       })
       .catch((err) => {
-        console.log("error adding song to tinderify playlist: ", err);
+        console.error("error adding song to tinderify playlist: ", err);
         this.setState({
           errorSnackOpen: true,
         });

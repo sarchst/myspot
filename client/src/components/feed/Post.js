@@ -208,7 +208,7 @@ class Post extends Component {
           this.setState({
             errorSnackOpen: true,
           });
-          console.log("error adding playlist to library: ", err);
+          console.error("error adding playlist to library: ", err);
         });
     } else if (type === "album") {
       spotifyWebApi
@@ -235,7 +235,7 @@ class Post extends Component {
           this.setState({
             errorSnackOpen: true,
           });
-          console.log("error adding album to library: ", err);
+          console.error("error adding album to library: ", err);
         });
     } else {
       spotifyWebApi
@@ -257,7 +257,7 @@ class Post extends Component {
           this.setState({
             errorSnackOpen: true,
           });
-          console.log("error adding song to MySpot playlist: ", err);
+          console.error("error adding song to MySpot playlist: ", err);
         });
     }
   };

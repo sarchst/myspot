@@ -319,10 +319,6 @@ class MakePost extends React.Component {
           </Grid>
         </Paper>
         <Snackbar
-          // anchorOrigin={{
-          //   // vertical: "middle",
-          //   horizontal: "right",
-          // }}
           open={this.state.errorSnackOpen}
           autoHideDuration={6000}
           onClose={() => this.handleClose()}

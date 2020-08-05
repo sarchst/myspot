@@ -97,7 +97,7 @@ export function fetchPostsWithFilter(id, profileFeedFilter) {
         return res;
       })
       .catch((error) => {
-        console.log("Fetch Posts Error: ", error);
+        console.error("Fetch Posts Error: ", error);
       });
   };
 }

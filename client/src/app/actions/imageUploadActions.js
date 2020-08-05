@@ -63,7 +63,7 @@ export const fetchProfilePic = (id) => {
         dispatch(fetchProfilePicSuccess(res.data.profilePic));
       })
       .catch((err) => {
-        console.log("fetch profile pic err: " + err);
+        console.error(err);
       });
   };
 };
@@ -78,6 +78,6 @@ export async function fetchProfilePicById(id) {
       return res.data.profilePic;
     })
     .catch((err) => {
-      console.log("fetch profile pic err: " + err);
+      console.error(err);
     });
 }
