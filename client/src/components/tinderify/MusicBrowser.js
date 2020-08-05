@@ -73,7 +73,9 @@ class MusicBrowser extends React.Component {
 
     spotifyWebApi.getUserPlaylists(user_ID).then(
       (data) => {
-        let playlist = data.items.find((o) => o.name === "Discover Weekly");
+        let playlist = data.items.find(
+          (o) => o.name === "Discover Weekly" && o.owner.id === user_ID
+        );
         if (playlist) {
           this.setState({
             playlistId: playlist.id,
