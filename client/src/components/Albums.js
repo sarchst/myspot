@@ -72,16 +72,23 @@ class Albums extends React.Component {
   }
 
   componentDidMount() {
-    spotifyWebApi.getMySavedAlbums().then(
-      (data) => {
-        this.setState({
-          usersAlbums: data.items,
+    let allAlbums = [];
+        let offset = 0;
+        let albums = await spotifyWebApi.getMySavedAlbums({
+          limit: 50,
+          offset: offset,
         });
-      },
-      function (err) {
-        console.error(err);
-      }
-    );
+        while (albums.items.length !== 0) {
+          allAlbums.push(...albums.items);
+          offset += 50;
+          albums = await spotifyWebApi.getMySavedAlbums({
+            limit: 50,
+            offset: offset,
+          });
+        }
+        this.setState({
+          userAlbums: allAlbums,
+        });
   }
 
   render() {
