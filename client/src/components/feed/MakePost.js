@@ -202,7 +202,7 @@ class MakePost extends React.Component {
   };
 
   handleSubmitPost = () => {
-    if (this.state.medsi === null || this.state.content === "") return;
+    if (this.state.media === null || this.state.content === "") return;
     const postObj = {
       username: this.props.user.username,
       authorId: this.props.user.id, // user id, ref to user schema

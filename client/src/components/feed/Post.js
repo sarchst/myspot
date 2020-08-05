@@ -636,7 +636,11 @@ class Post extends Component {
                 color="secondary"
                 variant="contained"
                 onClick={() =>
-                  this.handleSubmitComment(postdata._id, postdata.authorId)
+                  this.handleSubmitComment(
+                    postdata._id,
+                    postdata.authorId,
+                    this.prop
+                  )
                 }
               >
                 Post
