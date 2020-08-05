@@ -50,7 +50,7 @@ class Profile extends React.Component {
     // get selected user
     this.props.fetchSelectedUser(match.params.user);
     // get selected user's posts
-    this.props.fetchPostsWithFilter(match.params.user, this.props.filter);
+    this.props.fetchPostsWithFilter(match.params.user, this.props.profileFilter);
     // get current user's profile pic
     if (this.props.user && this.props.user.profilePic) {
       this.props.fetchProfilePicSuccess(this.props.user.profilePic);
