@@ -65,6 +65,7 @@ class MusicBrowser extends React.Component {
       trackID: "",
       successSnackOpen: false,
       errorSnackOpen: false,
+      tracksAvailable: true,
     };
     spotifyWebApi.setAccessToken(this.props.spotifyApi.accessToken);
   }
@@ -82,6 +83,11 @@ class MusicBrowser extends React.Component {
           this.setState({
             playlistId: data.items[0].id,
           });
+          if (data.items[0].tracks.total === 0) {
+            this.setState({
+              tracksAvailable: false,
+            });
+          }
         }
         spotifyWebApi.getPlaylist(this.state.playlistId).then(
           (data) => {
@@ -202,6 +208,11 @@ class MusicBrowser extends React.Component {
                 </Box>
               </Fragment>
             ) : null}
+            {!this.state.tracksAvailable ? (
+              <h1>No tracks available.</h1>
+            ) : (
+              <h1></h1>
+            )}
             <CarouselProvider
               naturalSlideWidth={5}
               naturalSlideHeight={5}
