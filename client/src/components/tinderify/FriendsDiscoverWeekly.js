@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import Button from "@material-ui/core/Button";
 import MaterialTable from "material-table";
-import { Paper } from "@material-ui/core";
+import { Avatar, Paper } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 import MusicBrowser from "./MusicBrowser";
 import Box from "@material-ui/core/Box";
@@ -88,7 +88,7 @@ class FriendsDiscoverWeekly extends React.Component {
               {
                 field: "pic",
                 render: (rowData) => (
-                  <img
+                  <Avatar
                     src={rowData.pic}
                     alt={"ProfilePic"}
                     style={{ width: 40, height: 40, borderRadius: 16 }}
