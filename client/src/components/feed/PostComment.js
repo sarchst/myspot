@@ -103,7 +103,10 @@ class PostComment extends React.Component {
 
 const mapStateToProps = (state) => ({
   user: state.user,
+  feedFilter: state.feed.filter,
+  profileFeedFilter: state.profileFeed.filter,
 });
+
 export default compose(
   withStyles(styles),
   connect(mapStateToProps, { deleteComment, fetchSelectedUser })

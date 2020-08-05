@@ -11,6 +11,7 @@ import {
   Grid,
   Input,
   InputLabel,
+  Snackbar,
   TextField,
 } from "@material-ui/core";
 import {
@@ -18,12 +19,17 @@ import {
   ToggleButtonGroup,
   Autocomplete,
 } from "@material-ui/lab";
+import MuiAlert from "@material-ui/lab/Alert";
 import AlbumIcon from "@material-ui/icons/Album";
 import MusicNoteIcon from "@material-ui/icons/MusicNote";
 import PlaylistAddIcon from "@material-ui/icons/PlaylistAdd";
 import { withStyles } from "@material-ui/core/styles";
 
 const spotifyWebApi = new Spotify();
+
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
 const styles = (theme) => ({
   root: {
@@ -58,6 +64,7 @@ class MakePost extends React.Component {
       media: null,
       type: "playlist",
       mediaOptions: [],
+      errorSnackOpen: false,
     };
     spotifyWebApi.setAccessToken(this.props.spotifyApi.accessToken);
   }
@@ -202,7 +209,10 @@ class MakePost extends React.Component {
   };
 
   handleSubmitPost = () => {
-    if (this.state.media === null || this.state.content === "") return;
+    if (this.state.media === null || this.state.content === "") {
+      this.setState({ errorSnackOpen: true });
+      return;
+    }
     const postObj = {
       username: this.props.user.username,
       authorId: this.props.user.id, // user id, ref to user schema
@@ -223,6 +233,16 @@ class MakePost extends React.Component {
     this.handleTypeSelect("", "playlist"); // dummy event as first param
   };
 
+  handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    this.setState({
+      errorSnackOpen: false,
+    });
+  };
+
   capitalizeFirstLetter = (string) => {
     return string.charAt(0).toUpperCase() + string.slice(1);
   };
@@ -234,7 +254,7 @@ class MakePost extends React.Component {
         <Paper className={classes.paper}>
           <Grid container spacing={2} alignItems="center" justify="flex-end">
             <Grid item xs={12}>
-              <FormControl fullWidth>
+              <FormControl required fullWidth>
                 <InputLabel htmlFor="standard-basic">
                   Tell us about your Jams
                 </InputLabel>
@@ -271,7 +291,7 @@ class MakePost extends React.Component {
               </FormControl>
             </Grid>
             <Grid item xs={8}>
-              <FormControl style={{ minWidth: 300 }}>
+              <FormControl required style={{ minWidth: 300 }}>
                 <Autocomplete
                   options={this.state.mediaOptions}
                   getOptionLabel={(option) => option.name}
@@ -298,6 +318,19 @@ class MakePost extends React.Component {
             </Grid>
           </Grid>
         </Paper>
+        <Snackbar
+          // anchorOrigin={{
+          //   // vertical: "middle",
+          //   horizontal: "right",
+          // }}
+          open={this.state.errorSnackOpen}
+          autoHideDuration={6000}
+          onClose={() => this.handleClose()}
+        >
+          <Alert onClose={() => this.handleClose()} severity="error">
+            Please tell us about your jam(s) and/or pick some media!
+          </Alert>
+        </Snackbar>
       </div>
     );
   }

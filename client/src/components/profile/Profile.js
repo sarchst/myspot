@@ -43,7 +43,10 @@ class Profile extends React.Component {
   componentDidMount = () => {
     const { match } = this.props;
     this.props.fetchSelectedUser(match.params.user);
-    this.props.fetchPostsWithFilter(match.params.user, this.props.filter);
+    this.props.fetchPostsWithFilter(
+      match.params.user,
+      this.props.profileFilter
+    );
     window.scrollTo(0, 0);
   };
 
