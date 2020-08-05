@@ -118,7 +118,9 @@ class Profile extends React.Component {
                 />
               ))
             ) : (
-              <h3 color="primary">Hmm...no posts yet. You should make one!</h3>
+              <h3 color="primary" style={{ textAlign: "center" }}>
+                Hmm...no posts yet. You should make one!
+              </h3>
             )}
           </div>
         </InfiniteScroll>
