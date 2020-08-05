@@ -42,12 +42,10 @@ export const fetchUserSettings = (id) => {
         dispatch(fetchUserSettingsSuccess(res.data.settings));
       })
       .catch((err) => {
-        console.log("fetch user settings err: " + err);
-        throw err;
+        console.error(err);
       });
   };
 };
-
 
 export const updateSettings = (settings, id) => {
   return (dispatch) => {
