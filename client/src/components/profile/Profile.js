@@ -2,9 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { withStyles } from "@material-ui/core/styles";
 import { toggleLike } from "../../app/actions/postActions";
-import {
-  fetchPostsWithFilter,
-} from "../../app/actions/postActions";
+import { fetchPostsWithFilter } from "../../app/actions/postActions";
 import Post from "../feed/Post";
 import MakePost from "../feed/MakePost";
 import ProfileCard from "./ProfileCard";
@@ -52,7 +50,7 @@ class Profile extends React.Component {
     // get selected user
     this.props.fetchSelectedUser(match.params.user);
     // get selected user's posts
-    this.props.fetchPostsWithFilter(match.params.user, this.props.filter);
+    this.props.fetchPostsWithFilter(match.params.user, this.props.profileFilter);
     // get current user's profile pic
     if (this.props.user && this.props.user.profilePic) {
       this.props.fetchProfilePicSuccess(this.props.user.profilePic);
@@ -77,13 +75,13 @@ class Profile extends React.Component {
     }
     // check if filter has been changed or selectedUser has changed
     if (
-      this.props.filter !== prevProps.filter ||
+      this.props.profileFilter !== prevProps.profileFilter ||
       prevProps.selectedUser.username !== this.props.selectedUser.username
     ) {
       // get posts from selectedUser if possible, else get from db
       this.props.fetchPostsWithFilter(
         this.props.selectedUser._id,
-        this.props.filter
+        this.props.profileFilter
       );
     }
   }
@@ -104,7 +102,7 @@ class Profile extends React.Component {
   };
 
   render() {
-    const { classes, user, toggleLike } = this.props;
+    const { classes, user, toggleLike, profileFilter, feedFilter } = this.props;
     return (
       <div className={classes.root}>
         <DeletePostDialog />
@@ -138,7 +136,9 @@ class Profile extends React.Component {
                 <Post
                   key={p._id}
                   postdata={p}
-                  toggleLike={() => toggleLike(p, user.id)}
+                  toggleLike={() =>
+                    toggleLike(p, user.id, profileFilter, feedFilter)
+                  }
                   userId={user.id}
                 />
               ))
@@ -155,7 +155,8 @@ class Profile extends React.Component {
 const mapStateToProps = (state) => ({
   user: state.user,
   posts: state.profileFeed.posts,
-  filter: state.profileFeed.filter,
+  profileFilter: state.profileFeed.filter,
+  feedFilter: state.feed.filter,
   selectedUser: state.selectedUser,
 });
 
