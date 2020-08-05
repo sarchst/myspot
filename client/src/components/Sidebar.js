@@ -99,7 +99,7 @@ const styles = (theme) => ({
 
 class Sidebar extends React.Component {
   handleDrawerClose = () => {
-    this.props.toggleSideBar();
+    this.props.toggleSidebar();
   };
 
   componentDidMount = () => {

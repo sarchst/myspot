@@ -270,6 +270,7 @@ class SongList extends React.Component {
     this.setState({
       successSnackOpen: false,
       errorSnackOpen: false,
+      deleteSnackOpen: false,
     });
   };
 
@@ -326,6 +327,7 @@ class SongList extends React.Component {
 
   render() {
     const { classes } = this.props;
+
     return (
       <div>
         {this.state.songlistType === "playlist" ? (

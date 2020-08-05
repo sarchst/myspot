@@ -4,7 +4,7 @@ import MaterialTable from "material-table";
 
 import MusicBrowser from "./MusicBrowser";
 
-import { Box, Button, Paper } from "@material-ui/core";
+import { Avatar, Box, Button, Paper } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 
 const styles = (theme) => ({
@@ -88,7 +88,7 @@ class FriendsDiscoverWeekly extends React.Component {
               {
                 field: "pic",
                 render: (rowData) => (
-                  <img
+                  <Avatar
                     src={rowData.pic}
                     alt={"ProfilePic"}
                     style={{ width: 40, height: 40, borderRadius: 16 }}

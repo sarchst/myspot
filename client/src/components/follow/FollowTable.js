@@ -8,7 +8,7 @@ import { getName } from "country-list";
 import FollowButton from "./FollowButton";
 import { fetchSelectedUser } from "../../app/actions/selectedUserActions";
 
-import { Paper } from "@material-ui/core";
+import { Avatar, Paper } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 
 const styles = (theme) => ({
@@ -105,9 +105,9 @@ class FollowTable extends React.Component {
                   }}
                   style={{ textDecoration: "none" }}
                 >
-                  <img
+                  <Avatar
                     src={rowData.pic}
-                    alt={"ProfilePic"}
+                    alt="profile-pic"
                     style={{ width: 40, height: 40, borderRadius: 16 }}
                   />
                 </Link>
