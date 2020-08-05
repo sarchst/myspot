@@ -8,10 +8,10 @@ import {
 } from "../app/actions/imageUploadActions";
 
 import { makeStyles } from "@material-ui/core/styles";
+import Avatar from "@material-ui/core/Avatar";
 import Card from "@material-ui/core/Card";
 import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
-import CardMedia from "@material-ui/core/CardMedia";
 import Typography from "@material-ui/core/Typography";
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
@@ -36,13 +36,12 @@ const ImageUpload = ({ saveAndUpdateProfilePic, user, fetchProfilePic }) => {
   const [snackOpen, setSnackOpen] = React.useState(false);
   const [fileObjects, setFileObjects] = React.useState([]);
 
-
   const handleSnackClose = () => setSnackOpen(false);
 
   const getProfilePic = () => {
-    if (user.profilePic === "") {
+    if (!user.profilePic) {
       // can set default pic link here
-      return "https://res.cloudinary.com/dafyfaoby/image/upload/v1595033507/samples/sheep.jpg";
+      return "";
     } else {
       return user.profilePic;
     }
@@ -51,10 +50,11 @@ const ImageUpload = ({ saveAndUpdateProfilePic, user, fetchProfilePic }) => {
   return (
     <div>
       <Card className={classes.root}>
-        <CardMedia
+        <Avatar
           className={classes.media}
-          image={getProfilePic()}
-          title="User's profile pic"
+          src={getProfilePic()}
+          style={{ width: "100%", height: "100%", borderRadius: 0 }}
+          alt="profile-pic"
         />
         <CardContent>
           <Typography gutterBottom variant="h5" component="h2">
