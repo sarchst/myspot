@@ -102,7 +102,7 @@ class MakePost extends React.Component {
             offset: offset,
           });
         }
-        const playlistOptions = this.getOptions(type, data.items);
+        const playlistOptions = this.getOptions(type, allPlaylists);
         this.setState({
           mediaOptions: playlistOptions,
           media: null,
@@ -124,7 +124,7 @@ class MakePost extends React.Component {
             offset: offset,
           });
         }
-        const albumOptions = this.getOptions(type, data.items);
+        const albumOptions = this.getOptions(type, allAlbums);
         this.setState({
           mediaOptions: albumOptions,
           media: null,
