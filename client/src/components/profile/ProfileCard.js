@@ -1,25 +1,29 @@
 // modified from Siriwatknp at https://mui-treasury.com/components/card/
 
 import React from "react";
-import Box from "@material-ui/core/Box";
-import Card from "@material-ui/core/Card";
-import CardContent from "@material-ui/core/CardContent";
-import Avatar from "@material-ui/core/Avatar";
-import Divider from "@material-ui/core/Divider";
-import { withStyles } from "@material-ui/core/styles";
 import { connect } from "react-redux";
 import Spotify from "spotify-web-api-js";
-import List from "@material-ui/core/List";
-import ListItemText from "@material-ui/core/ListItemText";
-import ListItemAvatar from "@material-ui/core/ListItemAvatar";
-import ListItem from "@material-ui/core/ListItem";
-import ListSubheader from "@material-ui/core/ListSubheader";
-import PlayCircleOutlineIcon from "@material-ui/icons/PlayCircleOutline";
-import MusicOffOutlinedIcon from "@material-ui/icons/MusicOffOutlined";
 import Emoji from "react-emoji-render";
 import { getName } from "country-list";
-import Typography from "@material-ui/core/Typography";
+
 import FollowButton from "../follow/FollowButton";
+
+import {
+  Avatar,
+  Box,
+  Card,
+  CardContent,
+  Divider,
+  List,
+  ListItem,
+  ListItemAvatar,
+  ListItemText,
+  ListSubheader,
+  Typography,
+} from "@material-ui/core";
+import PlayCircleOutlineIcon from "@material-ui/icons/PlayCircleOutline";
+import MusicOffOutlinedIcon from "@material-ui/icons/MusicOffOutlined";
+import { withStyles } from "@material-ui/core/styles";
 
 const styles = (theme) => ({
   card: {
