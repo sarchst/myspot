@@ -74,18 +74,34 @@ class Playlists extends React.Component {
   componentDidMount() {
     const userID = this.props.match.params.user;
     // identify user with React Router match.params instead because of race conditions with Redux store updating
-    spotifyWebApi.getUserPlaylists(userID).then(
-      (data) => {
+    this.getAllPlaylists(userID)
+      .then((allPlaylists) => {
         this.setState({
-          usersPlaylists: data.items,
-          userID: userID,
+          usersPlaylists: allPlaylists,
         });
-      },
-      function (err) {
-        console.error("Failed to fetch playlists for match params user", err);
-      }
-    );
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   }
+
+  getAllPlaylists = async (userID) => {
+    let allPlaylists = [];
+    let offset = 0;
+    let playlists = await spotifyWebApi.getUserPlaylists(userID, {
+      limit: 50,
+      offset: offset,
+    });
+    while (playlists.items.length !== 0) {
+      allPlaylists.push(...playlists.items);
+      offset += 50;
+      playlists = await spotifyWebApi.getUserPlaylists(userID, {
+        limit: 50,
+        offset: offset,
+      });
+    }
+    return allPlaylists;
+  };
 
   render() {
     const { classes } = this.props;

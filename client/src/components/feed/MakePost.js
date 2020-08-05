@@ -85,33 +85,50 @@ class MakePost extends React.Component {
     }
     switch (type) {
       case "playlist": {
-        spotifyWebApi.getUserPlaylists(this.props.user.id).then(
-          (data) => {
-            const playlistOptions = this.getOptions(type, data.items);
-            this.setState({
-              mediaOptions: playlistOptions,
-              media: null,
-            });
-          },
-          function (err) {
-            console.error(err);
+        let allPlaylists = [];
+        let offset = 0;
+        let playlists = await spotifyWebApi.getUserPlaylists(
+          this.props.user.id,
+          {
+            limit: 50,
+            offset: offset,
           }
         );
+        while (playlists.items.length !== 0) {
+          allPlaylists.push(...playlists.items);
+          offset += 50;
+          playlists = await spotifyWebApi.getUserPlaylists(this.props.user.id, {
+            limit: 50,
+            offset: offset,
+          });
+        }
+        const playlistOptions = this.getOptions(type, allPlaylists);
+        this.setState({
+          mediaOptions: playlistOptions,
+          media: null,
+        });
         break;
       }
       case "album": {
-        spotifyWebApi.getMySavedAlbums().then(
-          (data) => {
-            const albumOptions = this.getOptions(type, data.items);
-            this.setState({
-              mediaOptions: albumOptions,
-              media: null,
-            });
-          },
-          function (err) {
-            console.error(err);
-          }
-        );
+        let allAlbums = [];
+        let offset = 0;
+        let albums = await spotifyWebApi.getMySavedAlbums({
+          limit: 50,
+          offset: offset,
+        });
+        while (albums.items.length !== 0) {
+          allAlbums.push(...albums.items);
+          offset += 50;
+          albums = await spotifyWebApi.getMySavedAlbums({
+            limit: 50,
+            offset: offset,
+          });
+        }
+        const albumOptions = this.getOptions(type, allAlbums);
+        this.setState({
+          mediaOptions: albumOptions,
+          media: null,
+        });
         break;
       }
       case "track": {
