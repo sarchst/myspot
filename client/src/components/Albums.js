@@ -72,17 +72,34 @@ class Albums extends React.Component {
   }
 
   componentDidMount() {
-    spotifyWebApi.getMySavedAlbums().then(
-      (data) => {
+    this.getAllAlbums()
+      .then((allAlbums) => {
         this.setState({
-          usersAlbums: data.items,
+          usersAlbums: allAlbums,
         });
-      },
-      function (err) {
+      })
+      .catch((err) => {
         console.error(err);
-      }
-    );
+      });
   }
+
+  getAllAlbums = async () => {
+    let allAlbums = [];
+    let offset = 0;
+    let albums = await spotifyWebApi.getMySavedAlbums({
+      limit: 50,
+      offset: offset,
+    });
+    while (albums.items.length !== 0) {
+      allAlbums.push(...albums.items);
+      offset += 50;
+      albums = await spotifyWebApi.getMySavedAlbums({
+        limit: 50,
+        offset: offset,
+      });
+    }
+    return allAlbums;
+  };
 
   render() {
     const { classes, selectedUser } = this.props;
@@ -133,7 +150,7 @@ class Albums extends React.Component {
                     </CardContent>
                     <CardActions>
                       <Link
-                          style={{ textDecoration: "none" }}
+                        style={{ textDecoration: "none" }}
                         to={{
                           pathname: `/${selectedUser._id}/albums/${album.album.id}`,
                           state: {
