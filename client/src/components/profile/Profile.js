@@ -122,7 +122,7 @@ class Profile extends React.Component {
               ))
             ) : (
               <h3 color="primary" style={{ textAlign: "center" }}>
-                Hmm...no posts to be seen yet!
+                Hmm...no posts yet!
               </h3>
             )}
           </div>
