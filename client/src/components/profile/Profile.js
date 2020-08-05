@@ -79,7 +79,6 @@ class Profile extends React.Component {
   };
 
   render() {
-    console.log(this.props.profileFilter);
     const { classes, user, toggleLike, profileFilter, feedFilter } = this.props;
     return (
       <div className={classes.root}>
