@@ -17,19 +17,6 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import MusicNoteRoundedIcon from "@material-ui/icons/MusicNoteRounded";
 import { withStyles } from "@material-ui/core/styles";
 
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {"Copyright © "}
-      <Link color="inherit" href="https://material-ui.com/">
-        MySpot
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
-
 let loginURL = "http://localhost:9000/login";
 
 const styles = (theme) => ({
@@ -74,6 +61,12 @@ const styles = (theme) => ({
     flexDirection: "column",
     alignItems: "center",
   },
+  copyright: {
+    variant: "body2",
+    color: "textSecondary",
+    align: "center",
+  },
+  musicNote: {},
 });
 
 class Login extends React.Component {
@@ -111,11 +104,11 @@ class Login extends React.Component {
                 Sign In With Spotify
               </Button>
             </Grid>
-            <form className={classes.form} noValidate>
-              <Box mt={5}>
-                <Copyright />
-              </Box>
-            </form>
+            <Box mt={5}>
+              <Typography variant="body2" color="textSecondary" align="center">
+                {`Copyright © MySpot ${new Date().getFullYear()}.`}
+              </Typography>
+            </Box>
           </div>
         </Grid>
       </Grid>
