@@ -108,20 +108,34 @@ class SongList extends React.Component {
   componentDidMount() {
     if ("playlistid" in this.props.match.params) {
       // get playlist songs
-      spotifyWebApi.getPlaylistTracks(this.props.match.params.playlistid).then(
-        (data) => {
+      this.getAllPlaylistTracks(this.props.match.params.playlistid).then(
+        (tracks) => {
           this.setState({
             songlistType: "playlist",
           });
-          const tracks = this.organizeTrackData(data.items);
+          const organizedTracks = this.organizeTrackData(tracks);
           this.setState({
-            tracks: tracks,
+            tracks: organizedTracks,
           });
         },
         function (err) {
           console.error(err);
         }
       );
+      // spotifyWebApi.getPlaylistTracks(this.props.match.params.playlistid).then(
+      //   (data) => {
+      //     this.setState({
+      //       songlistType: "playlist",
+      //     });
+      //     const tracks = this.organizeTrackData(data.items);
+      //     this.setState({
+      //       tracks: tracks,
+      //     });
+      //   },
+      //   function (err) {
+      //     console.error(err);
+      //   }
+      // );
       // get playlist name and desc from Spotify API if can't retrieve from Link props
       if (!this.state.name) {
         spotifyWebApi.getPlaylist(this.props.match.params.playlistid).then(
@@ -171,6 +185,24 @@ class SongList extends React.Component {
       );
     }
   }
+
+  getAllPlaylistTracks = async (id) => {
+    let allTracks = [];
+    let offset = 0;
+    let tracks = await spotifyWebApi.getPlaylistTracks(id, {
+      limit: 100,
+      offset: offset,
+    });
+    while (tracks.items.length !== 0 && tracks.items.length < 501) {
+      allTracks.push(...tracks.items);
+      offset += 100;
+      tracks = await spotifyWebApi.getPlaylistTracks(id, {
+        limit: 100,
+        offset: offset,
+      });
+    }
+    return allTracks;
+  };
 
   organizeTrackData = (data) => {
     const tracks = [];
