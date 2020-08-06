@@ -142,6 +142,7 @@ class ProfileTable extends React.Component {
           this.setState({
             successSnackOpen: true,
           });
+          this.updateTable();
         } else {
           this.setState({
             containsSnackOpen: true,
@@ -279,6 +280,10 @@ class ProfileTable extends React.Component {
 
   setTabIndex = (index) => {
     this.setState({ tabIndex: index });
+  };
+
+  updateTable = () => {
+    this.fetchSpotifyPlaylists();
   };
 
   render() {
