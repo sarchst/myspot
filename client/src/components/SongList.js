@@ -16,14 +16,25 @@ import Tooltip from "@material-ui/core/Tooltip";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import NotInterestedIcon from "@material-ui/icons/NotInterested";
 import Snackbar from "@material-ui/core/Snackbar";
+import Box from "@material-ui/core/Box";
 import MuiAlert from "@material-ui/lab/Alert";
 import Button from "@material-ui/core/Button";
+import PlayCircleOutlineIcon from "@material-ui/icons/PlayCircleOutline";
+import MusicOffOutlinedIcon from "@material-ui/icons/MusicOffOutlined";
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 
 const styles = (theme) => ({
+  audioPlayer: {
+    width: "50%",
+  },
+  musicPlayerBox: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+  },
   listItemText: {
     fontSize: "1.5em",
   },
@@ -101,6 +112,7 @@ class SongList extends React.Component {
       successSnackOpen: false,
       errorSnackOpen: false,
       deleteSnackOpen: false,
+      songUri: "",
     };
     spotifyWebApi.setAccessToken(this.props.spotifyApi.accessToken);
   }
@@ -178,6 +190,7 @@ class SongList extends React.Component {
       data.map((track, index) =>
         tracks.push({
           id: track.track.id,
+          preview_url: track.track.preview_url,
           image: track.track.album.images.length
             ? track.track.album.images[track.track.album.images.length - 1].url
             : null,
@@ -194,6 +207,7 @@ class SongList extends React.Component {
         tracks.push({
           id: track.id,
           name: track.name,
+          preview_url: track.preview_url,
           artists: track.artists.map(
             (artist, index) =>
               artist.name + (index < track.artists.length - 1 ? " | " : "")
@@ -260,6 +274,12 @@ class SongList extends React.Component {
         });
         console.log("error adding song to MySpot playlist: ", err);
       });
+  };
+
+  setPlayerSong = (track) => {
+    this.setState({
+      songUri: track.preview_url,
+    });
   };
 
   handleClose = (event, reason) => {
@@ -382,8 +402,19 @@ class SongList extends React.Component {
           </div>
         </CssBaseline>
         <Container maxWidth="lg">
+          {this.state.songUri ? (
+            <Box className={classes.musicPlayerBox} pb={1}>
+              <audio
+                className={classes.audioPlayer}
+                autoPlay
+                controls="controls"
+                src={this.state.songUri}
+              ></audio>
+            </Box>
+          ) : null}
           <List className={classes.listRoot} dense={true}>
             {this.state.tracks.map((track, index) => {
+              const isPlaybackAvailable = track.preview_url ? true : false;
               return (
                 <ListItem key={index}>
                   {/* {this.state.name !== "MySpot" ? (
@@ -407,6 +438,31 @@ class SongList extends React.Component {
                       </IconButton>
                     </Tooltip>
                   )} */}
+                  {isPlaybackAvailable ? (
+                    <Tooltip title="Play Song">
+                      <IconButton
+                        onClick={
+                          isPlaybackAvailable
+                            ? () => this.setPlayerSong(track)
+                            : null
+                        }
+                      >
+                        <PlayCircleOutlineIcon
+                          color={"secondary"}
+                          fontSize="large"
+                        />
+                      </IconButton>
+                    </Tooltip>
+                  ) : (
+                    <Tooltip title="No song preview available">
+                      <IconButton>
+                        <MusicOffOutlinedIcon
+                          color={"secondary"}
+                          fontSize="large"
+                        />
+                      </IconButton>
+                    </Tooltip>
+                  )}
                   {this.getPlaylistEditButtons(track.id)}
                   <ListItemAvatar>
                     <Avatar
