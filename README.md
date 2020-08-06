@@ -22,7 +22,7 @@ MySpot is a social media platform for music lovers who want to connect with othe
 3. Follower/ Followee Actions :heavy_check_mark:
 4. Playlists on web app directly edit your Spotify playlists :heavy_check_mark:
 5. Get recommendations based on you like :heavy_check_mark:
-6. User-user interaction through comments/chat  :x: 
+6. User-user interaction through comments/chat  :grey_exclamation:
 
 **2-3 stretch requirements (plan to complete 1!)**
 1. Tinderify (swipe left or right on randomly generated songs to add them to your playlist) :heavy_check_mark:
