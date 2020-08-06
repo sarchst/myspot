@@ -98,7 +98,7 @@ class Favourites extends React.Component {
       limit: 50,
       offset: offset,
     });
-    while (tracks.items.length !== 0) {
+    while (tracks.items.length !== 0 && tracks.items.length < 501) {
       allTracks.push(...tracks.items);
       offset += 50;
       tracks = await spotifyWebApi.getMySavedTracks({

@@ -5,6 +5,7 @@ import Spotify from "spotify-web-api-js";
 
 import {
   Avatar,
+  Box,
   Button,
   Container,
   CssBaseline,
@@ -20,6 +21,8 @@ import {
 import MuiAlert from "@material-ui/lab/Alert";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import NotInterestedIcon from "@material-ui/icons/NotInterested";
+import PlayCircleOutlineIcon from "@material-ui/icons/PlayCircleOutline";
+import MusicOffOutlinedIcon from "@material-ui/icons/MusicOffOutlined";
 import { withStyles } from "@material-ui/core/styles";
 
 function Alert(props) {
@@ -27,6 +30,14 @@ function Alert(props) {
 }
 
 const styles = (theme) => ({
+  audioPlayer: {
+    width: "50%",
+  },
+  musicPlayerBox: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+  },
   listItemText: {
     fontSize: "1.5em",
   },
@@ -104,20 +115,22 @@ class SongList extends React.Component {
       successSnackOpen: false,
       deleteSnackOpen: false,
       errorSnackOpen: false,
+      songUri: "",
     };
     spotifyWebApi.setAccessToken(this.props.spotifyApi.accessToken);
   }
 
   componentDidMount() {
     if ("playlistid" in this.props.match.params) {
-      spotifyWebApi.getPlaylistTracks(this.props.match.params.playlistid).then(
-        (data) => {
+      // get playlist songs
+      this.getAllPlaylistTracks(this.props.match.params.playlistid).then(
+        (tracks) => {
           this.setState({
             songlistType: "playlist",
           });
-          const tracks = this.organizeTrackData(data.items);
+          const organizedTracks = this.organizeTrackData(tracks);
           this.setState({
-            tracks: tracks,
+            tracks: organizedTracks,
           });
         },
         function (err) {
@@ -172,12 +185,31 @@ class SongList extends React.Component {
     }
   }
 
+  getAllPlaylistTracks = async (id) => {
+    let allTracks = [];
+    let offset = 0;
+    let tracks = await spotifyWebApi.getPlaylistTracks(id, {
+      limit: 100,
+      offset: offset,
+    });
+    while (tracks.items.length !== 0 && tracks.items.length < 501) {
+      allTracks.push(...tracks.items);
+      offset += 100;
+      tracks = await spotifyWebApi.getPlaylistTracks(id, {
+        limit: 100,
+        offset: offset,
+      });
+    }
+    return allTracks;
+  };
+
   organizeTrackData = (data) => {
     const tracks = [];
     if (this.state.songlistType === "playlist") {
       data.map((track, index) =>
         tracks.push({
           id: track.track.id,
+          preview_url: track.track.preview_url,
           image: track.track.album.images.length
             ? track.track.album.images[track.track.album.images.length - 1].url
             : null,
@@ -194,6 +226,7 @@ class SongList extends React.Component {
         tracks.push({
           id: track.id,
           name: track.name,
+          preview_url: track.preview_url,
           artists: track.artists.map(
             (artist, index) =>
               artist.name + (index < track.artists.length - 1 ? " | " : "")
@@ -260,6 +293,12 @@ class SongList extends React.Component {
         });
         console.error("error adding song to MySpot playlist: ", err);
       });
+  };
+
+  setPlayerSong = (track) => {
+    this.setState({
+      songUri: track.preview_url,
+    });
   };
 
   handleClose = (event, reason) => {
@@ -382,10 +421,46 @@ class SongList extends React.Component {
           </div>
         </CssBaseline>
         <Container maxWidth="lg">
+          {this.state.songUri ? (
+            <Box className={classes.musicPlayerBox} pb={1}>
+              <audio
+                className={classes.audioPlayer}
+                autoPlay
+                controls="controls"
+                src={this.state.songUri}
+              ></audio>
+            </Box>
+          ) : null}
           <List className={classes.listRoot} dense={true}>
             {this.state.tracks.map((track, index) => {
+              const isPlaybackAvailable = track.preview_url ? true : false;
               return (
                 <ListItem key={index}>
+                  {isPlaybackAvailable ? (
+                    <Tooltip title="Play Song">
+                      <IconButton
+                        onClick={
+                          isPlaybackAvailable
+                            ? () => this.setPlayerSong(track)
+                            : null
+                        }
+                      >
+                        <PlayCircleOutlineIcon
+                          color={"secondary"}
+                          fontSize="large"
+                        />
+                      </IconButton>
+                    </Tooltip>
+                  ) : (
+                    <Tooltip title="No song preview available">
+                      <IconButton>
+                        <MusicOffOutlinedIcon
+                          color={"secondary"}
+                          fontSize="large"
+                        />
+                      </IconButton>
+                    </Tooltip>
+                  )}
                   {this.getPlaylistEditButtons(track.id)}
                   <ListItemAvatar>
                     <Avatar
