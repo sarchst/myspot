@@ -1,10 +1,13 @@
 # MySpot
 
-### Description:
+## Description:
 
 MySpot is a social media platform for music lovers who want to connect with other Spotify users. MySpot allows users to share music posts (Spotify playlists, albums, songs), see what their fellow MySpotters are listening to, build playlists, and discover new music. 
 
-### Project Task Requirements:
+## Usage:
+For your best instructor/marker expereience, upon logging into to MySpot, please search for and "follow" the following users via the search bar:**"mlouie_"**, **"quinnird"**, **"austin lee"**, and **"sarchst"**. This will populate your Feed and allow you to begin to build your social network! (And grade us).
+
+## Project Task Requirements:
 
 **3-5 minimal requirements (will definitely complete):**
  1. Public profile page :heavy_check_mark:
@@ -30,13 +33,38 @@ MySpot is a social media platform for music lovers who want to connect with othe
 3. Explore page (like IG) :x: 
 4. Make playlist on the application from scratch rather than on Spotify :heavy_check_mark:
 
-### Tech Stack:
-### Above and Beyond Functionality:
-### Next Steps:
-### List of Contributions:
+## Tech Stack:
+### HTML/CSS:
+HTML/CSS/JS front end rendering is handled by ReactJS and MaterialUI frameworks. Using these libraries made front end development more efficient and helped unifying styling throughout the application.
+
+### React/Redux:
+We used React to build reusable components for MySpot, for instance ProfileCard, SongList, FollowTable, and Post components are rendered in multiple places across the application. We simulated the familiar multi-page HTML experience with dynamic routing/updating via React Router. Redux is used to persist user information to reduce database calls.
+
+### MongoDB:
+We incorporated Mongoose for MongoDB validation and designed Schemas for User, Post, Settings, Comment, and Media. Our database holds a collection of users, and user objects hold references to the other aforementioned models. In accordance with best practices, we strived to minimize the size of our database by utilizing Spotify API calls and hosting images on an external website, and minimize database calls where possible.
+
+### ExpressJS:
+MySpot used ExpressJS to create the backend API. We implemented a Model-View-Controller model to improve code readability and organization. We used React Thunk to make the API calls to interact with our database.
+
+### Release Engineering:
+MySpot is hosted on Heroku: https://myspotmusic.herokuapp.com/! We utilized a monorepo and had pull request/code review protocols to aid in a smooth development process.
+
+## Above and Beyond Functionality:
+MySpot goes above and beyond the basic requirements by extensively incorporating the Spotify API into our core app functionality. We implemented the ability to … with Spotify. Need help with some extra stuff here.
+
+## Next Steps:
+Our future goals include implementing the ability for users to repost and share posts, incorporating a peer to peer chat feature, and implementing a notification system to further build on the social media aspect of MySpot. Additionally, we strive to implement an “Explore Page” where recent and popular posts from users you may not follow are presented so MySpotters can continue to expand their social network. Additionally, we would like to improve app security by forcing the client to authenticate API calls to our database.
+
+## List of Contributions:
+### Mikayla: 
+Mikayla contributed to the design of the database structure, model schemas, and wrote a majority of the REST endpoints which interact with the database. She also took a co-lead in designing the Post component and functionality. She connected backend to frontend components via Redux Thunk to bring Profile, Feed, and Settings pages to life and unified app styling for the full-stack experience.
+
+### Sarchen: 
+Sarchen’s focus was on integrating the Spotify API into the project. She developed the Tinderify feature, incorporating the user's albums/playlists/songs into the site, and implemented the ability for a user to 'like' songs, adding it to their MySpot playlist.
 
 
-### Previous Notes:
+
+## Previous Project Notes:
 ### 2 Minimal Requirement Breakdowns:
 
 **Add People I’m Following:**
