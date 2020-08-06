@@ -163,6 +163,14 @@ class Albums extends React.Component {
                           View Songs
                         </Button>
                       </Link>
+                      <Button
+                        size="small"
+                        color="secondary"
+                        href={album.album.external_urls.spotify}
+                        target="_blank"
+                      >
+                        View on Spotify
+                      </Button>
                     </CardActions>
                   </Card>
                 </Grid>
