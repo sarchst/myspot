@@ -4,7 +4,6 @@ import { connect } from "react-redux";
 import Spotify from "spotify-web-api-js";
 
 import {
-  Button,
   Card,
   CardActions,
   CardContent,
@@ -15,6 +14,8 @@ import {
   Typography,
 } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
+
+import Button from "@material-ui/core/Button";
 
 const spotifyWebApi = new Spotify();
 
@@ -94,6 +95,7 @@ class Albums extends React.Component {
       <React.Fragment>
         <CssBaseline />
         <main>
+          {/* Hero unit */}
           <div className={classes.heroContent}>
             <Container maxWidth="sm">
               <Typography
@@ -108,6 +110,7 @@ class Albums extends React.Component {
             </Container>
           </div>
           <Container className={classes.cardGrid} maxWidth="md">
+            {/* End hero unit */}
             <Grid container spacing={4}>
               {this.state.usersAlbums.map((album, index) => (
                 <Grid item key={index} xs={12} sm={6} md={4}>
@@ -123,7 +126,7 @@ class Albums extends React.Component {
                       </Typography>
                       <Typography>{album.album.artists[0].name}</Typography>
                     </CardContent>
-                    <CardActions>
+                    <CardActions className={classes.cardActions}>
                       <Link
                         style={{ textDecoration: "none" }}
                         to={{
@@ -138,6 +141,14 @@ class Albums extends React.Component {
                           View Songs
                         </Button>
                       </Link>
+                      <Button
+                        size="small"
+                        color="secondary"
+                        href={album.album.external_urls.spotify}
+                        target="_blank"
+                      >
+                        View on Spotify
+                      </Button>
                     </CardActions>
                   </Card>
                 </Grid>
