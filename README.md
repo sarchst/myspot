@@ -62,7 +62,8 @@ Mikayla contributed to the design of the database structure, model schemas, and 
 ### Sarchen: 
 Sarchen’s focus was on integrating the Spotify API into the project. She developed the Tinderify feature, incorporating the user's albums/playlists/songs into the site, and implemented the ability for a user to 'like' songs, adding it to their MySpot playlist.
 
-
+### Quinn:
+Quinn's main contributions were implementing the ability to follow and unfollow users, a MakePost component that lets you post Spotify media onto MySpot, and a ProfileTable component that lets you view and interact with any users playlists, followers, and following lists. Additionally I helped design, implement, and maintain our database, backend structure, models, and schemas.
 
 ## Previous Project Notes:
 ### 2 Minimal Requirement Breakdowns:
