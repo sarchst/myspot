@@ -5,7 +5,7 @@
 MySpot is a social media platform for music lovers who want to connect with other Spotify users. MySpot allows users to share music posts (Spotify playlists, albums, songs), see what their fellow MySpotters are listening to, build playlists, and discover new music. 
 
 ## Usage:
-For your best instructor/marker expereience, upon logging into to MySpot, please search for and "follow" the following users via the search bar:**"mlouie_"**, **"quinnird"**, **"austin lee"**, and **"sarchst"**. This will populate your Feed and allow you to begin to build your social network! (And grade us).
+For your best user expereience, upon logging into to MySpot, please search for and "follow" the following users via the search bar:**"mlouie_"**, **"quinnird"**, **"austin lee"**, and **"sarchst"**. This will populate your Feed and allow you to begin to build your social network! (And grade us).
 
 ## Project Task Requirements:
 
