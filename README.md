@@ -65,6 +65,9 @@ Sarchen’s focus was on integrating the Spotify API into the project. She devel
 ### Quinn:
 Quinn's main contributions were implementing the ability to follow and unfollow users, a MakePost component that lets you post Spotify media onto MySpot, and a ProfileTable component that lets you view and interact with any users playlists, followers, and following lists. Additionally I helped design, implement, and maintain our database, backend structure, models, and schemas.
 
+### Austin:
+Austin implemented login, integration between the Spotify API and front-end/database, and dynamic navigation/rendering for profiles and songlists.  He also contributed several behind-the-scenes features such as refactoring components and redux actions to minimize database calls, pioneering several Spotify API-related features, and improving Express server code.   
+
 ## Previous Project Notes:
 ### 2 Minimal Requirement Breakdowns:
 
