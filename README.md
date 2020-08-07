@@ -38,7 +38,7 @@ For your best user expereience, upon logging into to MySpot, please search for a
 HTML/CSS/JS front end rendering is handled by ReactJS and MaterialUI frameworks. Using these libraries made front end development more efficient and helped unifying styling throughout the application.
 
 ### React/Redux:
-We used React to build reusable components for MySpot, for instance ProfileCard, SongList, FollowTable, and Post components are rendered in multiple places across the application. We simulated the familiar multi-page HTML experience with dynamic routing/updating via React Router. Redux is used to persist user information to reduce database calls.
+We used React to build reusable components for MySpot, for instance ProfileCard, SongList, FollowTable, and Post components are rendered in multiple places across the application. We simulated the familiar multi-page HTML experience with dynamic routing/updating via React Router. Redux is used to persist user information to reduce database calls and improve user experience.
 
 ### MongoDB:
 We incorporated Mongoose for MongoDB validation and designed Schemas for User, Post, Settings, Comment, and Media. Our database holds a collection of users, and user objects hold references to the other aforementioned models. In accordance with best practices, we strived to minimize the size of our database by utilizing Spotify API calls and hosting images on an external website, and minimize database calls where possible.
@@ -50,7 +50,7 @@ MySpot used ExpressJS to create the backend API. We implemented a Model-View-Con
 MySpot is hosted on Heroku: https://myspotmusic.herokuapp.com/! We utilized a monorepo and had pull request/code review protocols to aid in a smooth development process.
 
 ## Above and Beyond Functionality:
-MySpot goes above and beyond the basic requirements by extensively incorporating the Spotify API into our core app functionality. We implemented the ability to … with Spotify. Need help with some extra stuff here.
+MySpot goes above and beyond the basic requirements by extensively incorporating the Spotify API into our core app functionality. We implemented the ability to view Spotify user's media such as playlists, albums, favourites. Additionally, we used the Spotify api to add, edit, and remove Spotify media throughout MySpot. We also unified the user's Spotify id as our own MySpot user id to make transitioning between calls to the Spotify API and calls to our own API efficient while keeping the data we fetch and update from both consistent througout our application. Further, we indirectly utilized Spotify's suggestion algorithm by incorporating Discover Weekly into our Tinderify feature by being able to swipe through and add songs from your friends' Discovery Weekly playlists. Further, we took advantage of Spotify's suggestion/recommendation algorithms by incorporating Discover Weekly into our Tinderify feature by being able to swipe through and add songs from your friends' Discovery Weekly playlists.
 
 ## Next Steps:
 Our future goals include implementing the ability for users to repost and share posts, incorporating a peer to peer chat feature, and implementing a notification system to further build on the social media aspect of MySpot. Additionally, we strive to implement an “Explore Page” where recent and popular posts from users you may not follow are presented so MySpotters can continue to expand their social network. Additionally, we would like to improve app security by forcing the client to authenticate API calls to our database.
