@@ -6,12 +6,13 @@ import { BrowserRouter as Router } from "react-router-dom";
 import Sidebar from "./components/Sidebar";
 import Appbar from "./components/Appbar";
 import Login from "./components/Login";
+import ScrollToTop from "./components/ScrollToTop";
+import { registerSpotifyApi } from "./app/actions/spotifyApiActions";
 import {
-  registerSpotifyApi,
+  setCurrentUser,
   submitSpotifyApiUserMe,
-} from "./app/actions/spotifyApiActions";
-import { setCurrentUser } from "./app/actions/userActions";
-import { fetchUserSettings } from "./app/actions/settingsActions";
+} from "./app/actions/userActions";
+import { setPlayListIDs } from "./app/actions/playlistActions";
 
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import "./App.css";
@@ -31,7 +32,6 @@ const lightTheme = createMuiTheme({
     },
   },
   overrides: {
-    // Style sheet name ⚛️
     MuiToggleButton: {
       root: {
         "&$selected": {
@@ -65,7 +65,6 @@ const darkTheme = createMuiTheme({
     },
   },
   overrides: {
-    // Style sheet name ⚛️
     MuiToggleButton: {
       root: {
         "&$selected": {
@@ -82,7 +81,6 @@ const darkTheme = createMuiTheme({
       head: {
         color: "#03DAC6",
         fontSize: "medium",
-        // fontWeight: "bold",
       },
     },
   },
@@ -95,33 +93,27 @@ class App extends React.Component {
     if (params.access_token) {
       spotifyWebApi.setAccessToken(params.access_token);
       let userObject = {};
-      // Pass refresh token as well for further use if a new access token is needed
       this.props.registerSpotifyApi(params);
-      spotifyWebApi
-        .getMe()
-        .then((response) => {
-          Object.assign(userObject, response);
-          return spotifyWebApi.getMyTopTracks();
-        })
-        .then((topTracksResponse) => {
-          if (topTracksResponse) {
-            userObject.topTracks = topTracksResponse.items.slice(
-              0,
-              Math.min(topTracksResponse.items.length, 3)
-            );
-          }
-          return spotifyWebApi.getMyRecentlyPlayedTracks();
-        })
-        .then((recentTracksResponse) => {
-          if (recentTracksResponse) {
-            userObject.recentTracks = recentTracksResponse.items.slice(
-              0,
-              Math.min(recentTracksResponse.items.length, 3)
-            );
-          }
-          this.props.submitSpotifyApiUserMe(userObject);
-          this.props.setCurrentUser(userObject.id, userObject.display_name);
-        });
+      Promise.all([
+        spotifyWebApi.getMe(),
+        spotifyWebApi.getMyTopTracks(),
+        spotifyWebApi.getMyRecentlyPlayedTracks(),
+      ]).then((values) => {
+        const spotifyMe = values[0];
+        const topTracks = values[1];
+        const recentTracks = values[2];
+        Object.assign(userObject, spotifyMe);
+        userObject.topTracks = topTracks.items.slice(
+          0,
+          Math.min(topTracks.items.length, 3)
+        );
+        userObject.recentTracks = recentTracks.items.slice(
+          0,
+          Math.min(recentTracks.items.length, 3)
+        );
+        this.props.submitSpotifyApiUserMe(userObject);
+        this.props.setPlayListIDs(spotifyMe.id, params.access_token);
+      });
     }
   }
 
@@ -146,6 +138,7 @@ class App extends React.Component {
         <ThemeProvider theme={this.selectTheme()}>
           <Router>
             <div className="App">
+              <ScrollToTop />
               <Appbar />
               <Sidebar />
             </div>
@@ -173,7 +166,8 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(registerSpotifyApi(spotifyApi)),
     submitSpotifyApiUserMe: (spotifyUserMe) =>
       dispatch(submitSpotifyApiUserMe(spotifyUserMe)),
-    fetchUserSettings: fetchUserSettings,
+    setPlayListIDs: (UserMeID, spotifyToken) =>
+      dispatch(setPlayListIDs(UserMeID, spotifyToken)),
   };
 };
 

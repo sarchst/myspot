@@ -1,20 +1,34 @@
 import React from "react";
 import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 import Spotify from "spotify-web-api-js";
-import FollowTable from "../FollowTable";
-
 import MaterialTable from "material-table";
-import { Paper, Tab, Tabs } from "@material-ui/core";
+
+import FollowTable from "../follow/FollowTable";
+
+import { Button, Paper, Snackbar, Tab, Tabs } from "@material-ui/core";
+import MuiAlert from "@material-ui/lab/Alert";
+import LibraryAddIcon from "@material-ui/icons/LibraryAdd";
 import { withStyles } from "@material-ui/core/styles";
+
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
 const styles = (theme) => ({
   root: {
     flexGrow: 1,
     padding: 10,
     borderRadius: 16,
-    // margin: 5,
     marginTop: theme.spacing(2),
     marginBottom: theme.spacing(2),
+  },
+  link: {
+    color: theme.palette.secondary.main,
+    textDecoration: "none",
+    "&:hover": {
+      textDecoration: "underline",
+    },
   },
 });
 
@@ -28,35 +42,116 @@ class ProfileTable extends React.Component {
       playlists: [],
       followers: [],
       following: [],
+      successSnackOpen: false,
+      errorSnackOpen: false,
+      containsSnackOpen: false,
     };
     spotifyWebApi.setAccessToken(this.props.spotifyApi.accessToken);
   }
 
-  componentDidMount = () => {
-    spotifyWebApi
-      .getUserPlaylists(this.props.user.id)
-      .then((result) => {
-        const playlists = this.transformPlaylistData(result);
-        this.setState({
-          playlists: playlists,
-        });
-      })
-      .catch((err) => {
-        console.log("Error getting top tracks: ", err);
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    if (
+      this.isTabIndexUpdatedToZero(prevState) &&
+      (!this.state.playlists.length || this.isSelectedUserUpdated(prevProps))
+    ) {
+      this.fetchSpotifyPlaylists();
+    }
+    if (this.isSelectedUserUpdated(prevProps)) {
+      this.setState({
+        tabIndex: false,
+        playlists: [],
       });
+    }
+  }
+
+  isTabIndexUpdatedToZero = (prevState) =>
+    this.state.tabIndex === 0 && this.state.tabIndex !== prevState.tabIndex;
+
+  isSelectedUserUpdated = (prevProps) =>
+    !(
+      prevProps.selectedUser &&
+      this.props.selectedUser &&
+      prevProps.selectedUser._id === this.props.selectedUser._id
+    );
+
+  transformPlaylistData = async (data) => {
+    return Promise.all(
+      data.map(async (pl) => {
+        const playlist = await spotifyWebApi.getPlaylist(pl.id);
+        const playlistObj = {
+          title: pl.name,
+          playlistArt: pl.images.length
+            ? pl.images[0].url
+            : "https://res.cloudinary.com/dafyfaoby/image/upload/v1595367319/mcbvhgkwezvngrxg3uac.jpg",
+          owner: pl.owner.display_name,
+          numTracks: pl.tracks.total,
+          playlistID: pl.id,
+          playlistDescription: pl.description,
+          numFollowers: playlist.followers.total,
+        };
+        return playlistObj;
+      })
+    ).catch((err) => {
+      console.error("error getting selected user's playlists: ", err);
+    });
   };
 
-  transformPlaylistData = (data) => {
-    const playlists = data.items.map((pl) => {
-      const playlist = {
-        title: pl.name,
-        playlistArt: pl.images[0].url,
-        owner: pl.owner.display_name,
-        numTracks: pl.tracks.total,
-      };
-      return playlist;
+  fetchSpotifyPlaylists = async () => {
+    let allPlaylists = [];
+    let offset = 0;
+    let playlists = await spotifyWebApi.getUserPlaylists(
+      this.props.selectedUser._id,
+      {
+        limit: 50,
+        offset: offset,
+      }
+    );
+    while (playlists.items.length !== 0) {
+      allPlaylists.push(...playlists.items);
+      offset += 50;
+      playlists = await spotifyWebApi.getUserPlaylists(
+        this.props.selectedUser._id,
+        {
+          limit: 50,
+          offset: offset,
+        }
+      );
+    }
+    this.transformPlaylistData(allPlaylists).then((playlists) => {
+      this.setState({
+        playlists: playlists,
+      });
     });
-    return playlists;
+  };
+
+  addPlaylistToLibrary = (id) => {
+    spotifyWebApi
+      .areFollowingPlaylist([id], [this.props.user.id])
+      .then((res) => {
+        if (res[0]) {
+          return false;
+        } else {
+          return spotifyWebApi.followPlaylist(id);
+        }
+      })
+      .then((res) => {
+        if (res === "") {
+          this.setState({
+            successSnackOpen: true,
+          });
+          this.updateTable();
+        } else {
+          this.setState({
+            containsSnackOpen: true,
+          });
+        }
+      })
+      .catch((err) => {
+        this.setState({
+          errorSnackOpen: true,
+        });
+        console.error("error adding playlist to library: ", err);
+      });
   };
 
   handleChange = (event, index) => {
@@ -65,6 +160,18 @@ class ProfileTable extends React.Component {
     } else {
       this.setState({ tabIndex: index });
     }
+  };
+
+  handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    this.setState({
+      successSnackOpen: false,
+      containsSnackOpen: false,
+      errorSnackOpen: false,
+    });
   };
 
   getPanel = (index) => {
@@ -82,19 +189,68 @@ class ProfileTable extends React.Component {
               title: "Playlist",
               field: "playlistArt",
               render: (rowData) => (
-                <img
-                  src={rowData.playlistArt}
-                  alt={"Playlist Art"}
-                  style={{ width: 40, height: 40, borderRadius: 16 }}
-                />
+                <Link
+                  to={{
+                    pathname: `/${this.props.selectedUser._id}/playlists/${rowData.playlistID}`,
+                    state: {
+                      playlistName: rowData.title,
+                      playlistDescription: rowData.playlistDescription,
+                    },
+                  }}
+                >
+                  <img
+                    src={rowData.playlistArt}
+                    alt={"Playlist Art"}
+                    style={{ width: 40, height: 40, borderRadius: 16 }}
+                  />
+                </Link>
               ),
               headerStyle: { width: "50px" },
               cellStyle: { width: "50px" },
               width: null,
             },
-            { title: "", field: "title" },
+            {
+              title: "",
+              field: "title",
+              render: (rowData) => (
+                <Link
+                  to={{
+                    pathname: `/${this.props.selectedUser._id}/playlists/${rowData.playlistID}`,
+                    state: {
+                      playlistName: rowData.title,
+                      playlistDescription: rowData.playlistDescription,
+                    },
+                  }}
+                  className={this.props.classes.link}
+                >
+                  {rowData.title}
+                </Link>
+              ),
+            },
             { title: "# of Tracks", field: "numTracks" },
+            { title: "# of Followers", field: "numFollowers" },
             { title: "Owner", field: "owner" },
+            {
+              title: "",
+              field: "playlistID",
+              render: (rowData) =>
+                this.props.user.id === this.props.selectedUser._id ||
+                rowData.title === "MySpot" ||
+                rowData.title === "MySpot-Tinderify" ||
+                rowData.title === "Discover Weekly" ? null : (
+                  <Button
+                    variant="outlined"
+                    color="secondary"
+                    size="small"
+                    endIcon={<LibraryAddIcon />}
+                    onClick={() =>
+                      this.addPlaylistToLibrary(rowData.playlistID)
+                    }
+                  >
+                    Add Playlist
+                  </Button>
+                ),
+            },
           ]}
           data={this.state.playlists}
           options={{
@@ -103,7 +259,7 @@ class ProfileTable extends React.Component {
             paging: false,
             toolbar: false,
             sorting: false,
-            // headerStyle: { color: "#03DAC6" },
+            draggable: false,
           }}
         />
       );
@@ -112,36 +268,76 @@ class ProfileTable extends React.Component {
         <FollowTable
           key={this.state.tabIndex}
           type={this.state.tabIndex === 1 ? "followers" : "following"}
+          profileTableCallback={() => this.setTabIndex(false)}
+          inProfileTable={true}
         />
       );
     }
+  };
+
+  setTabIndex = (index) => {
+    this.setState({ tabIndex: index });
+  };
+
+  updateTable = () => {
+    this.fetchSpotifyPlaylists();
   };
 
   render() {
     const { classes } = this.props;
 
     return (
-      <Paper className={classes.root}>
-        {/* <TabContext value={this.state.tabIndex}> */}
-        <Tabs
-          value={this.state.tabIndex}
-          onChange={this.handleChange}
-          indicatorColor="primary"
-          textColor="primary"
-          centered
+      <div>
+        <Paper className={classes.root}>
+          {/* <TabContext value={this.state.tabIndex}> */}
+          <Tabs
+            value={this.state.tabIndex}
+            onChange={this.handleChange}
+            indicatorColor="primary"
+            textColor="primary"
+            centered
+          >
+            <Tab label="Playlists" />
+            <Tab label="Followers" />
+            <Tab label="Following" />
+          </Tabs>
+          {this.getPanel(this.state.tabIndex)}
+        </Paper>
+        <Snackbar
+          open={this.state.successSnackOpen}
+          autoHideDuration={6000}
+          onClose={() => this.handleClose()}
         >
-          <Tab label="Playlists" />
-          <Tab label="Followers" />
-          <Tab label="Following" />
-        </Tabs>
-        {this.getPanel(this.state.tabIndex)}
-      </Paper>
+          <Alert onClose={() => this.handleClose()} severity="success">
+            Playlist was added to your library.
+          </Alert>
+        </Snackbar>
+        <Snackbar
+          open={this.state.containsSnackOpen}
+          autoHideDuration={6000}
+          onClose={() => this.handleClose()}
+        >
+          <Alert onClose={() => this.handleClose()} severity="info">
+            This Playlist is already in your library.
+          </Alert>
+        </Snackbar>
+        <Snackbar
+          open={this.state.errorSnackOpen}
+          autoHideDuration={6000}
+          onClose={() => this.handleClose()}
+        >
+          <Alert onClose={() => this.handleClose()} severity="error">
+            Error adding selected Playlist.
+          </Alert>
+        </Snackbar>
+      </div>
     );
   }
 }
 
 const mapStateToProps = (state) => ({
   spotifyApi: state.spotifyApi,
+  selectedUser: state.selectedUser,
   user: state.user,
 });
 

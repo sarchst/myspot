@@ -1,4 +1,5 @@
 import axios from "axios";
+
 export const UPDATE_SETTINGS_SUCCESS = "UPDATE_SETTINGS_SUCCESS";
 export const UPDATE_SETTINGS_ERROR = "UPDATE_SETTINGS_ERROR";
 export const UPDATE_SETTINGS_STARTED = "UPDATE_SETTINGS_STARTED";
@@ -42,12 +43,10 @@ export const fetchUserSettings = (id) => {
         dispatch(fetchUserSettingsSuccess(res.data.settings));
       })
       .catch((err) => {
-        console.log("fetch user settings err: " + err);
-        throw err;
+        console.error(err);
       });
   };
 };
-
 
 export const updateSettings = (settings, id) => {
   return (dispatch) => {

@@ -1,32 +1,23 @@
 import React from "react";
-import Card from "@material-ui/core/Card";
-import CardActions from "@material-ui/core/CardActions";
-import CardContent from "@material-ui/core/CardContent";
-import CardMedia from "@material-ui/core/CardMedia";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import Grid from "@material-ui/core/Grid";
-import Typography from "@material-ui/core/Typography";
-import { withStyles } from "@material-ui/core/styles";
-import Container from "@material-ui/core/Container";
-// import Link from "@material-ui/core/Link";
+import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import Spotify from "spotify-web-api-js";
 
-const spotifyWebApi = new Spotify();
+import {
+  Card,
+  CardActions,
+  CardContent,
+  CardMedia,
+  Container,
+  CssBaseline,
+  Grid,
+  Typography,
+} from "@material-ui/core";
+import { withStyles } from "@material-ui/core/styles";
 
-// will probs use this later but with probs be it's own seperate component!
-// function Copyright() {
-//   return (
-//     <Typography variant="body2" color="textSecondary" align="center">
-//       {"Copyright © "}
-//       <Link color="inherit" href="https://material-ui.com/">
-//         MySpot
-//       </Link>{" "}
-//       {new Date().getFullYear()}
-//       {"."}
-//     </Typography>
-//   );
-// }
+import Button from "@material-ui/core/Button";
+
+const spotifyWebApi = new Spotify();
 
 const styles = (theme) => ({
   icon: {
@@ -59,8 +50,6 @@ const styles = (theme) => ({
   },
 });
 
-// todo: (Sarchen) reuse Playlist component
-
 class Albums extends React.Component {
   constructor(props) {
     super(props);
@@ -71,21 +60,37 @@ class Albums extends React.Component {
   }
 
   componentDidMount() {
-    spotifyWebApi.getMySavedAlbums().then(
-      (data) => {
-        console.log("User albums", data);
+    this.getAllAlbums()
+      .then((allAlbums) => {
         this.setState({
-          usersAlbums: data.items,
+          usersAlbums: allAlbums,
         });
-      },
-      function (err) {
+      })
+      .catch((err) => {
         console.error(err);
-      }
-    );
+      });
   }
 
+  getAllAlbums = async () => {
+    let allAlbums = [];
+    let offset = 0;
+    let albums = await spotifyWebApi.getMySavedAlbums({
+      limit: 50,
+      offset: offset,
+    });
+    while (albums.items.length !== 0) {
+      allAlbums.push(...albums.items);
+      offset += 50;
+      albums = await spotifyWebApi.getMySavedAlbums({
+        limit: 50,
+        offset: offset,
+      });
+    }
+    return allAlbums;
+  };
+
   render() {
-    const { classes } = this.props;
+    const { classes, selectedUser } = this.props;
     return (
       <React.Fragment>
         <CssBaseline />
@@ -102,49 +107,48 @@ class Albums extends React.Component {
               >
                 Albums
               </Typography>
-              {/* <Typography
-                variant="h5"
-                align="center"
-                color="textSecondary"
-                paragraph
-              >
-                Something short and leading about the collection below—its
-                contents, the creator, etc. Make it short and sweet, but not too
-                short so folks don&apos;t simply skip over it entirely.
-              </Typography> */}
             </Container>
           </div>
           <Container className={classes.cardGrid} maxWidth="md">
             {/* End hero unit */}
             <Grid container spacing={4}>
-              {this.state.usersAlbums.map((playlist, index) => (
+              {this.state.usersAlbums.map((album, index) => (
                 <Grid item key={index} xs={12} sm={6} md={4}>
                   <Card className={classes.card}>
                     <CardMedia
                       className={classes.cardMedia}
-                      image={playlist.album.images[0].url}
+                      image={album.album.images[0].url}
                       title="Image title"
                     />
                     <CardContent className={classes.cardContent}>
                       <Typography gutterBottom variant="h5" component="h2">
-                        {playlist.album.name}
+                        {album.album.name}
                       </Typography>
-                      <Typography>{playlist.album.artists[0].name}</Typography>
+                      <Typography>{album.album.artists[0].name}</Typography>
                     </CardContent>
-                    <CardActions>
-                      {/* todo: (Sarchen) setup link to songlist for album*/}
-                      {/* <Link
-                        to={
-                          "/" +
-                          user.username +
-                          "/playlists/" +
-                          playlist.album.id
-                        }
-                      > */}
-                      {/* <Button size="small" color="primary">
-                        View Songs
-                      </Button> */}
-                      {/* </Link> */}
+                    <CardActions className={classes.cardActions}>
+                      <Link
+                        style={{ textDecoration: "none" }}
+                        to={{
+                          pathname: `/${selectedUser._id}/albums/${album.album.id}`,
+                          state: {
+                            collectionName: album.album.name,
+                            collectionDescription: album.album.description,
+                          },
+                        }}
+                      >
+                        <Button size="small" color="secondary">
+                          View Songs
+                        </Button>
+                      </Link>
+                      <Button
+                        size="small"
+                        color="secondary"
+                        href={album.album.external_urls.spotify}
+                        target="_blank"
+                      >
+                        View on Spotify
+                      </Button>
                     </CardActions>
                   </Card>
                 </Grid>
@@ -160,7 +164,7 @@ class Albums extends React.Component {
 const mapStateToProps = (state) => {
   return {
     spotifyApi: state.spotifyApi,
-    user: state.user,
+    selectedUser: state.selectedUser,
   };
 };
 

@@ -1,20 +1,24 @@
 import React from "react";
 import { connect } from "react-redux";
 import { DropzoneDialogBase } from "material-ui-dropzone";
-import Button from "@material-ui/core/Button";
+
 import {
   saveAndUpdateProfilePic,
   fetchProfilePic,
 } from "../app/actions/imageUploadActions";
 
-import { makeStyles } from "@material-ui/core/styles";
-import Card from "@material-ui/core/Card";
-import CardActions from "@material-ui/core/CardActions";
-import CardContent from "@material-ui/core/CardContent";
-import CardMedia from "@material-ui/core/CardMedia";
-import Typography from "@material-ui/core/Typography";
-import Snackbar from "@material-ui/core/Snackbar";
+import {
+  Avatar,
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  Snackbar,
+  Typography,
+} from "@material-ui/core";
 import MuiAlert from "@material-ui/lab/Alert";
+import { makeStyles } from "@material-ui/core/styles";
+
 require("dotenv").config();
 
 const useStyles = makeStyles({
@@ -36,13 +40,11 @@ const ImageUpload = ({ saveAndUpdateProfilePic, user, fetchProfilePic }) => {
   const [snackOpen, setSnackOpen] = React.useState(false);
   const [fileObjects, setFileObjects] = React.useState([]);
 
-
   const handleSnackClose = () => setSnackOpen(false);
 
   const getProfilePic = () => {
-    if (user.profilePic === "") {
-      // can set default pic link here
-      return "https://res.cloudinary.com/dafyfaoby/image/upload/v1595033507/samples/sheep.jpg";
+    if (!user.profilePic) {
+      return "";
     } else {
       return user.profilePic;
     }
@@ -51,18 +53,16 @@ const ImageUpload = ({ saveAndUpdateProfilePic, user, fetchProfilePic }) => {
   return (
     <div>
       <Card className={classes.root}>
-        <CardMedia
+        <Avatar
           className={classes.media}
-          image={getProfilePic()}
-          title="User's profile pic"
+          src={getProfilePic()}
+          style={{ width: "100%", height: "100%", borderRadius: 0 }}
+          alt="profile-pic"
         />
         <CardContent>
           <Typography gutterBottom variant="h5" component="h2">
-            {user.id}
+            {user.username}
           </Typography>
-          {/* <Typography variant="body2" color="textSecondary" component="p">
-              Cool description of me
-            </Typography> */}
         </CardContent>
         <CardActions>
           <Button
@@ -72,12 +72,6 @@ const ImageUpload = ({ saveAndUpdateProfilePic, user, fetchProfilePic }) => {
           >
             Edit Profile Picture
           </Button>
-          {/* <Button size="small" color="primary">
-            Share
-          </Button>
-          <Button size="small" color="primary">
-            Learn More
-          </Button> */}
         </CardActions>
       </Card>
 
@@ -89,20 +83,16 @@ const ImageUpload = ({ saveAndUpdateProfilePic, user, fetchProfilePic }) => {
         maxFileSize={5000000}
         open={open}
         onAdd={(newFileObjs) => {
-          console.log("onAdd", newFileObjs);
           setFileObjects([].concat(fileObjects, newFileObjs));
         }}
         onDelete={(deleteFileObj) => {
-          console.log("onDelete", deleteFileObj);
           setFileObjects(fileObjects.filter((x) => x !== deleteFileObj));
         }}
         onClose={() => setOpen(false)}
         onSave={() => {
           if (fileObjects.length > 1) {
-            console.log("only 1 pic allowed");
             setSnackOpen(true);
           } else {
-            console.log("onSave", fileObjects);
             saveAndUpdateProfilePic(fileObjects, user.id);
             setOpen(false);
           }

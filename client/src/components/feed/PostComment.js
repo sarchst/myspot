@@ -1,12 +1,15 @@
 import React from "react";
-import { Typography } from "@material-ui/core";
-import { withStyles } from "@material-ui/core/styles";
-import { Grid, IconButton } from "@material-ui/core";
-// import FavoriteOutlinedIcon from "@material-ui/icons/FavoriteOutlined";
 import { connect } from "react-redux";
 import { compose } from "redux";
+import { Link as RouterLink } from "react-router-dom";
+
 import { deleteComment } from "../../app/actions/postActions";
+import { fetchSelectedUser } from "../../app/actions/selectedUserActions";
+
+import { Grid, IconButton, Typography } from "@material-ui/core";
+import { withStyles } from "@material-ui/core/styles";
 import HighlightOffOutlinedIcon from "@material-ui/icons/HighlightOffOutlined";
+
 const styles = (theme) => ({
   root: {
     flexGrow: 1,
@@ -20,24 +23,31 @@ const styles = (theme) => ({
       backgroundColor: "transparent",
     },
   },
+  routerLink: {
+    textDecoration: "none",
+    color: theme.palette.secondary.main,
+    "&:hover": {
+      textDecoration: "underline",
+    },
+  },
 });
 
 class PostComment extends React.Component {
-  like = () => {
-    // TODO connect # likes to db
-    console.log("Liked!");
-  };
-
   handleDeleteComment = (commentdata) => {
     let postOwnerId = commentdata.postOwnerId;
-    let authorId = commentdata.authorId;
-
-    let commentInfo = {
-      postId: commentdata.postId,
-      commentId: commentdata._id,
+    let body = {
+      authorId: commentdata.authorId,
+      commentInfo: {
+        postId: commentdata.postId,
+        commentId: commentdata._id,
+      },
     };
-    this.props.deleteComment(postOwnerId, authorId, commentInfo);
-    console.log("Delete comment!");
+    this.props.deleteComment(
+      postOwnerId,
+      body,
+      this.props.profileFeedFilter,
+      this.props.feedFilter
+    );
   };
 
   render() {
@@ -49,6 +59,7 @@ class PostComment extends React.Component {
         <IconButton
           className={classes.button}
           onClick={() => this.handleDeleteComment(commentdata)}
+          color="secondary"
         >
           <HighlightOffOutlinedIcon fontSize="small" />
         </IconButton>
@@ -56,66 +67,33 @@ class PostComment extends React.Component {
     }
 
     return (
-      // <Grid container direction="row" justify="space-between">
-      <Grid
-        item
-        container
-        direction="row"
-        spacing={1}
-        alignItems="center"
-        // className="commentContainer"
-      >
-        <Grid item>
-          <Typography
-            color="primary"
-            // className="commentItem"
+      <Grid container direction="row" justify="center" alignItems="center">
+        <Grid item xs={9}>
+          <RouterLink
+            className={classes.routerLink}
+            to={`/${commentdata.authorId}`}
+            onClick={() => {
+              this.props.fetchSelectedUser(commentdata.authorId);
+            }}
           >
-            {commentdata.time}
-          </Typography>
-        </Grid>
-        <Grid item>
+            <Typography color="secondary" variant="caption">
+              {commentdata.authorUsername}:
+            </Typography>
+          </RouterLink>
           <Typography
-            color="secondary"
-            // fontWeight="bold"
-            // className="commentItem"
-          >
-            {commentdata.authorUsername}:
-          </Typography>
-        </Grid>
-        <Grid item>
-          <Typography
-            // className="commentItem"
             fontFamily="Monospace"
+            variant="subtitle2"
+            style={{ fontWeight: "italic" }}
           >
             {commentdata.content}
           </Typography>
         </Grid>
-
-        {/* TODO: reinstate comment likes if we have time */}
-        {/* <Grid item>
-          <IconButton
-            className={classes.button}
-            size="small"
-            aria-label="like"
-            aria-controls="like-post"
-            onClick={() => this.like()}
-            color={
-              commentdata.usersLiked.includes(this.props.user.id)
-                ? "red"
-                : "default"
-            }
-          >
-            {commentdata.usersLiked.length}
-            <FavoriteOutlinedIcon />
-          </IconButton>
-        </Grid> */}
-        <Grid>
-          {/* <IconButton
-                className={classes.button}
-                onClick={() => this.handleDeleteComment(commentdata)}
-              >
-                <HighlightOffOutlinedIcon fontSize="small" />
-              </IconButton> */}
+        <Grid item xs={2}>
+          <Typography color="primary" variant="caption">
+            {commentdata.time}
+          </Typography>
+        </Grid>
+        <Grid item xs={1}>
           {commentDeleteButton}
         </Grid>
       </Grid>
@@ -125,8 +103,11 @@ class PostComment extends React.Component {
 
 const mapStateToProps = (state) => ({
   user: state.user,
+  feedFilter: state.feed.filter,
+  profileFeedFilter: state.profileFeed.filter,
 });
+
 export default compose(
   withStyles(styles),
-  connect(mapStateToProps, { deleteComment })
+  connect(mapStateToProps, { deleteComment, fetchSelectedUser })
 )(PostComment);

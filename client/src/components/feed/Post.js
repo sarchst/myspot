@@ -1,8 +1,20 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
+import Spotify from "spotify-web-api-js";
 import { compose } from "redux";
 import { connect } from "react-redux";
-import { withStyles } from "@material-ui/core/styles";
+import { Link as RouterLink } from "react-router-dom";
+
+import PostComment from "./PostComment";
+import EditPostDialog from "./EditPostDialog";
+import DeletePostDialog from "./DeletePostDialog";
+import { addComment } from "../../app/actions/postActions";
+import { fetchSelectedUser } from "../../app/actions/selectedUserActions";
+import {
+  submitDeletePostDialog,
+  submitEditPostDialog,
+} from "../../app/actions";
+
 import {
   Accordion,
   AccordionActions,
@@ -15,33 +27,30 @@ import {
   IconButton,
   FormControl,
   Input,
+  InputLabel,
   Link,
   Menu,
   MenuItem,
   Paper,
-  InputLabel,
+  Snackbar,
+  Tooltip,
   Typography,
+  Container,
 } from "@material-ui/core";
+import MuiAlert from "@material-ui/lab/Alert";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import EmojiEmotionsIcon from "@material-ui/icons/EmojiEmotions";
 import LibraryAddIcon from "@material-ui/icons/LibraryAdd";
-import ReplyIcon from "@material-ui/icons/Reply";
-import ShareIcon from "@material-ui/icons/Share";
 import AlbumIcon from "@material-ui/icons/Album";
 import MusicNoteIcon from "@material-ui/icons/MusicNote";
 import PlaylistAddIcon from "@material-ui/icons/PlaylistAdd";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import { Link as RouterLink } from "react-router-dom";
-import { deletePost, addComment } from "../../app/actions/postActions";
-import DeletePostDialog from "./DeletePostDialog";
-import {
-  submitDeletePostDialog,
-  submitEditPostDialog,
-} from "../../app/actions";
-import PostComment from "./PostComment";
-// import EmojiEmotionsOutlinedIcon from "@material-ui/icons/EmojiEmotionsOutlined";
+import { withStyles } from "@material-ui/core/styles";
 import "emoji-mart/css/emoji-mart.css";
-import EditPostDialog from "./EditPostDialog";
+
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
 const styles = (theme) => ({
   root: {
@@ -87,9 +96,6 @@ const styles = (theme) => ({
   moreGid: {
     maxWidth: 50,
   },
-  media: {
-    // media style
-  },
   routerLink: {
     textDecoration: "none",
     color: "inherit",
@@ -117,7 +123,7 @@ const styles = (theme) => ({
     padding: theme.spacing(2),
   },
   column: {
-    flexBasis: "33.33%",
+    flexBasis: "100%",
   },
   helper: {
     borderLeft: `2px solid ${theme.palette.divider}`,
@@ -132,17 +138,24 @@ const styles = (theme) => ({
   },
 });
 
+const spotifyWebApi = new Spotify();
 
 class Post extends Component {
-  state = {
-    moreOptions: false,
-    anchorEl: null,
-    emojiPickerOpen: false,
-    commentContent: "",
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      moreOptions: false,
+      anchorEl: null,
+      commentContent: "",
+      successSnackOpen: false,
+      errorSnackOpen: false,
+      containsSnackOpen: false,
+    };
+    spotifyWebApi.setAccessToken(this.props.spotifyApi.accessToken);
+  }
 
-  chooseIcon = (media) => {
-    switch (media) {
+  chooseIcon = (type) => {
+    switch (type) {
       case "playlist":
         return <PlaylistAddIcon color={"primary"} />;
       case "album":
@@ -152,36 +165,101 @@ class Post extends Component {
     }
   };
 
-  goToMedia = () => {
-    // TODO GOTO media
+  goToMedia = (url) => {
+    window.open(url);
   };
 
   like = () => {
     this.props.toggleLike();
   };
 
-  repost = (post) => {
-    // create new post
-    console.log(post);
-  };
-
-  share = (type) => {
-    // TODO share spotify media
-    console.log(type);
-  };
   handleDelete = (postId) => {
     const payload = {
       open: this.props.delPostDialog.open,
       postId: postId,
     };
-    console.log(payload);
     this.props.submitDeletePostDialog(payload);
     this.closeOptions();
   };
 
-  addPostMedia = (type) => {
-    // TODO: add song, album, or playlist
-    console.log(type);
+  addPostMedia = (type, media) => {
+    if (type === "playlist") {
+      spotifyWebApi
+        .areFollowingPlaylist([media._id], [this.props.user.id])
+        .then((res) => {
+          if (res[0]) {
+            return false;
+          } else {
+            return spotifyWebApi.followPlaylist(media._id);
+          }
+        })
+        .then((res) => {
+          if (res === "") {
+            this.setState({
+              successSnackOpen: true,
+            });
+          } else {
+            this.setState({
+              containsSnackOpen: true,
+            });
+          }
+        })
+        .catch((err) => {
+          this.setState({
+            errorSnackOpen: true,
+          });
+          console.error("error adding playlist to library: ", err);
+        });
+    } else if (type === "album") {
+      spotifyWebApi
+        .containsMySavedAlbums([media._id])
+        .then((res) => {
+          if (res[0]) {
+            return false;
+          } else {
+            return spotifyWebApi.addToMySavedAlbums([media._id]);
+          }
+        })
+        .then((res) => {
+          if (res === "") {
+            this.setState({
+              successSnackOpen: true,
+            });
+          } else {
+            this.setState({
+              containsSnackOpen: true,
+            });
+          }
+        })
+        .catch((err) => {
+          this.setState({
+            errorSnackOpen: true,
+          });
+          console.error("error adding album to library: ", err);
+        });
+    } else {
+      spotifyWebApi
+        .removeTracksFromPlaylist(this.props.mySpotPlaylists.MySpotPlaylistID, [
+          "spotify:track:" + media._id,
+        ])
+        .then(() => {
+          return spotifyWebApi.addTracksToPlaylist(
+            this.props.mySpotPlaylists.MySpotPlaylistID,
+            ["spotify:track:" + media._id]
+          );
+        })
+        .then((res) => {
+          this.setState({
+            successSnackOpen: true,
+          });
+        })
+        .catch((err) => {
+          this.setState({
+            errorSnackOpen: true,
+          });
+          console.error("error adding song to MySpot playlist: ", err);
+        });
+    }
   };
 
   openMoreOptions = (e) => {
@@ -212,7 +290,11 @@ class Post extends Component {
       postId: postId,
       time: new Date().toLocaleString("en-US"),
     };
-    this.props.addComment(comment);
+    this.props.addComment(
+      comment,
+      this.props.profileFeedFilter,
+      this.props.feedFilter
+    );
     this.setState({
       commentContent: "",
     });
@@ -228,28 +310,50 @@ class Post extends Component {
     this.closeOptions();
   };
 
+  handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    this.setState({
+      successSnackOpen: false,
+      containsSnackOpen: false,
+      errorSnackOpen: false,
+    });
+  };
+
+  getAlertMessage = (postdata, submessage) => {
+    if (postdata.type === "playlist") {
+      return (
+        postdata.media.ownerUsername +
+        "'s playlist " +
+        postdata.media.name +
+        " " +
+        submessage +
+        " your Spotify"
+      );
+    } else if (postdata.type === "track") {
+      return (
+        postdata.media.name +
+        " by " +
+        postdata.media.artist +
+        " your MySpot playlist!"
+      );
+    } else if (postdata.type === "album") {
+      return (
+        postdata.media.name +
+        " by " +
+        postdata.media.artist +
+        " " +
+        submessage +
+        " your Spotify"
+      );
+    }
+  };
+
   render() {
     const { classes, postdata, userId } = this.props;
     const date = new Date(postdata.createdAt).toLocaleString("en-US");
-    let deleteOption,
-      repostOption,
-      editOption = null;
-    if (this.props.user.id === postdata.authorId) {
-      deleteOption = (
-        <MenuItem onClick={() => this.handleDelete(postdata._id)}>
-          Delete
-        </MenuItem>
-      );
-      editOption = (
-        <MenuItem
-          onClick={() => this.handleEdit(postdata._id, postdata.content)}
-        >
-          Edit
-        </MenuItem>
-      );
-    } else {
-      repostOption = <MenuItem>Repost</MenuItem>;
-    }
 
     return (
       <div className={classes.postContainer}>
@@ -269,11 +373,9 @@ class Post extends Component {
             <Grid item>
               <RouterLink
                 className={classes.routerLink}
-                to={{
-                  pathname: `/myspotter/${postdata.authorId}`,
-                  state: {
-                    user_ID: postdata.authorId,
-                  },
+                to={`/${postdata.authorId}`}
+                onClick={() => {
+                  this.props.fetchSelectedUser(postdata.authorId);
                 }}
               >
                 <Avatar
@@ -286,11 +388,9 @@ class Post extends Component {
             <Grid item>
               <RouterLink
                 className={classes.link}
-                to={{
-                  pathname: `/myspotter/${postdata.authorId}`,
-                  state: {
-                    user_ID: postdata.authorId,
-                  },
+                to={`/${postdata.authorId}`}
+                onClick={() => {
+                  this.props.fetchSelectedUser(postdata.authorId);
                 }}
               >
                 <Typography className={classes.routerLink}>
@@ -299,6 +399,7 @@ class Post extends Component {
               </RouterLink>
             </Grid>
           </Grid>
+
           <Grid container spacing={1}>
             <Grid
               item
@@ -306,31 +407,45 @@ class Post extends Component {
               xs={9}
               spacing={2}
               direction="column"
-              justify="space-between"
+              justify="center"
               alignItems="flex-start"
             >
-              <Grid item>{this.chooseIcon(postdata.type)}</Grid>
+              <Grid item>
+                {postdata.repost ? (
+                  <Typography variant="button" color="secondary">
+                    Repost
+                  </Typography>
+                ) : null}
+              </Grid>
               <Grid item>
                 <Typography>{postdata.content}</Typography>
               </Grid>
-              <Grid item>
+              <Grid container item alignItems="center">
+                {this.chooseIcon(postdata.type)}
                 <Link
                   component="button"
                   variant="body2"
-                  onClick={() => this.goToMedia()}
+                  onClick={() => this.goToMedia(postdata.media.spotifyLink)}
                 >
-                  <Typography>{postdata.media}</Typography>
+                  <Typography>
+                    {postdata.media.artist
+                      ? postdata.media.name + " - " + postdata.media.artist
+                      : postdata.media.name +
+                        (postdata.media.ownerUsername
+                          ? " - " + postdata.media.ownerUsername
+                          : "")}
+                  </Typography>
                 </Link>
               </Grid>
-              {/* TODO add media art component? */}
             </Grid>
             <Grid
               item
               container
               xs
               className={classes.moreGrid}
-              justify="flex-end"
-              alignItems="flex-start"
+              justify="flex-start"
+              alignItems="flex-end"
+              direction="column"
             >
               <Grid item color="primary">
                 <Grid
@@ -340,47 +455,62 @@ class Post extends Component {
                   justify="flex-end"
                 >
                   <Typography color="primary">{date}</Typography>
-                  {postdata.createdAt !== postdata.updatedAt && (
-                    <Typography variant="caption">Edited</Typography>
-                  )}
                 </Grid>
               </Grid>
-              <Grid item>
-                <IconButton
-                  aria-label="more"
-                  aria-controls="long-menu"
-                  aria-haspopup="true"
-                  onClick={(e) => this.openMoreOptions(e)}
-                  className={classes.button}
-                >
-                  <MoreVertIcon />
-                </IconButton>
+              <Grid container item direction="row" justify="flex-end">
+                {postdata.createdAt !== postdata.updatedAt && (
+                  <Typography variant="caption">Edited</Typography>
+                )}
+                {this.props.user.id === postdata.authorId ? (
+                  <div>
+                    <Grid item>
+                      <IconButton
+                        aria-label="more"
+                        aria-controls="long-menu"
+                        aria-haspopup="true"
+                        onClick={(e) => this.openMoreOptions(e)}
+                        className={classes.button}
+                      >
+                        <MoreVertIcon />
+                      </IconButton>
+                    </Grid>
+                    <Menu
+                      id="options-menu"
+                      anchorEl={this.state.anchorEl}
+                      anchorOrigin={{
+                        vertical: "top",
+                        horizontal: "right",
+                      }}
+                      transformOrigin={{
+                        vertical: "top",
+                        horizontal: "right",
+                      }}
+                      keepMounted
+                      open={this.state.moreOptions}
+                      onClose={this.closeOptions}
+                      PaperProps={{
+                        style: {
+                          maxHeight: 300,
+                          width: "20ch",
+                        },
+                      }}
+                    >
+                      <MenuItem onClick={() => this.handleDelete(postdata._id)}>
+                        Delete
+                      </MenuItem>
+                      <MenuItem
+                        onClick={() =>
+                          this.handleEdit(postdata._id, postdata.content)
+                        }
+                      >
+                        Edit
+                      </MenuItem>
+                    </Menu>
+                  </div>
+                ) : (
+                  " "
+                )}
               </Grid>
-              <Menu
-                id="options-menu"
-                anchorEl={this.state.anchorEl}
-                anchorOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
-                transformOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
-                keepMounted
-                open={this.state.moreOptions}
-                onClose={this.closeOptions}
-                PaperProps={{
-                  style: {
-                    maxHeight: 300,
-                    width: "20ch",
-                  },
-                }}
-              >
-                {editOption}
-                {deleteOption}
-                {repostOption}
-              </Menu>
             </Grid>
             <Grid
               item
@@ -391,52 +521,44 @@ class Post extends Component {
               alignItems="flex-end"
             >
               <Grid item>
-                <IconButton
-                  className={classes.button}
-                  size="small"
-                  aria-label="like"
-                  aria-controls="like-post"
-                  onClick={() => this.like()}
-                  color={
-                    postdata.usersLiked.includes(userId) ? "primary" : "default"
+                <Tooltip title="Like Post">
+                  <IconButton
+                    className={classes.button}
+                    size="small"
+                    aria-label="like"
+                    aria-controls="like-post"
+                    onClick={() => this.like()}
+                    color={
+                      postdata.usersLiked.includes(userId)
+                        ? "primary"
+                        : "default"
+                    }
+                  >
+                    {postdata.usersLiked.length}
+                    <EmojiEmotionsIcon />
+                  </IconButton>
+                </Tooltip>
+              </Grid>
+              <Grid item>
+                <Tooltip
+                  title={
+                    postdata.type === "track"
+                      ? "Add " + postdata.type + " to your MySpot Playlist"
+                      : "Add " + postdata.type + " to your Spotify"
                   }
                 >
-                  {postdata.usersLiked.length}
-                  <EmojiEmotionsIcon />
-                </IconButton>
-              </Grid>
-              <Grid item>
-                <IconButton
-                  className={classes.button}
-                  size="small"
-                  aria-label="repost"
-                  aria-controls="repost-post"
-                  onClick={() => this.repost(postdata)}
-                >
-                  <ReplyIcon />
-                </IconButton>
-              </Grid>
-              <Grid item>
-                <IconButton
-                  className={classes.button}
-                  size="small"
-                  aria-label="share"
-                  aria-controls="share-post"
-                  onClick={() => this.share(postdata)}
-                >
-                  <ShareIcon />
-                </IconButton>
-              </Grid>
-              <Grid item>
-                <IconButton
-                  className={classes.button}
-                  size="small"
-                  aria-label="add"
-                  aria-controls="add-media"
-                  onClick={() => this.addPostMedia(postdata)}
-                >
-                  <LibraryAddIcon />
-                </IconButton>
+                  <IconButton
+                    className={classes.button}
+                    size="small"
+                    aria-label="add"
+                    aria-controls="add-media"
+                    onClick={() =>
+                      this.addPostMedia(postdata.type, postdata.media)
+                    }
+                  >
+                    <LibraryAddIcon />
+                  </IconButton>
+                </Tooltip>
               </Grid>
             </Grid>
           </Grid>
@@ -463,47 +585,62 @@ class Post extends Component {
                 </Typography>
               </div>
             </AccordionSummary>
-            <AccordionDetails className={classes.details}>
-              <ul className={classes.column}>
+            <Container maxWidth="xl">
+              <AccordionDetails className={classes.details}>
                 {postdata.comments && postdata.comments.length
                   ? postdata.comments.map((comment, index) => {
-                      return <PostComment key={index} commentdata={comment} />;
+                      return (
+                        <PostComment
+                          style={{ width: 200 }}
+                          key={index}
+                          commentdata={comment}
+                        />
+                      );
                     })
                   : null}
-              </ul>
-              <Grid item container direction="row" alignItems="center">
-                <Grid item xs={11}>
-                  <FormControl fullWidth>
-                    <InputLabel htmlFor="standard-basic" color={"secondary"}>
-                      Leave a comment below
-                    </InputLabel>
-                    <Input
-                      value={this.state.commentContent}
-                      onChange={this.handleChangeComment}
-                      color={"secondary"}
-                      onKeyPress={(e) => {
-                        if (e.key === "Enter") {
-                          this.handleSubmitComment(
-                            postdata._id,
-                            postdata.authorId
-                          );
-                        }
-                      }}
-                    />
-                  </FormControl>
+                <Grid
+                  item
+                  container
+                  direction="row"
+                  alignItems="center"
+                  spacing={2}
+                >
+                  <Grid item xs={11}>
+                    <FormControl fullWidth>
+                      <InputLabel htmlFor="standard-basic" color={"secondary"}>
+                        Leave a comment below
+                      </InputLabel>
+                      <Input
+                        value={this.state.commentContent}
+                        onChange={this.handleChangeComment}
+                        color={"secondary"}
+                        onKeyPress={(e) => {
+                          if (e.key === "Enter") {
+                            this.handleSubmitComment(
+                              postdata._id,
+                              postdata.authorId
+                            );
+                          }
+                        }}
+                      />
+                    </FormControl>
+                  </Grid>
                 </Grid>
-              </Grid>
-              <div className={classes.column} />
-            </AccordionDetails>
+                <div className={classes.column} />
+              </AccordionDetails>
+            </Container>
             <Divider />
             <AccordionActions>
-              <Button size="small">Cancel</Button>
               <Button
                 size="small"
                 color="secondary"
                 variant="contained"
                 onClick={() =>
-                  this.handleSubmitComment(postdata._id, postdata.authorId)
+                  this.handleSubmitComment(
+                    postdata._id,
+                    postdata.authorId,
+                    this.prop
+                  )
                 }
               >
                 Post
@@ -511,14 +648,49 @@ class Post extends Component {
             </AccordionActions>
           </Accordion>
         </Grid>
+        <div className={classes.root}>
+          <Snackbar
+            open={this.state.successSnackOpen}
+            autoHideDuration={6000}
+            onClose={() => this.handleClose()}
+          >
+            <Alert onClose={() => this.handleClose()} severity="success">
+              {this.getAlertMessage(postdata, " was added to")}
+            </Alert>
+          </Snackbar>
+          <Snackbar
+            open={this.state.containsSnackOpen}
+            autoHideDuration={6000}
+            onClose={() => this.handleClose()}
+          >
+            <Alert onClose={() => this.handleClose()} severity="info">
+              {/* This media is already in your library. */}
+              {this.getAlertMessage(postdata, "is already in")}
+            </Alert>
+          </Snackbar>
+          <Snackbar
+            open={this.state.errorSnackOpen}
+            autoHideDuration={6000}
+            onClose={() => this.handleClose()}
+          >
+            <Alert onClose={() => this.handleClose()} severity="error">
+              {/* Error adding selected Media. */}
+              {this.getAlertMessage(postdata, " was not added to")}
+            </Alert>
+          </Snackbar>
+        </div>
       </div>
     );
   }
 }
 const mapStateToProps = (state) => ({
   user: state.user,
+  mySpotPlaylists: state.mySpotPlaylists,
+  spotifyApi: state.spotifyApi,
   delPostDialog: state.delPostDialog,
   editPostDialog: state.editPostDialog,
+  feedFilter: state.feed.filter,
+  profileFeedFilter: state.profileFeed.filter,
 });
 
 Post.propTypes = {
@@ -529,9 +701,9 @@ Post.propTypes = {
 export default compose(
   withStyles(styles),
   connect(mapStateToProps, {
-    deletePost,
     submitDeletePostDialog,
     addComment,
     submitEditPostDialog,
+    fetchSelectedUser,
   })
 )(Post);

@@ -34,10 +34,6 @@ createUser = (req, res) => {
 // updateUser updates user if they exist in the db
 // else create new user with req.body
 updateUser = async (req, res) => {
-  console.log("calling updateUser in user-controller");
-
-  console.log(req.body.recentTracks.length);
-  console.log(req.body.topTracks.length);
   const body = req.body;
   if (!body) {
     return res.status(400).json({
@@ -45,7 +41,6 @@ updateUser = async (req, res) => {
       error: "You must provide a body to update",
     });
   }
-  console.log("inside user-controller");
   User.findByIdAndUpdate(
     req.body._id,
     req.body,
@@ -63,49 +58,17 @@ updateUser = async (req, res) => {
           message: "user PUT error",
         });
       }
-      console.log(User);
       return res.status(200).json({
         User,
         message: "user PUT success",
       });
     }
   );
-
-  // User.findOne({ _id: req.params.id }, (err, User) => {
-  //   if (err) {
-  //     return res.status(404).json({
-  //       err,
-  //       message: "User not found!",
-  //     });
-  //   }
-  //   // confirm that these attributes we want the user to be able to update
-  //   User.profilePic = body.profilePic;
-  //   User.email = body.email;
-  //   User.settings = body.settings;
-  //   User.followers = body.followers;
-  //   User.following = body.following;
-  //   User.posts = body.posts;
-  //   User.save()
-  //     .then(() => {
-  //       return res.status(200).json({
-  //         success: true,
-  //         id: User._id,
-  //         message: "User updated!",
-  //       });
-  //     })
-  //     .catch((error) => {
-  //       return res.status(404).json({
-  //         error,
-  //         message: "User not updated!",
-  //       });
-  //     });
-  // });
 };
 
 // No deleteUser because we don't want user to be able to remove themselves from our db entirely
 
-// don't think we need to await keyword because we're using callbacks
-// Returns a single user from the database
+// Returns a single user from the database based on username
 getUserById = async (req, res) => {
   User.findOne({ _id: req.params.id }, (err, User) => {
     if (err) {
@@ -113,7 +76,22 @@ getUserById = async (req, res) => {
     }
 
     return res.status(200).json({ success: true, data: User });
-  }).catch((err) => console.log(err));
+  });
+};
+
+getUserByUsername = async (req, res) => {
+  User.findOne(
+    {
+      username: { $regex: new RegExp(["^", req.params.id, "$"].join(""), "i") },
+    },
+    (err, User) => {
+      if (err) {
+        return res.status(400).json({ success: false, error: err });
+      }
+
+      return res.status(200).json({ success: true, data: User });
+    }
+  );
 };
 
 // Returns a list of all users in the database
@@ -126,32 +104,25 @@ getUsers = async (req, res) => {
       return res.status(404).json({ success: false, error: `User not found` });
     }
     return res.status(200).json({ success: true, data: Users });
-  }).catch((err) => console.log(err));
+  });
 };
 
 // Returns a list of posts created by users the current user follows
 getUserFollowingFeed = async (req, res) => {
-  User.find({ _id: req.params.id }, "posts following profilePic", function (
-    err,
-    result
-  ) {
-    if (err) {
-      return res.status(400).json({ success: false, error: err });
-    }
-    if (!result) {
-      return res.status(404).json({ sucess: false, error: "User not found" });
-    }
-  })
+  User.find({ _id: req.params.id })
     .populate({
       path: "following",
       select: "posts profilePic",
     })
     .exec(function (err, result) {
-      // console.log(result.data.following.posts);
-      // console.log(result.following.posts);
+      if (err) {
+        return res.status(400).json({ success: false, error: err });
+      }
+      if (!result) {
+        return res.status(404).json({ sucess: false, error: "User not found" });
+      }
       return res.status(200).json({ success: true, data: result });
     });
-  // .catch((err) => console.log(err));
 };
 
 // Returns a list of posts created by the user
@@ -162,16 +133,12 @@ getUserPosts = async (req, res) => {
   ) {
     if (err) {
       return res.status(400).json({ success: false, error: err });
-    }
-    if (!result) {
+    } else if (!result) {
       return res.status(404).json({ success: false, error: "User not found" });
+    } else {
+      return res.status(200).json({ success: true, data: result });
     }
-  }).exec(function (err, user) {
-    console.log("user posts");
-    console.log(user);
-    return res.status(200).json({ success: true, data: user });
   });
-  // .catch((err) => console.log(err));
 };
 
 addPost = (req, res) => {
@@ -202,29 +169,29 @@ addPost = (req, res) => {
 };
 
 editPost = (req, res) => {
-   const body = req.body;
-   if (!body) {
-     return res.status(400).json({
-       success: false,
-       error: "You must provide a body to update",
-     });
-   }
+  const body = req.body;
+  if (!body) {
+    return res.status(400).json({
+      success: false,
+      error: "You must provide a body to update",
+    });
+  }
 
-   User.findOneAndUpdate(
-     { _id: req.params.id, "posts._id": body.postId },
-     { $set: { "posts.$[outer].content": body.content } },
-     { arrayFilters: [{ "outer._id": body.postId }], upsert: true, new: true },
-     (err, result) => {
-       if (err) {
-         return res.status(404).json({
-           err,
-           message: "This is an invalid comment update request.",
-         });
-       }
-       return res.status(200).json({ success: true, posts: result.posts });
-     }
-   );
-}
+  User.findOneAndUpdate(
+    { _id: req.params.id, "posts._id": body.postId },
+    { $set: { "posts.$[outer].content": body.content } },
+    { arrayFilters: [{ "outer._id": body.postId }], upsert: true, new: true },
+    (err, result) => {
+      if (err) {
+        return res.status(404).json({
+          err,
+          message: "This is an invalid comment update request.",
+        });
+      }
+      return res.status(200).json({ success: true, posts: result.posts });
+    }
+  );
+};
 
 deletePost = (req, res) => {
   const body = req.body;
@@ -249,7 +216,6 @@ deletePost = (req, res) => {
     }
   );
 };
-
 
 likePost = (req, res) => {
   const body = req.body;
@@ -300,14 +266,14 @@ unlikePost = (req, res) => {
     }
   );
 };
+
 getUserSettings = async (req, res) => {
   User.findOne({ _id: req.params.id }, "settings", (err, User) => {
     if (err) {
       return res.status(400).json({ success: false, error: err });
     }
-    console.log("user contrl method:" + User);
     return res.status(200).json({ success: true, data: User });
-  }).catch((err) => console.log(err));
+  }).catch((err) => console.error(err));
 };
 
 updateSettings = async (req, res) => {
@@ -319,10 +285,8 @@ updateSettings = async (req, res) => {
     });
   }
 
-  console.log("Req body is " + body);
   const settings = new Setting(body);
-  console.log("settings is " + settings);
-  console.log(req.params.id);
+
   User.findOneAndUpdate(
     { _id: req.params.id },
     { settings: settings },
@@ -352,11 +316,7 @@ addComment = async (req, res) => {
       error: "You must provide a body to update",
     });
   }
-  // console.log("Req body is " + body);
   const comment = new Comment(body);
-  // console.log("comment is " + comment);
-  // console.log("postid", body.postId);
-  // console.log(req.params.id);
   User.findOneAndUpdate(
     { _id: req.params.id, "posts._id": body.postId },
     { $push: { "posts.$[outer].comments": comment } },
@@ -403,9 +363,8 @@ getProfilePic = async (req, res) => {
     if (err) {
       return res.status(400).json({ success: false, error: err });
     }
-    console.log("user contrl method img link:" + Img);
     return res.status(200).json({ success: true, data: Img });
-  }).catch((err) => console.log(err));
+  }).catch((err) => console.error(err));
 };
 
 updateProfilePic = async (req, res) => {
@@ -417,8 +376,6 @@ updateProfilePic = async (req, res) => {
     });
   }
 
-  console.log("Req body is " + body);
-  console.log(req.params.id);
   User.findOneAndUpdate(
     { _id: req.params.id },
     {
@@ -446,14 +403,7 @@ updateProfilePic = async (req, res) => {
 };
 
 getFollowers = (req, res) => {
-  User.find({ _id: req.params.id }, "followers", (err, followers) => {
-    if (err) {
-      return res.status(400).json({ success: false, error: err });
-    }
-    if (followers === null) {
-      return res.status(404).json({ sucess: false, error: "User not found" });
-    }
-  })
+  User.find({ _id: req.params.id })
     .populate({
       path: "followers",
     })
@@ -461,19 +411,15 @@ getFollowers = (req, res) => {
       if (err) {
         return res.status(400).json({ success: false, error: err });
       }
+      if (followers === null) {
+        return res.status(404).json({ sucess: false, error: "User not found" });
+      }
       return res.status(200).json({ success: true, data: followers });
     });
 };
 
 getFollowing = (req, res) => {
-  User.find({ _id: req.params.id }, "following", (err, following) => {
-    if (err) {
-      return res.status(400).json({ success: false, error: err });
-    }
-    if (following === null) {
-      return res.status(404).json({ sucess: false, error: "User not found" });
-    }
-  })
+  User.find({ _id: req.params.id })
     .populate({
       path: "following",
     })
@@ -481,16 +427,48 @@ getFollowing = (req, res) => {
       if (err) {
         return res.status(400).json({ success: false, error: err });
       }
+      if (following === null) {
+        return res.status(404).json({ sucess: false, error: "User not found" });
+      }
       return res.status(200).json({ success: true, data: following });
     });
 };
 
-addFollowingFollowerRelationship = (req, res) => {
-  // TODO put on user to follow and put on user following
-};
+updateFollowRelationship = async (req, res) => {
+  const followerId = req.params.id;
+  const followeeId = req.body.id;
+  if (!followeeId) {
+    return res.status(400).json({
+      success: false,
+      error: "You must provide a body/ id to update",
+    });
+  }
 
-removeFollowingFollowerRelationship = (req, res) => {
-  // TODO delete on user to follow and delete on user following
+  const followerQuery = { _id: followerId };
+  const followeeQuery = { _id: followeeId };
+
+  let followerUpdate = {};
+  let followeeUpdate = {};
+
+  if (req.body.remove) {
+    followerUpdate = { $pull: { following: followeeId } };
+    followeeUpdate = { $pull: { followers: followerId } };
+  } else {
+    followerUpdate = { $addToSet: { following: followeeId } };
+    followeeUpdate = { $addToSet: { followers: followerId } };
+  }
+
+  const followerUpdated = await User.updateOne(followerQuery, followerUpdate);
+  const followeeUpdated = await User.findOneAndUpdate(
+    followeeQuery,
+    followeeUpdate,
+    { new: true }
+  );
+
+  if (!followerUpdated || !followeeUpdated) {
+    return res.status(404).json({ error: "Unable to follow that user" });
+  }
+  return res.status(200).json({ success: true, data: followeeUpdated });
 };
 
 module.exports = {
@@ -507,9 +485,9 @@ module.exports = {
   getProfilePic,
   getFollowers,
   getFollowing,
-  addFollowingFollowerRelationship,
-  removeFollowingFollowerRelationship,
+  updateFollowRelationship,
   deletePost,
+  getUserByUsername,
   addComment,
   deleteComment,
   likePost,
