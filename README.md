@@ -4,8 +4,14 @@
 
 MySpot is a social media platform for music lovers who want to connect with other Spotify users. MySpot allows users to share music posts (Spotify playlists, albums, songs), see what their fellow MySpotters are listening to, build playlists, and discover new music. 
 
-## Usage:
-For your best user expereience, upon logging into to MySpot, please search for and "follow" the following users via the search bar:**"mlouie_"**, **"quinnird"**, **"austin lee"**, and **"sarchst"**. This will populate your Feed and allow you to begin to build your social network! (And grade us).
+## How to start using the app:
+MySpot is better with friends! For the best user experience, find and follow other MySpot users by using the search bar and adding them using the follow button on their profiles. Don't know who to add? Why not start with the app creators:
+* **mlouie_**
+* **quinnird**
+* **austin lee**
+* **sarchst**
+
+This will populate your Feed and Following pages so you can build your social network and discover new music! You can find more users by checking out our followers/people we follow on our profiles, or by looking through our post comments. 
 
 ## Project Task Requirements:
 
@@ -24,7 +30,7 @@ For your best user expereience, upon logging into to MySpot, please search for a
    * Share playlists/song/album with others (default post is playlist) onto the Feed :heavy_check_mark:
 3. Follower/ Followee Actions :heavy_check_mark:
 4. Playlists on web app directly edit your Spotify playlists :heavy_check_mark:
-5. Get recommendations based on you like :heavy_check_mark:
+5. Get recommendations based on your likes :heavy_check_mark:
 6. User-user interaction through comments/chat  :grey_exclamation:
 
 **2-3 stretch requirements (plan to complete 1!)**
@@ -38,22 +44,28 @@ For your best user expereience, upon logging into to MySpot, please search for a
 HTML/CSS/JS front end rendering is handled by ReactJS and MaterialUI frameworks. Using these libraries made front end development more efficient and helped unifying styling throughout the application.
 
 ### React/Redux:
-We used React to build reusable components for MySpot, for instance ProfileCard, SongList, FollowTable, and Post components are rendered in multiple places across the application. We simulated the familiar multi-page HTML experience with dynamic routing/updating via React Router. Redux is used to persist user information to reduce database calls and improve user experience.
+We used React to build reusable components for MySpot, for instance ProfileCard, SongList, FollowTable, and Post components are rendered in multiple places across the application. We simulated the familiar multi-page HTML experience with dynamic routing/updating via React Router. React also let us use powerful pre-built components provided by Material-UI.
+
+We used Redux to centrally manage data used across multiple components such as user information, Spotify URIs, and site settings. Redux also allowed us minimize database call frequency by persisting data locally when possible, which reduces load times and improve user experience.
 
 ### MongoDB:
-We incorporated Mongoose for MongoDB validation and designed Schemas for User, Post, Settings, Comment, and Media. Our database holds a collection of users, and user objects hold references to the other aforementioned models. In accordance with best practices, we strived to minimize the size of our database by utilizing Spotify API calls and hosting images on an external website, and minimize database calls where possible.
+We incorporated Mongoose for MongoDB validation and designed Schemas for User, Post, Settings, Comment, and Media. Our database holds a collection of users, and user objects hold references to the other aforementioned models. Our database model was complex due to several self- and mutual schema references _e.g., Users have lists of other Users as followers/following; Users contain Comments which contain Posts which contain User authors_ 
+
+In accordance with best practices, we managed our data in a single collection for better performance, and strove to minimize the size of our database by only storing data when necessary and instead fetching data from 3rd party services _e.g., Spotify API calls and external image hosting_.
 
 ### ExpressJS:
-MySpot used ExpressJS to create the backend API. We implemented a Model-View-Controller model to improve code readability and organization. We used React Thunk to make the API calls to interact with our database.
+MySpot used ExpressJS to create the backend API. We implemented a Model-View-Controller model to improve code readability and organization. We used React Thunk to make the API calls to interact with our database. The Express server is also used to authenticate and obtain access tokens from Spotify during the login process.
 
 ### Release Engineering:
-MySpot is hosted on Heroku: https://myspotmusic.herokuapp.com/! We utilized a monorepo and had pull request/code review protocols to aid in a smooth development process.
+MySpot is hosted on Heroku: https://myspotmusic.herokuapp.com/! We utilized a mono-repo and had pull request/code review protocols to aid in a smooth development process.
 
 ## Above and Beyond Functionality:
-MySpot goes above and beyond the basic requirements by extensively incorporating the Spotify API into our core app functionality. We implemented the ability to view Spotify user's media such as playlists, albums, favourites. Additionally, we used the Spotify api to add, edit, and remove Spotify media throughout MySpot. We also unified the user's Spotify id as our own MySpot user id to make transitioning between calls to the Spotify API and calls to our own API efficient while keeping the data we fetch and update from both consistent througout our application. Further, we indirectly utilized Spotify's suggestion algorithm by incorporating Discover Weekly into our Tinderify feature by being able to swipe through and add songs from your friends' Discovery Weekly playlists. Further, we took advantage of Spotify's suggestion/recommendation algorithms by incorporating Discover Weekly into our Tinderify feature, where MySpotters are able to swipe through and add songs from your friends' Discovery Weekly playlists.
+MySpot goes above and beyond the basic requirements by extensively incorporating the Spotify API into our core app functionality. We implemented the ability to view Spotify media such as playlists, albums, favourites. Additionally, we used the Spotify api to add, edit, and remove Spotify media throughout MySpot. We also unified the user's Spotify ID as our own MySpot user ID to make transitioning between calls to the Spotify API and calls to our own API efficient while keeping the data we fetch and update from both consistent throughout our application. 
+
+Further, we improved upon Spotify's own Discover Weekly feature by making it easier and more engaging for users to check out and add Spotify's recommendations via our Tinderify feature. Using Tinderify, MySpotters can swipe through, preview, and add songs from both their and their friends' Discovery Weekly playlists.
 
 ## Next Steps:
-Our future goals include implementing the ability for users to repost and share posts, incorporating a peer to peer chat feature, and implementing a notification system to further build on the social media aspect of MySpot. Additionally, we strive to implement an “Explore Page” where recent and popular posts from users you may not follow are presented so MySpotters can continue to expand their social network. Additionally, we would like to improve app security by forcing the client to authenticate API calls to our database.
+Future features down the pipeline include the ability to repost and share posts, peer to peer chat, and a live notification system to further build on the social media elements of MySpot. We also want to implement an “Explore Page” to display new and trending posts across all MySpot users so that it's easier to discover new people to follow on the app. Additionally, we would like to improve app security by adding API calls authenticate to our database.
 
 ## List of Contributions:
 ### Mikayla: 
